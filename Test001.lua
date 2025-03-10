@@ -4864,7 +4864,6 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-local page2_5 = Tap2:newpage()
 page2_5:Label(" ┇ Spam Skill Fruity ┇ ")
 
 page2_5:Toggle("Auto Quake Wave (Lag)", false,function(qxkr)
