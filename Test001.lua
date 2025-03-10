@@ -4866,8 +4866,8 @@ end)
 
 page2_5:Label(" ┇ Spam Skill Fruity ┇ ")
 
-page2_5:Toggle("Auto Quake Wave (Lag)", false,function(qxkr)
-    _G.quake1 = qxukr
+page2_5:Toggle("Auto Quake Wave (Lag)", false,function(qxuk)
+    _G.quake1 = qxuk
 end)
 
 
