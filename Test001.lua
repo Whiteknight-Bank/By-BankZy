@@ -4908,7 +4908,7 @@ spawn(function()
             pcall(function()
                 for i,v in pairs(game.Players:GetChildren()) do
                     if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-15 or getgenv().disbring)
+                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-2 or getgenv().disbring)
                         if v.Character.Humanoid.Health == 0 then
                         	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
                         end
