@@ -4872,7 +4872,7 @@ end)
 
 
 spawn(function()
-    while wait(getgenv().spamtime) do
+    while wait() do
         pcall(function()
         if _G.quake1 then 
             local pla = game.Players.LocalPlayer;
