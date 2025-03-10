@@ -4867,8 +4867,41 @@ end)
 local page2_5 = Tap2:newpage()
 page2_5:Label(" ┇ Spam Skill Fruity ┇ ")
 
-page2_5:Toggle("Auto Quake Wave (Lag)", false,function(quke)
-    _G.quake = quke
+page2_5:Toggle("Auto Quake Wave (Lag)", false,function(qxkr)
+    _G.quake1 = qxukr
+end)
+
+
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+        if _G.quake1 then 
+            local pla = game.Players.LocalPlayer;
+            local Mouse = pla:GetMouse();
+
+            local args = {
+                [1] = tonumber(serializeTable(remotes)),
+                [2] = "QuakePower4",
+                [3] = "StartCharging",
+                [5] = "Right"
+            }
+            
+            game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+   
+            local args = {
+                [1] = tonumber(serializeTable(remotes)),
+                [2] = "QuakePower4",
+                [3] = "StopCharging",
+                [4] = Mouse.Target,
+                [5] = Mouse.Hit,
+                [6] = 100,
+                [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
+            }
+            
+            game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+        end
+        end)
+    end
 end)
 
 local Tap3 = Window:Taps("Players")
