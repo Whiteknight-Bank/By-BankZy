@@ -1,4 +1,4 @@
-local allowedUsers = {7654608168, 2013261311, 1221531649} -- ใส่ UserId ของผู้เล่นที่สามารถใช้เมนูได้
+local allowedUsers = {7654608168, 2013261311, 1221531649, 3644259253} -- 1.Bankzy_Alt1 2.ICU_XxWhiteknightxX 3.bung_dae 4.T3T_XxBankKungxX is allowed
 local player = game.Players.LocalPlayer
 
 -- ตรวจสอบว่า UserId ของผู้เล่นอยู่ในรายการที่อนุญาตหรือไม่
