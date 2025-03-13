@@ -5850,8 +5850,6 @@ page5_5:Button("NoClip Cam (On/Off)",function()
         end
     end
 end)
-end
-
-if not isAllowed(player.UserId) then
-    player:Kick("Kicked by own this for user only!!!")
+else
+    player:Kick("Kicked by owner, this is for specific users only!")
 end
