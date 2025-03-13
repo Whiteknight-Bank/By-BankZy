@@ -5817,5 +5817,5 @@ page5_5:Button("NoClip Cam (On/Off)",function()
     end
 end)
 else
-    player:Kick("Kicked by owner, this is for specific users only!")
+    game.Players.LocalPlayer:Kick("Kicked by owner, this is for specific users only!")
 end
