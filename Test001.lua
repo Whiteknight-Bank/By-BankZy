@@ -9,10 +9,10 @@ end
 local function isAllowed(userId)
     for _, id in pairs(allowedUsers) do
         if userId == id then
-            return end
+            return true
         end
     end
-    return end
+    return false
 end
 
 -- ตรวจสอบสิทธิ์ของผู้เล่น
