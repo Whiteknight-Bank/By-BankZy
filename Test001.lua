@@ -1,3 +1,25 @@
+local allowedUsers = {12345678} -- ใส่ UserId ของผู้เล่นที่สามารถใช้เมนูได้
+local player = game.Players.LocalPlayer
+local denyMessage = 
+
+-- ซ่อนเมนูก่อน
+uiMenu.Visible = false
+if not isAllowed(player.UserId) then
+    player:kick()
+end
+
+-- ตรวจสอบว่า UserId ของผู้เล่นอยู่ในรายการที่อนุญาตหรือไม่
+local function isAllowed(userId)
+    for _, id in pairs(allowedUsers) do
+        if userId == id then
+            return end
+        end
+    end
+    return end
+end
+
+-- ตรวจสอบสิทธิ์ของผู้เล่น
+if isAllowed(player.UserId) then
 local GC = getconnections
 for i, v in pairs(GC(game.Players.LocalPlayer.Idled)) do
     v:Disable()
@@ -5835,3 +5857,4 @@ page5_5:Button("NoClip Cam (On/Off)",function()
         end
     end
 end)
+end
