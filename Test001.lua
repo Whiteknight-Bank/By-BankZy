@@ -1,9 +1,6 @@
-local allowedUsers = {12345678} -- ใส่ UserId ของผู้เล่นที่สามารถใช้เมนูได้
+local allowedUsers = {7654608168} -- ใส่ UserId ของผู้เล่นที่สามารถใช้เมนูได้
 local player = game.Players.LocalPlayer
-local denyMessage = 
 
--- ซ่อนเมนูก่อน
-uiMenu.Visible = false
 if not isAllowed(player.UserId) then
     player:kick()
 end
