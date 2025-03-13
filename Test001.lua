@@ -4941,6 +4941,30 @@ game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireSe
     end
 end)
 
+page2_5:Toggle("Auto Hobby Punch", false,function(hxbbj)
+    _G.hobby2 = hxbbj
+end)
+
+spawn(function()
+    while wait() do
+        if _G.hobby2 then
+            local pla = game.Players.LocalPlayer;
+            local Mouse = pla:GetMouse();
+
+            local args = {
+    [1] = tonumber(serializeTable(remotes)),
+    [2] = "HobbyPower8",
+    [3] = "Contract",
+    [4] = CFrame.new(4791.0390625, 279.9236755371094, -10333.8564453125, 0.9651403427124023, 0.0003195153549313545, -0.2617327868938446, 2.9103826987286752e-11, 0.9999993443489075, 0.0012207685504108667, 0.26173296570777893, -0.0011782129295170307, 0.9651396870613098),
+    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach")
+}
+
+game:GetService("Players").LocalPlayer.Character.Powers.Hobby.RemoteEvent:FireServer(unpack(args))
+
+        end
+    end
+end)
+
 local Tap3 = Window:Taps("Players")
 local page3 = Tap3:newpage()
 
