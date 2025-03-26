@@ -3891,7 +3891,7 @@ local islandlist = {
 }
 
 --script
-local Window = create:Win("InW Hub : For Map OPL: Anarchy ")
+local Window = create:Win("InW Hub : For Map OPL: Anarchy / No Update Now.")
 game:GetService("CoreGui").redui.MainSceen.Visible = false
 
 create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L", 5)
