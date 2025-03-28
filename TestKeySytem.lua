@@ -62,3 +62,6 @@ end
 
 -- เชื่อมฟังก์ชันกับปุ่ม
 submitButton.MouseButton1Click:Connect(checkKey)
+
+-- ทำให้ KeyFrame เลื่อนเข้ามาเมื่อเริ่มเกม
+keyFrame:TweenPosition(UDim2.new(0.3, 0, 0.4, 0), "Out", "Quad", 0.5, true)
