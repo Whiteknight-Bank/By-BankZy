@@ -1,27 +1,27 @@
--- สร้าง ScreenGui และ UI
+-- Creat ScreenGui และ UI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- สร้าง KeyFrame (หน้ากรอกคีย์)
+-- Creat KeyFrame (Enter the key.)
 local keyFrame = Instance.new("Frame")
 keyFrame.Size = UDim2.new(0.4, 0, 0.3, 0)
-keyFrame.Position = UDim2.new(0.3, 0, -0.4, 0)  -- เริ่มจากข้างบน
-keyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20) -- สีดำเท่ห์
+keyFrame.Position = UDim2.new(0.3, 0, -0.4, 0)
+keyFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 keyFrame.BorderSizePixel = 0
 keyFrame.Visible = true
 keyFrame.Parent = screenGui
 
--- ใส่ขอบมนและเงา
+-- Add rounded edges and shadows.
 local uiCorner = Instance.new("UICorner")
 uiCorner.CornerRadius = UDim.new(0.1, 0)
 uiCorner.Parent = keyFrame
 
 local uiStroke = Instance.new("UIStroke")
 uiStroke.Thickness = 2
-uiStroke.Color = Color3.fromRGB(255, 255, 255) -- ขอบสีขาว
+uiStroke.Color = Color3.fromRGB(255, 255, 255)
 uiStroke.Parent = keyFrame
 
--- สร้าง KeyInput (ช่องใส่คีย์)
+-- Creat KeyInput (Input Key.)
 local keyInput = Instance.new("TextBox")
 keyInput.Size = UDim2.new(0.8, 0, 0.3, 0)
 keyInput.Position = UDim2.new(0.1, 0, 0.2, 0)
@@ -30,7 +30,7 @@ keyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 keyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyInput.Parent = keyFrame
 
--- ปุ่มยืนยัน (SubmitButton)
+-- Button (SubmitButton)
 local submitButton = Instance.new("TextButton")
 submitButton.Size = UDim2.new(0.8, 0, 0.3, 0)
 submitButton.Position = UDim2.new(0.1, 0, 0.6, 0)
@@ -39,31 +39,18 @@ submitButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 submitButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 submitButton.Parent = keyFrame
 
--- เอฟเฟกต์ปุ่มเมื่อกด
+-- Have Effect When u Press it.
 submitButton.MouseButton1Down:Connect(function()
-    submitButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- สีเทาเมื่อกด
+    submitButton.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 end)
 submitButton.MouseButton1Up:Connect(function()
-    submitButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- กลับเป็นสีขาว
+    submitButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 end)
 
--- สร้าง MainMenu (เมนูหลัก)
-local mainMenu = Instance.new("Frame")
-mainMenu.Size = UDim2.new(0.5, 0, 0.5, 0)
-mainMenu.Position = UDim2.new(0.25, 0, 0.25, 0)
-mainMenu.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-mainMenu.Visible = false
-mainMenu.Parent = screenGui
-
--- ใส่ขอบมนให้ MainMenu
-local menuCorner = Instance.new("UICorner")
-menuCorner.CornerRadius = UDim.new(0.1, 0)
-menuCorner.Parent = mainMenu
-
--- ข้อความแจ้งเตือน (มีอนิเมชั่น)
+-- Text Notification (Animation)
 local notification = Instance.new("TextLabel")
 notification.Size = UDim2.new(0.3, 0, 0.05, 0)
-notification.Position = UDim2.new(0.7, 0, 1.1, 0) -- เริ่มต้นอยู่นอกจอด้านล่าง
+notification.Position = UDim2.new(0.7, 0, 1.1, 0)
 notification.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 notification.TextColor3 = Color3.fromRGB(255, 255, 255)
 notification.Text = ""
@@ -74,10 +61,10 @@ local notificationCorner = Instance.new("UICorner")
 notificationCorner.CornerRadius = UDim.new(0.2, 0)
 notificationCorner.Parent = notification
 
--- คีย์ที่ถูกต้อง
+-- Currect key
 local correctKey = "7090"
 
--- ฟังก์ชันแจ้งเตือน (มีอนิเมชั่น)
+-- Notification (Animation)
 local function showNotification(message)
     notification.Text = message
     notification.Visible = true
@@ -93,11 +80,10 @@ local function checkKey()
     if keyInput.Text == correctKey then
         keyFrame:TweenPosition(UDim2.new(0.3, 0, -0.4, 0), "Out", "Quad", 0.5, true) -- เมนูเลื่อนออก
         wait(0.5)
-        keyFrame:Destroy() -- ทำลายเมนูคีย์
-        mainMenu.Visible = true
-        mainMenu:TweenPosition(UDim2.new(0.25, 0, 0.25, 0), "Out", "Quad", 0.5, true) -- แสดงเมนูหลัก
+        keyFrame:Destroy() -- destroy menu key
+        print("Script that requires key intection.")
     else
-        showNotification("❌ คีย์ผิด กรุณาลองใหม่!") -- แสดงข้อความแจ้งเตือน
+        showNotification("❌ คีย์ผิด กรุณาลองใหม่!")
     end
 end
 
