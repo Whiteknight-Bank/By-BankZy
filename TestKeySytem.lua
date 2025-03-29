@@ -43,8 +43,26 @@ mainMenu.BorderColor3 = Color3.fromRGB(255, 255, 255) -- ขอบสีขา�
 mainMenu.Visible = false
 mainMenu.Parent = screenGui
 
+-- สร้างข้อความแจ้งเตือน (อยู่มุมขวาล่าง)
+local notificationLabel = Instance.new("TextLabel")
+notificationLabel.Size = UDim2.new(0.3, 0, 0.05, 0)
+notificationLabel.Position = UDim2.new(0.7, 0, 0.9, 0) -- มุมขวาล่าง
+notificationLabel.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- พื้นหลังสีแดง (แจ้งเตือน)
+notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- ตัวอักษรสีขาว
+notificationLabel.Text = ""
+notificationLabel.Visible = false -- ซ่อนตอนเริ่มเกม
+notificationLabel.Parent = screenGui
+
 -- ตัวแปรตั้งค่า
 local correctKey = "MySecretKey" -- กำหนดคีย์ที่ถูกต้อง
+
+-- ฟังก์ชันแสดงข้อความแจ้งเตือน
+local function showNotification(message)
+    notificationLabel.Text = message
+    notificationLabel.Visible = true
+    wait(2) -- แสดงข้อความ 2 วินาที
+    notificationLabel.Visible = false
+end
 
 -- ฟังก์ชันตรวจสอบคีย์
 local function checkKey()
@@ -56,7 +74,7 @@ local function checkKey()
         mainMenu.Visible = true
         mainMenu:TweenPosition(UDim2.new(0.25, 0, 0.25, 0), "Out", "Quad", 0.5, true) -- อนิเมชั่นเลื่อนเข้า
     else
-        game.Players.LocalPlayer:Kick("คุณใส่คีย์ผิด!") -- เตะผู้เล่นออกจากเกม
+        showNotification("❌ คีย์ผิด กรุณาลองใหม่") -- แสดงข้อความแจ้งเตือน
     end
 end
 
