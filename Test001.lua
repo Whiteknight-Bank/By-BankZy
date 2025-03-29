@@ -83,6 +83,9 @@ end
 -- ฟังก์ชันตรวจสอบคีย์
 local function checkKey()
     if keyInput.Text == correctKey then
+    keyFrame:TweenPosition(UDim2.new(0.3, 0, -0.4, 0), "Out", "Quad", 0.5, true) -- เมนูเลื่อนออก
+        wait(0.5)
+        keyFrame:Destroy()
 local GC = getconnections
 for i, v in pairs(GC(game.Players.LocalPlayer.Idled)) do
     v:Disable()
