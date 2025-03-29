@@ -83,22 +83,6 @@ end
 -- ฟังก์ชันตรวจสอบคีย์
 local function checkKey()
     if keyInput.Text == correctKey then
-
-local allowedUsers = {7654608168, 2013261311, 1221531649, 3644259253} -- 1.Bankzy_Alt1 2.ICU_XxWhiteknightxX 3.bung_dae 4.T3T_XxBankKungxX is allowed
-local player = game.Players.LocalPlayer
-
--- ตรวจสอบว่า UserId ของผู้เล่นอยู่ในรายการที่อนุญาตหรือไม่
-local function isAllowed(userId)
-    for _, id in pairs(allowedUsers) do
-        if userId == id then
-            return true
-        end
-    end
-    return false
-end
-
--- ตรวจสอบสิทธิ์ของผู้เล่น
-if isAllowed(player.UserId) then
 local GC = getconnections
 for i, v in pairs(GC(game.Players.LocalPlayer.Idled)) do
     v:Disable()
