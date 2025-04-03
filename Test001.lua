@@ -5900,7 +5900,7 @@ spawn(function()
         pcall(function()
             if not DropCm then return end;
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find("Common Box", Value.Name) then
+                if table.find(Cache.DevConfig["ListOfBox1"], Value.Name) then
                     game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
                     Value.Parent = game.Players.LocalPlayer.Character;
                     Value.Parent = game.Workspace;
@@ -5919,7 +5919,7 @@ spawn(function()
         pcall(function()
             if not DropUn then return end;
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find("Uncommon Box", Value.Name) then
+                if table.find(Cache.DevConfig["ListOfBox2"], Value.Name) then
                     game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
                     Value.Parent = game.Players.LocalPlayer.Character;
                     Value.Parent = game.Workspace;
@@ -5938,7 +5938,7 @@ spawn(function()
         pcall(function()
             if not DropUL then return end;
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDropCompass"], Value.Name) then
+                if table.find(Cache.DevConfig["ListOfBox3"], Value.Name) then
                     game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
                     Value.Parent = game.Players.LocalPlayer.Character;
                     Value.Parent = game.Workspace;
