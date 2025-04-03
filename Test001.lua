@@ -5736,6 +5736,9 @@ local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
         warn("ResourceHolder not found in Workspace!")
     end
 end
+end)
+end
+end)
 
 page5:Label(" ┇ Unbox ┇ ")
 
