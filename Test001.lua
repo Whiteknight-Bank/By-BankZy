@@ -6028,7 +6028,7 @@ spawn(function()
         end)
     end
 end)
-page5_5:Label(" ┇ Aff Fake (ฝั่งซ้าย) ┇ ")
+page5_5:Label(" ┇ Aff Fake ┇ ")
 
 page5_5:TextBox("Affs",". . .",function(txt)
     AmountAff1 = txt
@@ -6041,17 +6041,18 @@ if not AmountDrink or not string.match(AmountDrink, "%d+") or tonumber(string.ma
 		end
 end)
 
-page5_5:Label(" ┇ Aff Fake (ฝั่งขวา) ┇ ")
+page5_5:Label(" ┇ Aff Fake ┇ ")
 
-page5_5:TextBox("Affs",". . .",function(xtx)
-    AmountAff2 = xtx
+page5_5:TextBox("Affs",". . .",function(txt)
+    AmountAff2 = txt
 end)
+
 page5_5:Button("Click", function()
 		if AmountAff2 then
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..xtx
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..xtx
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..xtx
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..xtx
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..txt
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..txt
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..txt
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..txt
 		end
 end)
     else
