@@ -5895,12 +5895,57 @@ page5:Toggle("Auto Drop (Com)", false,function(dropcm)
      DropCm = dropcm
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not DropCm then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find("Common Box", Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value.Parent = game.Workspace;
+                end
+            end
+        end)
+    end
+end)
+		
 page5:Toggle("Auto Drop (Uncom)", false,function(dropun)
      DropUn = dropun
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not DropUn then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find("Uncommon Box", Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value.Parent = game.Workspace;
+                end
+            end
+        end)
+    end
+end)
+
 page5:Toggle("Auto Drop (Rare,Ultra)", false,function(dropul)
      DropUL = dropul
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not DropUL then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfDropCompass"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value.Parent = game.Workspace;
+                end
+            end
+        end)
+    end
 end)
 
     else
