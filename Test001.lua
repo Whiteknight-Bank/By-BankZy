@@ -5889,6 +5889,20 @@ page5_5:Button("NoClip Cam (On/Off)",function()
         end
     end
 end)
+
+page5_5:Label(" ┇ Auto Drop Box ┇ ")
+page5:Toggle("Auto Drop (Com)", false,function(dropcm)
+     DropCm = dropcm
+end)
+
+page5:Toggle("Auto Drop (Uncom)", false,function(dropun)
+     DropUn = dropun
+end)
+
+page5:Toggle("Auto Drop (Rare,Ultra)", false,function(dropul)
+     DropUL = dropul
+end)
+
     else
         showNotification("❌ คีย์ผิด กรุณาลองใหม่!") -- แสดงข้อความแจ้งเตือน
     end
