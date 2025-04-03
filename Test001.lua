@@ -6028,6 +6028,10 @@ spawn(function()
         end)
     end
 end)
+page5_5:Label(" ┇ Aff Fake (ฝั่งซ้าย) ┇ ")
+
+page5_5:Label(" ┇ Aff Fake (ฝั่งขวา) ┇ ")
+
     else
         showNotification("❌ คีย์ผิด กรุณาลองใหม่!") -- แสดงข้อความแจ้งเตือน
     end
