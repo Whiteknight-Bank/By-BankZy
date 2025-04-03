@@ -6030,8 +6030,39 @@ spawn(function()
 end)
 page5_5:Label(" ┇ Aff Fake (ฝั่งซ้าย) ┇ ")
 
+page5_5:TextBox("Affs",". . .",function(txt)
+    AmountAff1 = txt
+end)
+
+page5_5:Button("Click", function()
+if not AmountDrink or not string.match(AmountDrink, "%d+") or tonumber(string.match(AmountDrink, "%d+")) < 0 then return end;
+        for _ = 1, tonumber(string.match(AmountDrink, "%d+")) do
+            game.Workspace.Merchants.BetterDrinkMerchant.Clickable.Retum:FireServer(Drink)
+		end
+end)
+
 page5_5:Label(" ┇ Aff Fake (ฝั่งขวา) ┇ ")
 
+page5_5:TextBox("Affs",". . .",function(xtx)
+    AmountAff2 = xtx
+end)
+page5_5:Button("Click", function()
+local player = game.Players.LocalPlayer
+                    local playerId = player.UserId
+                    local userDataName = game.Workspace.UserData["User_" .. playerId]
+
+                    -- DFT1
+                    local AffMele2 = userDataName.Data.DFT2Melee.Value
+                    local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                    local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                    local AffSword2 = userDataName.Data.DFT2Sword.Value
+		if AmountAff2 then
+					AffMele2 = ""..xtx
+					AffSniper2 = ""..xtx
+					AffSword2 = ""..xtx
+					AffDefense2 = ""..xtx
+		end
+end)
     else
         showNotification("❌ คีย์ผิด กรุณาลองใหม่!") -- แสดงข้อความแจ้งเตือน
     end
