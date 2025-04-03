@@ -5737,7 +5737,6 @@ local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
     end
 end
 end)
-end
 end)
 
 page5:Label(" ┇ Unbox ┇ ")
