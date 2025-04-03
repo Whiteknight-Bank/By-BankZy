@@ -4864,7 +4864,7 @@ end)
 spawn(function() -- Quake farm npcs
     while wait(0) do
         pcall(function()
-            if _G.Quakefarm then
+            if _G.quakefarm then
                 script = game:GetService("Players").LocalPlayer.Character.Powers.Quake;
                 VTQ = script.RemoteEvent.RemoteFunction:InvokeServer();
                 local pla = game.Players.LocalPlayer;
