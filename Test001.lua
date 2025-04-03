@@ -5735,7 +5735,6 @@ spawn(function()
                     warn("ResourceHolder not found in Workspace!")
                 end
             end)
-
             if not success then
                 warn("Error occurred: " .. err) -- แสดง error ถ้ามีปัญหา
             end
@@ -5747,8 +5746,6 @@ spawn(function()
     while wait() do -- ทำงานซ้ำทุก 1 วินาที
         if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
             pcall(function()
-            local ball = obj:FindFirstChild(ballName)
-            if ball then
                 local powerFolder = game.Workspace:FindFirstChild("Power")
 		if game.Players:GetPlayerFromCharacter(powerFolder) then
                 if powerFolder then
