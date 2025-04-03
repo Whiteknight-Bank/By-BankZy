@@ -6047,20 +6047,11 @@ page5_5:TextBox("Affs",". . .",function(xtx)
     AmountAff2 = xtx
 end)
 page5_5:Button("Click", function()
-local player = game.Players.LocalPlayer
-                    local playerId = player.UserId
-                    local userDataName = game.Workspace.UserData["User_" .. playerId]
-
-                    -- DFT1
-                    local AffMele2 = userDataName.Data.DFT2Melee.Value
-                    local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                    local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                    local AffSword2 = userDataName.Data.DFT2Sword.Value
 		if AmountAff2 then
-					AffMele2 = ""..xtx
-					AffSniper2 = ""..xtx
-					AffSword2 = ""..xtx
-					AffDefense2 = ""..xtx
+					game.Workspace.UserData["User_" ..players.UserId].Data.DFT2Melee.Value = ""..xtx
+					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Sniper.Value = ""..xtx
+					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Sword.Value = ""..xtx
+					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Defense.Value = ""..xtx
 		end
 end)
     else
