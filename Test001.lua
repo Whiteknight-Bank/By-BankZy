@@ -5747,8 +5747,10 @@ spawn(function()
     while wait() do -- ทำงานซ้ำทุก 1 วินาที
         if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
             pcall(function()
-                -- ค้นหาไฟล์ Magma ในโฟลเดอร์ Power
+            local ball = obj:FindFirstChild(ballName)
+            if ball then
                 local powerFolder = game.Workspace:FindFirstChild("Power")
+		if game.Players:GetPlayerFromCharacter(powerFolder) then
                 if powerFolder then
                     local magma = powerFolder:FindFirstChild("Magma")
                     if magma then
@@ -5760,7 +5762,8 @@ spawn(function()
                         end
                     end
                 end
-                
+									end
+	
                 -- ค้นหาไฟล์ MagmaBall ในโฟลเดอร์ shots
                 local shotsFolder = game.Workspace:FindFirstChild("shots")
                 if shotsFolder then
