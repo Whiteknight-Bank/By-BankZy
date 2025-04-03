@@ -6031,14 +6031,18 @@ end)
 page5_5:Label(" ┇ Aff Fake ┇ ")
 
 page5_5:TextBox("Affs",". . .",function(txt)
-    AmountAff1 = txt
+    AmountAff1 = txt  -- บันทึกค่าจาก TextBox
 end)
 
 page5_5:Button("Click", function()
-if not AmountDrink or not string.match(AmountDrink, "%d+") or tonumber(string.match(AmountDrink, "%d+")) < 0 then return end;
-        for _ = 1, tonumber(string.match(AmountDrink, "%d+")) do
-            game.Workspace.Merchants.BetterDrinkMerchant.Clickable.Retum:FireServer(Drink)
-		end
+    if AmountAff2 then
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Melee.Value = ""..AmountAff1
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Sniper.Value = ""..AmountAff1
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Sword.Value = ""..AmountAff1
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Defense.Value = ""..AmountAff1
+    else
+        print("Error: AmountAff2 is nil!")
+    end
 end)
 
 page5_5:Label(" ┇ Aff Fake ┇ ")
