@@ -5891,7 +5891,7 @@ page5_5:Button("NoClip Cam (On/Off)",function()
 end)
 
 page5_5:Label(" ┇ Auto Drop Box ┇ ")
-page5:Toggle("Auto Drop (Com)", false,function(dropcm)
+page5_5:Toggle("Auto Drop (Com)", false,function(dropcm)
      DropCm = dropcm
 end)
 
@@ -5910,7 +5910,7 @@ spawn(function()
     end
 end)
 		
-page5:Toggle("Auto Drop (Uncom)", false,function(dropun)
+page5_5:Toggle("Auto Drop (Uncom)", false,function(dropun)
      DropUn = dropun
 end)
 
@@ -5929,7 +5929,7 @@ spawn(function()
     end
 end)
 
-page5:Toggle("Auto Drop (Rare,Ultra)", false,function(dropul)
+page5_5:Toggle("Auto Drop (Rare,Ultra)", false,function(dropul)
      DropUL = dropul
 end)
 
