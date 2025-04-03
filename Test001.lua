@@ -5703,11 +5703,8 @@ page5:Toggle("Anti Dark Pool", false,function(anstun)
     _G.antistun = anstun
 end)
 
-
-_G.antistun = true  -- กำหนดค่าเริ่มต้นให้ _G.antistun
-
 spawn(function()
-    while wait(1) do
+    while wait() do
         if _G.antistun then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
