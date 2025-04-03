@@ -5744,22 +5744,17 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do -- ทำงานซ้ำทุก 1 วินาที (ปรับค่าได้)
+    while wait() do -- ทำงานซ้ำทุก 1 วินาที (สามารถปรับได้)
         if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
             pcall(function()
                 for _, obj in pairs(game.Workspace:GetChildren()) do
                     if game.Players:GetPlayerFromCharacter(obj) then -- ตรวจสอบว่าเป็นตัวละครของผู้เล่น
-                        -- ค้นหา ReturnBall1 และ ReturnBall2
+                        -- ค้นหาและลบ ReturnBall1 และ ReturnBall2
                         for _, ballName in pairs({"ReturnBall1", "ReturnBall2"}) do
                             local ball = obj:FindFirstChild(ballName)
                             if ball then
-                                -- ค้นหาและลบ TouchInterest ภายในวัตถุที่พบ
-                                for _, child in pairs(ball:GetDescendants()) do
-                                    if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                        print("ลบ TouchInterest ใน " .. ballName .. " ของผู้เล่น " .. obj.Name)
-                                    end
-                                end
+                                ball:Destroy()
+                                print("ลบ " .. ballName .. " จากผู้เล่น " .. obj.Name)
                             end
                         end
                     end
