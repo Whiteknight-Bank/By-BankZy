@@ -6044,18 +6044,20 @@ end)
 page5_5:Label(" ┇ Aff Fake ┇ ")
 
 page5_5:TextBox("Affs",". . .",function(txt)
-    AmountAff2 = txt
+    AmountAff2 = txt  -- บันทึกค่าจาก TextBox
 end)
 
 page5_5:Button("Click", function()
-		if AmountAff2 then
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..txt
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..txt
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..txt
-					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..txt
-		end
-end)
+    if AmountAff2 then
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..AmountAff2
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..AmountAff2
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..AmountAff2
+        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..AmountAff2
     else
+        print("Error: AmountAff2 is nil!")
+    end
+end)
+else
         showNotification("❌ คีย์ผิด กรุณาลองใหม่!") -- แสดงข้อความแจ้งเตือน
     end
 end
