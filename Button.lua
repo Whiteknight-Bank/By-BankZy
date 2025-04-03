@@ -46,7 +46,7 @@ screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 -- สร้าง Frame สำหรับแจ้งเตือน
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0.3, 0, 0.1, 0)
-frame.Position = UDim2.new(1, 0, 0.9, 0)  -- เริ่มต้นที่มุมขวานอกจอ
+frame.Position = UDim2.new(1, -13, 0.9, -15)  -- เริ่มต้นที่มุมขวานอกจอ
 frame.BackgroundTransparency = 0.5  -- พื้นหลังโปร่งใส
 frame.BackgroundColor3 = Color3.new(0, 0, 0) -- สีดำ
 frame.BorderSizePixel = 4  -- ขอบขาว
@@ -68,7 +68,7 @@ local TweenService = game:GetService("TweenService")
 
 -- การตั้งค่าอนิเมชั่นให้ Frame เคลื่อนที่เข้ามาจากข้างนอก
 local tweenInfo = TweenInfo.new(0.5, Enum.EasingStyle.Bounce, Enum.EasingDirection.Out)
-local goal = {Position = UDim2.new(0.7, 0, 0.9, 0)}  -- เคลื่อนที่ไปมุมขวาล่าง
+local goal = {Position = UDim2.new(0.7, -13, 0.9, -15)}  -- เคลื่อนที่ไปมุมขวาล่าง
 local tween = TweenService:Create(frame, tweenInfo, goal)
 
 -- เริ่มการอนิเมชั่น
