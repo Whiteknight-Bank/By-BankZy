@@ -5744,7 +5744,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(1) do -- ทำงานซ้ำทุก 1 วินาที (ปรับค่าได้)
+    while wait() do -- ทำงานซ้ำทุก 1 วินาที (ปรับค่าได้)
         if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
             pcall(function()
                 for _, obj in pairs(game.Workspace:GetChildren()) do
