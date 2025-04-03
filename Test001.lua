@@ -6048,10 +6048,10 @@ page5_5:TextBox("Affs",". . .",function(xtx)
 end)
 page5_5:Button("Click", function()
 		if AmountAff2 then
-					game.Workspace.UserData["User_" ..players.UserId].Data.DFT2Melee.Value = ""..xtx
-					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Sniper.Value = ""..xtx
-					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Sword.Value = ""..xtx
-					me.Workspace.UserData["User_" ..players.UserId].Data.DFT2Defense.Value = ""..xtx
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..xtx
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..xtx
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..xtx
+					game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..xtx
 		end
 end)
     else
