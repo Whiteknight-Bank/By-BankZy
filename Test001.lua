@@ -5743,33 +5743,32 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do -- ทำงานซ้ำทุก 1 วินาที
+    while wait(1) do -- ทำงานซ้ำทุก 1 วินาที
         if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
             pcall(function()
+                -- ค้นหาไฟล์ Dark ในโฟลเดอร์ Power
                 local powerFolder = game.Workspace:FindFirstChild("Power")
-		if game.Players:GetPlayerFromCharacter(powerFolder) then
                 if powerFolder then
-                    local magma = powerFolder:FindFirstChild("Magma")
-                    if magma then
-                        for _, child in pairs(magma:GetDescendants()) do
-                            if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
+                    local dark = powerFolder:FindFirstChild("Dark")
+                    if dark then
+                        for _, child in pairs(dark:GetDescendants()) do
+                            if child:IsA("Attachment") then
                                 child:Destroy()
-                                print("ลบ TouchInterest ใน Magma")
+                                print("ลบ Attachment ใน Dark")
                             end
                         end
                     end
                 end
-									end
-	
-                -- ค้นหาไฟล์ MagmaBall ในโฟลเดอร์ shots
-                local shotsFolder = game.Workspace:FindFirstChild("shots")
-                if shotsFolder then
-                    local magmaBall = shotsFolder:FindFirstChild("MagmaBall")
-                    if magmaBall then
-                        for _, child in pairs(magmaBall:GetDescendants()) do
-                            if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
+                
+                -- ค้นหาไฟล์ DarkStarBit ในโฟลเดอร์ Projectiles
+                local projectilesFolder = game.Workspace:FindFirstChild("Projectiles")
+                if projectilesFolder then
+                    local darkStarBit = projectilesFolder:FindFirstChild("DarkStarBit")
+                    if darkStarBit then
+                        for _, child in pairs(darkStarBit:GetDescendants()) do
+                            if child:IsA("Attachment") then
                                 child:Destroy()
-                                print("ลบ TouchInterest ใน MagmaBall")
+                                print("ลบ Attachment ใน DarkStarBit")
                             end
                         end
                     end
@@ -5778,7 +5777,7 @@ spawn(function()
         end
     end
 end)
-
+		
 page5:Label(" ┇ Unbox ┇ ")
 
 page5:Toggle("Unbox (Common)", false,function(ubcm)
