@@ -5742,9 +5742,13 @@ spawn(function()
     end
 end)
 
+page5:Toggle("Anti Venom", false,function(anve)
+    _G.antive = anve
+end)
+		
 spawn(function()
     while wait() do
-        if _G.antistun then
+        if _G.antive then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
