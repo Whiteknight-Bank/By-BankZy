@@ -5788,6 +5788,40 @@ end)
 spawn(function()
     while wait() do
         if _G.antive then
+            pcall(function()
+                for _, playerModel in pairs(game:GetService("Workspace")["" .. game.Players.Name]:GetChildren()) do
+                    -- ตรวจสอบว่าใน playerModel มี Power (สมมุติว่าเป็นผู้เล่น)
+                    local power = playerModel:FindFirstChild("Power")
+                    if power and power.Value == "Venom" then
+                        -- ตรวจสอบว่ามี VenomHydraStrike
+                        local hydraStrike = playerModel:FindFirstChild("VenomHydraStrike")
+                        if hydraStrike then
+                            -- ตรวจสอบว่ามี HydraHead
+                            local hydraHead = playerModel:FindFirstChild("HydraHead")
+                            if hydraHead then
+                                -- ลูปลบ TouchInterest ใน Head กับ Jaw
+                                for _, partName in pairs({"Head", "Jaw"}) do
+                                    local part = hydraHead:FindFirstChild(partName)
+                                    if part then
+                                        local touch = part:FindFirstChild("TouchInterest")
+                                        if touch then
+                                            touch:Destroy()
+                                            print("ลบ TouchInterest ใน " .. partName .. " ของ " .. playerModel.Name)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
+spawn(function()
+    while wait() do
+        if _G.antive then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
