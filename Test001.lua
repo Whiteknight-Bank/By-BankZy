@@ -5743,37 +5743,40 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(1) do -- ทำงานซ้ำทุก 1 วินาที
-        if _G.antistun then -- ตรวจสอบว่าเปิดใช้งานอยู่หรือไม่
-            pcall(function()
-                -- ค้นหาไฟล์ Dark ในโฟลเดอร์ Power
-                local powerFolder = game.Workspace:FindFirstChild("Power")
-                if powerFolder then
-                    local dark = powerFolder:FindFirstChild("Dark")
-                    if dark then
-                        for _, child in pairs(dark:GetDescendants()) do
-                            if child:IsA("Attachment") then
-                                child:Destroy()
-                                print("ลบ Attachment ใน Dark")
+    while wait() do
+        if _G.antistun then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                            print("ลบ TouchInterest ของ", player.Name)
+                                        end
+                                    end
+                                end
                             end
+                        end)
+
+                        if not success then
+                            warn("Error while processing player:", player.Name, err)
                         end
                     end
                 end
-                
-                -- ค้นหาไฟล์ DarkStarBit ในโฟลเดอร์ Projectiles
-                local projectilesFolder = game.Workspace:FindFirstChild("Projectiles")
-                if projectilesFolder then
-                    local darkStarBit = projectilesFolder:FindFirstChild("DarkStarBit")
-                    if darkStarBit then
-                        for _, child in pairs(darkStarBit:GetDescendants()) do
-                            if child:IsA("Attachment") then
-                                child:Destroy()
-                                print("ลบ Attachment ใน DarkStarBit")
-                            end
-                        end
-                    end
-                end
-            end)
+            else
+                warn("ไม่พบ Userdata ใน Workspace")
+            end
         end
     end
 end)
