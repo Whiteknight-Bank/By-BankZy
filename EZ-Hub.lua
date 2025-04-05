@@ -1,6 +1,6 @@
 --script
-local Window = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
-create:Win("EZ Hub")
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
+local Window = create:Win("EZ Hub")
 game:GetService("CoreGui").redui.MainSceen.Visible = false
 
 create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L", 5)
