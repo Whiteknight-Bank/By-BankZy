@@ -5786,22 +5786,25 @@ spawn(function()
     while wait() do
         if _G.antistun then
             pcall(function()
-local player = game.Players.LocalPlayer.Character
-       player["DF_Disabled"].Value = false
-       player.HeartStolen.Value = true
-       player.Returned.Value = false
-       player.Hobbied.Value = false
-       player.HMS.Value = false
-       player.ChillyPunched.Value = false
-       player.CandyTouched.Value = false
-       player.Negative.Value = false
-       player.OpeSevered.Value = false
-       player.SnowTouched.Value = false
-       player.RumbleStun.Value = false
-       player.GravityCrushed.Value = false                   
-	end
+                local player = game.Players.LocalPlayer
+                if player and player.Character then
+                    local char = player.Character
+                    char:WaitForChild("DF_Disabled").Value = false
+                    char:WaitForChild("HeartStolen").Value = false
+                    char:WaitForChild("Returned").Value = false
+                    char:WaitForChild("Hobbied").Value = false
+                    char:WaitForChild("HMS").Value = false
+                    char:WaitForChild("ChillyPunched").Value = false
+                    char:WaitForChild("CandyTouched").Value = false
+                    char:WaitForChild("Negative").Value = false
+                    char:WaitForChild("OpeSevered").Value = false
+                    char:WaitForChild("SnowTouched").Value = false
+                    char:WaitForChild("RumbleStun").Value = false
+                    char:WaitForChild("GravityCrushed").Value = false
+                end
             end)
         end
+    end
 end)
 
 page5:Label(" ┇ Unbox ┇ ")
