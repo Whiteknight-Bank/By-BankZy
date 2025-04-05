@@ -5783,7 +5783,7 @@ page5:Toggle("Anti ball", false,function(anve)
 end)
 
 spawn(function()
-    while wait(1) do
+    while wait() do
         if _G.antiball then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
@@ -5811,7 +5811,7 @@ spawn(function()
                         end
 
                         -- ตรวจโฟลเดอร์ shots
-                        local shotsFolder = obj:FindFirstChild("shots")
+                        local shotsFolder = obj:FindFirstChild("Shots")
                         if shotsFolder then
                             local magmaBall = shotsFolder:FindFirstChild("MagmaBall")
                             if magmaBall then
@@ -5825,7 +5825,7 @@ spawn(function()
                                 print("ไม่เจอ MagmaBall ใน shots ของ " .. player.Name)
                             end
                         else
-                            print("ไม่เจอ shots ใน " .. player.Name)
+                            print("ไม่เจอ Shots ใน " .. player.Name)
                         end
                     end
                 end
