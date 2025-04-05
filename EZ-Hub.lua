@@ -3675,6 +3675,26 @@ local page1 = Tap1:newpage()
 
 page1:Label(" ┇ Function Antis ┇ ")
 
-page1:Toggle("Anti", false,function(dmmsv)
-    AutoMission = dmmsv
+page1:Toggle("Anti Love", false,function(zxc)
+    _G.anti = zxc
+end)
+
+page1:Toggle("Anti Venom", false,function(zxc)
+    _G.anti = zxc
+end)
+
+page1:Toggle("Anti", false,function(zxc)
+    _G.anti = zxc
+end)
+
+page1:Toggle("Anti", false,function(zxc)
+    _G.anti = zxc
+end)
+
+page1:Toggle("Anti", false,function(zxc)
+    _G.anti = zxc
+end)
+
+page1:Toggle("Anti", false,function(zxc)
+    _G.anti = zxc
 end)
