@@ -5786,8 +5786,20 @@ spawn(function()
     while wait() do
         if _G.antistun then
             pcall(function()
-workspace[" "..game.Players.LocalPlayer.Name].Hobbied.Value = true
-                   end
+local player = game.Players.LocalPlayer.Character
+       player["DF_Disabled"].Value = false
+       player.HeartStolen.Value = true
+       player.Returned.Value = false
+       player.Hobbied.Value = false
+       player.HMS.Value = false
+       player.ChillyPunched.Value = false
+       player.CandyTouched.Value = false
+       player.Negative.Value = false
+       player.OpeSevered.Value = false
+       player.SnowTouched.Value = false
+       player.RumbleStun.Value = false
+       player.GravityCrushed.Value = false                   
+	end
             end)
         end
 end)
