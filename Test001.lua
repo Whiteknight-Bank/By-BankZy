@@ -5784,41 +5784,12 @@ end)
 		
 spawn(function()
     while wait() do
-        if _G.antive then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = " " .. tostring(player.Name)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Power")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomBreathProjectiles")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("Part")
-                                        if touchInterest then
-                                            touchInterest.TouchInterest:Destroy()
-                                            print("ลบ TouchInterest ของ", player.Name)
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-
-                        if not success then
-                            warn("Error while processing player:", player.Name, err)
-                        end
-                    end
-                end
-            else
-                warn("ไม่พบ Userdata ใน Workspace")
-            end
+        if _G.antistun then
+            pcall(function()
+workspace[" "..game.Players.LocalPlayer.Name].Hobbied.Value = true
+                   end
+            end)
         end
-    end
 end)
 
 page5:Label(" ┇ Unbox ┇ ")
