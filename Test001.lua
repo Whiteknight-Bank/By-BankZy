@@ -5783,17 +5783,18 @@ page5:Toggle("Anti ball", false,function(anve)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(1) do
         if _G.antiball then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
-                    if obj:IsA("Model") and game.Players:FindFirstChild(obj.Name) then
-                        local player = game.Players:FindFirstChild(obj.Name)
-                        print("พบผู้เล่น: " .. player.Name)
+                    -- ตรวจว่า obj มีชื่อเหมือนผู้เล่นจริง
+                    local player = game.Players:FindFirstChild(obj.Name)
+                    if player and obj:IsA("Model") then
 
-                        -- หา Power ภายใน Model ที่ตรงกับชื่อผู้เล่น
+                        -- ตรวจว่าใน Model ของผู้เล่นมีโฟลเดอร์ Power หรือไม่
                         local powerFolder = obj:FindFirstChild("Power")
                         if powerFolder then
+                            print("เจอ Power ใน " .. player.Name)
                             local magma = powerFolder:FindFirstChild("Magma")
                             if magma then
                                 for _, child in pairs(magma:GetDescendants()) do
@@ -5802,10 +5803,14 @@ spawn(function()
                                         print("ลบ TouchInterest ใน Magma ของ " .. player.Name)
                                     end
                                 end
+                            else
+                                print("ไม่เจอ Magma ใน Power ของ " .. player.Name)
                             end
+                        else
+                            print("ไม่เจอ Power ใน " .. player.Name)
                         end
 
-                        -- หา shots.MagmaBall
+                        -- ตรวจโฟลเดอร์ shots
                         local shotsFolder = obj:FindFirstChild("shots")
                         if shotsFolder then
                             local magmaBall = shotsFolder:FindFirstChild("MagmaBall")
@@ -5816,7 +5821,11 @@ spawn(function()
                                         print("ลบ TouchInterest ใน MagmaBall ของ " .. player.Name)
                                     end
                                 end
+                            else
+                                print("ไม่เจอ MagmaBall ใน shots ของ " .. player.Name)
                             end
+                        else
+                            print("ไม่เจอ shots ใน " .. player.Name)
                         end
                     end
                 end
