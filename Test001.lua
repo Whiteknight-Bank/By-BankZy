@@ -5124,6 +5124,51 @@ mta.__index = newcclosure(function(a, b, c)
     return index(a, b, c)
 end)
 
+local aimsilent = false -- ตั้งค่าตัวแปรเพื่อให้เปิด/ปิดการล็อคมอนสเตอร์
+local cacacac = CFrame.new() -- ค่าตำแหน่งที่เราจะล็อคไป
+
+-- ฟังก์ชั่น Toggle เปิด/ปิดการล็อค
+page3:Toggle("Aim Enemies", false, function(slims)
+    aimsilents = slims
+end)
+
+-- เริ่มสคริปต์ให้ทำงานในแบ็คกราวด์
+spawn(function()
+    pcall(function()
+        while true do wait()
+            pcall(function()
+                -- รับข้อมูลตัวละครผู้เล่น
+                local playerCharacter = game.Players.LocalPlayer.Character
+                if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
+                    local playerRootPart = playerCharacter.HumanoidRootPart
+                    
+                    if aimsilents then
+                        -- ลูปเพื่อทำการล็อคมอนสเตอร์ใน Enemies
+                        local enemies = workspace:WaitForChild("Enemies")
+                        for _, enemy in pairs(enemies:GetChildren()) do
+                            if enemy:FindFirstChild("HumanoidRootPart") then
+                                -- ล็อคไปที่ HumanoidRootPart ของมอนสเตอร์
+                                cacacac = enemy.HumanoidRootPart.CFrame
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end)
+
+-- เปลี่ยนการตั้งค่า __index เพื่อให้ล็อคตำแหน่งไปที่มอนสเตอร์ใน Enemies
+local index = mta.__index
+cf = CFrame.new(1, 2, 3)
+setreadonly(mta, false)
+mta.__index = newcclosure(function(a, b, c)
+    if tostring(b):lower() == 'hit' and aimsilent then
+        return cacacac
+    end
+    return index(a, b, c)
+end)
+
 page3:Label(" ┇ Max Charge Skill ┇ ")
 
 page3:Toggle("100% Charge Skill", false,function(max)
