@@ -3755,47 +3755,22 @@ end)
 
 spawn(function()
     while wait() do
-        if _G.antiball then
+        if _G.antity then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
-                    -- ตรวจว่า obj มีชื่อเหมือนผู้เล่นจริง
                     local player = game.Players:FindFirstChild(obj.Name)
                     if player and obj:IsA("Model") then
-                        -- ตรวจว่าใน Model ของผู้เล่นมีโฟลเดอร์ Power หรือไม่
                         local powerFolder = obj:FindFirstChild("Powers")
                         if powerFolder then
-                            print("เจอ Power ใน " .. player.Name)
                             local magma = powerFolder:FindFirstChild("Magma")
                             if magma then
-                                for _, child in pairs(magma:GetDescendants()) do
-                                    if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                        print("ลบ TouchInterest ใน Magma ของ " .. player.Name)
+                                for _, part in pairs(magma:GetDescendants()) do
+                                    if part:IsA("BasePart") and part.Name == "MagmaBall" then
+                                        part:Destroy()
+                                        print("ลบ MagmaBall ของ " .. player.Name)
                                     end
                                 end
-                            else
-                                print("ไม่เจอ Magma ใน Power ของ " .. player.Name)
                             end
-                        else
-                            print("ไม่เจอ Power ใน " .. player.Name)
-                        end
-
-                        -- ตรวจโฟลเดอร์ shots
-                        local shotsFolder = obj:FindFirstChild("Shots")
-                        if shotsFolder then
-                            local magmaBall = shotsFolder:FindFirstChild("MagmaBall")
-                            if magmaBall then
-                                for _, child in pairs(magmaBall:GetDescendants()) do
-                                    if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                        print("ลบ TouchInterest ใน MagmaBall ของ " .. player.Name)
-                                    end
-                                end
-                            else
-                                print("ไม่เจอ MagmaBall ใน shots ของ " .. player.Name)
-                            end
-                        else
-                            print("ไม่เจอ shots ใน " .. player.Name)
                         end
                     end
                 end
