@@ -3675,12 +3675,78 @@ local page1 = Tap1:newpage()
 
 page1:Label(" ┇ Function Antis ┇ ")
 
-page1:Toggle("Anti Love", false,function(zxc)
-    _G.anti = zxc
+page1:Toggle("Anti Love", false,function(lve)
+    _G.antilove = lve
 end)
 
-page1:Toggle("Anti Venom", false,function(zxc)
-    _G.anti = zxc
+spawn(function()
+    while wait() do
+        if _G.anti then
+            pcall(function()
+                for _, obj in ipairs(workspace:GetChildren()) do
+                    if obj:IsA("Model") then
+                        local player = game.Players:FindFirstChild("Love")
+                        if player then
+                            -- ค้นหา Powers
+                            local powerFolder = obj:FindFirstChild("Powers")
+                            if powerFolder then
+                                for _, power in pairs(powerFolder:GetChildren()) do
+                                    if targetNames[power.Name] then
+                                        for _, child in pairs(power:GetDescendants()) do
+                                            if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
+                                                child:Destroy()
+                                                print("ลบ TouchInterest ในพลัง " .. power.Name .. " ของ " .. player.Name)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+page1:Toggle("Anti Venom", false,function(vnom)
+    _G.antive = vnom
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antive then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                            print("ลบ TouchInterest ของ", player.Name)
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+
+                    end
+                end
+            else
+                warn("ไม่พบ Userdata ใน Workspace")
+            end
+        end
+    end
 end)
 
 page1:Toggle("Anti", false,function(zxc)
