@@ -5778,10 +5778,53 @@ spawn(function()
     end
 end)
 
-page5:Toggle("Anti", false,function(anve)
-    _G.antive = anve
+page5:Toggle("Anti ball", false,function(anve)
+    _G.antiball = anve
 end)
 
+spawn(function()
+    while wait() do
+        if _G.antiball then
+            pcall(function()
+                for _, obj in ipairs(workspace:GetChildren()) do
+                    if obj:IsA("Model") and game.Players:FindFirstChild(obj.Name) then
+                        local player = game.Players:FindFirstChild(obj.Name)
+                        print("พบผู้เล่น: " .. player.Name)
+
+                        -- หา Power ภายใน Model ที่ตรงกับชื่อผู้เล่น
+                        local powerFolder = obj:FindFirstChild("Power")
+                        if powerFolder then
+                            local magma = powerFolder:FindFirstChild("Magma")
+                            if magma then
+                                for _, child in pairs(magma:GetDescendants()) do
+                                    if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                        print("ลบ TouchInterest ใน Magma ของ " .. player.Name)
+                                    end
+                                end
+                            end
+                        end
+
+                        -- หา shots.MagmaBall
+                        local shotsFolder = obj:FindFirstChild("shots")
+                        if shotsFolder then
+                            local magmaBall = shotsFolder:FindFirstChild("MagmaBall")
+                            if magmaBall then
+                                for _, child in pairs(magmaBall:GetDescendants()) do
+                                    if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                        print("ลบ TouchInterest ใน MagmaBall ของ " .. player.Name)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
 page5:Label(" ┇ Unbox ┇ ")
 
 page5:Toggle("Unbox (Common)", false,function(ubcm)
