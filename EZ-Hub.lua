@@ -3754,7 +3754,7 @@ page1:Toggle("Anti Magmaball", false,function(bll)
 end)
 
 spawn(function()
-    while wait(1) do
+    while wait() do
         if _G.antiball then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
@@ -3762,7 +3762,7 @@ spawn(function()
                     local player = game.Players:FindFirstChild(obj.Name)
                     if player and obj:IsA("Model") then
                         -- ตรวจว่าใน Model ของผู้เล่นมีโฟลเดอร์ Power หรือไม่
-                        local powerFolder = obj:FindFirstChild("Power")
+                        local powerFolder = obj:FindFirstChild("Powers")
                         if powerFolder then
                             print("เจอ Power ใน " .. player.Name)
                             local magma = powerFolder:FindFirstChild("Magma")
