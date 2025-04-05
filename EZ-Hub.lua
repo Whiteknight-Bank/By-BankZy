@@ -3755,7 +3755,7 @@ end)
 
 spawn(function()
     while wait() do
-        if _G.antity then
+        if _G.antiball then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     local player = game.Players:FindFirstChild(obj.Name)
