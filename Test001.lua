@@ -5699,7 +5699,7 @@ if self.Name == 'Drown' and _G.nodmgwater then
     end
 end)
 
-page5:Toggle("Anti Dark Pool", false,function(anstun)
+page5:Toggle("Anti Dark&Venom Pool", false,function(anstun)
     _G.antistun = anstun
 end)
 
@@ -5735,20 +5735,13 @@ spawn(function()
                     warn("ResourceHolder not found in Workspace!")
                 end
             end)
-            if not success then
-                warn("Error occurred: " .. err) -- แสดง error ถ้ามีปัญหา
-            end
         end
     end
 end)
 
-page5:Toggle("Anti Venom", false,function(anve)
-    _G.antive = anve
-end)
-		
 spawn(function()
     while wait() do
-        if _G.antive then
+        if _G.antistun then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
@@ -5785,19 +5778,29 @@ spawn(function()
     end
 end)
 
+page5:Toggle("Anti Venom", false,function(anve)
+    _G.antive = anve
+end)
+
 spawn(function()
     while wait() do
         if _G.antive then
-            pcall(function()
-                for _, playerModel in pairs(game:GetService("Workspace")["" .. game.Players.Name]:GetChildren()) do
-                    -- ตรวจสอบว่าใน playerModel มี Power (สมมุติว่าเป็นผู้เล่น)
-                    local power = playerModel:FindFirstChild("Power")
-                    if power and power.Value == "Venom" then
-                        -- ตรวจสอบว่ามี VenomHydraStrike
-                        local hydraStrike = playerModel:FindFirstChild("VenomHydraStrike")
+		local resourceHolder = game.Workspace:FindFirstChild()
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local FolderName = "" .. tostring(player.Name)
+                    local userFolder = resourceHolder:FindFirstChild(FolderName)
+										
+                if userFolder then
+                        local success, err = pcall(function()
+                            local power = userFolder:FindFirstChild("Power")
+                    if power then
+			local hydra = userFolder:FindFirstChild("Venom")
+                    if hydra then
+                        local hydraStrike = userFolder:FindFirstChild("VenomHydraStrike")
                         if hydraStrike then
                             -- ตรวจสอบว่ามี HydraHead
-                            local hydraHead = playerModel:FindFirstChild("HydraHead")
+                            local hydraHead = userFolder:FindFirstChild("HydraHead")
                             if hydraHead then
                                 -- ลูปลบ TouchInterest ใน Head กับ Jaw
                                 for _, partName in pairs({"Head", "Jaw"}) do
@@ -5807,6 +5810,7 @@ spawn(function()
                                         if touch then
                                             touch:Destroy()
                                             print("ลบ TouchInterest ใน " .. partName .. " ของ " .. playerModel.Name)
+					end
                                         end
                                     end
                                 end
@@ -6105,39 +6109,6 @@ spawn(function()
                 end
             end
         end)
-    end
-end)
-page5_5:Label(" ┇ Aff Fake ┇ ")
-
-page5_5:TextBox("Affs",". . .",function(txt)
-    AmountAff1 = txt  -- บันทึกค่าจาก TextBox
-end)
-
-page5_5:Button("Click", function()
-    if AmountAff2 then
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Melee.Value = ""..AmountAff1
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Sniper.Value = ""..AmountAff1
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Sword.Value = ""..AmountAff1
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT1Defense.Value = ""..AmountAff1
-    else
-        print("Error: AmountAff2 is nil!")
-    end
-end)
-
-page5_5:Label(" ┇ Aff Fake ┇ ")
-
-page5_5:TextBox("Affs",". . .",function(txt)
-    AmountAff2 = txt  -- บันทึกค่าจาก TextBox
-end)
-
-page5_5:Button("Click", function()
-    if AmountAff2 then
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Melee.Value = ""..AmountAff2
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sniper.Value = ""..AmountAff2
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Sword.Value = ""..AmountAff2
-        game.Workspace.UserData["User_" ..game.Players.LocalPlayer.UserId].Data.DFT2Defense.Value = ""..AmountAff2
-    else
-        print("Error: AmountAff2 is nil!")
     end
 end)
 else
