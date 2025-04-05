@@ -5792,7 +5792,7 @@ spawn(function()
                     if player and obj:IsA("Model") then
 
                         -- ตรวจว่าใน Model ของผู้เล่นมีโฟลเดอร์ Power หรือไม่
-                        local powerFolder = obj:FindFirstChild("Power")
+                        local powerFolder = obj:FindFirstChild("Powers")
                         if powerFolder then
                             print("เจอ Power ใน " .. player.Name)
                             local magma = powerFolder:FindFirstChild("Magma")
