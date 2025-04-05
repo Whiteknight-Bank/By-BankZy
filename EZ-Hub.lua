@@ -1,17 +1,17 @@
 --script
 local Window = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
-create:Win("InW Hub : For Map OPL: Anarchy / No Update Now.")
+create:Win("EZ Hub")
 game:GetService("CoreGui").redui.MainSceen.Visible = false
 
 create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L", 5)
 
 game:GetService("CoreGui").redui.MainSceen.Visible = true
 
-local Tap1 = Window:Taps("Autos")
+local Tap1 = Window:Taps("Anti")
 local page1 = Tap1:newpage()
 
-page1:Label(" ┇ Function Autos ┇ ")
+page1:Label(" ┇ Function Antis ┇ ")
 
-page1:Toggle("Auto Claim Mission", false,function(dmmsv)
+page1:Toggle("Anti", false,function(dmmsv)
     AutoMission = dmmsv
 end)
