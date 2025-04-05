@@ -5781,47 +5781,6 @@ end)
 page5:Toggle("Anti Venom", false,function(anve)
     _G.antive = anve
 end)
-
-spawn(function()
-    while wait() do
-        if _G.antive then
-		local resourceHolder = game.Workspace:FindFirstChild()
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local FolderName = "" .. tostring(player.Name)
-                    local userFolder = resourceHolder:FindFirstChild(FolderName)
-										
-                if userFolder then
-                        local success, err = pcall(function()
-                            local power = userFolder:FindFirstChild("Power")
-                    if power then
-			local hydra = userFolder:FindFirstChild("Venom")
-                    if hydra then
-                        local hydraStrike = userFolder:FindFirstChild("VenomHydraStrike")
-                        if hydraStrike then
-                            -- ตรวจสอบว่ามี HydraHead
-                            local hydraHead = userFolder:FindFirstChild("HydraHead")
-                            if hydraHead then
-                                -- ลูปลบ TouchInterest ใน Head กับ Jaw
-                                for _, partName in pairs({"Head", "Jaw"}) do
-                                    local part = hydraHead:FindFirstChild(partName)
-                                    if part then
-                                        local touch = part:FindFirstChild("TouchInterest")
-                                        if touch then
-                                            touch:Destroy()
-                                            print("ลบ TouchInterest ใน " .. partName .. " ของ " .. playerModel.Name)
-					end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
 		
 spawn(function()
     while wait() do
