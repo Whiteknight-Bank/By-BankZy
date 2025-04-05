@@ -1,5 +1,5 @@
 --script
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
+local MainSceen = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
 local Window = create:Win("EZ Hub")
 game:GetService("CoreGui").redui.MainSceen.Visible = false
 
