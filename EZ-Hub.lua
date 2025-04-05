@@ -3749,13 +3749,13 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Anti Magmaball", false,function(zxc)
-    _G.anti = zxc
+page1:Toggle("Anti Magmaball", false,function(bll)
+    _G.antiball = bll
 end)
 
 spawn(function()
     while wait(1) do
-        if _G.antistun then
+        if _G.antiball then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     -- ตรวจว่า obj มีชื่อเหมือนผู้เล่นจริง
