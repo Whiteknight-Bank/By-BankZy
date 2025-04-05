@@ -5778,33 +5778,8 @@ spawn(function()
     end
 end)
 
-page5:Toggle("Anti Venom", false,function(anve)
+page5:Toggle("Anti", false,function(anve)
     _G.antive = anve
-end)
-		
-spawn(function()
-    while wait() do
-        if _G.antistun then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                if player and player.Character then
-                    local char = player.Character
-                    char:WaitForChild("DF_Disabled").Value = false
-                    char:WaitForChild("HeartStolen").Value = false
-                    char:WaitForChild("Returned").Value = false
-                    char:WaitForChild("Hobbied").Value = false
-                    char:WaitForChild("HMS").Value = false
-                    char:WaitForChild("ChillyPunched").Value = false
-                    char:WaitForChild("CandyTouched").Value = false
-                    char:WaitForChild("Negative").Value = false
-                    char:WaitForChild("OpeSevered").Value = false
-                    char:WaitForChild("SnowTouched").Value = false
-                    char:WaitForChild("RumbleStun").Value = false
-                    char:WaitForChild("GravityCrushed").Value = false
-                end
-            end)
-        end
-    end
 end)
 
 page5:Label(" ┇ Unbox ┇ ")
