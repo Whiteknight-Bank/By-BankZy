@@ -3760,6 +3760,7 @@ spawn(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     local player = game.Players:FindFirstChild(obj.Name)
                     if player and obj:IsA("Model") then
+                        -- ลบ MagmaBall ใน Powers.Magma
                         local powerFolder = obj:FindFirstChild("Powers")
                         if powerFolder then
                             local magma = powerFolder:FindFirstChild("Magma")
@@ -3767,7 +3768,21 @@ spawn(function()
                                 for _, part in pairs(magma:GetDescendants()) do
                                     if part:IsA("BasePart") and part.Name == "MagmaBall" then
                                         part:Destroy()
-                                        print("ลบ MagmaBall ของ " .. player.Name)
+                                        print("ลบ MagmaBall จาก Powers ของ " .. player.Name)
+                                    end
+                                end
+                            end
+                        end
+
+                        -- ลบ MagmaBall ใน Shots.Magma
+                        local shotsFolder = obj:FindFirstChild("Shots")
+                        if shotsFolder then
+                            local magmaShots = shotsFolder:FindFirstChild("Magma")
+                            if magmaShots then
+                                for _, part in pairs(magmaShots:GetDescendants()) do
+                                    if part:IsA("BasePart") and part.Name == "MagmaBall" then
+                                        part:Destroy()
+                                        print("ลบ MagmaBall จาก Shots ของ " .. player.Name)
                                     end
                                 end
                             end
