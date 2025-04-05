@@ -5699,13 +5699,13 @@ if self.Name == 'Drown' and _G.nodmgwater then
     end
 end)
 
-page5:Toggle("Anti Dark&Venom Pool", false,function(anstun)
-    _G.antistun = anstun
+page5:Toggle("Anti stun Fruity", false,function(anstun)
+    _G.antity = anstun
 end)
 
 spawn(function()
     while wait() do
-        if _G.antistun then
+        if _G.antity then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
 
@@ -5741,7 +5741,7 @@ end)
 
 spawn(function()
     while wait() do
-        if _G.antistun then
+        if _G.antity then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
@@ -5778,13 +5778,9 @@ spawn(function()
     end
 end)
 
-page5:Toggle("Anti love", false,function(anve)
-    _G.antitrim = anve
-end)
-
 spawn(function()
-    while wait(1) do
-        if _G.antitrim then
+    while wait() do
+        if _G.antity then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     local player = game.Players:FindFirstChild(obj.Name)
@@ -5824,6 +5820,28 @@ spawn(function()
                     end
                 end
             end)
+        end
+    end
+end)
+
+page5:Toggle("Anti Effect", false,function(anve)
+    _G.antistun = anve
+end)
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+spawn(function()
+    while wait(0.5) do
+        if _G.antistun then
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj:IsA("Model") and obj.Name == localPlayer.Name then
+                    pcall(function()
+                        obj.Hobbied.Value = false
+                        obj.DF_Disabled.Value = false
+                    end)
+                end
+            end
         end
     end
 end)
