@@ -5839,6 +5839,8 @@ spawn(function()
                     pcall(function()
                         obj.Hobbied.Value = false
                         obj.DF_Disabled.Value = false
+                        obj.SnowTouched.Value = false
+                        obj.SnowTouched.Time.Value = 0
                     end)
                 end
             end
