@@ -5699,7 +5699,7 @@ if self.Name == 'Drown' and _G.nodmgwater then
     end
 end)
 
-page5:Toggle("Anti stun Fruity", false,function(anstun)
+page5:Toggle("Anti Dark&Venom Pool", false,function(anstun)
     _G.antity = anstun
 end)
 
@@ -5775,6 +5775,10 @@ spawn(function()
     end
 end)
 
+page5:Toggle("Anti Status", false,function(anve)
+    _G.anti = anve
+end)
+
 local targetNames = {
     Alice=true, Venom=true, Magma=true, Rumble=true, Ope=true, String=true,
     Dark=true, Phoenix=true, Vampire=true, Gas=true, Sand=true, Hollow=true,
@@ -5783,11 +5787,31 @@ local targetNames = {
     Clone=true, Diamond=true, Float=true, Gravity=true, Hobby=true, Hot=true,
     Light=true, Love=true, Luck=true, Order=true, Rumble1=true, OpeOld=true,
     Spin=true, Plasma=true
-}
+		}
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+spawn(function()
+    while wait(0.5) do
+        if _G.anti then
+            for _, obj in ipairs(workspace:GetChildren()) do
+                if obj:IsA("Model") and obj.Name == localPlayer.Name then
+                    pcall(function()
+                        obj.Hobbied.Value = false
+                        obj.DF_Disabled.Value = false
+                        obj.SnowTouched.Value = false
+                        obj.VenomDoT.Value = false
+                    end)
+                end
+            end
+        end
+    end
+end)
 
 spawn(function()
     while wait() do
-        if _G.antity then
+        if _G.anti then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     if obj:IsA("Model") then
@@ -5811,30 +5835,6 @@ spawn(function()
                     end
                 end
             end)
-        end
-    end
-end)
-
-page5:Toggle("Anti Effect", false,function(anve)
-    _G.antistun = anve
-end)
-
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-spawn(function()
-    while wait(0.5) do
-        if _G.antistun then
-            for _, obj in ipairs(workspace:GetChildren()) do
-                if obj:IsA("Model") and obj.Name == localPlayer.Name then
-                    pcall(function()
-                        obj.Hobbied.Value = false
-                        obj.DF_Disabled.Value = false
-                        obj.SnowTouched.Value = false
-                        obj.SnowTouched.Time.Value = 0
-                    end)
-                end
-            end
         end
     end
 end)
