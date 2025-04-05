@@ -1,5 +1,6 @@
 --script
-local Window = create:Win("InW Hub : For Map OPL: Anarchy / No Update Now.")
+local Window = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Library.lua"))()
+create:Win("InW Hub : For Map OPL: Anarchy / No Update Now.")
 game:GetService("CoreGui").redui.MainSceen.Visible = false
 
 create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L", 5)
