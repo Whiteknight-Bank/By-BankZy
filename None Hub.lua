@@ -5539,7 +5539,84 @@ if self.Name == 'Drown' and _G.nodmgwater then
         end
     end
 end)
-	
+
+
+page5:Toggle("Anti Dark&Venom Pool", false,function(anstun)
+    _G.antity = anstun
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antity then
+            local success, err = pcall(function()
+                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+
+                if ResourceHolder then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
+                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+
+                        if playerResourceFolder then
+                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
+
+                            if magmaPool then
+                                for _, item in pairs(magmaPool:GetDescendants()) do
+                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
+                                        item:Destroy()
+                                        print("Removed TouchInterest from MagmaPool in", playerResourceFolder.Name)
+                                    end
+                                end
+                            else
+                                warn("MagmaPool not found in " .. resourceFolderName)
+                            end
+                        else
+                            warn("Resources folder not found for player: " .. resourceFolderName)
+                        end
+                    end
+                else
+                    warn("ResourceHolder not found in Workspace!")
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antity then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                            print("ลบ TouchInterest ของ", player.Name)
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+
+                    end
+                end
+            else
+                warn("ไม่พบ Userdata ใน Workspace")
+            end
+        end
+    end
+end)
+
 page5:Label(" ┇ Unbox ┇ ")
 
 page5:Toggle("Unbox (Common)", false,function(ubcm)
