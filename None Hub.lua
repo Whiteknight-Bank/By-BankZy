@@ -4426,6 +4426,10 @@ spawn(function() -- auto equip
     end
 end)
 
+page2:Toggle("Bring Mob All", false,function(brgal)
+    _G.autobring = brgal
+end)
+
 page2:Label(" ┇ Fruity Farm ┇ ")
 
 page2:Toggle("Auto Stats", false,function(drkmr)
@@ -4843,40 +4847,41 @@ end)
 page2_5:Label(" ┇ Spam Magma ┇ ")
 
 page2_5:Toggle("Auto Flare", false,function(mxgm)
-    _G.flare2 = mxgm
+    _G.flare1 = mxgm
 end)
 
-spawn(function()
-    while wait() do
-        if _G.flare2 then
+spawn(function() -- fire fist
+    while wait(getgenv().spamtime) do
+        if _G.flare1 then
             local pla = game.Players.LocalPlayer;
             local Mouse = pla:GetMouse();
         
             local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StopCharging",
-    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [6] = 100
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-
+                [1] = tonumber(serializeTable(remotes)),
+                [2] = "FlarePower2",
+                [3] = "StopCharging",
+                [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
+                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+                [6] = 100
+            }
+            
+            game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
+            
             local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StartCharging",
-    [4] = CFrame.new(2157.088623046875, 1193.5758056640625, -9786.4072265625, 0.9772287607192993, -0.020494922995567322, -0.21119679510593414, 1.862645149230957e-09, 0.9953245520591736, -0.09658809006214142, 0.21218889951705933, 0.09438865631818771, 0.9726595878601074),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [7] = "Right"
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-
+                [1] = tonumber(serializeTable(remotes)),
+                [2] = "FlarePower2",
+                [3] = "StartCharging",
+                [4] = CFrame.new(-550.802795, 244, 26.3580341, -0.63954407, 0.15401715, -0.753168106, -0, 0.979725122, 0.200346366, 0.768754423, 0.128130332, -0.626577377),
+                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+                [7] = "Left"
+            }
+            
+            game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
+            
         end
     end
 end)
+
 
 local Tap3 = Window:Taps("Players")
 local page3 = Tap3:newpage()
@@ -5184,45 +5189,6 @@ page4:Drop("Choose NPC", false,{
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
         end
     end)
-
-local page4_5 = Tap4:newpage()
-page4_5:Label(" ┇ Bug a Lot Compass ┇ ")
-
-page4_5:Toggle("Auto Reset Stats", false,function(setre)
-    reset = setre
-end)
-
-spawn(function()
-    while wait(5) do
-        if reset then
-            pcall(function()
-workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
-                   end)
-            end
-        end
-end)
-
-page4_5:Button("Check u Compass", function()
-    fireclickdetector(game:GetService("Workspace").Merchants.QuestMerchant.Clickable.ClickDetector)
-end)
-
-page4_5:Toggle("Auto Claim Weekly 3", false,function(clm)
-    _G.autoclaim3 = clm
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.autoclaim3 then
-local A_1 = "Claim"
-local A_2 = "Weekly3"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-            end
-        end)
-    end
-end)
 
 page4_5:Label(" ┇ Affinity Reroll 2.0 (Left) ┇ ")
 
