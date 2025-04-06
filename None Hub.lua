@@ -4478,6 +4478,7 @@ spawn(function() -- autofarm cannon
                     and v:FindFirstChild("HumanoidRootPart") then
                         v:FindFirstChild("HumanoidRootPart").Anchored = true
                         v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
+			end
                 end
             end
         end)
