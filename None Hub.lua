@@ -4923,9 +4923,9 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-page2_5:Label(" ┇ Spam Flare ┇ ")
+page2_5:Label(" ┇ Flare Skill X ┇ ")
 
-page2_5:Toggle("Spam Flare Skill X", false,function(mxgm)
+page2_5:Toggle("Spam Flare Fist", false,function(mxgm)
     _G.flare1 = mxgm
 end)
 
