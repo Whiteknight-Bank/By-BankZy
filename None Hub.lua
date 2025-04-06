@@ -5245,6 +5245,7 @@ page4:Drop("Choose NPC", false,{
         end
     end)
 
+local page4_5 = Tap4:newpage()
 page4_5:Label(" ┇ Affinity Reroll 2.0 (Left) ┇ ")
 
 page4_5:Button("Reroll (เปิด/Open)", function()
