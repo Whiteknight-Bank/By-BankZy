@@ -5768,16 +5768,10 @@ spawn(function()
                                         item:Destroy()
                                         print("Removed TouchInterest from MagmaPool in", playerResourceFolder.Name)
                                     end
-                                end
-                            else
-                                warn("MagmaPool not found in " .. resourceFolderName)
-                            end
-                        else
-                            warn("Resources folder not found for player: " .. resourceFolderName)
+				end
+				end
                         end
-                    end
-                else
-                    warn("ResourceHolder not found in Workspace!")
+		end
                 end
             end)
         end
@@ -5810,45 +5804,8 @@ spawn(function()
                                 end
                             end
                         end)
-
                     end
-                end
-            else
-                warn("ไม่พบ Userdata ใน Workspace")
-            end
-        end
-    end
-end)
-
-page5:Toggle("Anti Status", false,function(anve)
-    _G.anti = anve
-end)
-
-local targetNames = {
-    Alice=true, Venom=true, Magma=true, Rumble=true, Ope=true, String=true,
-    Dark=true, Phoenix=true, Vampire=true, Gas=true, Sand=true, Hollow=true,
-    Candy=true, Snow=true, Quake=true, Gum=true, Smelt=true, Flare=true,
-    Smoke=true, Barrier=true, Bomb=true, Chilly=true, Chop=true, Clear=true,
-    Clone=true, Diamond=true, Float=true, Gravity=true, Hobby=true, Hot=true,
-    Light=true, Love=true, Luck=true, Order=true, Rumble1=true, OpeOld=true,
-    Spin=true, Plasma=true
-		}
-
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-spawn(function()
-    while wait(0.5) do
-        if _G.anti then
-            for _, obj in ipairs(workspace:GetChildren()) do
-                if obj:IsA("Model") and obj.Name == localPlayer.Name then
-                    pcall(function()
-                        obj.Hobbied.Value = false
-                        obj.DF_Disabled.Value = false
-                        obj.SnowTouched.Value = false
-                        obj.VenomDoT.Value = false
-                    end)
-                end
+		end
             end
         end
     end
@@ -5856,23 +5813,38 @@ end)
 
 spawn(function()
     while wait() do
-        if _G.anti then
+        if _G.antity then
             pcall(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
-                    if obj:IsA("Model") then
-                        local player = game.Players:FindFirstChild(obj.Name)
-                        if player then
-                            -- ค้นหา Powers
-                            local powerFolder = obj:FindFirstChild("Powers")
-                            if powerFolder then
-                                for _, power in pairs(powerFolder:GetChildren()) do
-                                    if targetNames[power.Name] then
-                                        for _, child in pairs(power:GetDescendants()) do
-                                            if child:IsA("TouchTransmitter") and child.Name == "TouchInterest" then
-                                                child:Destroy()
-                                                print("ลบ TouchInterest ในพลัง " .. power.Name .. " ของ " .. player.Name)
-                                            end
-                                        end
+                    local player = game.Players:FindFirstChild(obj.Name)
+                    if player and obj:IsA("Model") then
+                        print("พบผู้เล่น: " .. player.Name)
+
+                        -- ค้นหา Power -> Dark
+                        local powerFolder = obj:FindFirstChild("Powers")
+                        if powerFolder then
+                            local love = powerFolder:FindFirstChild("Dark")
+                            if love then
+                                for _, child in pairs(love:GetDescendants()) do
+                                    if child:IsA("Attachment") then
+                                        child:Destroy()
+                                        print("ลบ Attachment ใน Dark ของ " .. player.Name)
+                                    end
+                                end
+                            end
+                        end
+
+                        local projFolder = obj:FindFirstChild("DarkParts")
+                        if projFolder then
+                            local trim = projFolder:FindFirstChild("WeldablePart")
+                            if trim then
+                                local fill = trim:FindFirstChild("Attachment")
+                                if fill then
+                                    for _, child in pairs(fill:GetDescendants()) do
+                                        if child:IsA("Attachment") then
+                                            child:Destroy()
+                                            print("ลบ Attachment ใน WeldablePart ของ " .. player.Name)
+					end
                                     end
                                 end
                             end
