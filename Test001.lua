@@ -4568,7 +4568,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(1) do
+    while wait(3) do
         if _G.dupgun then
             pcall(function()
                 -- ลบ Tool ทั้งหมดใน Character (มือ)
@@ -4583,7 +4583,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(1.5) do
+    while wait(5) do
         if _G.dupgun then
             pcall(function()
                 game:GetService("Players").LocalPlayer.Character.Weapons:FireServer()
