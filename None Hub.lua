@@ -4981,51 +4981,6 @@ mta.__index = newcclosure(function(a, b, c)
     return index(a, b, c)
 end)
 
-local aimsilent = false -- ตั้งค่าตัวแปรเพื่อให้เปิด/ปิดการล็อคมอนสเตอร์
-local cacacac = CFrame.new() -- ค่าตำแหน่งที่เราจะล็อคไป
-
--- ฟังก์ชั่น Toggle เปิด/ปิดการล็อค
-page3:Toggle("Aim Enemies", false, function(slims)
-    aimsilents = slims
-end)
-
--- เริ่มสคริปต์ให้ทำงานในแบ็คกราวด์
-spawn(function()
-    pcall(function()
-        while true do wait()
-            pcall(function()
-                -- รับข้อมูลตัวละครผู้เล่น
-                local playerCharacter = game.Players.LocalPlayer.Character
-                if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
-                    local playerRootPart = playerCharacter.HumanoidRootPart
-                    
-                    if aimsilents then
-                        -- ลูปเพื่อทำการล็อคมอนสเตอร์ใน Enemies
-                        local enemies = workspace:WaitForChild("Enemies")
-                        for _, enemy in pairs(enemies:GetChildren()) do
-                            if enemy:FindFirstChild("HumanoidRootPart") then
-                                -- ล็อคไปที่ HumanoidRootPart ของมอนสเตอร์
-                                cacacac = enemy.HumanoidRootPart.CFrame
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end)
-end)
-
--- เปลี่ยนการตั้งค่า __index เพื่อให้ล็อคตำแหน่งไปที่มอนสเตอร์ใน Enemies
-local index = mta.__index
-cf = CFrame.new(1, 2, 3)
-setreadonly(mta, false)
-mta.__index = newcclosure(function(a, b, c)
-    if tostring(b):lower() == 'hit' and aimsilent then
-        return cacacac
-    end
-    return index(a, b, c)
-end)
-
 page3:Label(" ┇ Max Charge Skill ┇ ")
 
 page3:Toggle("100% Charge Skill", false,function(max)
@@ -5545,19 +5500,6 @@ end)
 
 page5:Label(" ┇ Function Anti ┇ ")
 
-page5:Toggle("Anti AFK", false,function(afk)
-    _G.antiafk = afk
-end)
-
-if afk then
-        local vu = game:GetService("VirtualUser")
-            game:GetService("Players").LocalPlayer.Idled:Connect(function()
-                vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-                wait(1)
-                vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-            end)
-end
-
 page5:Toggle("Anti Damage On Water", false,function(nowater)
     _G.nodmgwater = nowater
 end)
@@ -5577,71 +5519,6 @@ if self.Name == 'Drown' and _G.nodmgwater then
             end
         end
             end)
-        end
-    end
-end)
-
-page5:Toggle("Anti Dark&Venom Pool", false,function(anstun)
-    _G.antity = anstun
-end)
-
-spawn(function()
-    while wait() do
-        if _G.antity then
-            local success, err = pcall(function()
-                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
-
-                if ResourceHolder then
-                    for _, player in pairs(game.Players:GetPlayers()) do
-                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
-                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
-
-                        if playerResourceFolder then
-                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
-
-                            if magmaPool then
-                                for _, item in pairs(magmaPool:GetDescendants()) do
-                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
-                                        item:Destroy()
-                                    end
-				end
-			end
-                        end
-		end
-                end
-            end)
-        end
-    end
-end)
-
-spawn(function()
-    while wait() do
-        if _G.antity then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomPool")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
         end
     end
 end)
