@@ -5818,7 +5818,6 @@ spawn(function()
                 for _, obj in ipairs(workspace:GetChildren()) do
                     local player = game.Players:FindFirstChild(obj.Name)
                     if player and obj:IsA("Model") then
-                        print("พบผู้เล่น: " .. player.Name)
 
                         -- ค้นหา Power -> Dark
                         local powerFolder = obj:FindFirstChild("Powers")
@@ -5834,13 +5833,19 @@ spawn(function()
                             end
                         end
 
-                        local projFolder = obj:FindFirstChild("DarkParts")
-                        if projFolder then
-                            local trim = projFolder:FindFirstChild("WeldablePart")
+                        local darkFolder = obj:FindFirstChild("DarkParts")
+                        if darkFolder then
+			local vorb = darkFolder:FindFirstChild("DarkVortexBall")
+			if vorb then
+				for _, vor in pairs(vor:GetChildren()) do
+					vor:Destroy()
+				end
+			end
+                            local trim = darkFolder:FindFirstChild("WeldablePart")
                             if trim then
-                                local fill = trim:FindFirstChild("Attachment")
-                                if fill then
-                                    for _, child in pairs(fill:GetDescendants()) do
+                                local att = trim:FindFirstChild("Attachment")
+                                if att then
+                                    for _, child in pairs(att:GetDescendants()) do
                                         if child:IsA("Attachment") then
                                             child:Destroy()
                                             print("ลบ Attachment ใน WeldablePart ของ " .. player.Name)
