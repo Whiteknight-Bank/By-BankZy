@@ -4551,11 +4551,9 @@ local backpack = player:WaitForChild("Backpack")
 
 local gunName = "Flintlock" -- ใส่ชื่อปืนที่ไม่ต้องการลบ
 
--- ตั้งค่าสถานะเริ่มต้น
-_G.dupgun = false
 
 spawn(function()
-    while wait() do -- เช็กทุก 1 วินาที
+    while wait() do
         if _G.dupgun then
             pcall(function()
                 -- ลบ Tool ทั้งหมดใน Backpack ยกเว้น gun
@@ -4570,7 +4568,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait(3) do
+    while wait(1) do
         if _G.dupgun then
             pcall(function()
                 -- ลบ Tool ทั้งหมดใน Character (มือ)
@@ -4579,6 +4577,16 @@ spawn(function()
                         item:Destroy()
                     end
                 end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+    while wait(1.5) do
+        if _G.dupgun then
+            pcall(function()
+                game:GetService("Players").LocalPlayer.Character.Weapons:FireServer()
             end)
         end
     end
