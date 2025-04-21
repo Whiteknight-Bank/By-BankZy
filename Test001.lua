@@ -4541,57 +4541,73 @@ end)
 page2:Label(" ┇ Auto Farm With Gun ┇ ")
 
 page2:Toggle("Auto Farm Gun", false,function(drkmr)
-    _G.dupgun = drkmr
+    _G.gun = drkmr
 end)
 
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer or Players:GetPlayerFromCharacter(script.Parent)
-local character = player.Character or player.CharacterAdded:Wait()
-local backpack = player:WaitForChild("Backpack")
+local MobList = {"Lv2 Angry Bob"}
 
-local gunName = "Flintlock" -- ใส่ชื่อปืนที่ไม่ต้องการลบ
-
+local function IsMobAllowed(mobName)
+    for _, allowedMob in ipairs(MobList) do
+        if string.find(mobName, allowedMob) then
+            return true
+        end
+    end
+    return false
+end
 
 spawn(function()
-    while wait() do
-        if _G.dupgun then
-            pcall(function()
-                -- ลบ Tool ทั้งหมดใน Backpack ยกเว้น gun
-                for _, item in pairs(backpack:GetChildren()) do
-                    if item:IsA("Tool") and item.Name ~= gunName then
-                        item:Destroy()
+    while task.wait(0.1) do
+        pcall(function()
+            if _G.gun then
+                for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") 
+                       and mob.Humanoid.Health > 0 and IsMobAllowed(mob.Name) then
+                        while mob.Humanoid.Health > 0 and _G.behindFarm do
+                            local mobRoot = mob.HumanoidRootPart
+                            local mobHead = mob:FindFirstChild("Head")
+                            local player = game.Players.LocalPlayer
+                            local char = player.Character or player.CharacterAdded:Wait()
+                            local playerRoot = char:WaitForChild("HumanoidRootPart")
+
+                            -- Auto Equip Flintlock
+                            local tool = char:FindFirstChildOfClass("Tool")
+                            if not tool or tool.Name ~= "Flintlock" then
+                                local backpack = player:WaitForChild("Backpack")
+                                local flintlock = backpack:FindFirstChild("Flintlock")
+                                if flintlock then
+                                    char.Humanoid:EquipTool(flintlock)
+                                    tool = flintlock
+                                end
+                            end
+
+                            -- Lock bullet to mob's head
+                            if mobHead then
+                                local bulletArgs = {
+                                    [1] = CFrame.new(playerRoot.Position, mobHead.Position),
+                                    [2] = mobHead
+                                }
+                                local remote = player:FindFirstChild("RemoteEvent")
+                                if remote then
+                                    remote:FireServer(unpack(bulletArgs))
+                                end
+                            end
+
+                            -- Move and attack
+                            playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 7)
+                            if tool then
+                                tool:Activate()
+                            else
+                                char.Humanoid:MoveTo(mobRoot.Position)
+                            end
+                            task.wait(0.1)
+                        end
+                        break
                     end
                 end
-            end)
-        end
+            end
+        end)
     end
 end)
-
-spawn(function()
-    while wait(3) do
-        if _G.dupgun then
-            pcall(function()
-                -- ลบ Tool ทั้งหมดใน Character (มือ)
-                for _, item in pairs(character:GetChildren()) do
-                    if item:IsA("Tool") then
-                        item:Destroy()
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-spawn(function()
-    while wait(5) do
-        if _G.dupgun then
-            pcall(function()
-                game:GetService("Players").LocalPlayer.Character.Weapons:FireServer()
-            end)
-        end
-    end
-end)
-
 
 page2:Label(" ┇ Haki Farm ┇ ")
 
