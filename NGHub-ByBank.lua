@@ -21,3 +21,21 @@ spawn(function()
         end
     end
 end)
+
+local Tap2 = Window:Taps("Farming")
+local page2 = Tap2:newpage()
+
+page2:Section("Function Farms")
+
+page2:Toggle("Auto Farm", false, function(state)
+    AutoMission = state
+end)
+
+local Tap3 = Window:Taps("Players")
+local page3 = Tap3:newpage()
+
+page3:Section("Local Player")
+
+page3:Toggle("View", false, function(state)
+    AutoMission = state
+end)
