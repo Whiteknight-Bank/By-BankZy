@@ -62,6 +62,7 @@ function library:Win(title)
         page.ScrollBarThickness = 6
         page.CanvasSize = UDim2.new(0, 0, 0, 0)
         page.BackgroundTransparency = 1
+        page.Name = name .. "_Page"
 
         local layout = Instance.new("UIListLayout", page)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -91,6 +92,17 @@ function library:Win(title)
             label.Font = Enum.Font.SourceSans
             label.TextSize = 16
             label.BackgroundTransparency = 1
+        end
+
+        function newPage:Section(txt)
+            local section = Instance.new("TextLabel", page)
+            section.Size = UDim2.new(1, -10, 0, 25)
+            section.Text = "─ " .. txt .. " ─"
+            section.TextColor3 = Color3.fromRGB(200, 200, 200)
+            section.Font = Enum.Font.SourceSansBold
+            section.TextSize = 16
+            section.BackgroundTransparency = 1
+            section.TextXAlignment = Enum.TextXAlignment.Left
         end
 
         function newPage:Toggle(txt, default, callback)
