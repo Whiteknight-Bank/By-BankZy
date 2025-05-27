@@ -65,6 +65,9 @@ function library:Win(title)
         page.Name = name .. "_Page"
 
         local layout = Instance.new("UIListLayout", page)
+        layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+        end)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
         layout.Padding = UDim.new(0, 5)
 
