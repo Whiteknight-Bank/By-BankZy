@@ -112,53 +112,63 @@ function library:Win(title)
 
         function page:Toggle(text, default, callback)
     local holder = Instance.new("Frame")
-    holder.Size = UDim2.new(1, -10, 0, 25)
+    holder.Name = "Toggle"
+    holder.Size = UDim2.new(1, -10, 0, 30)
     holder.BackgroundTransparency = 1
-    holder.Parent = self.Section -- หรือ page.Frame แล้วแต่ที่คุณใช้
+    holder.Parent = self.Section or self.Frame
 
     local label = Instance.new("TextLabel")
     label.Size = UDim2.new(1, -40, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Position = UDim2.new(0, 0, 0, 0)
     label.Text = text
-    label.Font = Enum.Font.Gotham
-    label.TextSize = 13
-    label.TextColor3 = Color3.fromRGB(240, 240, 240)
-    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.TextXAlignment = Enum.TextXAlignment.Left
+    label.BackgroundTransparency = 1
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 14
     label.Parent = holder
 
-    local toggle = Instance.new("TextButton")
+    local toggle = Instance.new("Frame")
     toggle.Size = UDim2.new(0, 30, 0, 15)
     toggle.Position = UDim2.new(1, -35, 0.5, -7)
-    toggle.AnchorPoint = Vector2.new(0, 0)
-    toggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    toggle.Text = ""
-    toggle.AutoButtonColor = false
+    toggle.AnchorPoint = Vector2.new(0, 0.5)
+    toggle.BackgroundColor3 = default and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(60, 60, 60)
+    toggle.BorderSizePixel = 0
+    toggle.BackgroundTransparency = 0
+    toggle.ClipsDescendants = true
     toggle.Parent = holder
 
-    local round = Instance.new("UICorner", toggle)
-    round.CornerRadius = UDim.new(1, 0)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = toggle
 
     local knob = Instance.new("Frame")
     knob.Size = UDim2.new(0, 13, 0, 13)
-    knob.Position = UDim2.new(0, 1, 0.5, -6)
-    knob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+    knob.Position = UDim2.new(default and 1 or 0, default and -14 or 1, 0.5, -6)
+    knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    knob.BorderSizePixel = 0
     knob.Parent = toggle
-    Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
+
+    local knobCorner = Instance.new("UICorner")
+    knobCorner.CornerRadius = UDim.new(1, 0)
+    knobCorner.Parent = knob
 
     local state = default
-    local function update()
-        toggle.BackgroundColor3 = state and Color3.fromRGB(0, 170, 127) or Color3.fromRGB(80, 80, 80)
-        knob:TweenPosition(UDim2.new(state and 1 or 0, state and -14 or 1, 0.5, -6), "Out", "Quad", 0.2, true)
+
+    local function updateToggle()
+        toggle.BackgroundColor3 = state and Color3.fromRGB(50, 200, 100) or Color3.fromRGB(60, 60, 60)
+        knob:TweenPosition(UDim2.new(state and 1 or 0, state and -14 or 1, 0.5, -6), "Out", "Quad", 0.15, true)
+        pcall(callback, state)
     end
 
-    toggle.MouseButton1Click:Connect(function()
-        state = not state
-        update()
-        if callback then callback(state) end
+    toggle.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            state = not state
+            updateToggle()
+        end
     end)
 
-    update()
+    updateToggle()
 end
         
         hideAllPages()
