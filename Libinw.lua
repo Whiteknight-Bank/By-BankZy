@@ -231,7 +231,7 @@ function library:Win(title)
             end)
         end
 
-function library:Dropdown(text, list, callback)
+function newPage:Dropdown(text, list, callback)
     local holder = Instance.new("Frame")
     holder.Size = UDim2.new(1, -10, 0, 30)
     holder.BackgroundTransparency = 1
