@@ -4,6 +4,11 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
+-- Remove old UI if exists
+if CoreGui:FindFirstChild("redui") then
+    CoreGui:FindFirstChild("redui"):Destroy()
+end
+
 -- UI Setup
 function library:Win(title)
     local gui = Instance.new("ScreenGui", CoreGui)
@@ -70,6 +75,11 @@ function library:Win(title)
             end
             page.Visible = true
         end)
+
+        -- Show the first created page by default
+        if #pages:GetChildren() == 1 then
+            page.Visible = true
+        end
 
         local newPage = {}
 
