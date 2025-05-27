@@ -6,7 +6,7 @@ create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L"
 local Tap1 = Window:Taps("Autos")
 local page1 = Tap1:newpage()
 
-page1:Section("ฟังก์ชันอัตโนมัติ")
+page1:Section("Function Autos")
 
 page1:Toggle("Auto Claim Mission", false, function(state)
     AutoMission = state
