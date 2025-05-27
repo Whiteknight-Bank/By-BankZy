@@ -24,3 +24,13 @@ page2:Label("เริ่มฟาร์มอัตโนมัติ")
 page2:Toggle("Auto Farm", false, function(state)
     AutoFarm = state
 end)
+
+local Tab3 = Window:Taps("Players")
+local page3 = Tab3:newpage()
+
+page3:Section("Local Player")
+page3:Label("---")
+
+page3:Toggle("Behind", false, function(state)
+    AutoFarm = state
+end)
