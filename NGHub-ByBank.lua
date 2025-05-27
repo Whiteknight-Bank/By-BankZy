@@ -1,41 +1,26 @@
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
-local Window = create:Win("NG Hub : For Map OPL")
+local Window = create:Win("InW Hub : For Map OPL")
 
-create:Notifile("", "   Welcome " .. game.Players.LocalPlayer.Name .. " To OP:L", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OP:L", 5)
 
-local Tap1 = Window:Taps("Autos")
-local page1 = Tap1:newpage()
+-- สร้างแท็บชื่อ Autos
+local Tab1 = Window:Taps("Autos")
+local page1 = Tab1:newpage()
 
-page1:Section("Function Autos")
+page1:Label("┇ Function Autos ┇")
+page1:Section("Mission Control")
 
 page1:Toggle("Auto Claim Mission", false, function(state)
     AutoMission = state
 end)
 
-spawn(function()
-    while task.wait(1) do
-        if AutoMission then
-            pcall(function()
-                workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-            end)
-        end
-    end
-end)
+-- เพิ่มอีกแท็บ
+local Tab2 = Window:Taps("Farming")
+local page2 = Tab2:newpage()
 
-local Tap2 = Window:Taps("Farming")
-local page2 = Tap2:newpage()
-
-page2:Section("Function Farms")
+page2:Section("Farming Area")
+page2:Label("เริ่มฟาร์มอัตโนมัติ")
 
 page2:Toggle("Auto Farm", false, function(state)
-    AutoMission = state
-end)
-
-local Tap3 = Window:Taps("Players")
-local page3 = Tap3:newpage()
-
-page3:Section("Local Player")
-
-page3:Toggle("View", false, function(state)
-    AutoMission = state
+    AutoFarm = state
 end)
