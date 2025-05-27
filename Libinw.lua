@@ -89,7 +89,7 @@ function library:Win(title)
             
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 22)
+            button.Size = UDim2.new(1, -10, 0, 30)
             button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
@@ -218,7 +218,7 @@ function library:Win(title)
         
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 22)
+            button.Size = UDim2.new(1, -10, 0, 30)
             button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
