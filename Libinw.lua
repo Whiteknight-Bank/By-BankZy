@@ -86,6 +86,63 @@ function library:Win(title)
         local newPage = {}
 
         function newPage:newpage()
+            
+        function newPage:Button(text, callback)
+            local button = Instance.new("TextButton", page)
+            button.Size = UDim2.new(1, -10, 0, 30)
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.Font = Enum.Font.SourceSans
+            button.TextSize = 16
+            button.Text = text
+            button.MouseButton1Click:Connect(function()
+                if callback then
+                    pcall(callback)
+                end
+            end)
+        end
+
+        function newPage:Dropdown(text, items, callback)
+            local label = Instance.new("TextLabel", page)
+            label.Size = UDim2.new(1, -10, 0, 25)
+            label.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            label.Text = text
+            label.Font = Enum.Font.SourceSans
+            label.TextSize = 16
+
+            local dropdown = Instance.new("TextButton", page)
+            dropdown.Size = UDim2.new(1, -10, 0, 30)
+            dropdown.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+            dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+            dropdown.Text = "Select"
+            dropdown.Font = Enum.Font.SourceSans
+            dropdown.TextSize = 16
+
+            dropdown.MouseButton1Click:Connect(function()
+                for _, child in ipairs(page:GetChildren()) do
+                    if child.Name == "DropdownOption" then child:Destroy() end
+                end
+                for _, item in ipairs(items) do
+                    local option = Instance.new("TextButton", page)
+                    option.Name = "DropdownOption"
+                    option.Size = UDim2.new(1, -10, 0, 25)
+                    option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                    option.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    option.Text = item
+                    option.Font = Enum.Font.SourceSans
+                    option.TextSize = 16
+                    option.MouseButton1Click:Connect(function()
+                        dropdown.Text = item
+                        if callback then callback(item) end
+                        for _, child in ipairs(page:GetChildren()) do
+                            if child.Name == "DropdownOption" then child:Destroy() end
+                        end
+                    end)
+                end
+            end)
+        end
+
             return newPage
         end
 
@@ -158,7 +215,64 @@ function library:Win(title)
 
         hideAllPages()
         page.Visible = true
-        return newPage
+        
+        function newPage:Button(text, callback)
+            local button = Instance.new("TextButton", page)
+            button.Size = UDim2.new(1, -10, 0, 30)
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            button.Font = Enum.Font.SourceSans
+            button.TextSize = 16
+            button.Text = text
+            button.MouseButton1Click:Connect(function()
+                if callback then
+                    pcall(callback)
+                end
+            end)
+        end
+
+        function newPage:Dropdown(text, items, callback)
+            local label = Instance.new("TextLabel", page)
+            label.Size = UDim2.new(1, -10, 0, 25)
+            label.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            label.Text = text
+            label.Font = Enum.Font.SourceSans
+            label.TextSize = 16
+
+            local dropdown = Instance.new("TextButton", page)
+            dropdown.Size = UDim2.new(1, -10, 0, 30)
+            dropdown.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+            dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+            dropdown.Text = "Select"
+            dropdown.Font = Enum.Font.SourceSans
+            dropdown.TextSize = 16
+
+            dropdown.MouseButton1Click:Connect(function()
+                for _, child in ipairs(page:GetChildren()) do
+                    if child.Name == "DropdownOption" then child:Destroy() end
+                end
+                for _, item in ipairs(items) do
+                    local option = Instance.new("TextButton", page)
+                    option.Name = "DropdownOption"
+                    option.Size = UDim2.new(1, -10, 0, 25)
+                    option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                    option.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    option.Text = item
+                    option.Font = Enum.Font.SourceSans
+                    option.TextSize = 16
+                    option.MouseButton1Click:Connect(function()
+                        dropdown.Text = item
+                        if callback then callback(item) end
+                        for _, child in ipairs(page:GetChildren()) do
+                            if child.Name == "DropdownOption" then child:Destroy() end
+                        end
+                    end)
+                end
+            end)
+        end
+
+            return newPage
     end
 
     return tabs
