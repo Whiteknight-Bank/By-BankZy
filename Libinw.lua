@@ -112,17 +112,46 @@ function library:Win(title)
 
         function newPage:Toggle(txt, default, callback)
             local state = default
-            local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 30)
-            button.BackgroundColor3 = default and Color3.fromRGB(0, 180, 0) or Color3.fromRGB(50, 50, 50)
-            button.TextColor3 = Color3.fromRGB(255, 255, 255)
-            button.Font = Enum.Font.SourceSans
-            button.TextSize = 16
-            button.Text = txt
 
-            button.MouseButton1Click:Connect(function()
+            local toggleFrame = Instance.new("Frame", page)
+            toggleFrame.Size = UDim2.new(1, -10, 0, 25)
+            toggleFrame.BackgroundTransparency = 1
+
+            local label = Instance.new("TextLabel", toggleFrame)
+            label.Size = UDim2.new(1, -40, 1, 0)
+            label.Position = UDim2.new(0, 0, 0, 0)
+            label.Text = txt
+            label.Font = Enum.Font.SourceSans
+            label.TextSize = 16
+            label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            label.BackgroundTransparency = 1
+            label.TextXAlignment = Enum.TextXAlignment.Left
+
+            local toggle = Instance.new("TextButton", toggleFrame)
+            toggle.Size = UDim2.new(0, 30, 0, 20)
+            toggle.Position = UDim2.new(1, -35, 0.5, -10)
+            toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
+            toggle.Text = ""
+            toggle.AutoButtonColor = false
+            toggle.BorderSizePixel = 0
+
+            local circle = Instance.new("Frame", toggle)
+            circle.Size = UDim2.new(0, 16, 0, 16)
+            circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
+            circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            circle.BorderSizePixel = 0
+            circle.AnchorPoint = Vector2.new(0, 0.5)
+            circle.Name = "Circle"
+
+            local uicorner = Instance.new("UICorner", toggle)
+            uicorner.CornerRadius = UDim.new(1, 0)
+            local uicircle = Instance.new("UICorner", circle)
+            uicircle.CornerRadius = UDim.new(1, 0)
+
+            toggle.MouseButton1Click:Connect(function()
                 state = not state
-                button.BackgroundColor3 = state and Color3.fromRGB(0, 180, 0) or Color3.fromRGB(50, 50, 50)
+                toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
+                circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
                 pcall(callback, state)
             end)
         end
