@@ -58,7 +58,7 @@ function library:Win(title)
 
         local page = Instance.new("ScrollingFrame", pages)
         page.Size = UDim2.new(1, 0, 1, 0)
-        page.Visible = false
+        page.Visible = true
         page.ScrollBarThickness = 6
         page.CanvasSize = UDim2.new(0, 0, 0, 0)
         page.BackgroundTransparency = 1
@@ -71,7 +71,15 @@ function library:Win(title)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
         layout.Padding = UDim.new(0, 5)
 
-        tabButton.MouseButton1Click:Connect(function()
+        
+            tabButton.MouseButton1Click:Connect(function()
+                for _, v in pairs(pages:GetChildren()) do
+                    if v:IsA("ScrollingFrame") then
+                        v.Visible = false
+                    end
+                end
+                page.Visible = true
+        
             for _, v in pairs(pages:GetChildren()) do
                 if v:IsA("ScrollingFrame") then
                     v.Visible = false
