@@ -110,52 +110,57 @@ function library:Win(title)
             section.TextXAlignment = Enum.TextXAlignment.Left
         end
 
-        function newPage:Toggle(txt, default, callback)
-            local state = default
+        function page:Toggle(text, default, callback)
+    local holder = Instance.new("Frame")
+    holder.Size = UDim2.new(1, -10, 0, 25)
+    holder.BackgroundTransparency = 1
+    holder.Parent = self.Section -- หรือ page.Frame แล้วแต่ที่คุณใช้
 
-            local toggleFrame = Instance.new("Frame", page)
-            toggleFrame.Size = UDim2.new(1, -10, 0, 25)
-            toggleFrame.BackgroundTransparency = 1
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, -40, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Text = text
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 13
+    label.TextColor3 = Color3.fromRGB(240, 240, 240)
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = holder
 
-            local label = Instance.new("TextLabel", toggleFrame)
-            label.Size = UDim2.new(1, -40, 1, 0)
-            label.Position = UDim2.new(0, 0, 0, 0)
-            label.Text = txt
-            label.Font = Enum.Font.SourceSans
-            label.TextSize = 16
-            label.TextColor3 = Color3.fromRGB(255, 255, 255)
-            label.BackgroundTransparency = 1
-            label.TextXAlignment = Enum.TextXAlignment.Left
+    local toggle = Instance.new("TextButton")
+    toggle.Size = UDim2.new(0, 30, 0, 15)
+    toggle.Position = UDim2.new(1, -35, 0.5, -7)
+    toggle.AnchorPoint = Vector2.new(0, 0)
+    toggle.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    toggle.Text = ""
+    toggle.AutoButtonColor = false
+    toggle.Parent = holder
 
-            local toggle = Instance.new("TextButton", toggleFrame)
-            toggle.Size = UDim2.new(0, 30, 0, 20)
-            toggle.Position = UDim2.new(1, -35, 0.5, -10)
-            toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
-            toggle.Text = ""
-            toggle.AutoButtonColor = false
-            toggle.BorderSizePixel = 0
+    local round = Instance.new("UICorner", toggle)
+    round.CornerRadius = UDim.new(1, 0)
 
-            local circle = Instance.new("Frame", toggle)
-            circle.Size = UDim2.new(0, 16, 0, 16)
-            circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
-            circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            circle.BorderSizePixel = 0
-            circle.AnchorPoint = Vector2.new(0, 0.5)
-            circle.Name = "Circle"
+    local knob = Instance.new("Frame")
+    knob.Size = UDim2.new(0, 13, 0, 13)
+    knob.Position = UDim2.new(0, 1, 0.5, -6)
+    knob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+    knob.Parent = toggle
+    Instance.new("UICorner", knob).CornerRadius = UDim.new(1, 0)
 
-            local uicorner = Instance.new("UICorner", toggle)
-            uicorner.CornerRadius = UDim.new(1, 0)
-            local uicircle = Instance.new("UICorner", circle)
-            uicircle.CornerRadius = UDim.new(1, 0)
+    local state = default
+    local function update()
+        toggle.BackgroundColor3 = state and Color3.fromRGB(0, 170, 127) or Color3.fromRGB(80, 80, 80)
+        knob:TweenPosition(UDim2.new(state and 1 or 0, state and -14 or 1, 0.5, -6), "Out", "Quad", 0.2, true)
+    end
 
-            toggle.MouseButton1Click:Connect(function()
-                state = not state
-                toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
-                circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
-                pcall(callback, state)
-            end)
-        end
+    toggle.MouseButton1Click:Connect(function()
+        state = not state
+        update()
+        if callback then callback(state) end
+    end)
 
+    update()
+end
+        
         hideAllPages()
         page.Visible = true
         return newPage
