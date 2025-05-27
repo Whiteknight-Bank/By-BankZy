@@ -89,7 +89,7 @@ function library:Win(title)
             
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 24)
+            button.Size = UDim2.new(1, -10, 0, 25)
             button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
@@ -102,25 +102,18 @@ function library:Win(title)
             end)
         end
 
-        
         function newPage:Dropdown(text, items, callback)
-            local holder = Instance.new("Frame", page)
-            holder.Size = UDim2.new(1, -10, 0, 26)
-            holder.BackgroundTransparency = 1
-
-            local label = Instance.new("TextLabel", holder)
-            label.Size = UDim2.new(0.5, 0, 1, 0)
-            label.BackgroundTransparency = 1
+            local label = Instance.new("TextLabel", page)
+            label.Size = UDim2.new(1, -10, 0, 25)
+            label.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
             label.TextColor3 = Color3.fromRGB(255, 255, 255)
             label.Text = text
             label.Font = Enum.Font.SourceSans
-            label.TextXAlignment = Enum.TextXAlignment.Left
             label.TextSize = 16
 
-            local dropdown = Instance.new("TextButton", holder)
-            dropdown.Size = UDim2.new(0.5, 0, 1, 0)
-            dropdown.Position = UDim2.new(0.5, 0, 0, 0)
-            dropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            local dropdown = Instance.new("TextButton", page)
+            dropdown.Size = UDim2.new(1, -10, 0, 30)
+            dropdown.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
             dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
             dropdown.Text = "Select"
             dropdown.Font = Enum.Font.SourceSans
@@ -133,7 +126,7 @@ function library:Win(title)
                 for _, item in ipairs(items) do
                     local option = Instance.new("TextButton", page)
                     option.Name = "DropdownOption"
-                    option.Size = UDim2.new(1, -10, 0, 24)
+                    option.Size = UDim2.new(1, -10, 0, 25)
                     option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
                     option.TextColor3 = Color3.fromRGB(255, 255, 255)
                     option.Text = item
@@ -146,10 +139,6 @@ function library:Win(title)
                             if child.Name == "DropdownOption" then child:Destroy() end
                         end
                     end)
-                end
-            end)
-        end
-    
                 end
             end)
         end
@@ -229,7 +218,7 @@ function library:Win(title)
         
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 24)
+            button.Size = UDim2.new(1, -10, 0, 25)
             button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
@@ -242,25 +231,18 @@ function library:Win(title)
             end)
         end
 
-        
         function newPage:Dropdown(text, items, callback)
-            local holder = Instance.new("Frame", page)
-            holder.Size = UDim2.new(1, -10, 0, 26)
-            holder.BackgroundTransparency = 1
-
-            local label = Instance.new("TextLabel", holder)
-            label.Size = UDim2.new(0.5, 0, 1, 0)
-            label.BackgroundTransparency = 1
+            local label = Instance.new("TextLabel", page)
+            label.Size = UDim2.new(1, -10, 0, 25)
+            label.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
             label.TextColor3 = Color3.fromRGB(255, 255, 255)
             label.Text = text
             label.Font = Enum.Font.SourceSans
-            label.TextXAlignment = Enum.TextXAlignment.Left
             label.TextSize = 16
 
-            local dropdown = Instance.new("TextButton", holder)
-            dropdown.Size = UDim2.new(0.5, 0, 1, 0)
-            dropdown.Position = UDim2.new(0.5, 0, 0, 0)
-            dropdown.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            local dropdown = Instance.new("TextButton", page)
+            dropdown.Size = UDim2.new(1, -10, 0, 30)
+            dropdown.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
             dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
             dropdown.Text = "Select"
             dropdown.Font = Enum.Font.SourceSans
@@ -273,7 +255,7 @@ function library:Win(title)
                 for _, item in ipairs(items) do
                     local option = Instance.new("TextButton", page)
                     option.Name = "DropdownOption"
-                    option.Size = UDim2.new(1, -10, 0, 24)
+                    option.Size = UDim2.new(1, -10, 0, 25)
                     option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
                     option.TextColor3 = Color3.fromRGB(255, 255, 255)
                     option.Text = item
@@ -286,10 +268,6 @@ function library:Win(title)
                             if child.Name == "DropdownOption" then child:Destroy() end
                         end
                     end)
-                end
-            end)
-        end
-    
                 end
             end)
         end
