@@ -4,12 +4,10 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- Remove old UI if exists
 if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
--- UI Setup
 function library:Win(title)
     local gui = Instance.new("ScreenGui", CoreGui)
     gui.Name = "redui"
@@ -58,42 +56,38 @@ function library:Win(title)
 
         local page = Instance.new("ScrollingFrame", pages)
         page.Size = UDim2.new(1, 0, 1, 0)
-        page.Visible = true
+        page.Visible = false
         page.ScrollBarThickness = 6
         page.CanvasSize = UDim2.new(0, 0, 0, 0)
         page.BackgroundTransparency = 1
         page.Name = name .. "_Page"
 
         local layout = Instance.new("UIListLayout", page)
-        layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
-        end)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
         layout.Padding = UDim.new(0, 5)
 
-        
-            tabButton.MouseButton1Click:Connect(function()
-                for _, v in pairs(pages:GetChildren()) do
-                    if v:IsA("ScrollingFrame") then
-                        v.Visible = false
-                    end
-                end
-                page.Visible = true
-        
+        layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+            page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+        end)
+
+        local function hideAllPages()
             for _, v in pairs(pages:GetChildren()) do
                 if v:IsA("ScrollingFrame") then
                     v.Visible = false
                 end
             end
+        end
+
+        tabButton.MouseButton1Click:Connect(function()
+            hideAllPages()
             page.Visible = true
         end)
 
-        -- Show the first created page by default
-        if #pages:GetChildren() == 1 then
-            page.Visible = true
-        end
-
         local newPage = {}
+
+        function newPage:newpage()
+            return newPage
+        end
 
         function newPage:Label(txt)
             local label = Instance.new("TextLabel", page)
@@ -133,13 +127,14 @@ function library:Win(title)
             end)
         end
 
+        hideAllPages()
+        page.Visible = true
         return newPage
     end
 
     return tabs
 end
 
--- Notification
 function library:Notifile(title, msg, duration)
     local gui = CoreGui:FindFirstChild("redui")
     if not gui then return end
