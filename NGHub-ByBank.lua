@@ -340,19 +340,60 @@ page4:Button("Click to Tp" , function()
 end)
 
 page4:Label("┇ SAFE ZONE ┇")
-page4:Dropdown("Select SafeZone", {"Safe Zone Sky", "Safe Zone UnderSea", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
 page4:Button("Click to Tp" , function()
+        if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
+        game.Players.LocalPlayer.Character.Humanoid.Sit = true
+        wait(0.15)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneUnderSeaPart"].CFrame * CFrame.new(0, 5, 0)
+    elseif getgenv().tpsafezone == "Safe Zone (Sky)" then
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+    elseif getgenv().tpsafezone == "Safe Zone Light Affinities 1.0" then
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneLightPart1"].CFrame * CFrame.new(0, 5, 0)
+	elseif getgenv().tpsafezone == "Safe Zone Light Affinities 2.0" then
+       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneLightPart2"].CFrame * CFrame.new(0, 5, 0)
+        end
     end)
 
 page4:Label("┇ NPCs ┇")
-page4:Dropdown("Select NPCs", {""}, function(t)
-    getgenv().tpnpc = t
+page4:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise"}, function(n)
+    getgenv().tpmerchant = n
 end)
 
 page4:Button("Click to Tp" , function()
+        if getgenv().tpmerchant == "Rayleigh" then
+            local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
+            if emoi == true then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Merchants.QuestHakiMerchant.HumanoidRootPart.CFrame
+            else
+                create:Notifile("OP:L", "Rayleigh did not spawn.!", 5)
+            end
+        elseif getgenv().tpmerchant == "Better Drink" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1493, 260, 2171)
+        elseif getgenv().tpmerchant == "Drink" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1282, 218, -1368)
+        elseif getgenv().tpmerchant == "Flail" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1110, 217, 3369)
+        elseif getgenv().tpmerchant == "QuestFish" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1702, 216, -325)
+        elseif getgenv().tpmerchant == "Krizma" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
+        elseif getgenv().tpmerchant == "Sword" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1005, 224, -3339)
+        elseif getgenv().tpmerchant == "Sniper" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1843, 222, 3416)
+        elseif getgenv().tpmerchant == "Emote" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1522, 265, 2165)
+        elseif getgenv().tpmerchant == "Affinity" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(113, 278, 4952)
+        elseif getgenv().tpmerchant == "Fish" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1983, 218, 566)
+        elseif getgenv().tpmerchant == "Expertise" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
+        end
     end)
 
 local Tab5 = Window:Taps("Misc")
