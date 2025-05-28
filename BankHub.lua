@@ -875,7 +875,9 @@ spawn(function()
     while wait() do
         if _G.skillz then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Z, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Z, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Z, false, game)
             end)
         end
     end
@@ -889,7 +891,9 @@ spawn(function()
     while wait() do
         if _G.skillx then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.X, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.X, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.X, false, game)
             end)
         end
     end
@@ -903,7 +907,9 @@ spawn(function()
     while wait() do
         if _G.skillc then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.C, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.C, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.C, false, game)
             end)
         end
     end
@@ -917,7 +923,9 @@ spawn(function()
     while wait() do
         if _G.skillv then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.V, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.V, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.V, false, game)
             end)
         end
     end
@@ -931,7 +939,9 @@ spawn(function()
     while wait() do
         if _G.skillb then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.B, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.B, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.B, false, game)
             end)
         end
     end
@@ -945,7 +955,9 @@ spawn(function()
     while wait() do
         if _G.skilln then
             pcall(function()
-                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.N, false, game)
+game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.N, false, game)
+task.wait(0.1)
+game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.N, false, game)
             end)
         end
     end
