@@ -350,7 +350,7 @@ end)
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ Coming Soon . . . ┇")
+page3:Label("┇ For Premiums ! ! ! ┇")
 
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
