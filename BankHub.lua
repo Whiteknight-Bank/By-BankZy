@@ -939,7 +939,7 @@ game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireS
                                 [4] = Mouse.Target,
                                 [5] = Head.CFrame * CFrame.new(0, 0, 0),
                                 [6] = 100,
-                                [7] = char.HumanoidRootPart.Position
+                                [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
                             }
 
                             rumble.RemoteEvent:FireServer(unpack(args))
