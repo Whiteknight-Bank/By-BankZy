@@ -35,6 +35,22 @@ local SafeZoneUnderSea = Instance.new("Part",game.Workspace)
     SafeZoneUnderSea.Position = Vector3.new((math.random(-5000, 5000)), -491, (math.random(-5000, 5000)))
     SafeZoneUnderSea.Anchored = true
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
+local function getPlayerNames()
+	local names = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player ~= LocalPlayer then
+			table.insert(names, player.Name)
+		end
+	end
+	return names
+end
+
+
 -- สร้างแท็บชื่อ Autos
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
@@ -241,14 +257,9 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-local PlayerName = {}
- for i,v in pairs(game.Players:GetChildren()) do
-    table.insert(PlayerName,v.Name)
- end
-
 page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", PlayerName, function(selected)
-    PlayerName1 = selected
+page3:Dropdown("Select Player", getPlayerNames(), function(name)
+    selectedPlayer = name
 end)
 
 page3:Button("Click to Tp", function()
@@ -257,44 +268,16 @@ page3:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
 end)
 
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-
--- ฟังก์ชันดูผู้เล่น
-local function viewPlayer(PlayerName1)
-	local target = Players:FindFirstChild(PlayerName1)
-	if target and target.Character and target.Character:FindFirstChild("Humanoid") then
-		Camera.CameraSubject = target.Character:FindFirstChild("Humanoid")
-		game.StarterGui:SetCore("SendNotification", {
-			Title = "View Mode",
-			Text = "กำลังดู: " .. name,
-			Duration = 2
-		})
-	end
-end
-
--- ฟังก์ชันกลับมากล้องตัวเอง
-local function resetView()
-	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-		Camera.CameraSubject = LocalPlayer.Character:FindFirstChild("Humanoid")
-		game.StarterGui:SetCore("SendNotification", {
-			Title = "View Mode",
-			Text = "กลับมาที่ตัวเอง",
-			Duration = 2
-		})
-	end
-end
-
--- เลือกชื่อผู้เล่น (ตัวอย่างอาจมาจาก Dropdown ก่อนหน้า หรือระบุไว้เลย)
-local targetPlayer = PlayerName1 -- คุณอาจใช้ตัวแปรที่อัปเดตจาก Dropdown ก็ได้
-
--- เพิ่ม Toggle เพื่อดูมุมกล้องของผู้เล่น
-page3:Toggle("ดูมุมกล้องของ " .. targetPlayer, false, function(state)
-	if state then
-		viewPlayer(targetPlayer)
-	else
-		resetView()
+page3:Toggle("View", false, function(state)
+	if selectedPlayer then
+		local target = Players:FindFirstChild(selectedPlayer)
+		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+			if state then
+				Camera.CameraSubject = target.Character.Humanoid
+			else
+				Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+			end
+		end
 	end
 end)
 
