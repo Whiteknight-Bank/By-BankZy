@@ -365,6 +365,10 @@ local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Function Farming ┇")
+page2:Dropdown("Select Weapon:", Wapon, function(wapn)
+    Wapon = wapn
+end)
+
 page2:Toggle("Auto Click", false, function(state)
     AutoClick = state
 end)
