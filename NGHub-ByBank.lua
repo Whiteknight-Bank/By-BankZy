@@ -215,8 +215,9 @@ local PlayerName = {}
  end
 
 page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", PlayerName, function(PlayerName1)
-        create:Notifile("Dropdown", "คุณเลือก: " .. PlayerName1, 3)
+page3:Dropdown("Select Player", PlayerName, function(selected)
+    PlayerName1 = selected
+        create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
 end)
 
 page3:Button("Click to Tp", function()
