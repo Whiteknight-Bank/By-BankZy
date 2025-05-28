@@ -208,14 +208,8 @@ game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:
     create:Notifile("", "Clicked!", 2)
 end)
 
-local PlayerName = {}
- for i,v in pairs(game.Players:GetChildren()) do
-    table.insert(PlayerName,v.Name)
- end
-
-PlayerName1 = ""
 page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", PlayerName, function(selected)
+page3:Dropdown("Select Player", {"1", "2"}, function(selected)
         create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
 end)
 
