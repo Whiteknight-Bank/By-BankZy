@@ -227,14 +227,23 @@ end)
 
 page3:Toggle("View", false, function(viewplr)
     Sp = viewplr
-    local plr1 = game.Players.LocalPlayer.Character.Humanoid
     local plr2 = game.Players:FindFirstChild(PlayerName1)
-    repeat wait(0)
-        game.Workspace.Camera.CameraSubject = plr2.Character.Humanoid
-    until Sp == false or plr2.Character.Humanoid.Health == 0
-    if Sp == false or plr2.Character.Humanoid.Health ~= 0 then
-        game.Workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-                end
+    if not plr2 or not plr2.Character or not plr2.Character:FindFirstChild("Humanoid") then
+        create:Notifile("Error", "Player not found", 2)
+        return
+    end
+
+    task.spawn(function()
+        if Sp then
+            workspace.CurrentCamera.CameraSubject = plr2.Character.Humanoid
+            repeat wait(0)
+                workspace.CurrentCamera.CameraSubject = plr2.Character.Humanoid
+            until Sp == false or plr2.Character.Humanoid.Health == 0
+            workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+        else
+            workspace.CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+        end
+    end)
 end)
 
 local Tab4 = Window:Taps("Island")
