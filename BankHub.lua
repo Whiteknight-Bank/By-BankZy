@@ -895,7 +895,7 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-page2:Toggle("Auto Farm Rumble (in Test)", false, function(rlb)
+page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
     _G.rumblefarm = rlb
 end)
 
@@ -919,9 +919,16 @@ spawn(function()
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 
                             -- เริ่มชาร์จ
-                            rumble.RemoteEvent:FireServer(
-                                VTR, "RumblePower2", "StartCharging", nil, nil, nil, nil
-                            )
+local args = {
+    [1] = VTR,
+    [2] = "RumblePower2",
+    [3] = "StartCharging",
+    [4] = v.HumanoidRootPart.Position,
+    [5] = workspace:WaitForChild("Water"):WaitForChild("Water0"):WaitForChild("Model"):WaitForChild("Water"),
+    [6] = "Right"
+}
+
+game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireServer(unpack(args))
                             
                             task.wait(0.3) -- ให้เวลาชาร์จพลัง
 
