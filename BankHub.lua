@@ -39,6 +39,29 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
+spawn(function() -- autofarm velocity
+    while wait(0) do
+        pcall(function()
+            if AutoFish or AutoPack or _G.behindfarm  then
+                if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+                    local Noclip = Instance.new("BodyVelocity")
+                    Noclip.Name = "BodyClip"
+                    Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+                    Noclip.MaxForce = Vector3.new(100000,100000,100000)
+                    Noclip.Velocity = Vector3.new(0,0,0)
+                end
+                game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
+            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false then
+                --if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
+                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
+                wait(1)
+                --end
+                game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
+            end
+        end)
+    end
+end)
+
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
 	local names = {}
@@ -545,6 +568,23 @@ page1:Label("┇ Function Haki ┇")
 page1:Toggle("Auto Buso Haki", false, function(abso)
     _G.autobuso = abso
 end)
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.autobuso then
+                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+
+            end
+        end)
+    end
+end)
 
 page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
     AutoHaki = hki
@@ -1047,14 +1087,44 @@ page4:Toggle("Auto Buy Drinks", false, function(bdy)
 end)
 
 page4:Toggle("Auto Drop Drink", false, function(dops)
-	_G.dropdrink = dops
+	DropDrinks = dops
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not DropDrinks then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value.Parent = game.Workspace;
+                end
+            end
+        end)
+    end
 end)
 
 page4:Toggle("Auto Drinks All", false, function(drks)
-	_G.drinks = drks
+	AutoDrinks = drks
 end)
 
-page4:Label("↑ Not Working Now ↑")
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoDrinks then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value:Activate();
+                end
+            end
+        end)
+    end
+end)
+
+page4:Label("↑ Not Working +Just Auto Buy Drink+ Now ↑")
 
 page4:Label("┇ Spam Dash Player ┇")
 page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
