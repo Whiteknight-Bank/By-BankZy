@@ -1082,7 +1082,7 @@ page4:Toggle("View", false, function(state)
 end)
 
 page4:Label("┇ Shop ┇")
-page4:Toggle("Auto Buy Drinks", false, function(bdy)
+page4:Toggle("Auto Buy Drinks (×)", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -1124,7 +1124,7 @@ spawn(function()
     end
 end)
 
-page4:Label("↑ Not Working +Just Auto Buy Drink+ Now ↑")
+page4:Label("↑ Auto Buy Drink Not Working Now ↑")
 
 page4:Label("┇ Spam Dash Player ┇")
 page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
