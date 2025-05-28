@@ -879,7 +879,7 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-page4:Toggle("God Mode Enemies (Coming Soon)", false, function(gxd)
+page4:Toggle("God Mode For Enemies ", false, function(gxd)
     _G.god = gxd
 end)
 
@@ -1273,4 +1273,4 @@ end)
 local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
 
-page9:Label("┇ FB: Bank Kesee or Discord: Rattanakorn0248 ┇")
+page9:Label("┇ FB: Bank Kesee or Discord: Rattanakorn0242 ┇")
