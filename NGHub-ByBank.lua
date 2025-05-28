@@ -153,6 +153,27 @@ local remotes = {}
     return tmp
 end
 
+local Wapon = {}
+for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+    if v:IsA("Tool") then
+        table.insert(Wapon ,v.Name)
+    end
+end
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.autodash then
+	for i,v in pairs(game:GetService("Workspace")[selectedPlayer]:GetChildren()) do
+if string.find(v.Name, "ShaveServer") then
+v:Destroy()
+end
+	end
+            end
+        end)
+    end
+end)
+
 -- สร้างแท็บชื่อ Autos
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
@@ -343,7 +364,7 @@ end)
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
-page4:Dropdown("Select Weapon:", Weaponlist, function(wpon)
+page4:Dropdown("Select Weapon:", Weapon, function(wpon)
     Weapon = wpon
 end)
 
@@ -403,6 +424,20 @@ end)
 page4:Label("┇ Spam Dash Player ┇")
 page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
 	_G.dash = dsh
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.autodash then
+	for i,v in pairs(game:GetService("Workspace")[selectedPlayer]:GetChildren()) do
+if string.find(v.Name, "Dash") then
+v:FireServer(CFrame.new(game.Players[selectedPlayer].Character.HumanoidRootPart.Position),workspace.Water)
+end
+end
+            end
+        end)
+    end
 end)
 
 plr = game.Players.LocalPlayer
