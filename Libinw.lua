@@ -146,7 +146,7 @@ function library:Win(title)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "▾" or "◂"
+        arrow.Text = opened and "↓" or "←"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -170,7 +170,7 @@ function library:Win(title)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "◂"
+                    arrow.Text = "←"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
@@ -327,7 +327,7 @@ function newPage:Dropdown(title, items, callback)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "▾" or "◂"
+        arrow.Text = opened and "↓" or "←"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -351,7 +351,7 @@ function newPage:Dropdown(title, items, callback)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "◂"
+                    arrow.Text = "←"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
