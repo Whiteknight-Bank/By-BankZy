@@ -1,8 +1,7 @@
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
-local Window = create:Win("NG Hub Premium : For Map OPL")
+local Window = create:Win("NG Hub : For Map OPL:Anarchy")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
-
 
 local Cache = { DevConfig = {} };
 
@@ -1201,7 +1200,7 @@ spawn(function()
 end)
 
 page7:Button("Check You Compass", function()
-fireclickdetector(game:GetService("Workspace").Merchants.QuestMerchant.Clickable.ClickDetector)
+create:Notifile("", "You Compass: " .. game.Players.LocalPlayer.Name .. "", 5)
 end)
 
 local Tab8 = Window:Taps("Misc")
