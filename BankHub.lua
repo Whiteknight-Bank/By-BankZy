@@ -1086,7 +1086,7 @@ page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page4:Toggle("Auto Buy Drinks (×)", false, function(bdy)
+page4:Toggle("Auto Buy Drinks", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -1142,8 +1142,6 @@ spawn(function()
         end)
     end
 end)
-
-page4:Label("↑ Auto Buy Drink Not Working Now ↑")
 
 page4:Label("┇ Spam Dash Player ┇")
 page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
