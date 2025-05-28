@@ -1090,6 +1090,21 @@ page4:Toggle("Auto Buy Drinks (×)", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.buydrink then
+local args = {
+    [1] = Cache.DevConfig["ListOfDrink"]
+}
+
+workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
+
+            end
+        end)
+    end
+end)
+
 page4:Toggle("Auto Drop Drink", false, function(dops)
 	DropDrinks = dops
 end)
