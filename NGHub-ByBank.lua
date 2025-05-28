@@ -281,6 +281,11 @@ page3:Toggle("View", false, function(state)
 	end
 end)
 
+page3:Label("┇ Spam Dash Player ┇")
+page3:Toggle("Spam Dash (In Select Player)", false, function(dsh)
+	_G.dash = dsh
+end)
+
 plr = game.Players.LocalPlayer
 
 local Tab4 = Window:Taps("Island")
