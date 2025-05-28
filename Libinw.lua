@@ -231,77 +231,46 @@ function library:Win(title)
             end)
         end
 
-function newPage:Dropdown(text, list, callback)
-    local holder = Instance.new("Frame")
-    holder.Size = UDim2.new(1, -10, 0, 30)
-    holder.BackgroundTransparency = 1
-    holder.Parent = self.container
+        function newPage:Dropdown(text, items, callback)
+            local label = Instance.new("TextLabel", page)
+            label.Size = UDim2.new(1, -10, 0, 25)
+            label.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            label.TextColor3 = Color3.fromRGB(255, 255, 255)
+            label.Text = text
+            label.Font = Enum.Font.SourceSans
+            label.TextSize = 16
 
-    local title = Instance.new("TextLabel")
-    title.Text = text
-    title.TextSize = 14
-    title.Font = Enum.Font.GothamBold
-    title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    title.BackgroundTransparency = 1
-    title.Size = UDim2.new(0.6, 0, 1, 0)
-    title.Position = UDim2.new(0, 5, 0, 0)
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.Parent = holder
+            local dropdown = Instance.new("TextButton", page)
+            dropdown.Size = UDim2.new(1, -10, 0, 30)
+            dropdown.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+            dropdown.TextColor3 = Color3.fromRGB(255, 255, 255)
+            dropdown.Text = "Select"
+            dropdown.Font = Enum.Font.SourceSans
+            dropdown.TextSize = 16
 
-    local dropdownBtn = Instance.new("TextButton")
-    dropdownBtn.Size = UDim2.new(0.3, 0, 1, 0)
-    dropdownBtn.Position = UDim2.new(0.65, 0, 0, 0)
-    dropdownBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    dropdownBtn.Text = "▶"
-    dropdownBtn.Font = Enum.Font.GothamBold
-    dropdownBtn.TextSize = 14
-    dropdownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    dropdownBtn.Parent = holder
-
-    local optionFrame = Instance.new("Frame")
-    optionFrame.Size = UDim2.new(1, -10, 0, 0)
-    optionFrame.Position = UDim2.new(0, 5, 1, 0)
-    optionFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    optionFrame.BorderSizePixel = 0
-    optionFrame.ClipsDescendants = true
-    optionFrame.Visible = false
-    optionFrame.Parent = holder
-
-    local UIListLayout = Instance.new("UIListLayout")
-    UIListLayout.Parent = optionFrame
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-
-    dropdownBtn.MouseButton1Click:Connect(function()
-        local expanded = not optionFrame.Visible
-        optionFrame.Visible = expanded
-        dropdownBtn.Text = expanded and "▼" or "▶"
-
-        if expanded then
-            local height = #list * 25
-            optionFrame:TweenSize(UDim2.new(1, -10, 0, height), "Out", "Quad", 0.2, true)
-        else
-            optionFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.2, true)
+            dropdown.MouseButton1Click:Connect(function()
+                for _, child in ipairs(page:GetChildren()) do
+                    if child.Name == "DropdownOption" then child:Destroy() end
+                end
+                for _, item in ipairs(items) do
+                    local option = Instance.new("TextButton", page)
+                    option.Name = "DropdownOption"
+                    option.Size = UDim2.new(1, -10, 0, 25)
+                    option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                    option.TextColor3 = Color3.fromRGB(255, 255, 255)
+                    option.Text = item
+                    option.Font = Enum.Font.SourceSans
+                    option.TextSize = 16
+                    option.MouseButton1Click:Connect(function()
+                        dropdown.Text = item
+                        if callback then callback(item) end
+                        for _, child in ipairs(page:GetChildren()) do
+                            if child.Name == "DropdownOption" then child:Destroy() end
+                        end
+                    end)
+                end
+            end)
         end
-    end)
-
-    for _, option in pairs(list) do
-        local optionBtn = Instance.new("TextButton")
-        optionBtn.Text = option
-        optionBtn.Size = UDim2.new(1, 0, 0, 25)
-        optionBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        optionBtn.Font = Enum.Font.Gotham
-        optionBtn.TextSize = 14
-        optionBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        optionBtn.Parent = optionFrame
-
-        optionBtn.MouseButton1Click:Connect(function()
-            callback(option)
-            optionFrame.Visible = false
-            dropdownBtn.Text = "▶"
-            optionFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.2, true)
-        end)
-    end
-end
 
             return newPage
     end
