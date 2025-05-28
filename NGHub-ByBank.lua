@@ -369,6 +369,11 @@ page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
+page2:Toggle("Auto Farm", false, function(state)
+    AutoMission = state
+end)
+
+page2:Label("┇ Function Weapon ┇")
 page2:Toggle("Auto Click", false, function(state)
     AutoClick = state
 end)
@@ -377,8 +382,13 @@ page2:Toggle("Auto Equip", false, function(state)
     _G.autoequip = state
 end)
 
-page2:Toggle("Auto Farm", false, function(state)
-    AutoMission = state
+page2:Label("┇ Other Farming With Skill DF ┇")
+page2:Toggle("Auto Farm Quake (Very Lag)", false, function(qke)
+    _G.quakefarm = qke
+end)
+
+page2:Toggle("Auto Farm Light", false, function(lth)
+    _G.light = lth
 end)
 
 local Tab3 = Window:Taps("Skill")
@@ -391,7 +401,7 @@ local page4 = Tab4:newpage()
 
 page4:Label("┇ No Save DATA ! ! ! ┇")
 page4:Button("DUPE" , function()
-create:Notifile("", "Clicked!", 2)
+create:Notifile("", "Start Dupe", 2)
                 
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
@@ -403,8 +413,6 @@ page4:Dropdown("Select Player:", getPlayerNames(), function(name)
 end)
 
 page4:Button("Click to Tp", function()
-    create:Notifile("", "Clicked", 2)
-
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
 end)
 
