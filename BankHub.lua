@@ -909,13 +909,12 @@ spawn(function()
                 if not rumble then return end
 
                 -- ถ้ามีฟังก์ชันเรียกค่าตรงนี้ได้เหมือน Quake
-                local VTR = rumble.RemoteEvent.RemoteFunction:InvokeServer()
+                local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
 
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health ~= 0 then
-			if v.Humanoid.Heath > 0 and
-                        (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 10000000000000000000000 then
-			if v.Name ~= " SetInstances" then
+                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
+                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                        if dist < 10000000000000000000000 then
                             v.HumanoidRootPart.CanCollide = false
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 
@@ -924,8 +923,8 @@ local args = {
     [1] = VTR,
     [2] = "RumblePower2",
     [3] = "StartCharging",
-    [4] = v.HumanoidRootPart.Position,
-    [5] = workspace:WaitForChild("Water"):WaitForChild("Water0"):WaitForChild("Model"):WaitForChild("Water"),
+    [4] = Mouse.Target,
+    [5] = Head.CFrame * CFrame.new(0, 0, 0),
     [6] = "Right"
 }
 
@@ -937,8 +936,8 @@ game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireS
                                 [1] = VTR,
                                 [2] = "RumblePower2",
                                 [3] = "StopCharging",
-                                [4] = v.HumanoidRootPart.Position,
-                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
+                                [4] = Mouse.Target,
+                                [5] = Head.CFrame * CFrame.new(0, 0, 0),
                                 [6] = 100,
                                 [7] = char.HumanoidRootPart.Position
                             }
