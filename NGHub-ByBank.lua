@@ -261,10 +261,10 @@ page3:Toggle("View", false, function(viewplr)
     Sp = viewplr
 end)
 
+plr = game.Players.LocalPlayer
+
 local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
-
-plr = game.Players.LocalPlayer
 
 page4:Label("┇ Function Teleport ┇")
 page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
@@ -272,7 +272,7 @@ page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains",
 end)
 
 page4:Button("Click to Tp" , function()
-    if getgenv().tpisland == "Grassy" then
+    if getgenv().island == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu's Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1526.0230712891, 364.99990844727, 10510.020507812)
