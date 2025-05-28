@@ -688,8 +688,16 @@ end)
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ For Premiums ! ! ! ┇")
+page3:Label("┇ Spam Skill For Premiums ! ! ! ┇")
+page3:Section("Coming Soon . . .")
 
+page3:Toggle("Max Charge Skill (100%)", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Label("┇ Auto Press Skill DF ┇")
+page3:Section("Function is Coming Soon . . .")
+		
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
