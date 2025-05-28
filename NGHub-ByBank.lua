@@ -217,7 +217,6 @@ local PlayerName = {}
 page3:Label("┇ Player ┇")
 page3:Dropdown("Select Player", PlayerName, function(selected)
     PlayerName1 = selected
-        create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
 end)
 
 page3:Button("Click to Tp", function()
@@ -228,14 +227,28 @@ end)
 
 page3:Toggle("View", false, function(viewplr)
     Sp = viewplr
-    local plr1 = game.Players.LocalPlayer.Character.Humanoid
+
+    local cam = workspace.CurrentCamera
     local plr2 = game.Players:FindFirstChild(PlayerName1)
-    repeat wait(0)
-        game.Workspace.Camera.CameraSubject = plr2.Character.Humanoid
-    until Sp == false or plr2.Character.Humanoid.Health == 0
-    if Sp == false or plr2.Character.Humanoid.Health ~= 0 then
-        game.Workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+
+    -- ตรวจสอบ player และ character ก่อน
+    if not plr2 or not plr2.Character or not plr2.Character:FindFirstChild("Humanoid") then
+        create:Notifile("Error", "Player not found or invalid!", 2)
+        return
+    end
+
+    task.spawn(function()
+        if Sp then
+            cam.CameraSubject = plr2.Character.Humanoid
+            repeat task.wait()
+                if plr2.Character and plr2.Character:FindFirstChild("Humanoid") then
+                    cam.CameraSubject = plr2.Character.Humanoid
                 end
+            until not Sp or plr2.Character.Humanoid.Health <= 0
+
+            cam.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+        end
+    end)
 end)
 
 local Tab4 = Window:Taps("Island")
