@@ -1065,7 +1065,7 @@ local page6 = Tab6:newpage()
 
 page6:Label("┇ Function Anti Devil Fruit ┇")
 page6:Toggle("Anti Skill Pool (Dark,Venom)", false, function(ndmg)
-    _G.nodmgwater = ndmg
+    _G.antity = ndmg
 end)
 
 spawn(function()
