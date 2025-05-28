@@ -347,29 +347,34 @@ page2:Toggle("Auto Farm", false, function(state)
     AutoMission = state
 end)
 
-local Tab3 = Window:Taps("Players")
+local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ No Save DATA ! ! ! ┇")
-page3:Button("DUPE" , function()
+page3:Label("┇ Coming Soon . . . ┇")
+
+local Tab4 = Window:Taps("Players")
+local page4 = Tab4:newpage()
+
+page4:Label("┇ No Save DATA ! ! ! ┇")
+page4:Button("DUPE" , function()
 create:Notifile("", "Clicked!", 2)
                 
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", getPlayerNames(), function(name)
+page4:Label("┇ Player ┇")
+page4:Dropdown("Select Player", getPlayerNames(), function(name)
     selectedPlayer = name
 end)
 
-page3:Button("Click to Tp", function()
+page4:Button("Click to Tp", function()
     create:Notifile("", "Clicked", 2)
 
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
 end)
 
-page3:Toggle("View", false, function(state)
+page4:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -382,22 +387,22 @@ page3:Toggle("View", false, function(state)
 	end
 end)
 
-page3:Label("┇ Spam Dash Player ┇")
-page3:Toggle("Spam Dash (In Select Player)", false, function(dsh)
+page4:Label("┇ Spam Dash Player ┇")
+page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
 	_G.dash = dsh
 end)
 
 plr = game.Players.LocalPlayer
 
-local Tab4 = Window:Taps("Island")
-local page4 = Tab4:newpage()
+local Tab5 = Window:Taps("Island")
+local page5 = Tab5:newpage()
 
-page4:Label("┇ Islands ┇")
-page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
+page5:Label("┇ Islands ┇")
+page5:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
     getgenv().tpisland = t
 end)
 
-page4:Button("Click to Tp" , function()
+page5:Button("Click to Tp" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu's Island" then
@@ -465,12 +470,12 @@ page4:Button("Click to Tp" , function()
                 end
 end)
 
-page4:Label("┇ SAFE ZONE ┇")
-page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page5:Label("┇ SAFE ZONE ┇")
+page5:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-page4:Button("Click to Tp" , function()
+page5:Button("Click to Tp" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -484,12 +489,12 @@ page4:Button("Click to Tp" , function()
         end
     end)
 
-page4:Label("┇ NPCs ┇")
-page4:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise"}, function(n)
+page5:Label("┇ NPCs ┇")
+page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-page4:Button("Click to Tp" , function()
+page5:Button("Click to Tp" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -522,11 +527,11 @@ page4:Button("Click to Tp" , function()
         end
     end)
 
-local Tab5 = Window:Taps("Misc")
-local page5 = Tab5:newpage()
+local Tab6 = Window:Taps("Misc")
+local page6 = Tab6:newpage()
 
-page5:Label("┇ Function Anti ┇")
-page5:Toggle("Anti Dmg Water", false, function(ndmg)
+page6:Label("┇ Function Anti ┇")
+page6:Toggle("Anti Dmg Water", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
 
