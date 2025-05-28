@@ -203,9 +203,9 @@ local page3 = Tab3:newpage()
 
 page3:Label("┇ No Save DATA ! ! ! ┇")
 page3:Button("DUPE", false, function()
+create:Notifile("", "Clicked!", 2)
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
-    create:Notifile("", "Clicked!", 2)
 end)
 
 local PlayerName = {}
