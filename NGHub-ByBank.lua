@@ -495,16 +495,6 @@ page1:Toggle("Auto Buso Haki", false, function(state)
     AutoMission = state
 end)
 
-page1:Button("Bring Chest" , function()
-create:Notifile("", "Bring All Chest in Sever", 1.5)
-                
-for _, v in pairs(game.Workspace:GetDescendants()) do
-                            if v.Name == "Touch" and v.Parent.Name == "TreasureChestPart" then
-                                v.Parent.CFrame = game.Workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.CFrame
-			end
-		end
-end)
-
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
