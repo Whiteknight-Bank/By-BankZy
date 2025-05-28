@@ -203,11 +203,19 @@ local page3 = Tab3:newpage()
 
 page4:Label("┇ No Save DATA ! ! ! ┇")
 page4:Button("DUPE", false, function()
+workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
+game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
     create:Notifile("", "Clicked!", 2)
 end)
 
+local PlayerName = {}
+ for i,v in pairs(game.Players:GetChildren()) do
+    table.insert(PlayerName,v.Name)
+ end
+
+PlayerName1 = ""
 page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", {"Option 1", "Option 2", "Option 3"}, function(selected)
+page3:Dropdown("Select Player", PlayerName, function(selected)
         create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
 end)
 
