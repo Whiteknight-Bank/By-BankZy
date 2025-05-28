@@ -257,8 +257,45 @@ page3:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
 end)
 
-page3:Toggle("View", false, function(viewplr)
-    Sp = viewplr
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Camera = workspace.CurrentCamera
+
+-- ฟังก์ชันดูผู้เล่น
+local function viewPlayer(PlayerName1)
+	local target = Players:FindFirstChild(PlayerName1)
+	if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+		Camera.CameraSubject = target.Character:FindFirstChild("Humanoid")
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "View Mode",
+			Text = "กำลังดู: " .. name,
+			Duration = 2
+		})
+	end
+end
+
+-- ฟังก์ชันกลับมากล้องตัวเอง
+local function resetView()
+	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
+		Camera.CameraSubject = LocalPlayer.Character:FindFirstChild("Humanoid")
+		game.StarterGui:SetCore("SendNotification", {
+			Title = "View Mode",
+			Text = "กลับมาที่ตัวเอง",
+			Duration = 2
+		})
+	end
+end
+
+-- เลือกชื่อผู้เล่น (ตัวอย่างอาจมาจาก Dropdown ก่อนหน้า หรือระบุไว้เลย)
+local targetPlayer = PlayerName1 -- คุณอาจใช้ตัวแปรที่อัปเดตจาก Dropdown ก็ได้
+
+-- เพิ่ม Toggle เพื่อดูมุมกล้องของผู้เล่น
+page3:Toggle("ดูมุมกล้องของ " .. targetPlayer, false, function(state)
+	if state then
+		viewPlayer(targetPlayer)
+	else
+		resetView()
+	end
 end)
 
 plr = game.Players.LocalPlayer
