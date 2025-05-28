@@ -3,6 +3,28 @@ local Window = create:Win("NG Hub Premium : For Map OPL")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OP:L", 5)
 
+-- ปุ่ม Toggle UI
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 40, 0, 40)
+toggleButton.Position = UDim2.new(1, -50, 0, 10) -- มุมขวาบน
+toggleButton.AnchorPoint = Vector2.new(0, 0)
+toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+toggleButton.Text = "≡"
+toggleButton.TextSize = 20
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.Name = "UIToggle"
+toggleButton.Parent = game.CoreGui -- หรือ ScreenGui
+
+-- ทำเป็นวงกลม
+local uicorner = Instance.new("UICorner", toggleButton)
+uicorner.CornerRadius = UDim.new(1, 0)
+
+-- เชื่อมกับ Library UI
+toggleButton.MouseButton1Click:Connect(function()
+    LibraryUI.Visible = not LibraryUI.Visible
+end)
+
+
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
