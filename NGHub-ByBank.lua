@@ -1208,6 +1208,10 @@ local Tab8 = Window:Taps("Misc")
 local page8 = Tab8:newpage()
 
 page8:Label("┇ Function Anti ┇")
+page8:Toggle("Anti Afk (Not Working Now)", false, function(afk)
+    _G.antiafk = afk
+end)
+
 page8:Toggle("Anti Dmg Water", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
