@@ -501,6 +501,8 @@ create:Notifile("", "Bring All Chest in Sever", 1.5)
 for _, v in pairs(game.Workspace:GetDescendants()) do
                             if v.Name == "Touch" and v.Parent.Name == "TreasureChestPart" then
                                 v.Parent.CFrame = game.Workspace[game.Players.LocalPlayer.Name].HumanoidRootPart.CFrame
+			end
+		end
 end)
 
 local Tab2 = Window:Taps("Farming")
