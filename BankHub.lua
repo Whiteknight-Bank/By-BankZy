@@ -938,7 +938,7 @@ game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireS
                                 [3] = "StopCharging",
                                 [4] = v.HumanoidRootPart.Position,
                                 [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
-                                [6] = 200,
+                                [6] = 100,
                                 [7] = char.HumanoidRootPart.Position
                             }
 
