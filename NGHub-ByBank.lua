@@ -631,3 +631,8 @@ if self.Name == 'Drown' and _G.nodmgwater then
         end
     end
 end)
+
+local Tab9 = Window:Taps("การติดต่อ")
+local page9 = Tab9:newpage()
+
+page9:Label("┇ FB: Bank Kesee or Discord: Rattanakorn0248 ┇")
