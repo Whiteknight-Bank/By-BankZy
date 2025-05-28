@@ -12,6 +12,22 @@ page1:Toggle("Auto Claim Mission", false, function(state)
     AutoMission = state
 end)
 
+page1:Toggle("Auto Package", false, function(state)
+    AutoMission = state
+end)
+
+page1:Toggle("Auto Fishing", false, function(state)
+    AutoMission = state
+end)
+
+page1:Toggle("Auto Claim Challanges", false, function(state)
+    AutoMission = state
+end)
+
+page1:Toggle("Auto Buso Haki", false, function(state)
+    AutoMission = state
+end)
+
 -- เพิ่มอีกแท็บ
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
