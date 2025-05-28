@@ -899,38 +899,44 @@ page2:Toggle("Auto Farm Rumble (in Test)", false, function(rlb)
     _G.rumblefarm = rlb
 end)
 
-spawn(function() -- Rumble farm NPCs
-    while wait(0) do
+spawn(function()
+    while task.wait() do
         pcall(function()
             if _G.rumblefarm then
-                local character = game.Players.LocalPlayer.Character
-                local script = character:FindFirstChild("Powers") and character.Powers:FindFirstChild("Rumble")
-                VTR = script.RemoteEvent.RemoteFunction:InvokeServer();
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
+                if not rumble then return end
 
-                if not script then return end
+                -- ถ้ามีฟังก์ชันเรียกค่าตรงนี้ได้เหมือน Quake
+                local VTR = rumble.RemoteEvent.RemoteFunction:InvokeServer()
 
-                local pla = game.Players.LocalPlayer
-                local Mouse = pla:GetMouse()
-
-                for i, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
-                        if v.Name ~= "SetInstances" and (character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 1000 then
+                for _, v in pairs(workspace.Enemies:GetChildren()) do
+                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
+                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
+                        if dist < 1000 then
                             v.HumanoidRootPart.CanCollide = false
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 
-                            wait(0.05)
+                            -- เริ่มชาร์จ
+                            rumble.RemoteEvent:FireServer(
+                                VTR, "RumblePower2", "StartCharging", nil, nil, nil, nil
+                            )
+                            
+                            task.wait(0.3) -- ให้เวลาชาร์จพลัง
 
                             local args = {
-                                [1] = VTR, -- อาจต้องเปลี่ยนหาก dynamic
+                                [1] = VTR,
                                 [2] = "RumblePower2",
                                 [3] = "StopCharging",
                                 [4] = v.HumanoidRootPart.Position,
                                 [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
                                 [6] = 200,
-                                [7] = character.HumanoidRootPart.Position
+                                [7] = char.HumanoidRootPart.Position
                             }
 
-                            script.RemoteEvent:FireServer(unpack(args))
+                            rumble.RemoteEvent:FireServer(unpack(args))
+                            task.wait(0.1) -- รอ cooldown นิดนึงก่อนไปตัวต่อไป
                         end
                     end
                 end
@@ -938,7 +944,6 @@ spawn(function() -- Rumble farm NPCs
         end)
     end
 end)
-
 
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
