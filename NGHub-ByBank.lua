@@ -500,7 +500,7 @@ end)
 page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
     _G.haki1 = hki
 end)
-page1:Section("↑ Warning: If You Use Farm Haki For Too Long, You Maybe Kicked Out Of The Map ↑")
+page1:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
