@@ -1425,18 +1425,26 @@ local PlaceID = game.PlaceId
 end)
 
 page8:Label("┇ Function Anti ┇")
-page8:Toggle("Anti Afk (Not Working Now)", false, function(afk)
-    _G.antiafk = afk
-end)
 
-if afk then
+local afkConnection
+
+page8:Toggle("Anti-AFK", false, function(state)
+create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " You Can AFK Now :)", 2)
+
+    if state then
         local vu = game:GetService("VirtualUser")
-            game:GetService("Players").LocalPlayer.Idled:Connect(function()
-                vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-                wait(1)
-                vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
-            end)
-end
+        afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            wait(1)
+            vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        end)
+    else
+        if afkConnection then
+            afkConnection:Disconnect()
+            afkConnection = nil
+        end
+    end
+end)
 
 page8:Toggle("Anti Dmg Water", false, function(dmgg)
     _G.nodmgwater = dmgg
