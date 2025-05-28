@@ -491,9 +491,16 @@ wait(.8)
     end
 end)
 
-page1:Toggle("Auto Buso Haki", false, function(state)
-    AutoMission = state
+page1:Label("┇ Function Haki ┇")
+
+page1:Toggle("Auto Buso Haki", false, function(abso)
+    _G.autobuso = abso
 end)
+
+page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
+    _G.haki1 = hki
+end)
+page1:Section("↑ Warning: If You Use Farm Haki For Too Long, You Maybe Kicked Out Of The Map ↑")
 
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
