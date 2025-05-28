@@ -553,3 +553,20 @@ if self.Name == 'Drown' and _G.nodmgwater then
         end
     end
 end)
+
+local Tab7 = Window:Taps("Anti DF")
+local page7 = Tab7:newpage()
+
+page7:Label("┇ Function Anti Devil Fruit ┇")
+page7:Toggle("Anti Dmg Water", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+local Tab8 = Window:Taps("DUPE COMP")
+local page8 = Tab8:newpage()
+
+page8:Label("┇ Function Dupe Compass ┇")
+page8:Label("Warning: It Will Reset Stats You All")
+page8:Toggle("Auto Reset", false, function(atrs)
+    _G.autoreset = atrs
+end)
