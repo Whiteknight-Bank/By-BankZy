@@ -666,6 +666,17 @@ page1:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
+page2:Label("┇ Function Enemies ┇")
+page2:Section("↓ Is Coming Soon . . . ↓")
+
+page2:Toggle("Auto Death Mob (Coming Soon)", false, function(dthh)
+    _G.autodie = dthh
+end)
+
+page2:Toggle("Auto Death Kaizu' Boss (Coming Soon)", false, function(befrm)
+    _G.autokaizu = befrm
+end)
+
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
@@ -861,13 +872,18 @@ page3:Section("Function is Coming Soon . . .")
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
-page4:Label("┇ No Save DATA ! ! ! ┇")
+page4:Label("┇ Local Player ┇")
 page4:Button("DUPE" , function()
 create:Notifile("", "Start Dupe", 2)
                 
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
+
+page4:Toggle("God Mode Enemies (Coming Soon)", false, function(gxd)
+    _G.god = gxd
+end)
+page4:Label("↑ Coming Soon . . . ↑")
 
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
