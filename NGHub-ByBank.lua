@@ -3,27 +3,60 @@ local Window = create:Win("NG Hub Premium : For Map OPL")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OP:L", 5)
 
--- ปุ่ม Toggle UI
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- ใส่ชื่อ UI ของคุณให้ตรง
+local mainUI = playerGui:WaitForChild("MainUI")
+
+local screenGui = Instance.new("ScreenGui", playerGui)
+screenGui.Name = "UIToggler"
+screenGui.ResetOnSpawn = false
+
 local toggleButton = Instance.new("TextButton")
 toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(1, -50, 0, 10) -- มุมขวาบน
-toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-toggleButton.Text = "≡"
-toggleButton.TextSize = 20
+toggleButton.Position = UDim2.new(1, -50, 0, 10)
+toggleButton.AnchorPoint = Vector2.new(1, 0)
+toggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
 toggleButton.TextColor3 = Color3.new(1, 1, 1)
-toggleButton.Name = "UIToggle"
-toggleButton.Parent = game.CoreGui -- หรือ ScreenGui
+toggleButton.Text = "◎"
+toggleButton.TextSize = 20
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.Parent = screenGui
+toggleButton.Name = "UIToggleButton"
 
--- ทำเป็นวงกลม
-local uicorner = Instance.new("UICorner", toggleButton)
-uicorner.CornerRadius = UDim.new(1, 0)
-
--- เชื่อมกับ Library UI
 toggleButton.MouseButton1Click:Connect(function()
-    LibraryUI.Visible = not LibraryUI.Visible
+	mainUI.Enabled = not mainUI.Enabled
 end)
 
+-- ระบบลากปุ่ม
+local dragging, dragInput, dragStart, startPos
+toggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = toggleButton.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		local delta = input.Position - dragStart
+		toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end)
 
 local Cache = { DevConfig = {} };
 
