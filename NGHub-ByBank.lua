@@ -13,7 +13,7 @@ page1:Toggle("Auto Claim Mission", false, function(state)
 end)
 
 -- เพิ่มอีกแท็บ
-local Tab2 = Window:Taps("Autos")
+local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Function Farming ┇")
