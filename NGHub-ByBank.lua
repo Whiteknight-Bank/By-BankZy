@@ -495,7 +495,7 @@ page1:Toggle("Auto Buso Haki", false, function(state)
     AutoMission = state
 end)
 
-page2:Button("Bring Chest" , function()
+page1:Button("Bring Chest" , function()
 create:Notifile("", "Bring All Chest in Sever", 1.5)
                 
 for _, v in pairs(game.Workspace:GetDescendants()) do
