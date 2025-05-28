@@ -895,9 +895,50 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-page2:Toggle("Auto Farm Rumble (Just Test)", false, function(rlb)
-    _G.Rumblefarm = rlb
+page2:Toggle("Auto Farm Rumble (in Test)", false, function(rlb)
+    _G.rumblefarm = rlb
 end)
+
+spawn(function() -- Rumble farm NPCs
+    while wait(0) do
+        pcall(function()
+            if _G.rumblefarm then
+                local character = game.Players.LocalPlayer.Character
+                local script = character:FindFirstChild("Powers") and character.Powers:FindFirstChild("Rumble")
+                VTR = script.RemoteEvent.RemoteFunction:InvokeServer();
+
+                if not script then return end
+
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+
+                for i, v in pairs(workspace.Enemies:GetChildren()) do
+                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then
+                        if v.Name ~= "SetInstances" and (character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 1000 then
+                            v.HumanoidRootPart.CanCollide = false
+                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+
+                            wait(0.05)
+
+                            local args = {
+                                [1] = VTR, -- อาจต้องเปลี่ยนหาก dynamic
+                                [2] = "RumblePower2",
+                                [3] = "StopCharging",
+                                [4] = v.HumanoidRootPart.Position,
+                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
+                                [6] = 200,
+                                [7] = character.HumanoidRootPart.Position
+                            }
+
+                            script.RemoteEvent:FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
