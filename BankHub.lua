@@ -931,7 +931,7 @@ local args = {
 
 game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireServer(unpack(args))
                             
-                            task.wait(0.3) -- ให้เวลาชาร์จพลัง
+                            task.wait(0.68) -- ให้เวลาชาร์จพลัง
 
                             local args = {
                                 [1] = VTR,
@@ -944,7 +944,7 @@ game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireS
                             }
 
                             rumble.RemoteEvent:FireServer(unpack(args))
-                            task.wait(0.1) -- รอ cooldown นิดนึงก่อนไปตัวต่อไป
+                            task.wait(0.3) -- รอ cooldown นิดนึงก่อนไปตัวต่อไป
                         end
                     end
                 end
