@@ -275,7 +275,7 @@ page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains",
     getgenv().island = t
 end)
 
-page4:Button("Click to Tp", false, function()
+page4:Button("Click to Tp" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu's Island" then
