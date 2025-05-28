@@ -912,9 +912,10 @@ spawn(function()
                 local VTR = rumble.RemoteEvent.RemoteFunction:InvokeServer()
 
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
-                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if dist < 10000000000000000000000 then
+                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health ~= 0 then
+			if v.Humanoid.Heath > 0 and
+                        (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 10000000000000000000000 then
+			if v.Name ~= " SetInstances" then
                             v.HumanoidRootPart.CanCollide = false
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 
