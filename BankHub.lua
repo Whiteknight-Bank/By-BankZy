@@ -1082,6 +1082,10 @@ page4:Toggle("View", false, function(state)
 end)
 
 page4:Label("┇ Shop ┇")
+page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
+    selectedDrinks = knrd
+end)
+
 page4:Toggle("Auto Buy Drinks (×)", false, function(bdy)
 	_G.buydrink = bdy
 end)
