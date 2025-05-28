@@ -867,30 +867,89 @@ end)
 
 page3:Label("┇ Auto Press Skill DF ┇")
 
-page3:Section("↓ Not Working Now ↓")
-page3:Toggle("Auto Skill Z", false, function(smx)
-	_G.skillmax = smx
+page3:Toggle("Auto Skill Z", false, function(zz)
+	_G.skillz = zz
 end)
 
-page3:Toggle("Auto Skill X", false, function(smx)
-	_G.skillmax = smx
-end)
-page3:Toggle("Auto Skill C", false, function(smx)
-	_G.skillmax = smx
-end)
-
-page3:Toggle("Auto Skill V", false, function(smx)
-	_G.skillmax = smx
-end)
-
-page3:Toggle("Auto Skill B", false, function(smx)
-	_G.skillmax = smx
+spawn(function()
+    while wait() do
+        if _G.skillz then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Z, false, game)
+            end)
+        end
+    end
 end)
 
-page3:Toggle("Auto Skill N", false, function(smx)
-	_G.skillmax = smx
+page3:Toggle("Auto Skill X", false, function(xxx)
+	_G.skillx = xx
 end)
-page3:Label("↑ Not Working Now ↑")
+
+spawn(function()
+    while wait() do
+        if _G.skillx then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.X, false, game)
+            end)
+        end
+    end
+end)
+
+page3:Toggle("Auto Skill C", false, function(cc)
+	_G.skillc = cc
+end)
+
+spawn(function()
+    while wait() do
+        if _G.skillc then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.C, false, game)
+            end)
+        end
+    end
+end)
+
+page3:Toggle("Auto Skill V", false, function(vv)
+	_G.skillv = vv
+end)
+
+spawn(function()
+    while wait() do
+        if _G.skillv then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.V, false, game)
+            end)
+        end
+    end
+end)
+
+page3:Toggle("Auto Skill B", false, function(bb)
+	_G.skillb = bb
+end)
+
+spawn(function()
+    while wait() do
+        if _G.skillb then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.B, false, game)
+            end)
+        end
+    end
+end)
+
+page3:Toggle("Auto Skill N", false, function(nn)
+	_G.skilln = nn
+end)
+
+spawn(function()
+    while wait() do
+        if _G.skilln then
+            pcall(function()
+                game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.N, false, game)
+            end)
+        end
+    end
+end)
 
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
