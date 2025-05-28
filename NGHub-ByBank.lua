@@ -1,62 +1,8 @@
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("NG Hub Premium : For Map OPL")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OP:L", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
 
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
-
--- ใส่ชื่อ UI ของคุณให้ตรง
-local mainUI = playerGui:WaitForChild("MainUI")
-
-local screenGui = Instance.new("ScreenGui", playerGui)
-screenGui.Name = "UIToggler"
-screenGui.ResetOnSpawn = false
-
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 40, 0, 40)
-toggleButton.Position = UDim2.new(1, -50, 0, 10)
-toggleButton.AnchorPoint = Vector2.new(1, 0)
-toggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
-toggleButton.TextColor3 = Color3.new(1, 1, 1)
-toggleButton.Text = "◎"
-toggleButton.TextSize = 20
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.Parent = screenGui
-toggleButton.Name = "UIToggleButton"
-
-toggleButton.MouseButton1Click:Connect(function()
-	mainUI.Enabled = not mainUI.Enabled
-end)
-
--- ระบบลากปุ่ม
-local dragging, dragInput, dragStart, startPos
-toggleButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = toggleButton.Position
-
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
-			end
-		end)
-	end
-end)
-
-toggleButton.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		dragInput = input
-	end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-	if input == dragInput and dragging then
-		local delta = input.Position - dragStart
-		toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-	end
-end)
 
 local Cache = { DevConfig = {} };
 
@@ -582,11 +528,28 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-local Tab6 = Window:Taps("Misc")
+local Tab6 = Window:Taps("Anti DF")
 local page6 = Tab6:newpage()
 
-page6:Label("┇ Function Anti ┇")
+page6:Label("┇ Function Anti Devil Fruit ┇")
 page6:Toggle("Anti Dmg Water", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+local Tab7 = Window:Taps("DUPE COMP")
+local page7 = Tab7:newpage()
+
+page7:Label("┇ Function Dupe Compass ┇")
+page7:Label("Warning: It Will Reset Stats You All")
+page7:Toggle("Auto Reset", false, function(atrs)
+    _G.autoreset = atrs
+end)
+
+local Tab8 = Window:Taps("Misc")
+local page8 = Tab8:newpage()
+
+page8:Label("┇ Function Anti ┇")
+page8:Toggle("Anti Dmg Water", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
 
@@ -607,21 +570,4 @@ if self.Name == 'Drown' and _G.nodmgwater then
             end)
         end
     end
-end)
-
-local Tab7 = Window:Taps("Anti DF")
-local page7 = Tab7:newpage()
-
-page7:Label("┇ Function Anti Devil Fruit ┇")
-page7:Toggle("Anti Dmg Water", false, function(ndmg)
-    _G.nodmgwater = ndmg
-end)
-
-local Tab8 = Window:Taps("DUPE COMP")
-local page8 = Tab8:newpage()
-
-page8:Label("┇ Function Dupe Compass ┇")
-page8:Label("Warning: It Will Reset Stats You All")
-page8:Toggle("Auto Reset", false, function(atrs)
-    _G.autoreset = atrs
 end)
