@@ -882,7 +882,43 @@ end)
 page4:Toggle("God Mode Enemies (Coming Soon)", false, function(gxd)
     _G.god = gxd
 end)
-page4:Label("↑ Coming Soon . . . ↑")
+
+local enemiesFolder = workspace:WaitForChild("Enemies")
+
+spawn(function()
+	while wait(1) do
+		if not _G.god then break end
+		pcall(function()
+			-- มอนที่มีอยู่แล้ว
+			for _, enemy in pairs(enemiesFolder:GetChildren()) do
+				if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") then
+					for _, part in pairs(enemy:GetDescendants()) do
+						if part:IsA("BasePart") then
+							part.CanTouch = false
+						end
+					end
+				end
+			end
+
+			-- มอนที่ spawn ใหม่
+			enemiesFolder.ChildAdded:Connect(function(enemy)
+				if enemy:IsA("Model") then
+					task.delay(0.1, function()
+						if enemy:FindFirstChild("Humanoid") then
+							for _, part in pairs(enemy:GetDescendants()) do
+								if part:IsA("BasePart") then
+									part.CanTouch = false
+								end
+							end
+						end
+					end)
+				end
+			end)
+		end)
+	end
+end)
+
+page4:Label("↑ Pls Wait a Moment, It Works ↑")
 
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
