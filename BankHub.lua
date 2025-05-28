@@ -1,5 +1,5 @@
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
-local Window = create:Win("NG Hub : For Map OPL:Anarchy")
+local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
 
