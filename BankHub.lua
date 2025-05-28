@@ -1065,7 +1065,7 @@ page4:Dropdown("Select Player:", getPlayerNames(), function(name)
 end)
 
 page4:Button("Click to Tp", function()
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
 page4:Toggle("View", false, function(state)
@@ -1095,7 +1095,7 @@ spawn(function()
         pcall(function()
             if _G.buydrink then
 local args = {
-    [1] = Cache.DevConfig["ListOfDrink"]
+    [1] = selectedDrinks
 }
 
 workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
