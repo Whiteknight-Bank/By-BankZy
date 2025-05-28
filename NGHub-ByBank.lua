@@ -1049,8 +1049,69 @@ local Tab6 = Window:Taps("Anti DF")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ Function Anti Devil Fruit ┇")
-page6:Toggle("Anti Skill Pool (Dark,Venom,Candy)", false, function(ndmg)
+page6:Toggle("Anti Skill Pool (Dark,Venom)", false, function(ndmg)
     _G.nodmgwater = ndmg
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antity then
+            local success, err = pcall(function()
+                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+
+                if ResourceHolder then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
+                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+
+                        if playerResourceFolder then
+                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
+
+                            if magmaPool then
+                                for _, item in pairs(magmaPool:GetDescendants()) do
+                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
+                                        item:Destroy()
+                                    end
+				end
+				end
+                        end
+		end
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antity then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
+        end
+    end
 end)
 
 local Tab7 = Window:Taps("Quest Sam")
@@ -1065,16 +1126,66 @@ end)
 
 page7:Label("┇ Function Quest Sam ┇")
 page7:Section("Warning: If You Want Unlimited, Pls Click Dupe")
-page7:Toggle("Auto Find", false, function(atrs)
-    _G.autoreset = atrs
+
+page7:Toggle("Auto Find", false, function(comp)
+    AutoComp = comp
 end)
 
-page7:Toggle("Auto Claim Compass", false, function(atrs)
-    _G.autoreset = atrs
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoComp then return end;
+            local Compass = game.Players.LocalPlayer.Backpack:FindFirstChild("Compass");
+            local Compass2 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
+	    local Compass3 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
+            if Compass or Compass2 or Compass3 then
+                local OldPostiton = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
+                game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                Compass.Parent = game.Players.LocalPlayer.Character;
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Compass.Poser.Value);
+                Compass:Activate();
+                wait(0.2);
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(OldPostiton);
+            end
+        end)
+    end
 end)
 
-page7:Toggle("Auto Drop Compass", false, function(atrs)
-    _G.autoreset = atrs
+page7:Toggle("Auto Claim Compass", false, function(clmp)
+    AutoClaimComp = clmp
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoClaimComp then return end;
+            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
+            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
+        end)
+    end
+end)
+
+page7:Toggle("Auto Drop Compass", false, function(drpc)
+    AutoDropComp = drpc
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoDropComp then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfDropCompass"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value.Parent = game.Workspace;
+                end
+            end
+        end)
+    end
+end)
+
+page7:Button("Check You Compass", function()
+fireclickdetector(game:GetService("Workspace").Merchants.QuestMerchant.Clickable.ClickDetector)
 end)
 
 local Tab8 = Window:Taps("Misc")
