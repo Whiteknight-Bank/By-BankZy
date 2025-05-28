@@ -364,7 +364,7 @@ end)
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
-page4:Dropdown("Select Weapon:", Weapon, function(wpon)
+page2:Dropdown("Select Weapon:", Weapon, function(wpon)
     Weapon = wpon
 end)
 
