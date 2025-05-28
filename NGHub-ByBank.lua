@@ -743,17 +743,27 @@ page6:Toggle("Anti Skill Pool (Dark,Venom,Candy)", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
 
-local Tab7 = Window:Taps("DUPE COMPASS")
+local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
 
 page7:Label("┇ For Making a Lot Of Compasses ┇")
-page7:Label("Warning: It Will Reset Stats You All")
+page7:Section("Warning: It Will Reset Stats You All")
 
-page7:Toggle("Auto Reset", false, function(atrs)
+page7:Toggle("Auto Farm Compass (Not Working Now)", false, function(atrs)
     _G.autoreset = atrs
 end)
 
-page7:Toggle("Auto Claim Weekly", false, function(atrs)
+page7:Label("┇ Function Quest Sam ┇")
+page7:Section("Warning: If You Want Unlimited, Pls Click Dupe")
+page7:Toggle("Auto Find", false, function(atrs)
+    _G.autoreset = atrs
+end)
+
+page7:Toggle("Auto Claim Compass", false, function(atrs)
+    _G.autoreset = atrs
+end)
+
+page7:Toggle("Auto Drop Compass", false, function(atrs)
     _G.autoreset = atrs
 end)
 
