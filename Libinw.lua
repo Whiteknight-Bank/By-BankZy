@@ -212,52 +212,59 @@ end
             section.TextXAlignment = Enum.TextXAlignment.Left
         end
 
-        function newPage:Toggle(txt, default, callback)
-            local state = default
+        function newPage:Toggle(text, default, callback)
+    local toggleFrame = Instance.new("Frame", page)
+    toggleFrame.Size = UDim2.new(1, -10, 0, 30)
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    toggleFrame.BorderSizePixel = 0
 
-            local toggleFrame = Instance.new("Frame", page)
-            toggleFrame.Size = UDim2.new(1, -10, 0, 25)
-            toggleFrame.BackgroundTransparency = 1
+    local label = Instance.new("TextLabel", toggleFrame)
+    label.Size = UDim2.new(1, -50, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.SourceSans
+    label.TextSize = 16
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Text = text
 
-            local label = Instance.new("TextLabel", toggleFrame)
-            label.Size = UDim2.new(1, -40, 1, 0)
-            label.Position = UDim2.new(0, 0, 0, 0)
-            label.Text = txt
-            label.Font = Enum.Font.SourceSans
-            label.TextSize = 16
-            label.TextColor3 = Color3.fromRGB(255, 255, 255)
-            label.BackgroundTransparency = 1
-            label.TextXAlignment = Enum.TextXAlignment.Left
+    local toggleBtn = Instance.new("TextButton", toggleFrame)
+    toggleBtn.Size = UDim2.new(0, 40, 0, 20)
+    toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    toggleBtn.Text = ""
+    toggleBtn.BorderSizePixel = 0
+    toggleBtn.AutoButtonColor = false
+    toggleBtn.Name = "ToggleSwitch"
 
-            local toggle = Instance.new("TextButton", toggleFrame)
-            toggle.Size = UDim2.new(0, 30, 0, 20)
-            toggle.Position = UDim2.new(1, -35, 0.5, -10)
-            toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
-            toggle.Text = ""
-            toggle.AutoButtonColor = false
-            toggle.BorderSizePixel = 0
+    local circle = Instance.new("Frame", toggleBtn)
+    circle.Size = UDim2.new(0, 18, 0, 18)
+    circle.Position = default and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)
+    circle.BackgroundColor3 = default and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+    circle.BorderSizePixel = 0
+    circle.Name = "SwitchKnob"
+    circle.ZIndex = 2
+    circle.BackgroundTransparency = 0
+    circle.ClipsDescendants = true
+    circle.AnchorPoint = Vector2.new(0, 0)
+    circle:TweenSize(UDim2.new(0, 18, 0, 18), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+    local uicorner = Instance.new("UICorner", circle)
+    uicorner.CornerRadius = UDim.new(1, 0)
 
-            local circle = Instance.new("Frame", toggle)
-            circle.Size = UDim2.new(0, 16, 0, 16)
-            circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
-            circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            circle.BorderSizePixel = 0
-            circle.AnchorPoint = Vector2.new(0, 0.5)
-            circle.Name = "Circle"
+    Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+    Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
 
-            local uicorner = Instance.new("UICorner", toggle)
-            uicorner.CornerRadius = UDim.new(1, 0)
-            local uicircle = Instance.new("UICorner", circle)
-            uicircle.CornerRadius = UDim.new(1, 0)
+    local toggled = default
+    toggleBtn.MouseButton1Click:Connect(function()
+        toggled = not toggled
+        circle:TweenPosition(toggled and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+        circle.BackgroundColor3 = toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+        if callback then callback(toggled) end
+    end)
 
-            toggle.MouseButton1Click:Connect(function()
-                state = not state
-                toggle.BackgroundColor3 = state and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(60, 60, 60)
-                circle.Position = UDim2.new(state and 1 or 0, state and -18 or 2, 0.5, -8)
-                pcall(callback, state)
-            end)
-        end
-
+    if callback then callback(default) end
+end
+        
         hideAllPages()
         page.Visible = true
         
