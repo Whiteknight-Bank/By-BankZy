@@ -855,6 +855,10 @@ spawn(function() -- Light farm npcs
     end
 end)
 
+page2:Toggle("Auto Farm Rumble (Just Test)", false, function(rlb)
+    _G.Rumblefarm = rlb
+end)
+
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
@@ -974,7 +978,7 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-page4:Toggle("God Mode For Enemies ", false, function(gxd)
+page4:Toggle("God Mode For Enemies (Not Sure) ", false, function(gxd)
     _G.god = gxd
 end)
 
@@ -1036,6 +1040,21 @@ page4:Toggle("View", false, function(state)
 		end
 	end
 end)
+
+page4:Label("┇ Shop ┇")
+page4:Toggle("Auto Buy Drinks", false, function(bdy)
+	_G.buydrink = bdy
+end)
+
+page4:Toggle("Auto Drop Drink", false, function(dops)
+	_G.dropdrink = dops
+end)
+
+page4:Toggle("Auto Drinks All", false, function(drks)
+	_G.drinks = drks
+end)
+
+page4:Label("↑ Not Working Now ↑")
 
 page4:Label("┇ Spam Dash Player ┇")
 page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
@@ -1331,7 +1350,15 @@ spawn(function()
 end)
 
 page7:Button("Check You Compass", function()
-create:Notifile("", "You Compass: " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. "", 5)
+create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. " Compass", 5)
+end)
+
+page7:Button("Check You Rare Box ( Not Working Now)", function()
+create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. " Rare Box", 5)
+end)
+
+page7:Button("Check You Ultra Rare (Not Working Now)", function()
+create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. " Ultra Rare Box", 5)
 end)
 
 local Tab8 = Window:Taps("Misc")
@@ -1339,15 +1366,15 @@ local page8 = Tab8:newpage()
 
 page8:Label("┇ Function Sever ┇")
 page8:Button("Rejoin Server", function()
-create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 2)
-wait(1.5)
+create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
+wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
 page8:Button("Hop Server", function()
-create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 2)
-wait(1.5)
+create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
+wait(3)
 
 local PlaceID = game.PlaceId
           local AllIDs = {}
@@ -1428,10 +1455,10 @@ page8:Label("┇ Function Anti ┇")
 
 local afkConnection
 
-page8:Toggle("Anti-AFK", false, function(state)
-create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " You Can AFK Now :)", 2)
+page8:Toggle("Anti AFK", false, function(state)
 
     if state then
+	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
         local vu = game:GetService("VirtualUser")
         afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
             vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
