@@ -215,16 +215,26 @@ local PlayerName = {}
  end
 
 page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player", PlayerName, function(selected)
-        create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
+page3:Dropdown("Select Player", PlayerName, function(PlayerName1)
+        create:Notifile("Dropdown", "คุณเลือก: " .. PlayerName1, 3)
 end)
 
 page3:Button("Click to Tp", function()
     create:Notifile("", "Clicked", 2)
+
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(PlayerName1).Character.HumanoidRootPart.CFrame
 end)
 
-page3:Toggle("Behind", false, function(state)
-    AutoFarm = state
+page3:Toggle("View", false, function(viewplr)
+    Sp = viewplr
+    local plr1 = game.Players.LocalPlayer.Character.Humanoid
+    local plr2 = game.Players:FindFirstChild(PlayerName1)
+    repeat wait(0)
+        game.Workspace.Camera.CameraSubject = plr2.Character.Humanoid
+    until Sp == false or plr2.Character.Humanoid.Health == 0
+    if Sp == false or plr2.Character.Humanoid.Health ~= 0 then
+        game.Workspace.Camera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+                end
 end)
 
 local Tab4 = Window:Taps("Island")
