@@ -201,7 +201,12 @@ end)
 local Tab3 = Window:Taps("Players")
 local page3 = Tab3:newpage()
 
-page3:Section("Player")
+page4:Label("┇ No Save DATA ! ! ! ┇")
+page4:Button("DUPE", false, function()
+    create:Notifile("", "Clicked!", 2)
+end)
+
+page3:Label("┇ Player ┇")
 page3:Dropdown("Select Player", {"Option 1", "Option 2", "Option 3"}, function(selected)
         create:Notifile("Dropdown", "คุณเลือก: " .. selected, 3)
 end)
