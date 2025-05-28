@@ -1339,7 +1339,10 @@ local page8 = Tab8:newpage()
 
 page8:Label("┇ Function Sever ┇")
 page8:Button("Rejoin Server", function()
-		print("Not Working Now")
+create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 2)
+wait(1.5)
+		   game.Players.LocalPlayer:Kick()
+game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
 page8:Label("┇ Function Anti ┇")
@@ -1372,16 +1375,61 @@ end)
 
 page8:Label("┇ Function Unbox ┇")
 
-page8:Toggle("Auto Unbox Common", false, function(ndmg)
-    _G.nodmgwater = ndmg
+page8:Toggle("Auto Unbox Common", false, function(bxcm)
+    UnboxCM = bxcm
 end)
 
-page8:Toggle("Auto Unbox Uncommon", false, function(ndmg)
-    _G.nodmgwater = ndmg
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not UnboxCM then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfBox1"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value:Activate();
+                end
+            end
+        end)
+    end
 end)
 
-page8:Toggle("Auto Unbox Rare&Ultra", false, function(ndmg)
-    _G.nodmgwater = ndmg
+page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
+    UnboxUn = bxun
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not UnboxUn then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfBox2"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value:Activate();
+                end
+            end
+        end)
+    end
+end)
+
+page8:Toggle("Auto Unbox Rare&Ultra", false, function(bxrl)
+    UnboxRUL = bxrl
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not UnboxRUL then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfBox3"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value:Activate();
+                end
+            end
+        end)
+    end
 end)
 
 page8:Label("┇ Function Auto Affinities 2.0 ┇")
@@ -1397,6 +1445,8 @@ end)
 page8:Toggle("Auto Reroll 2.0 (All)", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
+
+page8:Section("↑ Not Working Now is Coming Soon . . . ↑")
 
 local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
