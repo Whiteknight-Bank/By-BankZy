@@ -1200,7 +1200,7 @@ spawn(function()
 end)
 
 page7:Button("Check You Compass", function()
-create:Notifile("", "You Compass: " .. game.Players.LocalPlayer.Name .. "", 5)
+create:Notifile("", "You Compass: " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. "", 5)
 end)
 
 local Tab8 = Window:Taps("Misc")
