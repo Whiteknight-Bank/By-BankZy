@@ -266,7 +266,7 @@ plr = game.Players.LocalPlayer
 local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
 
-page4:Label("┇ Function Teleport ┇")
+page4:Label("┇ Islands ┇")
 page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
     getgenv().tpisland = t
 end)
@@ -338,6 +338,22 @@ page4:Button("Click to Tp" , function()
         plr.Character.HumanoidRootPart.CFrame = game.workspace.Altar.RecepticalEffect.CFrame * CFrame.new(0, 5, 0)
                 end
 end)
+
+page4:Label("┇ SAFE ZONE ┇")
+page4:Dropdown("Select SafeZone", {"Safe Zone Sky", "Safe Zone UnderSea", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+    getgenv().tpsafezone = s
+end)
+
+page4:Button("Click to Tp" , function()
+    end)
+
+page4:Label("┇ NPCs ┇")
+page4:Dropdown("Select NPCs", {""}, function(t)
+    getgenv().tpnpc = t
+end)
+
+page4:Button("Click to Tp" , function()
+    end)
 
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
