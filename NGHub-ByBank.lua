@@ -11,12 +11,6 @@ Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
-for i,v in pairs(game:GetService("Players").LocalPlayer.PlayerGui:GetChildren()) do
-if v.Name == "Menu" then
-  v.Frame.C.Frame.Nametag.Text = " ".."Protect Name by: InW Hub"
-end
-end
-
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -269,6 +263,8 @@ end)
 
 local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
+
+plr = game.Players.LocalPlayer
 
 page4:Label("┇ Function Teleport ┇")
 page4:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
