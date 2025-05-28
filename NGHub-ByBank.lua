@@ -227,28 +227,6 @@ end)
 
 page3:Toggle("View", false, function(viewplr)
     Sp = viewplr
-
-    local cam = workspace.CurrentCamera
-    local plr2 = game.Players:FindFirstChild(PlayerName1)
-
-    -- ตรวจสอบ player และ character ก่อน
-    if not plr2 or not plr2.Character or not plr2.Character:FindFirstChild("Humanoid") then
-        create:Notifile("Error", "Player not found or invalid!", 2)
-        return
-    end
-
-    task.spawn(function()
-        if Sp then
-            cam.CameraSubject = plr2.Character.Humanoid
-            repeat task.wait()
-                if plr2.Character and plr2.Character:FindFirstChild("Humanoid") then
-                    cam.CameraSubject = plr2.Character.Humanoid
-                end
-            until not Sp or plr2.Character.Humanoid.Health <= 0
-
-            cam.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
-        end
-    end)
 end)
 
 local Tab4 = Window:Taps("Island")
