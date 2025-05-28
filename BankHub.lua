@@ -908,42 +908,38 @@ spawn(function()
                 local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
                 if not rumble then return end
 
-                -- ถ้ามีฟังก์ชันเรียกค่าตรงนี้ได้เหมือน Quake
-                local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
-
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
                     if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
                         local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if dist < 10000000000000000000000 then
+                        if dist < 1000 then
+                            -- รีเฟรช VTQ ทุกครั้ง
+                            local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
+
                             v.HumanoidRootPart.CanCollide = false
                             v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
 
-                            -- เริ่มชาร์จ
-local args = {
-    [1] = VTR,
-    [2] = "RumblePower2",
-    [3] = "StartCharging",
-    [4] = Mouse.Target,
-    [5] = Head.CFrame * CFrame.new(0, 0, 0),
-    [6] = "Right"
-}
+                            -- ชาร์จพลัง
+                            rumble.RemoteEvent:FireServer(
+                                VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil
+                            )
 
-game:GetService("Players").LocalPlayer.Character.Powers.Rumble.RemoteEvent:FireServer(unpack(args))
-                            
-                            task.wait(0.68) -- ให้เวลาชาร์จพลัง
+                            task.wait(0.45) -- รอให้เต็ม
 
+                            -- ปล่อยพลัง
                             local args = {
-                                [1] = VTR,
+                                [1] = VTQ,
                                 [2] = "RumblePower2",
                                 [3] = "StopCharging",
-                                [4] = Mouse.Target,
-                                [5] = Head.CFrame * CFrame.new(0, 0, 0),
-                                [6] = 100,
-                                [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
+                                [4] = v.HumanoidRootPart.Position,
+                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
+                                [6] = 200,
+                                [7] = char.HumanoidRootPart.Position
                             }
 
                             rumble.RemoteEvent:FireServer(unpack(args))
-                            task.wait(0.3) -- รอ cooldown นิดนึงก่อนไปตัวต่อไป
+
+                            -- รอให้ cooldown/reset state ก่อนวนใหม่
+                            task.wait(0.25)
                         end
                     end
                 end
