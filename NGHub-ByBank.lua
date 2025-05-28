@@ -343,7 +343,19 @@ end)
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
+page4:Dropdown("Select Weapon:", Weaponlist, function(wpon)
+    Weapon = wpon
+end)
+
 page2:Label("┇ Function Farming ┇")
+page2:Toggle("Auto Click", false, function(state)
+    AutoClick = state
+end)
+
+page2:Toggle("Auto Equip", false, function(state)
+    _G.autoequip = state
+end)
+
 page2:Toggle("Auto Farm", false, function(state)
     AutoMission = state
 end)
@@ -365,7 +377,7 @@ game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:
 end)
 
 page4:Label("┇ Player ┇")
-page4:Dropdown("Select Player", getPlayerNames(), function(name)
+page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
 end)
 
@@ -532,16 +544,21 @@ local Tab6 = Window:Taps("Anti DF")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ Function Anti Devil Fruit ┇")
-page6:Toggle("Anti Dmg Water", false, function(ndmg)
+page6:Toggle("Anti Skill Pool (Dark,Venom,Candy)", false, function(ndmg)
     _G.nodmgwater = ndmg
 end)
 
-local Tab7 = Window:Taps("DUPE COMP")
+local Tab7 = Window:Taps("DUPE COMPASS")
 local page7 = Tab7:newpage()
 
-page7:Label("┇ Function Dupe Compass ┇")
+page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Label("Warning: It Will Reset Stats You All")
+
 page7:Toggle("Auto Reset", false, function(atrs)
+    _G.autoreset = atrs
+end)
+
+page7:Toggle("Auto Claim Weekly", false, function(atrs)
     _G.autoreset = atrs
 end)
 
