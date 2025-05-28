@@ -303,7 +303,7 @@ spawn(function()
 end)
 
 page1:Toggle("Auto Fishing", false, function(fsh)
-    AutoFishing = afsh
+    AutoFishing = fsh
 end)
 
 spawn(function() -- fish farm
@@ -866,8 +866,32 @@ page3:Toggle("Max Charge Skill (100%)", false, function(smx)
 end)
 
 page3:Label("┇ Auto Press Skill DF ┇")
-page3:Section("Function is Coming Soon . . .")
-		
+
+page3:Section("↓ Not Working Now ↓")
+page3:Toggle("Auto Skill Z", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Toggle("Auto Skill X", false, function(smx)
+	_G.skillmax = smx
+end)
+page3:Toggle("Auto Skill C", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Toggle("Auto Skill V", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Toggle("Auto Skill B", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Toggle("Auto Skill N", false, function(smx)
+	_G.skillmax = smx
+end)
+page3:Label("↑ Not Working Now ↑")
+
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
@@ -1242,6 +1266,11 @@ end)
 local Tab8 = Window:Taps("Misc")
 local page8 = Tab8:newpage()
 
+page8:Label("┇ Function Sever ┇")
+page8:Button("Rejoin Server", function()
+		print("Not Working Now")
+end)
+
 page8:Label("┇ Function Anti ┇")
 page8:Toggle("Anti Afk (Not Working Now)", false, function(afk)
     _G.antiafk = afk
@@ -1268,6 +1297,34 @@ if self.Name == 'Drown' and _G.nodmgwater then
             end)
         end
     end
+end)
+
+page8:Label("┇ Function Unbox ┇")
+
+page8:Toggle("Auto Unbox Common", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+page8:Toggle("Auto Unbox Uncommon", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+page8:Toggle("Auto Unbox Rare&Ultra", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+page8:Label("┇ Function Auto Affinities 2.0 ┇")
+
+page8:Toggle("Auto Reroll 2.0 (Left)", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+page8:Toggle("Auto Reroll 2.0 (Right)", false, function(ndmg)
+    _G.nodmgwater = ndmg
+end)
+
+page8:Toggle("Auto Reroll 2.0 (All)", false, function(ndmg)
+    _G.nodmgwater = ndmg
 end)
 
 local Tab9 = Window:Taps("การติดต่อ")
