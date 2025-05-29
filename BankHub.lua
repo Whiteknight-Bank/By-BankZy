@@ -92,11 +92,8 @@ local image = Instance.new("ImageLabel", mainFrame)
 image.Size = UDim2.new(0, 120, 0, 120)
 image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
-image.Image = "rbxassetid://10511856020" -- ✅ เรียกถูกตัวแปร
+image.Image = "rbxassetid://10511856020"
 
-image.Loaded:Connect(function()
-    print("✅ รูปโหลดเสร็จแล้ว")
-end)
 -- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
 barBg.Size = UDim2.new(0.8, 0, 0, 6)
