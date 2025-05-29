@@ -1209,36 +1209,24 @@ page4:Toggle("God Mode For Enemies (Not Sure) ", false, function(gxd)
     _G.god = gxd
 end)
 
-local enemiesFolder = workspace:WaitForChild("Enemies")
-
 spawn(function()
-	while wait(1) do
+	while wait(0.1) do
 		if not _G.god then break end
 		pcall(function()
-			-- มอนที่มีอยู่แล้ว
-			for _, enemy in pairs(enemiesFolder:GetChildren()) do
-				if enemy:IsA("Model") and enemy:FindFirstChild("Humanoid") then
-					for _, part in pairs(enemy:GetDescendants()) do
-						if part:IsA("BasePart") then
-							part.CanTouch = false
-						end
-					end
-				end
-			end
+			workspace.Enemies.DescendantAdded:Connect(function(obj)
+				if not _G.god then return end
 
-			-- มอนที่ spawn ใหม่
-			enemiesFolder.ChildAdded:Connect(function(enemy)
-				if enemy:IsA("Model") then
-					task.delay(0.1, function()
-						if enemy:FindFirstChild("Humanoid") then
-							for _, part in pairs(enemy:GetDescendants()) do
-								if part:IsA("BasePart") then
-									part.CanTouch = false
-								end
+				task.delay(0.1, function()
+					local torso = obj:FindFirstChild("Torso", true)
+					if torso then
+						for _, child in pairs(torso:GetChildren()) do
+							if child:IsA("TouchTransmitter") or child.Name == "TouchInterest" then
+								child:Destroy()
+								print("🧹 ลบ TouchInterest จาก Torso:", torso:GetFullName())
 							end
 						end
-					end)
-				end
+					end
+				end)
 			end)
 		end)
 	end
