@@ -53,7 +53,8 @@ body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
 • Add Auto Rumble in Farming (Old)
-• Fix Button Close Menu New!!
+• New!! Fix Button Close Menu
+• New!! Fix Reroll Affinities 2.0
 • Coming Soon . . .
 ]])
 body.Parent = frame
