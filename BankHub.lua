@@ -59,6 +59,7 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
+local imageId = "rbxassetid://10511856020" -- เปลี่ยนเป็นรูปคุณ
 local CoreGui = game:GetService("CoreGui")
 
 if CoreGui:FindFirstChild("LoadingScreen") then
@@ -77,7 +78,6 @@ mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
 
--- หัวข้อ
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
@@ -87,14 +87,13 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 28
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- รูปกลาง
+-- ✅ แก้ตรงนี้: ตัวแปรชื่อ "image"
 local image = Instance.new("ImageLabel", mainFrame)
 image.Size = UDim2.new(0, 120, 0, 120)
 image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
-image.Image = "rbxassetid://10511856020"
+image.Image = imageId
 
--- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
 barBg.Size = UDim2.new(0.8, 0, 0, 6)
 barBg.Position = UDim2.new(0.1, 0, 0.75, 0)
@@ -102,14 +101,12 @@ barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 barBg.BorderSizePixel = 0
 Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
 
--- ✅ หลอดโหลดจริง
 local bar = Instance.new("Frame", barBg)
 bar.Size = UDim2.new(0, 0, 1, 0)
 bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 bar.BorderSizePixel = 0
 Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
--- เปอร์เซ็นต์
 local percentLabel = Instance.new("TextLabel", mainFrame)
 percentLabel.Size = UDim2.new(1, 0, 0, 30)
 percentLabel.Position = UDim2.new(0, 0, 0.8, 0)
@@ -119,28 +116,15 @@ percentLabel.Font = Enum.Font.GothamBold
 percentLabel.TextSize = 22
 percentLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
 
--- โหลดภาพก่อนเริ่มหลอดโหลด
+-- ✅ โหลดหลอดและรอให้ครบ 100% แล้วปิด
 task.spawn(function()
-	local loaded = false
-	task.spawn(function()
-		image.Loaded:Wait()
-		loaded = true
-	end)
-
-	local timeout = 5
-	local timer = 0
-	while not loaded and timer < timeout do
-		task.wait(0.1)
-		timer += 0.1
-	end
-
-	-- โหลดแถบ
 	for i = 1, 100 do
 		bar.Size = UDim2.new(i / 100, 0, 1, 0)
 		percentLabel.Text = i .. "%"
 		wait(0.02)
 	end
 
+	wait(0.5)
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
