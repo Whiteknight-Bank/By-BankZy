@@ -54,8 +54,6 @@ body.TextScaled = true
 body.Text = string.upper([[
 • New!! Fix Menu Loading
 • New!! Add Auto Buso Haki in Auto Farm All!!
-• 
-• 
 • Coming Soon . . .
 ]])
 body.Parent = frame
@@ -1746,12 +1744,12 @@ end)
 
 page8:Toggle("Anti Dmg Water", false, function(dmgg)
     _G.nodmgwater = dmgg
+create:Notifile("", "Start Anti " .. game.Players.LocalPlayer.Name .. " You Can Swim Now :)", 3)
 end)
-
+		
 spawn(function()
     while wait() do
         if _G.nodmgwater then
-	create:Notifile("", "Start Anti " .. game.Players.LocalPlayer.Name .. " You Can Swim Now :)", 3)
             pcall(function()
                 local args = {
     [1] = "NOPLS"
