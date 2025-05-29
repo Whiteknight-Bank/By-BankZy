@@ -8,58 +8,94 @@ if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
-   local CoreGui = game:GetService("CoreGui")
+  function library:Win(title) local CoreGui = game:GetService("CoreGui")
 
-function library:Win(title)
-    local gui = Instance.new("ScreenGui", CoreGui)
-    gui.Name = "redui"
-    gui.ResetOnSpawn = false
+local gui = Instance.new("ScreenGui", CoreGui)
+gui.Name = "redui"
+gui.ResetOnSpawn = false
 
-    local main = Instance.new("Frame", gui)
-    main.Name = "MainSceen"
-    main.Size = UDim2.new(0, 500, 0, 350)
-    main.Position = UDim2.new(0.5, -250, 0.5, -175)
-    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    main.Active = true
-    main.Draggable = true
+local main = Instance.new("Frame", gui)
+main.Name = "MainSceen"
+main.Size = UDim2.new(0, 500, 0, 350)
+main.Position = UDim2.new(0.5, -250, 0.5, -175)
+main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+main.Active = true
+main.Draggable = false
 
-    -- ✅ กรอบม่วงรอบเมนูหลัก
-    local strokeMain = Instance.new("UIStroke", main)
-    strokeMain.Color = Color3.fromRGB(170, 0, 255) -- สีม่วง
-    strokeMain.Thickness = 2
-    strokeMain.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+local mainBorder = Instance.new("UIStroke", main)
+mainBorder.Color = Color3.fromRGB(150, 0, 255)
+mainBorder.Thickness = 2
 
-    -- ✅ ปุ่มเปิดปิดแบบใส อยู่มุมบนซ้ายของเมนูหลัก
-    local toggleButton = Instance.new("TextButton")
-    toggleButton.Name = "BankHubToggle"
-    toggleButton.Parent = main
-    toggleButton.Size = UDim2.new(0, 35, 0, 20)
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)
-    toggleButton.BackgroundTransparency = 1
-    toggleButton.Text = "X"
-    toggleButton.TextColor3 = Color3.fromRGB(255, 80, 80)
-    toggleButton.Font = Enum.Font.GothamBold
-    toggleButton.TextSize = 16
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "BankHubToggle"
+toggleButton.Parent = main
+toggleButton.Size = UDim2.new(0, 40, 0, 20)
+toggleButton.Position = UDim2.new(0, 5, 0, 5)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Text = "✕"
+toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 18
 
-    toggleButton.MouseButton1Click:Connect(function()
-        main.Visible = not main.Visible
-    end)
+local dragFrame = Instance.new("Frame")
+dragFrame.Size = main.Size
+dragFrame.Position = main.Position
+dragFrame.BackgroundTransparency = 1
+dragFrame.Visible = false
+dragFrame.Active = true
+dragFrame.Parent = gui
 
-    -- ✅ แถบชื่อเมนู
-    local titleBar = Instance.new("TextLabel", main)
-    titleBar.Size = UDim2.new(1, 0, 0, 35)
-    titleBar.Position = UDim2.new(0, 0, 0, 0)
-    titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    titleBar.Text = title
-    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleBar.Font = Enum.Font.SourceSansBold
-    titleBar.TextSize = 20
+local dragging = false
+local offset
 
-    -- ✅ กรอบม่วงรอบแถบชื่อ
-    local strokeTitle = Instance.new("UIStroke", titleBar)
-    strokeTitle.Color = Color3.fromRGB(170, 0, 255)
-    strokeTitle.Thickness = 2
-    strokeTitle.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+dragFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        offset = Vector2.new(input.Position.X - dragFrame.AbsolutePosition.X, input.Position.Y - dragFrame.AbsolutePosition.Y)
+    end
+end)
+
+dragFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local newPos = UDim2.new(0, input.Position.X - offset.X, 0, input.Position.Y - offset.Y)
+        main.Position = newPos
+        dragFrame.Position = newPos
+    end
+end)
+
+toggleButton.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
+    dragFrame.Visible = not main.Visible
+end)
+
+local titleBar = Instance.new("TextLabel", main)
+titleBar.Size = UDim2.new(1, 0, 0, 35)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+titleBar.Text = title
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.Font = Enum.Font.SourceSansBold
+titleBar.TextSize = 20
+
+local tabButtons = Instance.new("Frame", main)
+tabButtons.Size = UDim2.new(0, 120, 1, -35)
+tabButtons.Position = UDim2.new(0, 0, 0, 35)
+tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+local tabLayout = Instance.new("UIListLayout", tabButtons)
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+tabLayout.Padding = UDim.new(0, 5)
+
+local pages = Instance.new("Frame", main)
+pages.Size = UDim2.new(1, -130, 1, -45)
+pages.Position = UDim2.new(0, 130, 0, 40)
+pages.BackgroundTransparency = 1
     
 local tabs = {}
 
