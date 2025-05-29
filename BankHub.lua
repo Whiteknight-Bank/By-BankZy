@@ -1225,12 +1225,20 @@ page4:Toggle("God Mode For Enemies", false, function(gxd)
 end)
 
 spawn(function()
-    while wait() do
-        if _G.god then 
+    while task.wait() do
+        if _G.god then
             pcall(function()
-                for _, v in pairs(workspace.Enemies:GetDescendants()) do
-                    if v:IsA("TouchTransmitter") then
-                        v:Destroy()
+                for _, obj in pairs(workspace.Enemies:GetDescendants()) do
+                    -- ปิดฟิสิกส์และตรวจจับทุกอย่างของ Part
+                    if obj:IsA("BasePart") then
+                        obj.CanTouch = false
+                        obj.CanCollide = false
+                        obj.CanQuery = false
+                    end
+                    
+                    -- ลบเฉพาะ TouchTransmitter (TouchInterest)
+                    if obj:IsA("TouchTransmitter") then
+                        obj:Destroy()
                     end
                 end
             end)
