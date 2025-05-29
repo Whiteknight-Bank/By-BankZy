@@ -844,9 +844,7 @@ local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Function Enemies ┇")
-page2:Section("↓ Is Coming Soon . . . ↓")
-
-page2:Toggle("Auto Death Mob (In Test)", false, function(dthh)
+page2:Toggle("Auto Death Mob", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -871,6 +869,7 @@ end)
 page2:Toggle("Auto Death Kaizu' Boss (Coming Soon)", false, function(befrm)
     _G.autokaizu = befrm
 end)
+page2:Section("↑ Is Coming Soon . . . ↑")
 
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
