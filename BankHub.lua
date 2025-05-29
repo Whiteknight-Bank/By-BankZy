@@ -59,8 +59,6 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://https://76680615618506" -- ✅ ID ที่ถูกต้อง
-
 local CoreGui = game:GetService("CoreGui")
 
 if CoreGui:FindFirstChild("LoadingScreen") then
@@ -94,7 +92,7 @@ local image = Instance.new("ImageLabel", mainFrame)
 image.Size = UDim2.new(0, 120, 0, 120)
 image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
-image.Image = imageId -- ✅ เรียกถูกตัวแปร
+image.Image = "rbxassetid://10511856020" -- ✅ เรียกถูกตัวแปร
 
 -- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
