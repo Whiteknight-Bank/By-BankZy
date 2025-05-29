@@ -8,78 +8,94 @@ if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
-   local RunService = game:GetService("RunService")
+   function library:Win(title) local CoreGui = game:GetService("CoreGui")
 
-function library:Win(title)
-	local CoreGui = game:GetService("CoreGui")
+local gui = Instance.new("ScreenGui", CoreGui)
+gui.Name = "redui"
+gui.ResetOnSpawn = false
 
-	if CoreGui:FindFirstChild("redui") then
-		CoreGui:FindFirstChild("redui"):Destroy()
-	end
+local main = Instance.new("Frame", gui)
+main.Name = "MainSceen"
+main.Size = UDim2.new(0, 500, 0, 350)
+main.Position = UDim2.new(0.5, -250, 0.5, -175)
+main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+main.Active = true
+main.Draggable = false
 
-	local gui = Instance.new("ScreenGui", CoreGui)
-	gui.Name = "redui"
-	gui.ResetOnSpawn = false
+local mainBorder = Instance.new("UIStroke", main)
+mainBorder.Color = Color3.fromRGB(150, 0, 255)
+mainBorder.Thickness = 2
 
-	local main = Instance.new("Frame", gui)
-	main.Name = "MainSceen"
-	main.Size = UDim2.new(0, 500, 0, 350)
-	main.Position = UDim2.new(0.5, -250, 0.5, -175)
-	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	main.BorderSizePixel = 2
-	main.BorderColor3 = Color3.fromRGB(170, 0, 255)
-	main.Active = true
-	main.Draggable = true
-	main.Visible = true
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "BankHubToggle"
+toggleButton.Parent = main
+toggleButton.Size = UDim2.new(0, 40, 0, 20)
+toggleButton.Position = UDim2.new(0, 5, 0, 5)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Text = "✕"
+toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 18
 
-	-- ปุ่มเปิด/ปิด ยึดมุมซ้ายบนของเมนูตลอดเวลา
-	local toggleButton = Instance.new("TextButton")
-	toggleButton.Parent = gui
-	toggleButton.Size = UDim2.new(0, 60, 0, 25)
-	toggleButton.BackgroundTransparency = 1
-	toggleButton.Text = "☰"
-	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-	toggleButton.Font = Enum.Font.GothamBold
-	toggleButton.TextSize = 16
-	toggleButton.ZIndex = 100
+local dragFrame = Instance.new("Frame")
+dragFrame.Size = main.Size
+dragFrame.Position = main.Position
+dragFrame.BackgroundTransparency = 1
+dragFrame.Visible = false
+dragFrame.Active = true
+dragFrame.Parent = gui
 
-	-- อัปเดตตำแหน่งปุ่มให้ตามเมนู
-	RunService.RenderStepped:Connect(function()
-		if main and main.Parent then
-			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
-		end
-	end)
+local dragging = false
+local offset
 
-	toggleButton.MouseButton1Click:Connect(function()
-		main.Visible = not main.Visible
-	end)
+dragFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        offset = Vector2.new(input.Position.X - dragFrame.AbsolutePosition.X, input.Position.Y - dragFrame.AbsolutePosition.Y)
+    end
+end)
 
-	-- title bar
-	local titleBar = Instance.new("TextLabel", main)
-	titleBar.Size = UDim2.new(1, 0, 0, 35)
-	titleBar.Position = UDim2.new(0, 0, 0, 0)
-	titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	titleBar.Text = title
-	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-	titleBar.Font = Enum.Font.SourceSansBold
-	titleBar.TextSize = 20
+dragFrame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
 
-	-- เมนูด้านซ้าย
-	local tabButtons = Instance.new("Frame", main)
-	tabButtons.Size = UDim2.new(0, 120, 1, -35)
-	tabButtons.Position = UDim2.new(0, 0, 0, 35)
-	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	tabButtons.BorderSizePixel = 2
-	tabButtons.BorderColor3 = Color3.fromRGB(170, 0, 255)
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local newPos = UDim2.new(0, input.Position.X - offset.X, 0, input.Position.Y - offset.Y)
+        main.Position = newPos
+        dragFrame.Position = newPos
+    end
+end)
 
-	local tabLayout = Instance.new("UIListLayout", tabButtons)
-	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	tabLayout.Padding = UDim.new(0, 5)
+toggleButton.MouseButton1Click:Connect(function()
+    main.Visible = not main.Visible
+    dragFrame.Visible = not main.Visible
+end)
 
-	local pages = Instance.new("Frame", main)
-	pages.Size = UDim2.new(1, -130, 1, -45)
-	pages.Position = UDim2.new(0, 130, 0, 40)
-	pages.BackgroundTransparency = 1
+local titleBar = Instance.new("TextLabel", main)
+titleBar.Size = UDim2.new(1, 0, 0, 35)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+titleBar.Text = title
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.Font = Enum.Font.SourceSansBold
+titleBar.TextSize = 20
+
+local tabButtons = Instance.new("Frame", main)
+tabButtons.Size = UDim2.new(0, 120, 1, -35)
+tabButtons.Position = UDim2.new(0, 0, 0, 35)
+tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+local tabLayout = Instance.new("UIListLayout", tabButtons)
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+tabLayout.Padding = UDim.new(0, 5)
+
+local pages = Instance.new("Frame", main)
+pages.Size = UDim2.new(1, -130, 1, -45)
+pages.Position = UDim2.new(0, 130, 0, 40)
+pages.BackgroundTransparency = 1
     
 local tabs = {}
 
