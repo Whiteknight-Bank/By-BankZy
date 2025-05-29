@@ -44,7 +44,7 @@ corner.CornerRadius = UDim.new(0, 10)
 
 -- เส้นขอบสีขาว
 local stroke = Instance.new("UIStroke", toggleButton)
-stroke.Thickness = 2
+stroke.Thickness = 1
 stroke.Color = Color3.fromRGB(255, 255, 255)
 
 toggleButton.MouseButton1Click:Connect(function()
