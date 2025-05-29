@@ -8,7 +8,7 @@ if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
-function library:Win(title)
+   function library:Win(title)
     local gui = Instance.new("ScreenGui", CoreGui)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
@@ -77,7 +77,7 @@ function library:Win(title)
     pages.Size = UDim2.new(1, -130, 1, -45)
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
-end
+
     
 local tabs = {}
 
