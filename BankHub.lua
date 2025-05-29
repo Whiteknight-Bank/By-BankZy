@@ -58,6 +58,65 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "LoadingUI"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 150)
+frame.Position = UDim2.new(0.5, -150, 0.5, -75)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.Parent = gui
+
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0, 16)
+
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "LOADING..."
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 28
+title.TextScaled = true
+
+local progressBarBG = Instance.new("Frame", frame)
+progressBarBG.Size = UDim2.new(0.9, 0, 0, 20)
+progressBarBG.Position = UDim2.new(0.05, 0, 1, -40)
+progressBarBG.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+
+local progressCorner = Instance.new("UICorner", progressBarBG)
+progressCorner.CornerRadius = UDim.new(0, 8)
+
+local progressBar = Instance.new("Frame", progressBarBG)
+progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+progressBar.Size = UDim2.new(0, 0, 1, 0)
+
+local progressCorner2 = Instance.new("UICorner", progressBar)
+progressCorner2.CornerRadius = UDim.new(0, 8)
+
+progressBar.Parent = progressBarBG
+
+-- เล่น Tween ให้โหลดเต็ม
+TweenService:Create(progressBar, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+    Size = UDim2.new(1, 0, 1, 0)
+}):Play()
+
+-- ✅ รอโหลดเสร็จแล้วค่อยเปิดเมนู
+task.delay(5, function()
+    gui:Destroy()
+
+    -- ⬇️ ใส่โค้ดเมนูคุณตรงนี้ เช่น:
+    local create = loadstring(game:HttpGet("https://your-link.com/create_final.lua"))()
+    local window = create:Win("My Cool UI")
+    -- ต่อด้วย window:Taps(...) ได้เลย
+end)
+
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
