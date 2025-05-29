@@ -412,4 +412,62 @@ function library:Notifile(title, msg, duration)
     end)
 end
 
+--// Loading UI สวยงาม
+local TweenService = game:GetService("TweenService")
+
+-- สร้างหน้าจอโหลดกลางจอ
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "LoadingUI"
+loadingGui.ResetOnSpawn = false
+loadingGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+local loadingFrame = Instance.new("Frame")
+loadingFrame.Size = UDim2.new(0, 250, 0, 120)
+loadingFrame.Position = UDim2.new(0.5, -125, 0.5, -60)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+loadingFrame.BackgroundTransparency = 1
+loadingFrame.Parent = loadingGui
+
+-- มุมโค้ง
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 14)
+corner.Parent = loadingFrame
+
+-- ข้อความ Loading...
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.Position = UDim2.new(0, 0, 0, 10)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "LOADING..."
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 30
+titleLabel.Parent = loadingFrame
+
+-- แถบสถานะ
+local statusLabel = Instance.new("TextLabel")
+statusLabel.Size = UDim2.new(1, 0, 0, 30)
+statusLabel.Position = UDim2.new(0, 0, 1, -40)
+statusLabel.BackgroundTransparency = 1
+statusLabel.Text = "โปรดรอสักครู่..."
+statusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextSize = 16
+statusLabel.Parent = loadingFrame
+
+-- แสดงพร้อมอนิเมชั่นเฟดเข้า
+TweenService:Create(loadingFrame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
+TweenService:Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
+TweenService:Create(statusLabel, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
+
+-- ซ่อนไปหลังโหลด
+task.delay(2.5, function()
+    TweenService:Create(loadingFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(titleLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    TweenService:Create(statusLabel, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    task.wait(0.6)
+    loadingGui:Destroy()
+end)
+
+
 return library
