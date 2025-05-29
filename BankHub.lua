@@ -849,7 +849,7 @@ page2:Toggle("Auto Death Mob", false, function(dthh)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(2) do
         if _G.autodie then 
 	pcall(function()
             for _,v in pairs(workspace.Enemies:GetDescendants()) do
@@ -1224,26 +1224,18 @@ page4:Toggle("God Mode For Enemies (Not Sure) ", false, function(gxd)
 end)
 
 spawn(function()
-	while wait(0.1) do
-		if not _G.god then break end
-		pcall(function()
-			workspace.Enemies.DescendantAdded:Connect(function(obj)
-				if not _G.god then return end
-
-				task.delay(0.1, function()
-					local torso = obj:FindFirstChild("Torso", true)
-					if torso then
-						for _, child in pairs(torso:GetChildren()) do
-							if child:IsA("TouchTransmitter") or child.Name == "TouchInterest" then
-								child:Destroy()
-								print("🧹 ลบ TouchInterest จาก Torso:", torso:GetFullName())
-							end
-						end
-					end
-				end)
-			end)
-		end)
-	end
+    while wait(2) do
+        if _G.god then 
+	pcall(function()
+            for _,v in pairs(workspace.Enemies:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Torso") then
+                    v.TouchInterest:Destroy()
+                end
+            end
+        end) 
+    end
+    end
 end)
 
 page4:Label("↑ Pls Wait a Moment, It Works ↑")
