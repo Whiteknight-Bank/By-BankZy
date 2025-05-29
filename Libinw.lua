@@ -9,71 +9,68 @@ if CoreGui:FindFirstChild("redui") then
 end
 
    function library:Win(title)
-    local gui = Instance.new("ScreenGui", CoreGui)
-    gui.Name = "redui"
-    gui.ResetOnSpawn = false
-
-    local main = Instance.new("Frame", gui)
-    main.Name = "MainSceen"
-    main.Size = UDim2.new(0, 500, 0, 350)
-    main.Position = UDim2.new(0.5, -250, 0.5, -175)
-    main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    main.Active = true
-    main.Draggable = true
-
-    -- ทำให้ main โค้งมน
-    local corner = Instance.new("UICorner", main)
-    corner.CornerRadius = UDim.new(0, 12)
-
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "BankHubToggle"
-toggleButton.Parent = game.CoreGui:FindFirstChild("redui") or game.CoreGui
-toggleButton.Size = UDim2.new(0, 120, 0, 35)
-toggleButton.Position = UDim2.new(0, 10, 0.5, -20)
-toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- สีเทาเข้ม
-toggleButton.Text = "BANK HUB"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 16
-toggleButton.TextWrapped = true
-toggleButton.BorderSizePixel = 2
-toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255) -- กรอบขาว
-toggleButton.AutoButtonColor = true
-
-local corner = Instance.new("UICorner", toggleButton)
-corner.CornerRadius = UDim.new(0, 10)
+	local CoreGui = game:GetService("CoreGui")
 	
-toggleButton.MouseButton1Click:Connect(function()
-	main.Visible = not main.Visible
-end)
+	if CoreGui:FindFirstChild("redui") then
+		CoreGui:FindFirstChild("redui"):Destroy() -- เคลียร์เก่า
+	end
 
-    local titleBar = Instance.new("TextLabel", main)
-    titleBar.Size = UDim2.new(1, 0, 0, 35)
-    titleBar.Position = UDim2.new(0, 0, 0, 0)
-    titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    titleBar.Text = title
-    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleBar.Font = Enum.Font.SourceSansBold
-    titleBar.TextSize = 20
-    local titleCorner = Instance.new("UICorner", titleBar)
-    titleCorner.CornerRadius = UDim.new(0, 8)
+	local gui = Instance.new("ScreenGui", CoreGui)
+	gui.Name = "redui"
+	gui.ResetOnSpawn = false
 
-    local tabButtons = Instance.new("Frame", main)
-    tabButtons.Size = UDim2.new(0, 120, 1, -35)
-    tabButtons.Position = UDim2.new(0, 0, 0, 35)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    local tabCorner = Instance.new("UICorner", tabButtons)
-    tabCorner.CornerRadius = UDim.new(0, 8)
+	local main = Instance.new("Frame", gui)
+	main.Name = "MainSceen"
+	main.Size = UDim2.new(0, 500, 0, 350)
+	main.Position = UDim2.new(0.5, -250, 0.5, -175)
+	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- สีดำ
+	main.BorderSizePixel = 3
+	main.BorderColor3 = Color3.fromRGB(170, 0, 255) -- กรอบม่วง
+	main.Active = true
+	main.Draggable = true
+	main.Visible = true
 
-    local tabLayout = Instance.new("UIListLayout", tabButtons)
-    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabLayout.Padding = UDim.new(0, 5)
+	local toggleButton = Instance.new("TextButton")
+	toggleButton.Name = "BankHubToggle"
+	toggleButton.Parent = gui
+	toggleButton.Size = UDim2.new(0, 120, 0, 35)
+	toggleButton.Position = UDim2.new(0, 10, 0.5, -20)
+	toggleButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50) -- สีแดง
+	toggleButton.Text = "☰ MENU"
+	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	toggleButton.Font = Enum.Font.GothamBold
+	toggleButton.TextSize = 16
+	toggleButton.TextWrapped = true
+	toggleButton.BorderSizePixel = 1
+	toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+	toggleButton.AutoButtonColor = true
 
-    local pages = Instance.new("Frame", main)
-    pages.Size = UDim2.new(1, -130, 1, -45)
-    pages.Position = UDim2.new(0, 130, 0, 40)
-    pages.BackgroundTransparency = 1
+	toggleButton.MouseButton1Click:Connect(function()
+		main.Visible = not main.Visible
+	end)
 
+	local titleBar = Instance.new("TextLabel", main)
+	titleBar.Size = UDim2.new(1, 0, 0, 35)
+	titleBar.Position = UDim2.new(0, 0, 0, 0)
+	titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	titleBar.Text = title
+	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+	titleBar.Font = Enum.Font.SourceSansBold
+	titleBar.TextSize = 20
+
+	local tabButtons = Instance.new("Frame", main)
+	tabButtons.Size = UDim2.new(0, 120, 1, -35)
+	tabButtons.Position = UDim2.new(0, 0, 0, 35)
+	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+
+	local tabLayout = Instance.new("UIListLayout", tabButtons)
+	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	tabLayout.Padding = UDim.new(0, 5)
+
+	local pages = Instance.new("Frame", main)
+	pages.Size = UDim2.new(1, -130, 1, -45)
+	pages.Position = UDim2.new(0, 130, 0, 40)
+	pages.BackgroundTransparency = 1
     
 local tabs = {}
 
