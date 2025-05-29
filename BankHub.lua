@@ -854,17 +854,16 @@ spawn(function()
 	while wait(0.1) do
 		if not _G.autodie then break end
 		pcall(function()
-			workspace.Enemies.DescendantAdded:Connect(function(obj)
-				if not _G.autodie then return end
-
-				task.delay(0.1, function()
-					local humanoid = obj:FindFirstChildOfClass("Humanoid")
-					if humanoid and humanoid.Health > 0 then
-						humanoid.Health = 0
-						print("💀 ฆ่ามอนทันที:", humanoid:GetFullName())
+			for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+				if enemy:IsA("Model") then
+					for _, obj in pairs(enemy:GetChildren()) do
+						if obj:IsA("Humanoid") and obj.Health > 0 then
+							obj.Health = 0
+							print("💀 ฆ่ามอน:", enemy.Name)
+						end
 					end
-				end)
-			end)
+				end
+			end
 		end)
 	end
 end)
