@@ -25,21 +25,23 @@ end
     local corner = Instance.new("UICorner", main)
     corner.CornerRadius = UDim.new(0, 12)
 
-    -- ปุ่ม toggle มุมซ้ายของเมนู
-    local toggleButton = Instance.new("TextButton", main)
-    toggleButton.Size = UDim2.new(0, 30, 0, 30)
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)
-    toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    toggleButton.Text = "≡"
-    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    toggleButton.Font = Enum.Font.SourceSansBold
-    toggleButton.TextSize = 20
-    toggleButton.ZIndex = 10
+    -- ปุ่มเปิด/ปิด UI อยู่มุมซ้ายบน
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ToggleUI"
+toggleButton.Parent = gui
+toggleButton.Size = UDim2.new(0, 30, 0, 30)
+toggleButton.Position = UDim2.new(0, 5, 0, 5)
+toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+toggleButton.Text = "≡"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.TextSize = 20
+toggleButton.ZIndex = 9999 -- ให้อยู่บนสุดเสมอ
 
-    local toggleCorner = Instance.new("UICorner", toggleButton)
-    toggleCorner.CornerRadius = UDim.new(1, 0)
+local toggleCorner = Instance.new("UICorner", toggleButton)
+toggleCorner.CornerRadius = UDim.new(1, 0)
 
-    toggleButton.MouseButton1Click:Connect(function()
+toggleButton.MouseButton1Click:Connect(function()
 	main.Visible = not main.Visible
 end)
 
