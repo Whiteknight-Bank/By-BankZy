@@ -43,13 +43,8 @@ end
     toggleCorner.CornerRadius = UDim.new(1, 0)
 
     toggleButton.MouseButton1Click:Connect(function()
-        toggleVisible = not toggleVisible
-        for _, child in pairs(main:GetChildren()) do
-            if child ~= toggleButton then
-                child.Visible = toggleVisible
-            end
-        end
-    end)
+	main.Visible = not main.Visible
+end)
 
     local titleBar = Instance.new("TextLabel", main)
     titleBar.Size = UDim2.new(1, 0, 0, 35)
