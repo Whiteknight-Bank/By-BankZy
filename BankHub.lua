@@ -52,8 +52,8 @@ body.Font = Enum.Font.SourceSansBold
 body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
-• New!! Fix Menu Loading
-• New!! Add Auto Buso Haki in Auto Farm All!!
+• Big New!! Fix Ui Menu Look Better
+• New!! Fix Menu Loading Look Better
 • Fix Bug Menu
 • Coming Soon . . .
 ]])
