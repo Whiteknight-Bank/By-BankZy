@@ -26,24 +26,27 @@ function library:Win(title)
 	main.Size = UDim2.new(0, 500, 0, 350)
 	main.Position = UDim2.new(0.5, -250, 0.5, -175)
 	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	main.BackgroundTransparency = 0.4 -- ✅ ใสจางๆ
 	main.BorderSizePixel = 2
 	main.BorderColor3 = Color3.fromRGB(170, 0, 255)
 	main.Active = true
 	main.Draggable = true
 	main.Visible = true
 
-	-- ปุ่มเปิด/ปิด ยึดมุมซ้ายบนของเมนูตลอดเวลา
+	-- ✅ ปุ่มเปิด/ปิด อยู่มุมซ้าย บนเมนูหลัก
 	local toggleButton = Instance.new("TextButton")
 	toggleButton.Parent = gui
 	toggleButton.Size = UDim2.new(0, 60, 0, 25)
-	toggleButton.BackgroundTransparency = 1
+	toggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- ✅ สีเทาใส
+	toggleButton.BackgroundTransparency = 0.3 -- ✅ โปร่งใสบางส่วน
 	toggleButton.Text = "Q"
 	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	toggleButton.Font = Enum.Font.GothamBold
 	toggleButton.TextSize = 16
 	toggleButton.ZIndex = 100
+	toggleButton.BorderSizePixel = 0 -- ✅ ไม่มีกรอบ
 
-	-- อัปเดตตำแหน่งปุ่มให้ตามเมนู
+	-- ปรับตำแหน่งให้ตามกรอบเมนู
 	RunService.RenderStepped:Connect(function()
 		if main and main.Parent then
 			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
@@ -54,32 +57,36 @@ function library:Win(title)
 		main.Visible = not main.Visible
 	end)
 
-	-- title bar
+	-- Title Bar
 	local titleBar = Instance.new("TextLabel", main)
 	titleBar.Size = UDim2.new(1, 0, 0, 35)
 	titleBar.Position = UDim2.new(0, 0, 0, 0)
 	titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	titleBar.BackgroundTransparency = 0.2 -- ใสจางๆนิดหน่อย
 	titleBar.Text = title
 	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
 	titleBar.Font = Enum.Font.SourceSansBold
 	titleBar.TextSize = 20
+	titleBar.BorderSizePixel = 0
 
 	-- เมนูด้านซ้าย
 	local tabButtons = Instance.new("Frame", main)
 	tabButtons.Size = UDim2.new(0, 120, 1, -35)
 	tabButtons.Position = UDim2.new(0, 0, 0, 35)
 	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	tabButtons.BorderSizePixel = 2
-	tabButtons.BorderColor3 = Color3.fromRGB(170, 0, 255)
+	tabButtons.BackgroundTransparency = 0.3 -- ✅ ใสจางๆ
+	tabButtons.BorderSizePixel = 0 -- ✅ ไม่เอาเส้นแบ่งข้างใน
 
 	local tabLayout = Instance.new("UIListLayout", tabButtons)
 	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	tabLayout.Padding = UDim.new(0, 5)
 
+	-- เนื้อหาหลัก
 	local pages = Instance.new("Frame", main)
 	pages.Size = UDim2.new(1, -130, 1, -45)
 	pages.Position = UDim2.new(0, 130, 0, 40)
 	pages.BackgroundTransparency = 1
+	pages.BorderSizePixel = 0
 
    local tabs = {}
 
