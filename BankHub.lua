@@ -59,7 +59,7 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://10511856020" -- เปลี่ยนเป็นรูปคุณ
+local imageId = "rbxassetid://10511856020" -- ✅ ID ที่ถูกต้อง
 
 local CoreGui = game:GetService("CoreGui")
 
@@ -94,11 +94,11 @@ local image = Instance.new("ImageLabel", mainFrame)
 image.Size = UDim2.new(0, 120, 0, 120)
 image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
-ImageLabel.Image = "rbxassetid://10511856020"
+image.Image = imageId -- ✅ เรียกถูกตัวแปร
 
 -- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
-barBg.Size = UDim2.new(0.8, 0, 0, 6) -- ความสูงแค่ 6 px (บาง)
+barBg.Size = UDim2.new(0.8, 0, 0, 6)
 barBg.Position = UDim2.new(0.1, 0, 0.75, 0)
 barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 barBg.BorderSizePixel = 0
@@ -107,7 +107,7 @@ Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
 -- ✅ หลอดโหลดจริง
 local bar = Instance.new("Frame", barBg)
 bar.Size = UDim2.new(0, 0, 1, 0)
-bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- สีเขียว
+bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
 bar.BorderSizePixel = 0
 Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
@@ -121,8 +121,22 @@ percentLabel.Font = Enum.Font.GothamBold
 percentLabel.TextSize = 22
 percentLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
 
--- โหลด
+-- โหลดภาพก่อนเริ่มหลอดโหลด
 task.spawn(function()
+	local loaded = false
+	task.spawn(function()
+		image.Loaded:Wait()
+		loaded = true
+	end)
+
+	local timeout = 5
+	local timer = 0
+	while not loaded and timer < timeout do
+		task.wait(0.1)
+		timer += 0.1
+	end
+
+	-- โหลดแถบ
 	for i = 1, 100 do
 		bar.Size = UDim2.new(i / 100, 0, 1, 0)
 		percentLabel.Text = i .. "%"
@@ -130,6 +144,7 @@ task.spawn(function()
 	end
 
 	ScreenGui:Destroy()
+end)
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
