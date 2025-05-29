@@ -1,10 +1,17 @@
+local library = {}
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+if CoreGui:FindFirstChild("redui") then
+    CoreGui:FindFirstChild("redui"):Destroy()
+end
+
 function library:Win(title)
     local gui = Instance.new("ScreenGui", CoreGui)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
-
-    -- ปุ่มเปิดปิดเมนู (ฝังในเมนูหลัก)
-    local toggleVisible = true
 
     local main = Instance.new("Frame", gui)
     main.Name = "MainSceen"
@@ -14,50 +21,18 @@ function library:Win(title)
     main.Active = true
     main.Draggable = true
 
-    -- ทำให้ main โค้งมน
-    local corner = Instance.new("UICorner", main)
-    corner.CornerRadius = UDim.new(0, 12)
-
-    -- ปุ่ม toggle มุมซ้ายของเมนู
-    local toggleButton = Instance.new("TextButton", main)
-    toggleButton.Size = UDim2.new(0, 30, 0, 30)
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)
-    toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    toggleButton.Text = "≡"
-    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    toggleButton.Font = Enum.Font.SourceSansBold
-    toggleButton.TextSize = 20
-    toggleButton.ZIndex = 10
-
-    local toggleCorner = Instance.new("UICorner", toggleButton)
-    toggleCorner.CornerRadius = UDim.new(1, 0)
-
-    toggleButton.MouseButton1Click:Connect(function()
-        toggleVisible = not toggleVisible
-        for _, child in pairs(main:GetChildren()) do
-            if child ~= toggleButton then
-                child.Visible = toggleVisible
-            end
-        end
-    end)
-
     local titleBar = Instance.new("TextLabel", main)
     titleBar.Size = UDim2.new(1, 0, 0, 35)
-    titleBar.Position = UDim2.new(0, 0, 0, 0)
     titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     titleBar.Text = title
     titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleBar.Font = Enum.Font.SourceSansBold
     titleBar.TextSize = 20
-    local titleCorner = Instance.new("UICorner", titleBar)
-    titleCorner.CornerRadius = UDim.new(0, 8)
 
     local tabButtons = Instance.new("Frame", main)
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
     tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    local tabCorner = Instance.new("UICorner", tabButtons)
-    tabCorner.CornerRadius = UDim.new(0, 8)
 
     local tabLayout = Instance.new("UIListLayout", tabButtons)
     tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -67,7 +42,6 @@ function library:Win(title)
     pages.Size = UDim2.new(1, -130, 1, -45)
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
-end
 
     local tabs = {}
 
