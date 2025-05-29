@@ -76,64 +76,75 @@ end)
     
 local tabs = {}
 
-    function tabs:Taps(name)
-        local tabButton = Instance.new("TextButton", tabButtons)
-        tabButton.Size = UDim2.new(1, -10, 0, 30)
-        tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        tabButton.Font = Enum.Font.SourceSans
-        tabButton.TextSize = 16
-        tabButton.Text = name
+function tabs:Taps(name)
+    local tabButton = Instance.new("TextButton", tabButtons)
+    tabButton.Size = UDim2.new(1, -10, 0, 30)
+    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    tabButton.Font = Enum.Font.SourceSans
+    tabButton.TextSize = 16
+    tabButton.Text = name
+    tabButton.AutoButtonColor = true
 
-        local page = Instance.new("ScrollingFrame", pages)
-        page.Size = UDim2.new(1, 0, 1, 0)
-        page.Visible = false
-        page.ScrollBarThickness = 6
-        page.CanvasSize = UDim2.new(0, 0, 0, 0)
-        page.BackgroundTransparency = 1
-        page.Name = name .. "_Page"
+    local tabCorner = Instance.new("UICorner", tabButton)
+    tabCorner.CornerRadius = UDim.new(0, 6)
 
-        local layout = Instance.new("UIListLayout", page)
-        layout.SortOrder = Enum.SortOrder.LayoutOrder
-        layout.Padding = UDim.new(0, 5)
+    local page = Instance.new("ScrollingFrame", pages)
+    page.Size = UDim2.new(1, 0, 1, 0)
+    page.Visible = false
+    page.ScrollBarThickness = 6
+    page.CanvasSize = UDim2.new(0, 0, 0, 0)
+    page.BackgroundTransparency = 0 -- ตั้งค่าให้เห็นมุมโค้ง
+    page.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    page.Name = name .. "_Page"
 
-        layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
-        end)
+    local pageCorner = Instance.new("UICorner", page)
+    pageCorner.CornerRadius = UDim.new(0, 6)
 
-        local function hideAllPages()
-            for _, v in pairs(pages:GetChildren()) do
-                if v:IsA("ScrollingFrame") then
-                    v.Visible = false
-                end
+    local layout = Instance.new("UIListLayout", page)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0, 5)
+
+    layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+    end)
+
+    local function hideAllPages()
+        for _, v in pairs(pages:GetChildren()) do
+            if v:IsA("ScrollingFrame") then
+                v.Visible = false
             end
         end
+    end
 
-        tabButton.MouseButton1Click:Connect(function()
-            hideAllPages()
-            page.Visible = true
+    tabButton.MouseButton1Click:Connect(function()
+        hideAllPages()
+        page.Visible = true
+    end)
+
+    local newPage = {}
+
+    function newPage:Button(text, callback)
+        local button = Instance.new("TextButton", page)
+        button.Size = UDim2.new(1, -10, 0, 30)
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.Font = Enum.Font.SourceSans
+        button.TextSize = 16
+        button.Text = text
+        button.AutoButtonColor = true
+
+        local btnCorner = Instance.new("UICorner", button)
+        btnCorner.CornerRadius = UDim.new(0, 6)
+
+        button.MouseButton1Click:Connect(function()
+            if callback then
+                pcall(callback)
+            end
         end)
-
-        local newPage = {}
-
-        function newPage:newpage()
-            
-        function newPage:Button(text, callback)
-            local button = Instance.new("TextButton", page)
-            button.Size = UDim2.new(1, -10, 0, 30)
-            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-            button.TextColor3 = Color3.fromRGB(255, 255, 255)
-            button.Font = Enum.Font.SourceSans
-            button.TextSize = 16
-            button.Text = text
-            button.MouseButton1Click:Connect(function()
-                if callback then
-                    pcall(callback)
-                end
-            end)
-        end
-
-        function newPage:Dropdown(title, items, callback)
+    end
+        
+function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
     container.BackgroundTransparency = 1
