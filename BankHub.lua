@@ -102,21 +102,17 @@ progressCorner2.CornerRadius = UDim.new(0, 8)
 
 progressBar.Parent = progressBarBG
 
--- เล่น Tween ให้โหลดเต็ม
-TweenService:Create(progressBar, TweenInfo.new(5, Enum.EasingStyle.Linear), {
+-- ▶️ Tween Animation
+local tween = TweenService:Create(progressBar, TweenInfo.new(5, Enum.EasingStyle.Quad), {
     Size = UDim2.new(1, 0, 1, 0)
-}):Play()
+})
+tween:Play()
 
--- ✅ รอโหลดเสร็จแล้วค่อยเปิดเมนู
-task.delay(5, function()
-    gui:Destroy()
+-- ✅ รอจนโหลดเสร็จแล้วค่อยเปิด UI
+tween.Completed:Wait()
 
-    -- ⬇️ ใส่โค้ดเมนูคุณตรงนี้ เช่น:
-    local create = loadstring(game:HttpGet("https://your-link.com/create_final.lua"))()
-    local window = create:Win("My Cool UI")
-    -- ต่อด้วย window:Taps(...) ได้เลย
-end)
-
+-- ลบ UI โหลด
+gui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
