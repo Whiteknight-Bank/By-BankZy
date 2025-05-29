@@ -88,65 +88,75 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui")
-gui.Name = "UpdatePopup"
-gui.ResetOnSpawn = false
-gui.Parent = player:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
--- กล่องหลัก
-local frame = Instance.new("Frame")
-frame.Name = "MainFrame"
-frame.Size = UDim2.new(0, 400, 0, 250)
-frame.Position = UDim2.new(0.5, 0, 0.5, 0)
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-frame.Parent = gui
+-- GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "UpdateNoticeMini"
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- ปุ่มปิด
-local close = Instance.new("TextButton")
-close.Size = UDim2.new(0, 30, 0, 30)
-close.Position = UDim2.new(1, -35, 0, 5)
-close.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-close.Text = "X"
-close.Font = Enum.Font.SourceSansBold
-close.TextSize = 18
-close.TextColor3 = Color3.fromRGB(255, 255, 255)
-close.Parent = frame
-close.MouseButton1Click:Connect(function()
-	frame.Visible = false
-end)
+-- Main Frame (Smaller & shifted left)
+local mainFrame = Instance.new("Frame")
+mainFrame.AnchorPoint = Vector2.new(1, 0)
+mainFrame.Position = UDim2.new(1, -100, 0, 20)
+mainFrame.Size = UDim2.new(0, 180, 0, 30)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BackgroundTransparency = 0.2
+mainFrame.BorderSizePixel = 0
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
 
--- ข้อความหัวเรื่อง NEW UPDATE
-local title = Instance.new("TextLabel")
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "NEW UPDATE"
-title.TextColor3 = Color3.fromRGB(255, 255, 0)
-title.Font = Enum.Font.SourceSansBold
-title.TextScaled = true
-title.Parent = frame
+-- Toggle Button
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(1, 0, 0, 30)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Text = "🆕 Update ▼"
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.Font = Enum.Font.Gotham
+toggleButton.TextSize = 14
+toggleButton.Parent = mainFrame
 
--- ข้อความหลายบรรทัด
-local body = Instance.new("TextLabel")
-body.Size = UDim2.new(1, -20, 1, -60)
-body.Position = UDim2.new(0, 10, 0, 50)
-body.BackgroundTransparency = 1
-body.TextWrapped = true
-body.TextYAlignment = Enum.TextYAlignment.Top
-body.Font = Enum.Font.SourceSansBold
-body.TextColor3 = Color3.new(1, 1, 1)
-body.TextScaled = true
-body.Text = string.upper([[
-• Big New!! Fix Ui Menu & Button All Look Better
-• Fix Bug Menu
-• Coming Soon . . .
-]])
-body.Parent = frame
+-- Content Frame (Hidden by default)
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 0, 60)
+contentFrame.Position = UDim2.new(0, 0, 0, 30)
+contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+contentFrame.BackgroundTransparency = 0.2
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = mainFrame
+
+local label = Instance.new("TextLabel")
+label.Size = UDim2.new(1, -10, 1, -10)
+label.Position = UDim2.new(0, 5, 0, 5)
+label.BackgroundTransparency = 1
+label.Text = "- ปรับ Ui ใหม่ \n- ปรับระบบแจ้งอัพเดต \n- ปรับเมนูใหม่"
+label.TextColor3 = Color3.new(1, 1, 1)
+label.TextWrapped = true
+label.Font = Enum.Font.Gotham
+label.TextSize = 13
+label.TextXAlignment = Enum.TextXAlignment.Left
+label.TextYAlignment = Enum.TextYAlignment.Top
+label.Parent = contentFrame
+
+-- Animation
+local expandedSize = UDim2.new(0, 180, 0, 90)
+local collapsedSize = UDim2.new(0, 180, 0, 30)
+local isOpen = false
+
+local function togglePanel()
+	isOpen = not isOpen
+	local newSize = isOpen and expandedSize or collapsedSize
+	TweenService:Create(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Size = newSize
+	}):Play()
+	toggleButton.Text = isOpen and " Update ▼" or " Update ▲"
+end
+
+toggleButton.MouseButton1Click:Connect(togglePanel)
 		
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
