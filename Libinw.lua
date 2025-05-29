@@ -10,80 +10,104 @@ end
 
 function library:Win(title)
 	local CoreGui = game:GetService("CoreGui")
+	local TweenService = game:GetService("TweenService")
 	local RunService = game:GetService("RunService")
 
+	-- ลบ GUI เดิมก่อน
 	if CoreGui:FindFirstChild("redui") then
 		CoreGui:FindFirstChild("redui"):Destroy()
 	end
 
+	-- สร้าง ScreenGui
 	local gui = Instance.new("ScreenGui", CoreGui)
 	gui.Name = "redui"
 	gui.ResetOnSpawn = false
 
-	-- เมนูหลัก
-	local main = Instance.new("Frame", gui)
-	main.Name = "MainSceen"
-	main.Size = UDim2.new(0, 500, 0, 350)
-	main.Position = UDim2.new(0.5, -250, 0.5, -175)
-	main.BackgroundColor3 = Color3.fromRGB(120, 0, 180) -- สีม่วง
-	main.BackgroundTransparency = 0.5 -- โปร่งใส
-	main.BorderSizePixel = 0 -- ไม่มีกรอบ
-	main.Active = true
-	main.Draggable = true
-	main.Visible = true
-
-	-- ปุ่มเปิด/ปิด
+	-- ปุ่ม Bank Hub
 	local toggleButton = Instance.new("TextButton")
 	toggleButton.Parent = gui
 	toggleButton.Size = UDim2.new(0, 80, 0, 30)
-	toggleButton.BackgroundColor3 = Color3.fromRGB(150, 0, 200)
-	toggleButton.BackgroundTransparency = 0.7 -- ใส
+	toggleButton.Position = UDim2.new(0, 100, 0, 100) -- เริ่มต้น
+	toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+	toggleButton.BackgroundTransparency = 0.3
 	toggleButton.Text = "Bank Hub"
-	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	toggleButton.TextColor3 = Color3.new(1, 1, 1)
 	toggleButton.Font = Enum.Font.GothamBold
 	toggleButton.TextSize = 16
-	toggleButton.ZIndex = 100
-	toggleButton.Active = true
 	toggleButton.Draggable = true
+	toggleButton.Active = true
+	toggleButton.AutoButtonColor = false
 
-	-- ให้ปุ่มตามเมนู (เฉพาะแกน Y)
-	RunService.RenderStepped:Connect(function()
-		if main and main.Parent then
-			toggleButton.Position = UDim2.new(0, main.Position.X.Offset, 0, main.Position.Y.Offset)
-		end
-	end)
+	-- เมนูหลัก
+	local main = Instance.new("Frame")
+	main.Name = "MainSceen"
+	main.Size = UDim2.new(0, 500, 0, 350)
+	main.Position = UDim2.new(0.5, -250, 0.5, -175)
+	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+	main.BackgroundTransparency = 0.3
+	main.BorderSizePixel = 0
+	main.Visible = true
+	main.Parent = gui
 
-	toggleButton.MouseButton1Click:Connect(function()
-		main.Visible = not main.Visible
-	end)
+	-- เส้นกรอบนอก
+	local border = Instance.new("UIStroke", main)
+	border.Thickness = 2
+	border.Color = Color3.fromRGB(255, 255, 255)
 
-	-- title bar
+	-- Title Bar
 	local titleBar = Instance.new("TextLabel", main)
 	titleBar.Size = UDim2.new(1, 0, 0, 35)
 	titleBar.Position = UDim2.new(0, 0, 0, 0)
-	titleBar.BackgroundColor3 = Color3.fromRGB(60, 0, 100)
-	titleBar.BackgroundTransparency = 0.4
+	titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	titleBar.BackgroundTransparency = 0.2
 	titleBar.Text = title
 	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-	titleBar.Font = Enum.Font.SourceSansBold
+	titleBar.Font = Enum.Font.GothamBold
 	titleBar.TextSize = 20
 
-	-- เมนูด้านซ้าย
+	-- เมนูซ้าย
 	local tabButtons = Instance.new("Frame", main)
 	tabButtons.Size = UDim2.new(0, 120, 1, -35)
 	tabButtons.Position = UDim2.new(0, 0, 0, 35)
-	tabButtons.BackgroundColor3 = Color3.fromRGB(90, 0, 140)
-	tabButtons.BackgroundTransparency = 0.4
-	tabButtons.BorderSizePixel = 0
+	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	tabButtons.BackgroundTransparency = 0.3
 
 	local tabLayout = Instance.new("UIListLayout", tabButtons)
 	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	tabLayout.Padding = UDim.new(0, 5)
 
+	-- หน้าหลัก
 	local pages = Instance.new("Frame", main)
 	pages.Size = UDim2.new(1, -130, 1, -45)
 	pages.Position = UDim2.new(0, 130, 0, 40)
 	pages.BackgroundTransparency = 1
+
+	-- ตำแหน่งปุ่มตามเมนู
+	RunService.RenderStepped:Connect(function()
+		if main.Visible then
+			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
+		end
+	end)
+
+	-- Animation Toggle
+	local isOpen = true
+	local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
+
+	toggleButton.MouseButton1Click:Connect(function()
+		if isOpen then
+			local tween = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
+			tween:Play()
+			tween.Completed:Connect(function()
+				main.Visible = false
+			end)
+		else
+			main.Visible = true
+			main.Size = UDim2.new(0, 0, 0, 0)
+			local tween = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 500, 0, 350)})
+			tween:Play()
+		end
+		isOpen = not isOpen
+	end)
 
    local tabs = {}
 
