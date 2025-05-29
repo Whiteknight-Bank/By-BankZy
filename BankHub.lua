@@ -59,7 +59,7 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local imageId = "https://create.roblox.com/dashboard/creations/store/105166874543574/configure" -- เปลี่ยนเป็นรูปคุณ
+local imageId = "rbxassetid://10511856020" -- เปลี่ยนเป็นรูปคุณ
 
 local CoreGui = game:GetService("CoreGui")
 
@@ -94,7 +94,7 @@ local image = Instance.new("ImageLabel", mainFrame)
 image.Size = UDim2.new(0, 120, 0, 120)
 image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
-image.Image = imageId
+ImageLabel.Image = "rbxassetid://10511856020"
 
 -- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
