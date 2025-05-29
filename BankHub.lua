@@ -1754,6 +1754,7 @@ end)
 spawn(function()
     while wait() do
         if _G.nodmgwater then
+	create:Notifile("", "Start Anti " .. game.Players.LocalPlayer.Name .. " You Can Swim Now :)", 3)
             pcall(function()
                 local args = {
     [1] = "NOPLS"
@@ -1950,10 +1951,6 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
         end)
     end
 end)
-
-page8:Toggle("Auto Reroll Affinity 2.0 (Left&Right/ทั้งคู่)", false, function(rlll)
-    isRunning = rlll
-	end)
 
 local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
