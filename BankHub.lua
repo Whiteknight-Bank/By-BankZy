@@ -1833,7 +1833,7 @@ page8:Label("┇ Function Auto Affinities 2.0 ┇")
 local isRunning1 = false
 local task1Thread
 
-page8:Toggle("Auto Reroll Affinity 2.0 (Devil Fruit 1)", false, function(rol)
+page8:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -1890,15 +1890,145 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Devil Fruit 1)", false, function(rol)
     end
 end)
 
-page8:Toggle("Auto Reroll 2.0 (Right)", false, function(ndmg)
-    _G.nodmgwater = ndmg
+local isRunning2 = false
+local task2Thread
+
+page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
+    isRunning2 = roll
+
+    if isRunning2 then
+        task2Thread = task.spawn(function()
+            while isRunning2 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT2
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
+                    isRunning2 = false
+                    break
+                end
+
+                local args2 = {
+                    [1] = "DFT2",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense2 == 2 then args2[2] = 0/0 end
+                if AffMelee2 == 2 then args2[3] = 0/0 end
+                if AffSniper2 == 2 then args2[4] = 0/0 end
+                if AffSword2 == 2 then args2[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args2))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)
 
-page8:Toggle("Auto Reroll 2.0 (All)", false, function(ndmg)
-    _G.nodmgwater = ndmg
-end)
+local isRunning = false
+local taskThread
 
-page8:Section("↑ Not Working Now is Coming Soon . . . ↑")
+page8:Toggle("Auto Reroll Affinity 2.0 (Left&Right/ทั้งคู่)", false, function(rlll)
+    isRunning = rlll
+
+    if isRunning then
+        taskThread = task.spawn(function()
+            while isRunning do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- ====== DFT1 ======
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+                if not (AffMelee1 == 2 and AffSniper1 == 2 and AffDefense1 == 2 and AffSword1 == 2) then
+                    local args1 = {
+                        [1] = "DFT1",
+                        [2] = false,
+                        [3] = false,
+                        [4] = false,
+                        [5] = false,
+                        [6] = "Cash"
+                    }
+
+                    if AffDefense1 == 2 then args1[2] = 0/0 end
+                    if AffMelee1 == 2 then args1[3] = 0/0 end
+                    if AffSniper1 == 2 then args1[4] = 0/0 end
+                    if AffSword1 == 2 then args1[5] = 0/0 end
+
+                    local retum = workspace:FindFirstChild("Merchants")?
+                        :FindFirstChild("AffinityMerchant")?
+                        :FindFirstChild("Clickable")?
+                        :FindFirstChild("Retum")
+                    if retum then
+                        retum:FireServer(unpack(args1))
+                    end
+                end
+
+                -- ====== DFT2 ======
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                if not (AffMelee2 == 2 and AffSniper2 == 2 and AffDefense2 == 2 and AffSword2 == 2) then
+                    local args2 = {
+                        [1] = "DFT2",
+                        [2] = false,
+                        [3] = false,
+                        [4] = false,
+                        [5] = false,
+                        [6] = "Cash"
+                    }
+
+                    if AffDefense2 == 2 then args2[2] = 0/0 end
+                    if AffMelee2 == 2 then args2[3] = 0/0 end
+                    if AffSniper2 == 2 then args2[4] = 0/0 end
+                    if AffSword2 == 2 then args2[5] = 0/0 end
+
+                    local retum = workspace:FindFirstChild("Merchants")?
+                        :FindFirstChild("AffinityMerchant")?
+                        :FindFirstChild("Clickable")?
+                        :FindFirstChild("Retum")
+                    if retum then
+                        retum:FireServer(unpack(args2))
+                    end
+                end
+            end
+        end)
+    end
+end)
 
 local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
