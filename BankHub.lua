@@ -181,7 +181,7 @@ local Camera = workspace.CurrentCamera
 spawn(function() -- autofarm velocity
     while wait(0) do
         pcall(function()
-            if AutoFish or AutoPack or _G.behindfarm  then
+            if AutoFish or AutoPack or _G.behindfarm or _G.rumblefarm then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                     local Noclip = Instance.new("BodyVelocity")
                     Noclip.Name = "BodyClip"
@@ -190,7 +190,7 @@ spawn(function() -- autofarm velocity
                     Noclip.Velocity = Vector3.new(0,0,0)
                 end
                 game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
-            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false then
+            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false or _G.rumblefarm == false then
                 --if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
                 wait(1)
@@ -205,9 +205,7 @@ end)
 local function getPlayerNames()
 	local names = {}
 	for _, player in ipairs(Players:GetPlayers()) do
-		if player ~= LocalPlayer then
 			table.insert(names, player.Name)
-		end
 	end
 	return names
 end
