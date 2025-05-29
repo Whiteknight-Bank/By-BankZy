@@ -9,128 +9,121 @@ if CoreGui:FindFirstChild("redui") then
 end
 
 function library:Win(title)
-	local CoreGui = game:GetService("CoreGui")
-	local TweenService = game:GetService("TweenService")
-	local RunService = game:GetService("RunService")
-	local UserInputService = game:GetService("UserInputService")
+    local CoreGui = game:GetService("CoreGui")
+    local TweenService = game:GetService("TweenService")
+    local UserInputService = game:GetService("UserInputService")
+    local RunService = game:GetService("RunService")
 
-	if CoreGui:FindFirstChild("redui") then
-		CoreGui:FindFirstChild("redui"):Destroy()
-	end
+    if CoreGui:FindFirstChild("redui") then
+        CoreGui:FindFirstChild("redui"):Destroy()
+    end
 
-	local gui = Instance.new("ScreenGui", CoreGui)
-	gui.Name = "redui"
-	gui.ResetOnSpawn = false
+    local gui = Instance.new("ScreenGui", CoreGui)
+    gui.Name = "redui"
+    gui.ResetOnSpawn = false
 
-	-- ปุ่ม Bank Hub
-	local toggleButton = Instance.new("TextButton")
-	toggleButton.Parent = gui
-	toggleButton.Size = UDim2.new(0, 80, 0, 30)
-	toggleButton.Position = UDim2.new(0, 100, 0, 100)
-	toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-	toggleButton.BackgroundTransparency = 0.3
-	toggleButton.Text = "Bank Hub"
-	toggleButton.TextColor3 = Color3.new(1, 1, 1)
-	toggleButton.Font = Enum.Font.GothamBold
-	toggleButton.TextSize = 16
-	toggleButton.Draggable = true
-	toggleButton.Active = true
-	toggleButton.AutoButtonColor = false
+    -- เมนูหลัก
+    local main = Instance.new("Frame")
+    main.Size = UDim2.new(0, 500, 0, 350)
+    main.Position = UDim2.new(0.5, -250, 0.5, -175)
+    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    main.BackgroundTransparency = 0.3
+    main.BorderSizePixel = 0
+    main.Parent = gui
+    main.ClipsDescendants = true
 
-	-- เมนูหลัก
-	local main = Instance.new("Frame")
-	main.Name = "MainSceen"
-	main.Size = UDim2.new(0, 500, 0, 350)
-	main.Position = UDim2.new(0.5, -250, 0.5, -175)
-	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	main.BackgroundTransparency = 0.3
-	main.BorderSizePixel = 0
-	main.Visible = true
-	main.Parent = gui
+    -- เส้นขอบขาวรอบกล่อง
+    local border = Instance.new("UIStroke", main)
+    border.Thickness = 2
+    border.Color = Color3.fromRGB(255, 255, 255)
 
-	-- เส้นกรอบ
-	local border = Instance.new("UIStroke", main)
-	border.Thickness = 2
-	border.Color = Color3.fromRGB(255, 255, 255)
+    -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Size = UDim2.new(0, 80, 0, 30)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    toggleButton.BackgroundTransparency = 0.2
+    toggleButton.Text = "Bank Hub"
+    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 16
+    toggleButton.ZIndex = 10
+    toggleButton.Parent = gui
 
-	-- Title Bar
-	local titleBar = Instance.new("TextLabel", main)
-	titleBar.Size = UDim2.new(1, 0, 0, 35)
-	titleBar.Position = UDim2.new(0, 0, 0, 0)
-	titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	titleBar.BackgroundTransparency = 0.2
-	titleBar.Text = title
-	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-	titleBar.Font = Enum.Font.GothamBold
-	titleBar.TextSize = 20
-	titleBar.Active = true
+    -- Title bar (ใช้ลาก)
+    local titleBar = Instance.new("TextLabel")
+    titleBar.Size = UDim2.new(1, 0, 0, 35)
+    titleBar.Position = UDim2.new(0, 0, 0, 0)
+    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleBar.BackgroundTransparency = 0.2
+    titleBar.Text = title
+    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleBar.Font = Enum.Font.GothamBold
+    titleBar.TextSize = 20
+    titleBar.Parent = main
+    titleBar.Active = true
 
-	-- Dragging Menu Logic
-	local dragging = false
-	local dragStart, startPos
+    -- Layouts
+    local tabButtons = Instance.new("Frame", main)
+    tabButtons.Size = UDim2.new(0, 120, 1, -35)
+    tabButtons.Position = UDim2.new(0, 0, 0, 35)
+    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    tabButtons.BackgroundTransparency = 0.3
 
-	titleBar.InputBegan:Connect(function(input)
-		if input.UserInputType == Enum.UserInputType.MouseButton1 then
-			dragging = true
-			dragStart = input.Position
-			startPos = main.Position
-			input.Changed:Connect(function()
-				if input.UserInputState == Enum.UserInputState.End then
-					dragging = false
-				end
-			end)
-		end
-	end)
+    local tabLayout = Instance.new("UIListLayout", tabButtons)
+    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    tabLayout.Padding = UDim.new(0, 5)
 
-	UserInputService.InputChanged:Connect(function(input)
-		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-			local delta = input.Position - dragStart
-			main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-	end)
+    local pages = Instance.new("Frame", main)
+    pages.Size = UDim2.new(1, -130, 1, -45)
+    pages.Position = UDim2.new(0, 130, 0, 40)
+    pages.BackgroundTransparency = 1
 
-	-- เมนูซ้าย
-	local tabButtons = Instance.new("Frame", main)
-	tabButtons.Size = UDim2.new(0, 120, 1, -35)
-	tabButtons.Position = UDim2.new(0, 0, 0, 35)
-	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	tabButtons.BackgroundTransparency = 0.3
+    -- Dragging Menu by titleBar (ลากเมนู)
+    local dragging, dragStart, startPos
+    titleBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = main.Position
+        end
+    end)
+    titleBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
 
-	local tabLayout = Instance.new("UIListLayout", tabButtons)
-	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-	tabLayout.Padding = UDim.new(0, 5)
+    -- ตำแหน่งปุ่มติดซ้ายบนเมนูเสมอ
+    RunService.RenderStepped:Connect(function()
+        toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X - 85, 0, main.AbsolutePosition.Y)
+    end)
 
-	local pages = Instance.new("Frame", main)
-	pages.Size = UDim2.new(1, -130, 1, -45)
-	pages.Position = UDim2.new(0, 130, 0, 40)
-	pages.BackgroundTransparency = 1
+    -- Toggle ปิด/เปิดเมนูแบบมีแอนิเมชัน
+    local isOpen = true
+    local fullSize = main.Size
+    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
-	-- ตำแหน่งปุ่มตามเมนู
-	RunService.RenderStepped:Connect(function()
-		if main.Visible then
-			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
-		end
-	end)
-
-	-- Toggle Animation
-	local isOpen = true
-	local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
-
-	toggleButton.MouseButton1Click:Connect(function()
-		if isOpen then
-			local tween = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
-			tween:Play()
-			tween.Completed:Once(function()
-				main.Visible = false
-			end)
-		else
-			main.Visible = true
-			main.Size = UDim2.new(0, 0, 0, 0)
-			local tween = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 500, 0, 350)})
-			tween:Play()
-		end
-		isOpen = not isOpen
-	end)
+    toggleButton.MouseButton1Click:Connect(function()
+        if isOpen then
+            local shrink = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
+            shrink:Play()
+            shrink.Completed:Once(function()
+                main.Visible = false
+                main.Size = fullSize
+            end)
+        else
+            main.Visible = true
+            main.Size = UDim2.new(0, 0, 0, 0)
+            TweenService:Create(main, tweenInfo, {Size = fullSize}):Play()
+        end
+        isOpen = not isOpen
+    end)
 
    local tabs = {}
 
