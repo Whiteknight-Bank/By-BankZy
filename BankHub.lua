@@ -53,8 +53,9 @@ body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
 • New!! Fix Auto Death Mob
-• New!! Fix Button Close Menu
+• New!! Fix Menu
 • New!! Fix Reroll Affinities 2.0
+• New!! Fix God Mode Enemies
 • Coming Soon . . .
 ]])
 body.Parent = frame
