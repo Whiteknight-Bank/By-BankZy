@@ -59,7 +59,7 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://10511856020" -- ✅ ID ที่ถูกต้อง
+local imageId = "rbxassetid://https://76680615618506" -- ✅ ID ที่ถูกต้อง
 
 local CoreGui = game:GetService("CoreGui")
 
