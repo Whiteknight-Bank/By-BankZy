@@ -1830,8 +1830,64 @@ end)
 
 page8:Label("┇ Function Auto Affinities 2.0 ┇")
 
-page8:Toggle("Auto Reroll 2.0 (Left)", false, function(ndmg)
-    _G.nodmgwater = ndmg
+local isRunning1 = false
+local task1Thread
+
+page8:Toggle("Auto Reroll Affinity 2.0 (Devil Fruit 1)", false, function(rol)
+    isRunning1 = rol
+
+    if isRunning1 then
+        task1Thread = task.spawn(function()
+            while isRunning1 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT1
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
+                    isRunning1 = false
+                    break
+                end
+
+                local args1 = {
+                    [1] = "DFT1",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense1 == 2 then args1[2] = 0/0 end
+                if AffMelee1 == 2 then args1[3] = 0/0 end
+                if AffSniper1 == 2 then args1[4] = 0/0 end
+                if AffSword1 == 2 then args1[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 page8:Toggle("Auto Reroll 2.0 (Right)", false, function(ndmg)
