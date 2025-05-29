@@ -25,6 +25,7 @@ end
     local corner = Instance.new("UICorner", main)
     corner.CornerRadius = UDim.new(0, 12)
 
+local CoreGui = game:GetService("CoreGui")
 local existingBtn = CoreGui:FindFirstChild("BankHubToggle")
 if existingBtn then
     existingBtn:Destroy()
@@ -82,11 +83,10 @@ game:GetService("UserInputService").InputChanged:Connect(function(input)
 		)
 	end
 end)
-	
--- เส้นขอบสีขาว
-local stroke = Instance.new("UIStroke", toggleButton)
-stroke.Thickness = 1
-stroke.Color = Color3.fromRGB(255, 255, 255)
+
+-- ทำให้เปิด/ปิด UI หลักได้
+local mainUI = CoreGui:FindFirstChild("redui") and CoreGui.redui:FindFirstChild("MainSceen")
+
 
 toggleButton.MouseButton1Click:Connect(function()
 	main.Visible = not main.Visible
