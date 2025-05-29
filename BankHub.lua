@@ -849,21 +849,18 @@ page2:Toggle("Auto Death Mob", false, function(dthh)
 end)
 
 spawn(function()
-	while wait(0.1) do
-		if not _G.autodie then break end
-		pcall(function()
-			for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-				if enemy:IsA("Model") then
-					for _, obj in pairs(enemy:GetChildren()) do
-						if obj:IsA("Humanoid") and obj.Health > 0 then
-							obj.Health = 0
-							print("💀 ฆ่ามอน:", enemy.Name)
-						end
-					end
-				end
-			end
-		end)
-	end
+    while wait() do
+        if _G.autodie then 
+	pcall(function()
+            for _,v in pairs(workspace.Enemies:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
 end)
 
 page2:Toggle("Auto Death Kaizu' Boss (Coming Soon)", false, function(befrm)
