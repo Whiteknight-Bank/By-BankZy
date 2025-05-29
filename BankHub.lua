@@ -28,7 +28,7 @@ TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.Ea
 -- ข้อความ "Loading" (ต่ำลงมา)
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0, 30)
-title.Position = UDim2.new(0, 0, 0.20, 0)
+title.Position = UDim2.new(0, 0, 0.37, 0)
 title.BackgroundTransparency = 1
 title.Text = "Loading"
 title.Font = Enum.Font.GothamBold
