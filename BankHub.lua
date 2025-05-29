@@ -52,15 +52,15 @@ body.Font = Enum.Font.SourceSansBold
 body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
-• New!! Fix Auto Death Mob
-• New!! Remove Buso&Add Auto Buso Haki in Auto Farm All!!
-• New!! Fix Reroll Affinities 2.0
-• New!! Fix God Mode Enemies
+• New!! Fix Menu Loading
+• New!! Add Auto Buso Haki in Auto Farm All!!
+• 
+• 
 • Coming Soon . . .
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://1234567890" -- เปลี่ยนเป็นรูปคุณ
+local imageId = "rbxassetid://105166874543574" -- เปลี่ยนเป็นรูปคุณ
 
 local CoreGui = game:GetService("CoreGui")
 
