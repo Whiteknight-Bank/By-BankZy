@@ -1,3 +1,64 @@
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "UpdatePopup"
+gui.ResetOnSpawn = false
+gui.Parent = player:WaitForChild("PlayerGui")
+
+-- กล่องหลัก
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.new(0, 400, 0, 250)
+frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
+
+-- ปุ่มปิด
+local close = Instance.new("TextButton")
+close.Size = UDim2.new(0, 30, 0, 30)
+close.Position = UDim2.new(1, -35, 0, 5)
+close.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+close.Text = "X"
+close.Font = Enum.Font.SourceSansBold
+close.TextSize = 18
+close.TextColor3 = Color3.fromRGB(255, 255, 255)
+close.Parent = frame
+close.MouseButton1Click:Connect(function()
+	frame.Visible = false
+end)
+
+-- ข้อความหัวเรื่อง NEW UPDATE
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "NEW UPDATE"
+title.TextColor3 = Color3.fromRGB(255, 255, 0)
+title.Font = Enum.Font.SourceSansBold
+title.TextScaled = true
+title.Parent = frame
+
+-- ข้อความหลายบรรทัด
+local body = Instance.new("TextLabel")
+body.Size = UDim2.new(1, -20, 1, -60)
+body.Position = UDim2.new(0, 10, 0, 50)
+body.BackgroundTransparency = 1
+body.TextWrapped = true
+body.TextYAlignment = Enum.TextYAlignment.Top
+body.Font = Enum.Font.SourceSansBold
+body.TextColor3 = Color3.new(1, 1, 1)
+body.TextScaled = true
+body.Text = string.upper([[
+THIS IS A MULTILINE
+• Chnage The Menu Looks Great More
+• Coming Soon . . .
+]])
+body.Parent = frame
+
+
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
