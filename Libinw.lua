@@ -25,23 +25,64 @@ end
     local corner = Instance.new("UICorner", main)
     corner.CornerRadius = UDim.new(0, 12)
 
-   -- ปุ่มเปิด/ปิด UI อยู่นอกเมนูหลัก
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "ToggleUI"
-toggleButton.Parent = gui -- ให้อยู่ใน gui ไม่ใช่ใน main
-toggleButton.Size = UDim2.new(0, 110, 0, 35)
-toggleButton.Position = UDim2.new(0, 10, 0, 10) -- มุมซ้ายบน
-toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-toggleButton.Text = "Bank Hub"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.SourceSansBold
-toggleButton.TextSize = 18
-toggleButton.ZIndex = 9999
+local existingBtn = CoreGui:FindFirstChild("BankHubToggle")
+if existingBtn then
+    existingBtn:Destroy()
+end
 
--- มุมโค้ง
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "BankHubToggle"
+toggleButton.Parent = CoreGui
+toggleButton.Size = UDim2.new(0, 120, 0, 35)
+toggleButton.Position = UDim2.new(0, 10, 0.5, -20)
+toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleButton.Text = "BANK HUB"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 16
+toggleButton.TextWrapped = true
+toggleButton.BorderSizePixel = 2
+toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.AutoButtonColor = true
+
 local corner = Instance.new("UICorner", toggleButton)
 corner.CornerRadius = UDim.new(0, 10)
 
+-- ทำให้ลากได้
+local dragToggle = false
+local dragInput, mousePos, framePos
+
+toggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragToggle = true
+		mousePos = input.Position
+		framePos = toggleButton.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragToggle = false
+			end
+		end)
+	end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement then
+		dragInput = input
+	end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragToggle then
+		local delta = input.Position - mousePos
+		toggleButton.Position = UDim2.new(
+			framePos.X.Scale,
+			framePos.X.Offset + delta.X,
+			framePos.Y.Scale,
+			framePos.Y.Offset + delta.Y
+		)
+	end
+end)
+	
 -- เส้นขอบสีขาว
 local stroke = Instance.new("UIStroke", toggleButton)
 stroke.Thickness = 1
