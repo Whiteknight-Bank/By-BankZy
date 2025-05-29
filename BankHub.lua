@@ -60,85 +60,80 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local player = game.Players.LocalPlayer
-local playerGui = player:WaitForChild("PlayerGui")
+--👇 ใส่ ID ภาพตรงนี้ (ImageId ต้องอยู่ในรูปแบบ rbxassetid://ID)
+local imageId = "rbxassetid://1234567890" -- เปลี่ยน ID ตรงนี้ตามรูปที่คุณต้องการ
 
--- สร้างหน้าจอโหลด
-local loadingScreen = Instance.new("ScreenGui", playerGui)
-loadingScreen.Name = "LoadingScreen"
-loadingScreen.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-loadingScreen.ResetOnSpawn = false
+local CoreGui = game:GetService("CoreGui")
 
--- กล่องโหลด
-local frame = Instance.new("Frame", loadingScreen)
-frame.Size = UDim2.new(0, 300, 0, 120)
-frame.Position = UDim2.new(1, -320, 1, -140) -- มุมขวาล่าง
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.AnchorPoint = Vector2.new(0, 0)
-frame.BackgroundTransparency = 0.2
-frame.ClipsDescendants = true
-frame.Active = true
-frame.Draggable = false
-frame:TweenPosition(UDim2.new(1, -320, 1, -140), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5)
+-- ถ้ามีซ้ำ ลบก่อน
+if CoreGui:FindFirstChild("LoadingScreen") then
+    CoreGui:FindFirstChild("LoadingScreen"):Destroy()
+end
 
--- ทำให้มุมโค้ง
-local corner = Instance.new("UICorner", frame)
-corner.CornerRadius = UDim.new(0, 12)
+local ScreenGui = Instance.new("ScreenGui", CoreGui)
+ScreenGui.Name = "LoadingScreen"
 
--- ชื่อหัว
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 30)
+local mainFrame = Instance.new("Frame", ScreenGui)
+mainFrame.Size = UDim2.new(0, 400, 0, 350)
+mainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
+
+-- ข้อความบนสุด
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0.15, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "LOADING . . . BANK HUB"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Text = "BANK HUB"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 18
-title.TextYAlignment = Enum.TextYAlignment.Center
+title.TextScaled = true
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- แถบเปอร์เซ็นต์
-local percentLabel = Instance.new("TextLabel", frame)
-percentLabel.Size = UDim2.new(1, 0, 0, 50)
-percentLabel.Position = UDim2.new(0, 0, 0.5, -10)
+-- รูปภาพตรงกลาง
+local image = Instance.new("ImageLabel", mainFrame)
+image.Size = UDim2.new(0.7, 0, 0.5, 0)
+image.Position = UDim2.new(0.15, 0, 0.2, 0)
+image.BackgroundTransparency = 1
+image.Image = imageId
+
+-- หลอดโหลดพื้นหลัง
+local barBg = Instance.new("Frame", mainFrame)
+barBg.Size = UDim2.new(0.8, 0, 0.08, 0)
+barBg.Position = UDim2.new(0.1, 0, 0.8, 0)
+barBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+barBg.BorderSizePixel = 0
+Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 8)
+
+-- หลอดโหลดจริง
+local bar = Instance.new("Frame", barBg)
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+bar.BorderSizePixel = 0
+Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 8)
+
+-- เปอร์เซ็นต์
+local percentLabel = Instance.new("TextLabel", mainFrame)
+percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
+percentLabel.Position = UDim2.new(0, 0, 0.9, 0)
 percentLabel.BackgroundTransparency = 1
 percentLabel.Text = "0%"
-percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 percentLabel.Font = Enum.Font.GothamBold
-percentLabel.TextSize = 32
-percentLabel.TextStrokeTransparency = 0.8
+percentLabel.TextScaled = true
+percentLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 
--- แถบโหลดพื้นหลัง
-local barBg = Instance.new("Frame", frame)
-barBg.Size = UDim2.new(1, -20, 0, 10)
-barBg.Position = UDim2.new(0, 10, 1, -20)
-barBg.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-barBg.BorderSizePixel = 0
-Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 6)
-
--- แถบโหลดจริง
-local barFill = Instance.new("Frame", barBg)
-barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-barFill.BorderSizePixel = 0
-Instance.new("UICorner", barFill).CornerRadius = UDim.new(0, 6)
-
--- แอนิเมชันโหลด
+-- โหลด
 task.spawn(function()
-	for i = 0, 100 do
+	for i = 1, 100 do
+		bar.Size = UDim2.new(i / 100, 0, 1, 0)
 		percentLabel.Text = i .. "%"
-		barFill:TweenSize(UDim2.new(i/100, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.03)
-		wait(0.03)
+		wait(0.02)
 	end
 
-	-- ซ่อนหน้าจอโหลดเมื่อเสร็จ
-	wait(0.2)
-	loadingScreen:Destroy()
+	-- ลบหน้าโหลด
+	ScreenGui:Destroy()
 
-	-- เรียก UI หลักของคุณที่นี่
-	-- เช่น require() หรือ loadstring()
-end)
-
-wait(5)
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
@@ -1955,6 +1950,8 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
         end)
     end
 end)
+
+	end)
 
 local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
