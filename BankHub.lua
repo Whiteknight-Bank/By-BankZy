@@ -58,7 +58,7 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://10511856020" -- เปลี่ยนเป็นรูปคุณ
+local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 
 if CoreGui:FindFirstChild("LoadingScreen") then
@@ -70,12 +70,17 @@ ScreenGui.Name = "LoadingScreen"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 
-local mainFrame = Instance.new("Frame", ScreenGui)
-mainFrame.Size = UDim2.new(0, 400, 0, 300)
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 0, 0, 0)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.Parent = ScreenGui
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
+
+TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 400, 0, 300)
+}):Play()
 
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0, 40)
@@ -86,16 +91,9 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 28
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- ✅ แก้ตรงนี้: ตัวแปรชื่อ "image"
-local image = Instance.new("ImageLabel", mainFrame)
-image.Size = UDim2.new(0, 120, 0, 120)
-image.Position = UDim2.new(0.5, -60, 0.35, -60)
-image.BackgroundTransparency = 1
-image.Image = imageId
-
 local barBg = Instance.new("Frame", mainFrame)
 barBg.Size = UDim2.new(0.8, 0, 0, 6)
-barBg.Position = UDim2.new(0.1, 0, 0.75, 0)
+barBg.Position = UDim2.new(0.1, 0, 0.65, 0)
 barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 barBg.BorderSizePixel = 0
 Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
@@ -108,15 +106,16 @@ Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
 local percentLabel = Instance.new("TextLabel", mainFrame)
 percentLabel.Size = UDim2.new(1, 0, 0, 30)
-percentLabel.Position = UDim2.new(0, 0, 0.8, 0)
+percentLabel.Position = UDim2.new(0, 0, 0.75, 0)
 percentLabel.BackgroundTransparency = 1
 percentLabel.Text = "0%"
 percentLabel.Font = Enum.Font.GothamBold
 percentLabel.TextSize = 22
 percentLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
 
--- ✅ โหลดหลอดและรอให้ครบ 100% แล้วปิด
 task.spawn(function()
+	wait(0.4) -- รอ tween ก่อนเริ่มโหลด
+
 	for i = 1, 100 do
 		bar.Size = UDim2.new(i / 100, 0, 1, 0)
 		percentLabel.Text = i .. "%"
