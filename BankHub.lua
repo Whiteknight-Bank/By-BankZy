@@ -1,3 +1,79 @@
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+
+if CoreGui:FindFirstChild("LoadingScreen") then
+    CoreGui:FindFirstChild("LoadingScreen"):Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui", CoreGui)
+ScreenGui.Name = "LoadingScreen"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+
+-- กล่องหลัก
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 0, 0, 0) -- เริ่มเล็ก
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundTransparency = 0.2 -- โปร่งใสนิดนึง
+mainFrame.Parent = ScreenGui
+Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
+
+-- แอนิเมชันขยาย
+TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 400, 0, 160)
+}):Play()
+
+-- ข้อความ "Loading Bank Hub"
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundTransparency = 1
+title.Text = "Loading Bank Hub"
+title.Font = Enum.Font.GothamBold
+title.TextSize = 26
+title.TextColor3 = Color3.new(1, 1, 1)
+
+-- หลอดโหลดพื้นหลัง (สีขาวบาง)
+local barBg = Instance.new("Frame", mainFrame)
+barBg.Size = UDim2.new(0.8, 0, 0, 6)
+barBg.Position = UDim2.new(0.1, 0, 0.55, 0)
+barBg.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+barBg.BackgroundTransparency = 0.8
+barBg.BorderSizePixel = 0
+Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
+
+-- หลอดโหลดจริง (สีเขียว)
+local bar = Instance.new("Frame", barBg)
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+bar.BorderSizePixel = 0
+Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
+
+-- ตัวเลข %
+local percentLabel = Instance.new("TextLabel", mainFrame)
+percentLabel.Size = UDim2.new(1, 0, 0, 30)
+percentLabel.Position = UDim2.new(0, 0, 0.65, 0)
+percentLabel.BackgroundTransparency = 1
+percentLabel.Text = "0%"
+percentLabel.Font = Enum.Font.GothamBold
+percentLabel.TextSize = 22
+percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- เริ่มโหลด
+task.spawn(function()
+	wait(0.4) -- รอแอนิเมชันก่อน
+
+	for i = 1, 100 do
+		bar.Size = UDim2.new(i / 100, 0, 1, 0)
+		percentLabel.Text = i .. "%"
+		wait(0.02)
+	end
+
+	wait(0.5)
+	ScreenGui:Destroy()
+
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "UpdatePopup"
@@ -57,83 +133,7 @@ body.Text = string.upper([[
 • Coming Soon . . .
 ]])
 body.Parent = frame
-
-local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
-
-if CoreGui:FindFirstChild("LoadingScreen") then
-    CoreGui:FindFirstChild("LoadingScreen"):Destroy()
-end
-
-local ScreenGui = Instance.new("ScreenGui", CoreGui)
-ScreenGui.Name = "LoadingScreen"
-ScreenGui.ResetOnSpawn = false
-ScreenGui.IgnoreGuiInset = true
-
--- กล่องหลัก
-local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 0, 0, 0) -- เริ่มเล็ก
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.BackgroundTransparency = 0.2 -- โปร่งใสนิดนึง
-mainFrame.Parent = ScreenGui
-Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
-
--- แอนิเมชันขยาย
-TweenService:Create(mainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-    Size = UDim2.new(0, 400, 0, 160)
-}):Play()
-
--- ข้อความ "Loading Bank Hub"
-local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0, 50)
-title.Position = UDim2.new(0, 0, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "Loading Bank Hub"
-title.Font = Enum.Font.GothamBold
-title.TextSize = 26
-title.TextColor3 = Color3.new(1, 1, 1)
-
--- หลอดโหลดพื้นหลัง (สีขาวบาง)
-local barBg = Instance.new("Frame", mainFrame)
-barBg.Size = UDim2.new(0.8, 0, 0, 6)
-barBg.Position = UDim2.new(0.1, 0, 0.55, 0)
-barBg.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-barBg.BackgroundTransparency = 0.6
-barBg.BorderSizePixel = 0
-Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
-
--- หลอดโหลดจริง (สีเขียว)
-local bar = Instance.new("Frame", barBg)
-bar.Size = UDim2.new(0, 0, 1, 0)
-bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-bar.BorderSizePixel = 0
-Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
-
--- ตัวเลข %
-local percentLabel = Instance.new("TextLabel", mainFrame)
-percentLabel.Size = UDim2.new(1, 0, 0, 30)
-percentLabel.Position = UDim2.new(0, 0, 0.65, 0)
-percentLabel.BackgroundTransparency = 1
-percentLabel.Text = "0%"
-percentLabel.Font = Enum.Font.GothamBold
-percentLabel.TextSize = 22
-percentLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
-
--- เริ่มโหลด
-task.spawn(function()
-	wait(0.4) -- รอแอนิเมชันก่อน
-
-	for i = 1, 100 do
-		bar.Size = UDim2.new(i / 100, 0, 1, 0)
-		percentLabel.Text = i .. "%"
-		wait(0.02)
-	end
-
-	wait(0.5)
-	ScreenGui:Destroy()
-
+		
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
