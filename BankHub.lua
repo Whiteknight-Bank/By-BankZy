@@ -1220,18 +1220,18 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-page4:Toggle("God Mode For Enemies (Not Sure) ", false, function(gxd)
+page4:Toggle("God Mode For Enemies", false, function(gxd)
     _G.god = gxd
 end)
 
 spawn(function()
-    while wait(2) do
+    while wait() do
         if _G.god then 
 	pcall(function()
             for _,v in pairs(workspace.Enemies:GetDescendants()) do
                 if v:IsA("Model") and 
 		v:FindFirstChild("Torso") then
-                    v.TouchInterest:Destroy()
+                    v:Destroy("TouchInterest")
                 end
             end
         end) 
@@ -1350,18 +1350,18 @@ local Tab5 = Window:Taps("Island")
 local page5 = Tab5:newpage()
 
 page5:Label("┇ Islands ┇")
-page5:Dropdown("Select Islands", {"Grassy", "Kaizu's Island", "Snowy Mountains", "Pursuer's Island", "Bar", "Cliffs", "Wnidmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar", ""}, function(t)
+page5:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
 page5:Button("Click to Tp" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
-      elseif getgenv().tpisland == "Kaizu's Island" then
+      elseif getgenv().tpisland == "Kaizu Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1526.0230712891, 364.99990844727, 10510.020507812)
       elseif getgenv().tpisland == "Snowy Mountains"  then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(6501, 408, -1261)
-      elseif getgenv().tpisland == "Pursuer's Island" then
+      elseif getgenv().tpisland == "Pursuer Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(4847, 570, -7143)
       elseif getgenv().tpisland == "Bar" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(1522, 260, 2188)
