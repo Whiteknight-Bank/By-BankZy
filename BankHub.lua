@@ -1744,7 +1744,6 @@ end)
 
 page8:Toggle("Anti Dmg Water", false, function(dmgg)
     _G.nodmgwater = dmgg
-create:Notifile("", "Start Anti " .. game.Players.LocalPlayer.Name .. " You Can Swim Now :)", 3)
 end)
 		
 spawn(function()
