@@ -16,30 +16,34 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
 
+    -- สร้างปุ่มเปิด/ปิดที่ลอยอยู่นอกเมนู
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Name = "ToggleMenu"
+    toggleButton.Parent = gui
+    toggleButton.Size = UDim2.new(0, 40, 0, 20)
+    toggleButton.Position = UDim2.new(0.5, -250 + 5, 0.5, -175 + 5) -- เริ่มที่มุมซ้ายบนของ main
+    toggleButton.BackgroundTransparency = 0.6
+    toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    toggleButton.Text = "✕"
+    toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 18
+    toggleButton.Active = true
+    toggleButton.Draggable = true
+
+    -- เมนูหลัก
     local main = Instance.new("Frame", gui)
     main.Name = "MainSceen"
     main.Size = UDim2.new(0, 500, 0, 350)
     main.Position = UDim2.new(0.5, -250, 0.5, -175)
     main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     main.Active = true
-    main.Draggable = true -- ✅ เปิดให้ลากได้โดยตรง
+    main.Draggable = true
 
     local mainBorder = Instance.new("UIStroke", main)
     mainBorder.Color = Color3.fromRGB(150, 0, 255)
     mainBorder.Thickness = 2
 
-    -- ✅ ปุ่มปิดอยู่ในมุมซ้ายของ main
-    local toggleButton = Instance.new("TextButton", main)
-    toggleButton.Name = "BankHubToggle"
-    toggleButton.Size = UDim2.new(0, 40, 0, 20)
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)
-    toggleButton.BackgroundTransparency = 1
-    toggleButton.Text = "✕"
-    toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-    toggleButton.Font = Enum.Font.GothamBold
-    toggleButton.TextSize = 18
-
-    -- ตำแหน่งล่าสุดไว้ใช้ตอนเปิดใหม่
     local lastPosition = main.Position
 
     toggleButton.MouseButton1Click:Connect(function()
@@ -47,12 +51,18 @@ function library:Win(title)
             lastPosition = main.Position
             main.Visible = false
         else
-            main.Position = lastPosition
+            main.Position = toggleButton.Position - UDim2.new(0, 5, 0, 5) -- ปรับกลับไปตำแหน่ง toggle
             main.Visible = true
         end
     end)
 
-    -- ✅ แถบชื่อด้านบน
+    -- ติดตามตำแหน่ง toggleButton เพื่อ sync กับ main ตอนเปิด
+    toggleButton:GetPropertyChangedSignal("Position"):Connect(function()
+        if not main.Visible then
+            lastPosition = toggleButton.Position - UDim2.new(0, 5, 0, 5)
+        end
+    end)
+
     local titleBar = Instance.new("TextLabel", main)
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
@@ -62,11 +72,6 @@ function library:Win(title)
     titleBar.Font = Enum.Font.SourceSansBold
     titleBar.TextSize = 20
 
-    local titleStroke = Instance.new("UIStroke", titleBar)
-    titleStroke.Color = Color3.fromRGB(150, 0, 255)
-    titleStroke.Thickness = 2
-
-    -- ✅ แถบปุ่มด้านซ้าย
     local tabButtons = Instance.new("Frame", main)
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
@@ -76,7 +81,6 @@ function library:Win(title)
     tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
     tabLayout.Padding = UDim.new(0, 5)
 
-    -- ✅ หน้าหลักด้านขวา
     local pages = Instance.new("Frame", main)
     pages.Size = UDim2.new(1, -130, 1, -45)
     pages.Position = UDim2.new(0, 130, 0, 40)
