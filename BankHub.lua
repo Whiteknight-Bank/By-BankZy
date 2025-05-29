@@ -54,11 +54,12 @@ body.TextScaled = true
 body.Text = string.upper([[
 • New!! Fix Menu Loading
 • New!! Add Auto Buso Haki in Auto Farm All!!
+• Fix Bug Menu
 • Coming Soon . . .
 ]])
 body.Parent = frame
 
-local imageId = "rbxassetid://105166874543574" -- เปลี่ยนเป็นรูปคุณ
+local imageId = "https://create.roblox.com/dashboard/creations/store/105166874543574/configure" -- เปลี่ยนเป็นรูปคุณ
 
 local CoreGui = game:GetService("CoreGui")
 
