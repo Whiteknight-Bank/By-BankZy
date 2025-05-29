@@ -142,7 +142,6 @@ function tabs:Taps(name)
                 pcall(callback)
             end
         end)
-    end
         
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
