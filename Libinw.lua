@@ -25,69 +25,24 @@ end
     local corner = Instance.new("UICorner", main)
     corner.CornerRadius = UDim.new(0, 12)
 
-local CoreGui = game:GetService("CoreGui")
-local existingBtn = CoreGui:FindFirstChild("BankHubToggle")
-if existingBtn then
-    existingBtn:Destroy()
-end
-
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
-toggleButton.Parent = CoreGui
+toggleButton.Parent = game.CoreGui:FindFirstChild("redui") or game.CoreGui
 toggleButton.Size = UDim2.new(0, 120, 0, 35)
 toggleButton.Position = UDim2.new(0, 10, 0.5, -20)
-toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- สีเทาเข้ม
 toggleButton.Text = "BANK HUB"
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Font = Enum.Font.GothamBold
 toggleButton.TextSize = 16
 toggleButton.TextWrapped = true
 toggleButton.BorderSizePixel = 2
-toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255) -- กรอบขาว
 toggleButton.AutoButtonColor = true
 
 local corner = Instance.new("UICorner", toggleButton)
 corner.CornerRadius = UDim.new(0, 10)
-
--- ทำให้ลากได้
-local dragToggle = false
-local dragInput, mousePos, framePos
-
-toggleButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragToggle = true
-		mousePos = input.Position
-		framePos = toggleButton.Position
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragToggle = false
-			end
-		end)
-	end
-end)
-
-toggleButton.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		dragInput = input
-	end
-end)
-
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-	if input == dragInput and dragToggle then
-		local delta = input.Position - mousePos
-		toggleButton.Position = UDim2.new(
-			framePos.X.Scale,
-			framePos.X.Offset + delta.X,
-			framePos.Y.Scale,
-			framePos.Y.Offset + delta.Y
-		)
-	end
-end)
-
--- ทำให้เปิด/ปิด UI หลักได้
-local mainUI = CoreGui:FindFirstChild("redui") and CoreGui.redui:FindFirstChild("MainSceen")
-
-
+	
 toggleButton.MouseButton1Click:Connect(function()
 	main.Visible = not main.Visible
 end)
