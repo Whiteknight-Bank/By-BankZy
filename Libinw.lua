@@ -8,7 +8,9 @@ if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
-   function library:Win(title)
+   local RunService = game:GetService("RunService")
+
+function library:Win(title)
 	local CoreGui = game:GetService("CoreGui")
 
 	if CoreGui:FindFirstChild("redui") then
@@ -24,52 +26,32 @@ end
 	main.Size = UDim2.new(0, 500, 0, 350)
 	main.Position = UDim2.new(0.5, -250, 0.5, -175)
 	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	main.BorderSizePixel = 3
+	main.BorderSizePixel = 2
 	main.BorderColor3 = Color3.fromRGB(170, 0, 255)
 	main.Active = true
 	main.Draggable = true
 	main.Visible = true
 
-	-- 🔴 ปุ่มเปิด/ปิด อยู่บนมุมซ้ายของ "main"
+	-- ปุ่มเปิด/ปิด ยึดมุมซ้ายบนของเมนูตลอดเวลา
 	local toggleButton = Instance.new("TextButton")
-	toggleButton.Name = "BankHubToggle"
-	toggleButton.Parent = main -- อยู่ใน Frame หลัก
-	toggleButton.Size = UDim2.new(0, 25, 0, 25)
-	toggleButton.Position = UDim2.new(0, 5, 0, 5)
-	toggleButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-	toggleButton.BackgroundTransparency = 0.3
-	toggleButton.Text = "X"
+	toggleButton.Parent = gui
+	toggleButton.Size = UDim2.new(0, 60, 0, 25)
+	toggleButton.BackgroundTransparency = 1
+	toggleButton.Text = "☰"
 	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	toggleButton.Font = Enum.Font.GothamBold
 	toggleButton.TextSize = 16
-	toggleButton.BorderSizePixel = 1
-	toggleButton.BorderColor3 = Color3.fromRGB(255, 255, 255)
-	toggleButton.ZIndex = 2
+	toggleButton.ZIndex = 100
 
-	-- สร้างปุ่มเล็กใสไว้หน้าจอเสมอ สำหรับเปิดเมนู
-	local reopenButton = Instance.new("TextButton")
-	reopenButton.Name = "ReopenButton"
-	reopenButton.Parent = gui
-	reopenButton.Size = UDim2.new(0, 60, 0, 25)
-	reopenButton.Position = UDim2.new(0, 10, 0, 10)
-	reopenButton.BackgroundColor3 = Color3.fromRGB(80, 0, 120)
-	reopenButton.BackgroundTransparency = 0.4
-	reopenButton.Text = "เปิดเมนู"
-	reopenButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-	reopenButton.Font = Enum.Font.Gotham
-	reopenButton.TextSize = 14
-	reopenButton.BorderSizePixel = 1
-	reopenButton.BorderColor3 = Color3.fromRGB(200, 200, 255)
-	reopenButton.Visible = false -- ซ่อนไว้ก่อน
-
-	toggleButton.MouseButton1Click:Connect(function()
-		main.Visible = false
-		reopenButton.Visible = true
+	-- อัปเดตตำแหน่งปุ่มให้ตามเมนู
+	RunService.RenderStepped:Connect(function()
+		if main and main.Parent then
+			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
+		end
 	end)
 
-	reopenButton.MouseButton1Click:Connect(function()
-		main.Visible = true
-		reopenButton.Visible = false
+	toggleButton.MouseButton1Click:Connect(function()
+		main.Visible = not main.Visible
 	end)
 
 	-- title bar
@@ -82,10 +64,13 @@ end
 	titleBar.Font = Enum.Font.SourceSansBold
 	titleBar.TextSize = 20
 
+	-- เมนูด้านซ้าย
 	local tabButtons = Instance.new("Frame", main)
 	tabButtons.Size = UDim2.new(0, 120, 1, -35)
 	tabButtons.Position = UDim2.new(0, 0, 0, 35)
 	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	tabButtons.BorderSizePixel = 2
+	tabButtons.BorderColor3 = Color3.fromRGB(170, 0, 255)
 
 	local tabLayout = Instance.new("UIListLayout", tabButtons)
 	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
