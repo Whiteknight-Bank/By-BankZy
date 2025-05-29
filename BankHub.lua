@@ -846,8 +846,27 @@ local page2 = Tab2:newpage()
 page2:Label("┇ Function Enemies ┇")
 page2:Section("↓ Is Coming Soon . . . ↓")
 
-page2:Toggle("Auto Death Mob (Coming Soon)", false, function(dthh)
+page2:Toggle("Auto Death Mob (In Test)", false, function(dthh)
     _G.autodie = dthh
+end)
+
+spawn(function()
+	while wait(0.1) do
+		if not _G.autodie then break end
+		pcall(function()
+			workspace.Enemies.DescendantAdded:Connect(function(obj)
+				if not _G.autodie then return end
+
+				task.delay(0.1, function()
+					local humanoid = obj:FindFirstChildOfClass("Humanoid")
+					if humanoid and humanoid.Health > 0 then
+						humanoid.Health = 0
+						print("💀 ฆ่ามอนทันที:", humanoid:GetFullName())
+					end
+				end)
+			end)
+		end)
+	end
 end)
 
 page2:Toggle("Auto Death Kaizu' Boss (Coming Soon)", false, function(befrm)
