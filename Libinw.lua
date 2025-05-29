@@ -22,9 +22,9 @@ function library:Win(title)
     toggleButton.Parent = gui
     toggleButton.Size = UDim2.new(0, 40, 0, 20)
     toggleButton.Position = UDim2.new(0.5, -250 + 5, 0.5, -175 + 5) -- เริ่มที่มุมซ้ายบนของ main
-    toggleButton.BackgroundTransparency = 0.6
+    toggleButton.BackgroundTransparency = 1
     toggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    toggleButton.Text = "✕"
+    toggleButton.Text = "X"
     toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
     toggleButton.Font = Enum.Font.GothamBold
     toggleButton.TextSize = 18
