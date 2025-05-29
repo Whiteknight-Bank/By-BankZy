@@ -15,6 +15,7 @@ end
     gui.Name = "redui"
     gui.ResetOnSpawn = false
 
+    -- Main menu
     local main = Instance.new("Frame", gui)
     main.Name = "MainSceen"
     main.Size = UDim2.new(0, 500, 0, 350)
@@ -27,36 +28,47 @@ end
     mainBorder.Color = Color3.fromRGB(150, 0, 255)
     mainBorder.Thickness = 2
 
+    -- ปุ่มปิด/เปิดที่ลอยนอก main
     local toggleButton = Instance.new("TextButton")
     toggleButton.Name = "BankHubToggle"
-    toggleButton.Parent = main
+    toggleButton.Parent = gui
     toggleButton.Size = UDim2.new(0, 40, 0, 20)
-    toggleButton.Position = UDim2.new(0, 5, 0, 5)
     toggleButton.BackgroundTransparency = 1
-    toggleButton.Text = "--"
+    toggleButton.Text = "✕"
     toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-    toggleButton.Font = Enum.Font.Gotham -- 👈 ไม่ใช้ GothamBold
-    toggleButton.TextSize = 16
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 18
+    toggleButton.ZIndex = 10
 
-    local dragFrame = Instance.new("Frame")
-    dragFrame.Size = main.Size
-    dragFrame.Position = main.Position
-    dragFrame.BackgroundTransparency = 1
-    dragFrame.Visible = false
-    dragFrame.Active = true
-    dragFrame.Parent = gui
+    -- ตำแหน่งปัจจุบันของเมนู
+    local lastPosition = main.Position
 
+    -- ตัวแปรลาก
     local dragging = false
     local offset
 
-    dragFrame.InputBegan:Connect(function(input)
+    -- อัปเดตตำแหน่ง toggleButton ให้ตาม main เสมอ
+    local function updateTogglePosition()
+        toggleButton.Position = UDim2.new(0, main.Position.X.Offset + 5, 0, main.Position.Y.Offset + 5)
+    end
+
+    -- เชื่อมการอัปเดตตำแหน่ง
+    main:GetPropertyChangedSignal("Position"):Connect(function()
+        lastPosition = main.Position
+        updateTogglePosition()
+    end)
+
+    updateTogglePosition()
+
+    -- ระบบลาก toggleButton เพื่อย้ายทั้งเมนู
+    toggleButton.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = true
-            offset = Vector2.new(input.Position.X - dragFrame.AbsolutePosition.X, input.Position.Y - dragFrame.AbsolutePosition.Y)
+            offset = Vector2.new(input.Position.X - toggleButton.AbsolutePosition.X, input.Position.Y - toggleButton.AbsolutePosition.Y)
         end
     end)
 
-    dragFrame.InputEnded:Connect(function(input)
+    toggleButton.InputEnded:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
             dragging = false
         end
@@ -64,17 +76,17 @@ end
 
     game:GetService("UserInputService").InputChanged:Connect(function(input)
         if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local newPos = UDim2.new(0, input.Position.X - offset.X, 0, input.Position.Y - offset.Y)
-            main.Position = newPos
-            dragFrame.Position = newPos
+            local newX = input.Position.X - offset.X
+            local newY = input.Position.Y - offset.Y
+            main.Position = UDim2.new(0, newX - 5, 0, newY - 5)
         end
     end)
 
     toggleButton.MouseButton1Click:Connect(function()
         main.Visible = not main.Visible
-        dragFrame.Visible = not main.Visible
     end)
 
+    -- แถบชื่อ
     local titleBar = Instance.new("TextLabel", main)
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
@@ -84,11 +96,11 @@ end
     titleBar.Font = Enum.Font.SourceSansBold
     titleBar.TextSize = 20
 
-    -- ✅ เพิ่มกรอบสีม่วงให้ titleBar
-    local titleBorder = Instance.new("UIStroke", titleBar)
-    titleBorder.Color = Color3.fromRGB(150, 0, 255)
-    titleBorder.Thickness = 2
+    local titleStroke = Instance.new("UIStroke", titleBar)
+    titleStroke.Color = Color3.fromRGB(150, 0, 255)
+    titleStroke.Thickness = 2
 
+    -- ปุ่มด้านข้าง
     local tabButtons = Instance.new("Frame", main)
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
