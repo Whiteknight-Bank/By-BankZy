@@ -12,13 +12,12 @@ function library:Win(title)
 	local CoreGui = game:GetService("CoreGui")
 	local TweenService = game:GetService("TweenService")
 	local RunService = game:GetService("RunService")
+	local UserInputService = game:GetService("UserInputService")
 
-	-- ลบ GUI เดิมก่อน
 	if CoreGui:FindFirstChild("redui") then
 		CoreGui:FindFirstChild("redui"):Destroy()
 	end
 
-	-- สร้าง ScreenGui
 	local gui = Instance.new("ScreenGui", CoreGui)
 	gui.Name = "redui"
 	gui.ResetOnSpawn = false
@@ -27,7 +26,7 @@ function library:Win(title)
 	local toggleButton = Instance.new("TextButton")
 	toggleButton.Parent = gui
 	toggleButton.Size = UDim2.new(0, 80, 0, 30)
-	toggleButton.Position = UDim2.new(0, 100, 0, 100) -- เริ่มต้น
+	toggleButton.Position = UDim2.new(0, 100, 0, 100)
 	toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	toggleButton.BackgroundTransparency = 0.3
 	toggleButton.Text = "Bank Hub"
@@ -49,7 +48,7 @@ function library:Win(title)
 	main.Visible = true
 	main.Parent = gui
 
-	-- เส้นกรอบนอก
+	-- เส้นกรอบ
 	local border = Instance.new("UIStroke", main)
 	border.Thickness = 2
 	border.Color = Color3.fromRGB(255, 255, 255)
@@ -64,6 +63,31 @@ function library:Win(title)
 	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
 	titleBar.Font = Enum.Font.GothamBold
 	titleBar.TextSize = 20
+	titleBar.Active = true
+
+	-- Dragging Menu Logic
+	local dragging = false
+	local dragStart, startPos
+
+	titleBar.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			dragStart = input.Position
+			startPos = main.Position
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local delta = input.Position - dragStart
+			main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+	end)
 
 	-- เมนูซ้าย
 	local tabButtons = Instance.new("Frame", main)
@@ -76,7 +100,6 @@ function library:Win(title)
 	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	tabLayout.Padding = UDim.new(0, 5)
 
-	-- หน้าหลัก
 	local pages = Instance.new("Frame", main)
 	pages.Size = UDim2.new(1, -130, 1, -45)
 	pages.Position = UDim2.new(0, 130, 0, 40)
@@ -89,7 +112,7 @@ function library:Win(title)
 		end
 	end)
 
-	-- Animation Toggle
+	-- Toggle Animation
 	local isOpen = true
 	local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Sine, Enum.EasingDirection.Out)
 
@@ -97,7 +120,7 @@ function library:Win(title)
 		if isOpen then
 			local tween = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
 			tween:Play()
-			tween.Completed:Connect(function()
+			tween.Completed:Once(function()
 				main.Visible = false
 			end)
 		else
