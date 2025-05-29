@@ -52,8 +52,8 @@ body.Font = Enum.Font.SourceSansBold
 body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
-• Add Auto Rumble in Farming
-• Chnage The Menu Looks Great More
+• Add Auto Rumble in Farming (Old)
+• Fix Button Close Menu New!!
 • Coming Soon . . .
 ]])
 body.Parent = frame
