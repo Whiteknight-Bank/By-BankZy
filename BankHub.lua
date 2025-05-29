@@ -52,7 +52,7 @@ body.Font = Enum.Font.SourceSansBold
 body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
-• Add Auto Rumble in Farming (Old)
+• New!! Fix Auto Death Mob
 • New!! Fix Button Close Menu
 • New!! Fix Reroll Affinities 2.0
 • Coming Soon . . .
