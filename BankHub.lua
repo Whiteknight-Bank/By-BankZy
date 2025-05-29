@@ -75,52 +75,52 @@ ScreenGui.IgnoreGuiInset = true
 
 local mainFrame = Instance.new("Frame", ScreenGui)
 mainFrame.Size = UDim2.new(0, 400, 0, 300)
-mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
 
 -- หัวข้อ
 local title = Instance.new("TextLabel", mainFrame)
-title.Size = UDim2.new(1, 0, 0.15, 0)
+title.Size = UDim2.new(1, 0, 0, 40)
 title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "BANK HUB"
 title.Font = Enum.Font.GothamBold
-title.TextScaled = true
+title.TextSize = 28
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- รูปภาพกลาง
+-- รูปกลาง
 local image = Instance.new("ImageLabel", mainFrame)
-image.Size = UDim2.new(0.7, 0, 0.45, 0)
-image.Position = UDim2.new(0.15, 0, 0.2, 0)
+image.Size = UDim2.new(0, 120, 0, 120)
+image.Position = UDim2.new(0.5, -60, 0.35, -60)
 image.BackgroundTransparency = 1
 image.Image = imageId
 
--- ✅ หลอดโหลดพื้นหลัง (บางลง)
+-- ✅ หลอดโหลดพื้นหลัง (บาง)
 local barBg = Instance.new("Frame", mainFrame)
-barBg.Size = UDim2.new(0.8, 0, 0.035, 0) -- ปรับความสูงให้บาง
-barBg.Position = UDim2.new(0.1, 0, 0.72, 0)
-barBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+barBg.Size = UDim2.new(0.8, 0, 0, 6) -- ความสูงแค่ 6 px (บาง)
+barBg.Position = UDim2.new(0.1, 0, 0.75, 0)
+barBg.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 barBg.BorderSizePixel = 0
 Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
 
 -- ✅ หลอดโหลดจริง
 local bar = Instance.new("Frame", barBg)
 bar.Size = UDim2.new(0, 0, 1, 0)
-bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+bar.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- สีเขียว
 bar.BorderSizePixel = 0
 Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
 -- เปอร์เซ็นต์
 local percentLabel = Instance.new("TextLabel", mainFrame)
-percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
+percentLabel.Size = UDim2.new(1, 0, 0, 30)
 percentLabel.Position = UDim2.new(0, 0, 0.8, 0)
 percentLabel.BackgroundTransparency = 1
 percentLabel.Text = "0%"
 percentLabel.Font = Enum.Font.GothamBold
-percentLabel.TextScaled = true
-percentLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+percentLabel.TextSize = 22
+percentLabel.TextColor3 = Color3.fromRGB(180, 255, 180)
 
 -- โหลด
 task.spawn(function()
