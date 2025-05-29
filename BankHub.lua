@@ -60,28 +60,27 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
---👇 ใส่ ID ภาพตรงนี้ (ImageId ต้องอยู่ในรูปแบบ rbxassetid://ID)
-local imageId = "rbxassetid://1234567890" -- เปลี่ยน ID ตรงนี้ตามรูปที่คุณต้องการ
+local imageId = "rbxassetid://1234567890" -- เปลี่ยนเป็นรูปคุณ
 
 local CoreGui = game:GetService("CoreGui")
 
--- ถ้ามีซ้ำ ลบก่อน
 if CoreGui:FindFirstChild("LoadingScreen") then
     CoreGui:FindFirstChild("LoadingScreen"):Destroy()
 end
 
 local ScreenGui = Instance.new("ScreenGui", CoreGui)
 ScreenGui.Name = "LoadingScreen"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
 
 local mainFrame = Instance.new("Frame", ScreenGui)
-mainFrame.Size = UDim2.new(0, 400, 0, 350)
-mainFrame.Position = UDim2.new(0.5, -200, 0.5, -175)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.Size = UDim2.new(0, 400, 0, 300)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
 
--- ข้อความบนสุด
+-- หัวข้อ
 local title = Instance.new("TextLabel", mainFrame)
 title.Size = UDim2.new(1, 0, 0.15, 0)
 title.Position = UDim2.new(0, 0, 0, 0)
@@ -91,32 +90,32 @@ title.Font = Enum.Font.GothamBold
 title.TextScaled = true
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- รูปภาพตรงกลาง
+-- รูปภาพกลาง
 local image = Instance.new("ImageLabel", mainFrame)
-image.Size = UDim2.new(0.7, 0, 0.5, 0)
+image.Size = UDim2.new(0.7, 0, 0.45, 0)
 image.Position = UDim2.new(0.15, 0, 0.2, 0)
 image.BackgroundTransparency = 1
 image.Image = imageId
 
--- หลอดโหลดพื้นหลัง
+-- ✅ หลอดโหลดพื้นหลัง (บางลง)
 local barBg = Instance.new("Frame", mainFrame)
-barBg.Size = UDim2.new(0.8, 0, 0.08, 0)
-barBg.Position = UDim2.new(0.1, 0, 0.8, 0)
+barBg.Size = UDim2.new(0.8, 0, 0.035, 0) -- ปรับความสูงให้บาง
+barBg.Position = UDim2.new(0.1, 0, 0.72, 0)
 barBg.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 barBg.BorderSizePixel = 0
-Instance.new("UICorner", barBg).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", barBg).CornerRadius = UDim.new(1, 0)
 
--- หลอดโหลดจริง
+-- ✅ หลอดโหลดจริง
 local bar = Instance.new("Frame", barBg)
 bar.Size = UDim2.new(0, 0, 1, 0)
 bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 bar.BorderSizePixel = 0
-Instance.new("UICorner", bar).CornerRadius = UDim.new(0, 8)
+Instance.new("UICorner", bar).CornerRadius = UDim.new(1, 0)
 
 -- เปอร์เซ็นต์
 local percentLabel = Instance.new("TextLabel", mainFrame)
 percentLabel.Size = UDim2.new(1, 0, 0.1, 0)
-percentLabel.Position = UDim2.new(0, 0, 0.9, 0)
+percentLabel.Position = UDim2.new(0, 0, 0.8, 0)
 percentLabel.BackgroundTransparency = 1
 percentLabel.Text = "0%"
 percentLabel.Font = Enum.Font.GothamBold
@@ -131,7 +130,6 @@ task.spawn(function()
 		wait(0.02)
 	end
 
-	-- ลบหน้าโหลด
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
