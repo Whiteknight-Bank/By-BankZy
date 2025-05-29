@@ -22,9 +22,10 @@ main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 main.Active = true
 main.Draggable = false
 
-local mainBorder = Instance.new("UIStroke", main)
-mainBorder.Color = Color3.fromRGB(150, 0, 255)
-mainBorder.Thickness = 2
+local strokeMain = Instance.new("UIStroke", main)
+strokeMain.Color = Color3.fromRGB(170, 0, 255) -- สีม่วง
+strokeMain.Thickness = 2
+strokeMain.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
@@ -32,7 +33,7 @@ toggleButton.Parent = main
 toggleButton.Size = UDim2.new(0, 40, 0, 20)
 toggleButton.Position = UDim2.new(0, 5, 0, 5)
 toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "✕"
+toggleButton.Text = "X"
 toggleButton.TextColor3 = Color3.fromRGB(255, 0, 0)
 toggleButton.Font = Enum.Font.GothamBold
 toggleButton.TextSize = 18
@@ -82,6 +83,11 @@ titleBar.Text = title
 titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleBar.Font = Enum.Font.SourceSansBold
 titleBar.TextSize = 20
+
+local strokeTitle = Instance.new("UIStroke", titleBar)
+strokeTitle.Color = Color3.fromRGB(170, 0, 255) -- สีม่วง
+strokeTitle.Thickness = 2
+strokeTitle.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
 local tabButtons = Instance.new("Frame", main)
 tabButtons.Size = UDim2.new(0, 120, 1, -35)
