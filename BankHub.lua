@@ -58,62 +58,55 @@ body.Text = string.upper([[
 ]])
 body.Parent = frame
 
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
+-- Create Loading Screen
+local loadingGui = Instance.new("ScreenGui")
+loadingGui.Name = "LoadingGui"
+loadingGui.ResetOnSpawn = false
+loadingGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local player = Players.LocalPlayer
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "LoadingUI"
-gui.ResetOnSpawn = false
+local loadingFrame = Instance.new("Frame")
+loadingFrame.Size = UDim2.new(0, 250, 0, 40)
+loadingFrame.Position = UDim2.new(1, -260, 1, -60)
+loadingFrame.AnchorPoint = Vector2.new(0, 0)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+loadingFrame.BorderSizePixel = 0
+loadingFrame.BackgroundTransparency = 0.2
+loadingFrame.Parent = loadingGui
+loadingFrame.ClipsDescendants = true
+loadingFrame.Name = "LoadFrame"
+loadingFrame.ZIndex = 10
+loadingFrame:TweenSize(UDim2.new(0, 250, 0, 40), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true)
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 300, 0, 150)
-frame.Position = UDim2.new(0.5, -150, 0.5, -75)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-frame.Parent = gui
+local loadingBar = Instance.new("Frame")
+loadingBar.Size = UDim2.new(0, 0, 1, 0)
+loadingBar.Position = UDim2.new(0, 0, 0, 0)
+loadingBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+loadingBar.BorderSizePixel = 0
+loadingBar.Parent = loadingFrame
+loadingBar.ZIndex = 11
 
-local corner = Instance.new("UICorner", frame)
-corner.CornerRadius = UDim.new(0, 16)
+local loadingLabel = Instance.new("TextLabel")
+loadingLabel.Size = UDim2.new(1, 0, 1, 0)
+loadingLabel.BackgroundTransparency = 1
+loadingLabel.Text = "LOADING..."
+loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+loadingLabel.TextScaled = true
+loadingLabel.Font = Enum.Font.SourceSansBold
+loadingLabel.Parent = loadingFrame
+loadingLabel.ZIndex = 12
 
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Position = UDim2.new(0, 0, 0, 10)
-title.BackgroundTransparency = 1
-title.Text = "LOADING..."
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 28
-title.TextScaled = true
+-- Animate Loading Bar
+local percent = 0
+while percent <= 1 do
+    loadingBar.Size = UDim2.new(percent, 0, 1, 0)
+    percent = percent + 0.01
+    wait(0.03)
+end
 
-local progressBarBG = Instance.new("Frame", frame)
-progressBarBG.Size = UDim2.new(0.9, 0, 0, 20)
-progressBarBG.Position = UDim2.new(0.05, 0, 1, -40)
-progressBarBG.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+-- Remove Loading GUI and run main UI
+loadingGui:Destroy()
 
-local progressCorner = Instance.new("UICorner", progressBarBG)
-progressCorner.CornerRadius = UDim.new(0, 8)
-
-local progressBar = Instance.new("Frame", progressBarBG)
-progressBar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-progressBar.Size = UDim2.new(0, 0, 1, 0)
-
-local progressCorner2 = Instance.new("UICorner", progressBar)
-progressCorner2.CornerRadius = UDim.new(0, 8)
-
-progressBar.Parent = progressBarBG
-
--- ▶️ Tween Animation
-local tween = TweenService:Create(progressBar, TweenInfo.new(5, Enum.EasingStyle.Quad), {
-    Size = UDim2.new(1, 0, 1, 0)
-})
-tween:Play()
-
--- ✅ รอจนโหลดเสร็จแล้วค่อยเปิด UI
-tween.Completed:Wait()
-
--- ลบ UI โหลด
-gui:Destroy()
-
+wait(5)
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
