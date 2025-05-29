@@ -53,7 +53,7 @@ body.TextColor3 = Color3.new(1, 1, 1)
 body.TextScaled = true
 body.Text = string.upper([[
 • New!! Fix Auto Death Mob
-• New!! Fix Menu
+• New!! Remove Buso&Add Auto Buso Haki in Auto Farm All!!
 • New!! Fix Reroll Affinities 2.0
 • New!! Fix God Mode Enemies
 • Coming Soon . . .
@@ -203,6 +203,23 @@ spawn(function() -- autofarm velocity
     end
 end)
 
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.behindfarm or _G.lightfarm or quakefarm then
+                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+
+            end
+        end)
+    end
+end)
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
 	local names = {}
@@ -703,28 +720,6 @@ local A_1 = "RewardMark"
 end)
 
 page1:Label("┇ Function Haki ┇")
-
-page1:Toggle("Auto Buso Haki", false, function(abso)
-    _G.autobuso = abso
-end)
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.autobuso then
-                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-
-            end
-        end)
-    end
-end)
-
 page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
     AutoHaki = hki
 end)
@@ -1225,20 +1220,27 @@ page4:Toggle("God Mode For Enemies", false, function(gxd)
 end)
 
 spawn(function()
-    while task.wait() do
+    while wait(2) do -- รอทุก 0.2 วิ เพื่อลดภาระ CPU
         if _G.god then
             pcall(function()
+                -- 1. ลบ TouchTransmitter จากมอนสเตอร์
                 for _, obj in pairs(workspace.Enemies:GetDescendants()) do
-                    -- ปิดฟิสิกส์และตรวจจับทุกอย่างของ Part
-                    if obj:IsA("BasePart") then
-                        obj.CanTouch = false
-                        obj.CanCollide = false
-                        obj.CanQuery = false
-                    end
-                    
-                    -- ลบเฉพาะ TouchTransmitter (TouchInterest)
                     if obj:IsA("TouchTransmitter") then
                         obj:Destroy()
+                    end
+                end
+
+                -- 2. ปิดการสัมผัส Part ของผู้เล่นทั้งหมด
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    local character = player.Character
+                    if character then
+                        for _, part in pairs(character:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                part.CanTouch = false
+                                part.CanCollide = false
+                                part.CanQuery = false
+                            end
+                        end
                     end
                 end
             end)
