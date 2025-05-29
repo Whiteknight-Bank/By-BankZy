@@ -1227,15 +1227,14 @@ end)
 spawn(function()
     while wait() do
         if _G.god then 
-	pcall(function()
-            for _,v in pairs(workspace.Enemies:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Torso") then
-                    v:Destroy("TouchInterest")
+            pcall(function()
+                for _, v in pairs(workspace.Enemies:GetDescendants()) do
+                    if v:IsA("TouchTransmitter") then
+                        v:Destroy()
+                    end
                 end
-            end
-        end) 
-    end
+            end)
+        end
     end
 end)
 
