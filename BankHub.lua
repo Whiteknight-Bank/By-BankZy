@@ -136,7 +136,7 @@ task.spawn(function()
 	-- เช่น require() หรือ loadstring()
 end)
 
-wait(3.5)
+wait(5)
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
