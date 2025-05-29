@@ -8,10 +8,9 @@ if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
 end
 
-local RunService = game:GetService("RunService")
-
 function library:Win(title)
 	local CoreGui = game:GetService("CoreGui")
+	local RunService = game:GetService("RunService")
 
 	if CoreGui:FindFirstChild("redui") then
 		CoreGui:FindFirstChild("redui"):Destroy()
@@ -21,35 +20,36 @@ function library:Win(title)
 	gui.Name = "redui"
 	gui.ResetOnSpawn = false
 
+	-- เมนูหลัก
 	local main = Instance.new("Frame", gui)
 	main.Name = "MainSceen"
 	main.Size = UDim2.new(0, 500, 0, 350)
 	main.Position = UDim2.new(0.5, -250, 0.5, -175)
-	main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-	main.BackgroundTransparency = 0.4 -- ✅ ใสจางๆ
-	main.BorderSizePixel = 2
-	main.BorderColor3 = Color3.fromRGB(170, 0, 255)
+	main.BackgroundColor3 = Color3.fromRGB(120, 0, 180) -- สีม่วง
+	main.BackgroundTransparency = 0.5 -- โปร่งใส
+	main.BorderSizePixel = 0 -- ไม่มีกรอบ
 	main.Active = true
 	main.Draggable = true
 	main.Visible = true
 
-	-- ✅ ปุ่มเปิด/ปิด อยู่มุมซ้าย บนเมนูหลัก
+	-- ปุ่มเปิด/ปิด
 	local toggleButton = Instance.new("TextButton")
 	toggleButton.Parent = gui
-	toggleButton.Size = UDim2.new(0, 60, 0, 25)
-	toggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- ✅ สีเทาใส
-	toggleButton.BackgroundTransparency = 0.3 -- ✅ โปร่งใสบางส่วน
-	toggleButton.Text = "Q"
+	toggleButton.Size = UDim2.new(0, 80, 0, 30)
+	toggleButton.BackgroundColor3 = Color3.fromRGB(150, 0, 200)
+	toggleButton.BackgroundTransparency = 0.7 -- ใส
+	toggleButton.Text = "Bank Hub"
 	toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	toggleButton.Font = Enum.Font.GothamBold
 	toggleButton.TextSize = 16
 	toggleButton.ZIndex = 100
-	toggleButton.BorderSizePixel = 0 -- ✅ ไม่มีกรอบ
+	toggleButton.Active = true
+	toggleButton.Draggable = true
 
-	-- ปรับตำแหน่งให้ตามกรอบเมนู
+	-- ให้ปุ่มตามเมนู (เฉพาะแกน Y)
 	RunService.RenderStepped:Connect(function()
 		if main and main.Parent then
-			toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X, 0, main.AbsolutePosition.Y)
+			toggleButton.Position = UDim2.new(0, main.Position.X.Offset, 0, main.Position.Y.Offset)
 		end
 	end)
 
@@ -57,36 +57,33 @@ function library:Win(title)
 		main.Visible = not main.Visible
 	end)
 
-	-- Title Bar
+	-- title bar
 	local titleBar = Instance.new("TextLabel", main)
 	titleBar.Size = UDim2.new(1, 0, 0, 35)
 	titleBar.Position = UDim2.new(0, 0, 0, 0)
-	titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	titleBar.BackgroundTransparency = 0.2 -- ใสจางๆนิดหน่อย
+	titleBar.BackgroundColor3 = Color3.fromRGB(60, 0, 100)
+	titleBar.BackgroundTransparency = 0.4
 	titleBar.Text = title
 	titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
 	titleBar.Font = Enum.Font.SourceSansBold
 	titleBar.TextSize = 20
-	titleBar.BorderSizePixel = 0
 
 	-- เมนูด้านซ้าย
 	local tabButtons = Instance.new("Frame", main)
 	tabButtons.Size = UDim2.new(0, 120, 1, -35)
 	tabButtons.Position = UDim2.new(0, 0, 0, 35)
-	tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-	tabButtons.BackgroundTransparency = 0.3 -- ✅ ใสจางๆ
-	tabButtons.BorderSizePixel = 0 -- ✅ ไม่เอาเส้นแบ่งข้างใน
+	tabButtons.BackgroundColor3 = Color3.fromRGB(90, 0, 140)
+	tabButtons.BackgroundTransparency = 0.4
+	tabButtons.BorderSizePixel = 0
 
 	local tabLayout = Instance.new("UIListLayout", tabButtons)
 	tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
 	tabLayout.Padding = UDim.new(0, 5)
 
-	-- เนื้อหาหลัก
 	local pages = Instance.new("Frame", main)
 	pages.Size = UDim2.new(1, -130, 1, -45)
 	pages.Position = UDim2.new(0, 130, 0, 40)
 	pages.BackgroundTransparency = 1
-	pages.BorderSizePixel = 0
 
    local tabs = {}
 
