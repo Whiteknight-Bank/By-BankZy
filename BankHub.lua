@@ -1137,7 +1137,7 @@ spawn(function()
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
                     if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
                         local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if dist < 1000 then
+                        if dist < 10000000000000000000000 then
                             -- รีเฟรช VTQ ทุกครั้ง
                             local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
 
@@ -1292,50 +1292,6 @@ create:Notifile("", "Start Dupe", 2)
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
-
-local connectionAdded, connectionRemoved, connectionDescendant
-
-page4:Toggle("God Mode For Enemies", false, function(gxd)
-    _G.god = gxd
-
-    -- ล้างการเชื่อมต่อเดิมก่อน
-    if connectionAdded then connectionAdded:Disconnect() end
-    if connectionRemoved then connectionRemoved:Disconnect() end
-    if connectionDescendant then connectionDescendant:Disconnect() end
-
-    local enemies = workspace:FindFirstChild("Enemies")
-    if not enemies then return end
-
-    local function removeTouchInterests()
-        if not _G.god then return end
-        pcall(function()
-            for _, obj in pairs(enemies:GetDescendants()) do
-                if obj:IsA("TouchInterest") then
-                    obj:Destroy()
-                end
-            end
-        end)
-    end
-
-    if gxd then
-        -- รันตอนเปิด toggle ครั้งแรก
-        removeTouchInterests()
-
-        -- เมื่อ Enemy ใหม่ถูกเพิ่ม
-        connectionDescendant = enemies.DescendantAdded:Connect(function(obj)
-            if obj:IsA("TouchInterest") then
-                pcall(function()
-                    obj:Destroy()
-                end)
-            end
-        end)
-
-        -- เมื่อ Enemy โดนเพิ่มหรือลบ ให้สแกนใหม่ทั้งหมด
-        connectionAdded = enemies.ChildAdded:Connect(removeTouchInterests)
-        connectionRemoved = enemies.ChildRemoved:Connect(removeTouchInterests)
-    end
-end)
-
 
 page4:Label("↑ Pls Wait a Moment, It Works ↑")
 
