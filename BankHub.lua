@@ -1399,51 +1399,8 @@ end
 end)
 
 page4:Label("┇ Kill Player ┇")
-page4:Toggle("Auto Light Kill Player", false, function(klg)
-	_G.lightplr = klg
-end)
+page4:Section("Is Coming Soon . . .")
 		
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.lightplr then
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local light = char.Powers.Light
-                local VTC = light.RemoteEvent.RemoteFunction:InvokeServer()
-                local Mouse = player:GetMouse()
-
-                for i, plr in pairs(game.Players:GetPlayers()) do
-                    if plr ~= player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") and plr.Character:FindFirstChild("Humanoid") then
-                        local targetChar = plr.Character
-                        if targetChar.Humanoid.Health > 0 then
-                            local dist = (char.HumanoidRootPart.Position - targetChar.HumanoidRootPart.Position).Magnitude
-                            if dist < 500 then
-                                local hrp = targetChar.HumanoidRootPart
-                                hrp.CanCollide = false
-                                hrp.Size = Vector3.new(60, 60, 60)
-
-                                wait(0.05)
-
-                                local args = {
-                                    [1] = VTC,
-                                    [2] = "LightPower2",
-                                    [3] = "StopCharging",
-                                    [4] = targetChar.Head.CFrame,
-                                    [5] = Mouse.Target,
-                                    [6] = 100
-                                }
-
-                                light.RemoteEvent:FireServer(unpack(args))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
 plr = game.Players.LocalPlayer
 
 local Tab5 = Window:Taps("Island")
