@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้ปุ่มเปิดปิด\n- แก้ไขเมนูให้ไม่บัค\n- แก้ Auto Death Mob มอนตายทุกตัว 100%\n- แก้ Auti Skill Pool (Dark,Venom) สามารถกัน สกิล ดูด ผลมืดได้ และ สกิล บ่อ ผลพิษได้"
+label.Text = "- แก้ปุ่มเปิดปิด\n- แก้ไขเมนูให้ไม่บัค\n- แก้ Auto Death Mob มอนตายทุกตัว 100%\n- แก้ Anti Skill Pool (Dark,Venom) สามารถกัน สกิล ดูด ผลมืดได้ และ สกิล บ่อ ผลพิษได้\n- เพิ่ม Anti Lag มีแค่ ดู FPS"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -1780,6 +1780,10 @@ local PlaceID = game.PlaceId
 end)
 
 page8:Label("┇ Function Anti ┇")
+page8:Button("Anti Lag", function()
+create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
+wait(2)
+end)
 
 local afkConnection
 
