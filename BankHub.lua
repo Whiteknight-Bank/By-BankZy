@@ -1149,7 +1149,7 @@ spawn(function()
                                 VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil
                             )
 
-                            task.wait(0.45) -- รอให้เต็ม
+                            task.wait(1.2) -- รอให้เต็ม
 
                             -- ปล่อยพลัง
                             local args = {
