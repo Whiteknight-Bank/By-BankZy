@@ -92,54 +92,61 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- UI
+-- GUI
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "CenterUpdateUI"
+screenGui.Name = "UpdatePanelUI"
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Main Frame (Centered, large, red transparent)
+-- Main Frame (กลางจอ สีดำใส)
 local mainFrame = Instance.new("Frame")
 mainFrame.AnchorPoint = Vector2.new(0.5, 0)
-mainFrame.Position = UDim2.new(0.5, 0, 0, 40)
-mainFrame.Size = UDim2.new(0, 400, 0, 40)
-mainFrame.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+mainFrame.Position = UDim2.new(0.5, 0, 0, 50)
+mainFrame.Size = UDim2.new(0, 450, 0, 40)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 mainFrame.BackgroundTransparency = 0.3
 mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
 mainFrame.Parent = screenGui
-mainFrame.ZIndex = 2
-mainFrame.Visible = true
 
--- Toggle Button (on the left)
+-- ปุ่มปิดทั้งหมด (อยู่ซ้าย)
+local closeAllButton = Instance.new("TextButton")
+closeAllButton.Size = UDim2.new(0, 40, 0, 40)
+closeAllButton.Position = UDim2.new(0, 0, 0, 0)
+closeAllButton.BackgroundTransparency = 1
+closeAllButton.Text = "✖"
+closeAllButton.Font = Enum.Font.GothamBold
+closeAllButton.TextSize = 20
+closeAllButton.TextColor3 = Color3.new(1, 0.4, 0.4)
+closeAllButton.Parent = mainFrame
+
+-- ปุ่มเปิด/ปิดแสดงเนื้อหา (อยู่ขวา)
 local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(1, 0, 0, 40)
-toggleButton.Position = UDim2.new(0, 0, 0, 0)
+toggleButton.Size = UDim2.new(0, 60, 0, 40)
+toggleButton.AnchorPoint = Vector2.new(1, 0)
+toggleButton.Position = UDim2.new(1, -5, 0, 0)
 toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "▼  New Update"
-toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.Text = "▼"
 toggleButton.Font = Enum.Font.GothamBold
 toggleButton.TextSize = 20
-toggleButton.TextXAlignment = Enum.TextXAlignment.Left
-toggleButton.TextStrokeTransparency = 0.8
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Parent = mainFrame
 
--- Content Frame (hidden by default)
+-- เนื้อหา
 local contentFrame = Instance.new("Frame")
 contentFrame.Size = UDim2.new(1, 0, 0, 160)
 contentFrame.Position = UDim2.new(0, 0, 0, 40)
-contentFrame.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+contentFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 contentFrame.BackgroundTransparency = 0.4
 contentFrame.BorderSizePixel = 0
 contentFrame.Parent = mainFrame
 
--- Message Label
 local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -20, 1, -20)
 label.Position = UDim2.new(0, 10, 0, 10)
 label.BackgroundTransparency = 1
-label.Text = "- เพิ่มระบบ UI ใหม่\n- ปรับแต่งเมนูใหม่\n- รองรับเปิดปิดแบบแอนิเมชัน"
+label.Text = "- ระบบใหม่มาแล้ว!\n- ปรับปรุงประสิทธิภาพ\n- UI แบบโปรพร้อมลูกศร!"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -148,24 +155,31 @@ label.TextXAlignment = Enum.TextXAlignment.Left
 label.TextYAlignment = Enum.TextYAlignment.Top
 label.Parent = contentFrame
 
--- Animation settings
-local expandedSize = UDim2.new(0, 400, 0, 200)
-local collapsedSize = UDim2.new(0, 400, 0, 40)
+-- Animation
+local expandedSize = UDim2.new(0, 450, 0, 200)
+local collapsedSize = UDim2.new(0, 450, 0, 40)
 local isOpen = false
 
+-- Toggle open/close content
 local function togglePanel()
 	isOpen = not isOpen
-	local newSize = isOpen and expandedSize or collapsedSize
+	local size = isOpen and expandedSize or collapsedSize
 	local arrow = isOpen and "▲" or "▼"
-	toggleButton.Text = arrow .. "  New Update"
 
 	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Size = newSize
+		Size = size
 	}):Play()
+
+	toggleButton.Text = arrow
 end
 
+-- Close everything
+closeAllButton.MouseButton1Click:Connect(function()
+	mainFrame.Visible = false
+end)
+
 toggleButton.MouseButton1Click:Connect(togglePanel)
-	
+		
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
