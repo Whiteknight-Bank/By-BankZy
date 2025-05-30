@@ -1719,7 +1719,7 @@ spawn(function()
     end
 end)
 		
-page7:Toggle("Auto Farm Compass", false, function(clmw)
+page7:Toggle("Auto Claim Weekly", false, function(clmw)
     _G.claimwek = clmw
 end)
 
@@ -1746,7 +1746,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if not AutoComp or _G.farmcomp then return end;
+            if not AutoComp then return end;
             local Compass = game.Players.LocalPlayer.Backpack:FindFirstChild("Compass");
             local Compass2 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
 	    local Compass3 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
