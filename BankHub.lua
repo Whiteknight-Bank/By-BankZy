@@ -1783,6 +1783,47 @@ page8:Label("┇ Function Anti ┇")
 page8:Button("Anti Lag", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
+
+-- FPS Counter Script (LocalScript)
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+-- สร้าง GUI
+local player = Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "FPSCounter"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- สร้าง TextLabel แสดง FPS
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 120, 0, 35)                      -- ขนาดใหญ่ขึ้นนิดหน่อย
+fpsLabel.Position = UDim2.new(1, -130, 0, 10)                 -- มุมขวาบน
+fpsLabel.AnchorPoint = Vector2.new(0, 0)
+fpsLabel.BackgroundTransparency = 1                           -- ไม่มีพื้นหลัง
+fpsLabel.BorderSizePixel = 0
+fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)               -- สีเขียว
+fpsLabel.TextStrokeTransparency = 0.5                         -- ขอบตัวอักษร
+fpsLabel.Font = Enum.Font.SourceSansBold
+fpsLabel.TextSize = 22                                        -- ตัวอักษรใหญ่ขึ้น
+fpsLabel.Text = "FPS: 0"
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Right          -- ชิดขวา
+fpsLabel.Parent = screenGui
+
+-- อัปเดต FPS ทุกวินาที
+local lastUpdate = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+	frameCount += 1
+	local currentTime = tick()
+	if currentTime - lastUpdate >= 1 then
+		local fps = math.floor(frameCount / (currentTime - lastUpdate))
+		fpsLabel.Text = "FPS: " .. fps
+		lastUpdate = currentTime
+		frameCount = 0
+	end
+end)
 end)
 
 local afkConnection
