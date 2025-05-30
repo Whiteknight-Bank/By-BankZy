@@ -92,72 +92,80 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- GUI
+-- UI
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "UpdateNoticeMini"
+screenGui.Name = "CenterUpdateUI"
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Main Frame (Smaller & shifted left)
+-- Main Frame (Centered, large, red transparent)
 local mainFrame = Instance.new("Frame")
-mainFrame.AnchorPoint = Vector2.new(1, 0)
-mainFrame.Position = UDim2.new(1, -100, 0, 20)
-mainFrame.Size = UDim2.new(0, 180, 0, 30)
-mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-mainFrame.BackgroundTransparency = 0.2
+mainFrame.AnchorPoint = Vector2.new(0.5, 0)
+mainFrame.Position = UDim2.new(0.5, 0, 0, 40)
+mainFrame.Size = UDim2.new(0, 400, 0, 40)
+mainFrame.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+mainFrame.BackgroundTransparency = 0.3
 mainFrame.BorderSizePixel = 0
 mainFrame.ClipsDescendants = true
 mainFrame.Parent = screenGui
+mainFrame.ZIndex = 2
+mainFrame.Visible = true
 
--- Toggle Button
+-- Toggle Button (on the left)
 local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(1, 0, 0, 30)
+toggleButton.Size = UDim2.new(1, 0, 0, 40)
+toggleButton.Position = UDim2.new(0, 0, 0, 0)
 toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "🆕 Update ▼"
+toggleButton.Text = "▼  New Update"
 toggleButton.TextColor3 = Color3.new(1, 1, 1)
-toggleButton.Font = Enum.Font.Gotham
-toggleButton.TextSize = 14
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 20
+toggleButton.TextXAlignment = Enum.TextXAlignment.Left
+toggleButton.TextStrokeTransparency = 0.8
 toggleButton.Parent = mainFrame
 
--- Content Frame (Hidden by default)
+-- Content Frame (hidden by default)
 local contentFrame = Instance.new("Frame")
-contentFrame.Size = UDim2.new(1, 0, 0, 60)
-contentFrame.Position = UDim2.new(0, 0, 0, 30)
-contentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-contentFrame.BackgroundTransparency = 0.2
+contentFrame.Size = UDim2.new(1, 0, 0, 160)
+contentFrame.Position = UDim2.new(0, 0, 0, 40)
+contentFrame.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+contentFrame.BackgroundTransparency = 0.4
 contentFrame.BorderSizePixel = 0
 contentFrame.Parent = mainFrame
 
+-- Message Label
 local label = Instance.new("TextLabel")
-label.Size = UDim2.new(1, -10, 1, -10)
-label.Position = UDim2.new(0, 5, 0, 5)
+label.Size = UDim2.new(1, -20, 1, -20)
+label.Position = UDim2.new(0, 10, 0, 10)
 label.BackgroundTransparency = 1
-label.Text = "- ปรับ Ui ใหม่ \n- ปรับระบบแจ้งอัพเดต \n- ปรับเมนูใหม่"
+label.Text = "- เพิ่มระบบ UI ใหม่\n- ปรับแต่งเมนูใหม่\n- รองรับเปิดปิดแบบแอนิเมชัน"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
-label.TextSize = 18
+label.TextSize = 16
 label.TextXAlignment = Enum.TextXAlignment.Left
 label.TextYAlignment = Enum.TextYAlignment.Top
 label.Parent = contentFrame
 
--- Animation
-local expandedSize = UDim2.new(0, 180, 0, 90)
-local collapsedSize = UDim2.new(0, 180, 0, 30)
+-- Animation settings
+local expandedSize = UDim2.new(0, 400, 0, 200)
+local collapsedSize = UDim2.new(0, 400, 0, 40)
 local isOpen = false
 
 local function togglePanel()
 	isOpen = not isOpen
 	local newSize = isOpen and expandedSize or collapsedSize
-	TweenService:Create(mainFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+	local arrow = isOpen and "▲" or "▼"
+	toggleButton.Text = arrow .. "  New Update"
+
+	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
 		Size = newSize
 	}):Play()
-	toggleButton.Text = isOpen and " Update ▼" or " Update ▲"
 end
 
 toggleButton.MouseButton1Click:Connect(togglePanel)
-		
+	
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
 
