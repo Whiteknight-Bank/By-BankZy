@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้ปุ่มเปิดปิด\n- แก้ไขเมนูให้ไม่บัค\n- แก้ Auto Death Mob มอนตายทุกตัว 100%\n- แก้ Anti Skill Pool (Dark,Venom) สามารถกัน สกิล ดูด ผลมืดได้ และ สกิล บ่อ ผลพิษได้\n- แก้ไข Anti Lag"
+label.Text = "- แก้ปุ่มเปิดปิด\n- แก้ไขเมนูให้ไม่บัค\n- แก้ Auto Death Mob มอนตายทุกตัว 100%\n- เพิ่ม Anti Love"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -270,6 +270,18 @@ spawn(function()
         end)
     end
 end)
+
+-- ฟังก์ชัน: หาผู้เล่นทุกคนที่อยู่ใน Workspace
+local function getAllPlayerModelsInWorkspace()
+	local players = {}
+	for _, v in pairs(game.Workspace:GetChildren()) do
+		if v:IsA("Model") and game.Players:FindFirstChild(v.Name) then
+			table.insert(players, v)
+		end
+	end
+	return players
+		end
+
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
 	local names = {}
@@ -1542,13 +1554,13 @@ local Tab6 = Window:Taps("Anti DF")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ Function Anti Devil Fruit ┇")
-page6:Toggle("Anti Skill Pool (Dark,Venom)", false, function(ndmg)
-    _G.antity = ndmg
+page6:Toggle("Anti Dark&Venom Pool", false, function(ndmg)
+    _G.antivedark = ndmg
 end)
 
 spawn(function()
     while wait() do
-        if _G.antity then
+        if _G.antivedark then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
 
@@ -1607,6 +1619,58 @@ spawn(function()
     end
 end)
 
+page6:Toggle("Anti Love", false, function(lve)
+    _G.antilove = lve
+end)
+
+spawn(function()
+	while wait() do
+		if _G.antilove then
+			pcall(function()
+				local models = getAllPlayerModelsInWorkspace()
+
+				for _, model in pairs(models) do
+					local powers = model:FindFirstChild("Powers")
+					if powers then
+						local love = powers:FindFirstChild("Love")
+						if love then
+							local projectiles = love:FindFirstChild("Projectiles")
+							if projectiles then
+
+								-- 💘 LoveHeartTrimFill > TouchInterest
+								local heartTrim = projectiles:FindFirstChild("LoveHeartTrim")
+								if heartTrim then
+									local fill = heartTrim:FindFirstChild("LoveHeartTrimFill")
+									if fill then
+										local touch = fill:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: LoveHeartTrimFill ของ", model.Name)
+										end
+									end
+								end
+
+								-- 🏹 LoveArrow > Tip > TouchInterest
+								local arrow = projectiles:FindFirstChild("LoveArrow")
+								if arrow then
+									local tip = arrow:FindFirstChild("Tip")
+									if tip then
+										local touch = tip:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: Tip ของ", model.Name)
+										end
+									end
+								end
+
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+end)
 local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
 
