@@ -1719,7 +1719,7 @@ spawn(function()
                 Event:FireServer(A_1, A_2)
 
                 -- รอเฉพาะหลังจากรัน ChallengeRemote
-                task.wait(0.7)
+                task.wait(2.7)
 
                 -- ค่อยยิง Stats
                 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
