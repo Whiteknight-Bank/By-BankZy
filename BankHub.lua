@@ -1704,10 +1704,30 @@ local page7 = Tab7:newpage()
 page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Section("Warning: It Will Reset Stats You All")
 
-page7:Toggle("Auto Farm Compass (Not Working Now)", false, function(atrs)
-    _G.autoreset = atrs
+page7:Toggle("Auto Farm Compass", false, function(atrs)
+    _G.farmcomp = atrs
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.farmcomp then
+                -- ส่งคำสั่งรับ Weekly3
+                local A_1 = "Claim"
+                local A_2 = "Weekly3"
+                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+                Event:FireServer(A_1, A_2)
+
+                -- รอเฉพาะหลังจากรัน ChallengeRemote
+                task.wait(0.7)
+
+                -- ค่อยยิง Stats
+                workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
+            end
+        end)
+    end
+end)
+	
 page7:Label("┇ Function Quest Sam ┇")
 page7:Section("Warning: If You Want Unlimited, Pls Click Dupe")
 
