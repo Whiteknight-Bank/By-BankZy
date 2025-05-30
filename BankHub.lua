@@ -1709,10 +1709,10 @@ page7:Toggle("Auto Farm Compass", false, function(atrs)
 end)
 
 spawn(function()
-    while wait(2) do
+    while wait() do
         pcall(function()
             if _G.farmcomp then
-		task.wait(1)
+		task.wait(1.6)
                 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
             end
         end)
