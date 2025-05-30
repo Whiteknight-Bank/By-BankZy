@@ -1143,7 +1143,7 @@ spawn(function()
                 pcall(function()
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
                 end)
-                wait(1)
+                wait(10)
             end
         end
     end
