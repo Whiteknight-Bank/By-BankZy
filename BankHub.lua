@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้ปุ่มเปิดปิด\n- แก้ไขเมนูให้ไม่บัค\n- แก้ Auto Death Mob มอนตายทุกตัว 100%\n- เพิ่ม Anti Love"
+label.Text = "- เอา God Mode Enemies ออก เพราะ อยู่ในช่วงแก้ไขตัวนี้ใช้งานไม่ได้\n- แก้ไข Auto Farm Compass ใช้งานได้!!!\n- เพิ่ม Auto Death Kaizu\n- เพิ่ม Anti Love"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -921,9 +921,25 @@ spawn(function()
     end
 end)
 
-page2:Toggle("Auto Death Kaizu' Boss (Coming Soon)", false, function(befrm)
-    _G.autokaizu = befrm
+page2:Toggle("Auto Death Kaizu' Boss (50/50%)", false, function(zki)
+    _G.autokaizu = zki
 end)
+
+spawn(function()
+    while wait() do
+        if _G.autokaizu then 
+	pcall(function()
+            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
+end)
+
 page2:Section("↑ Is Coming Soon . . . ↑")
 
 page2:Label("┇ Function Farming ┇")
@@ -1279,35 +1295,6 @@ end)
 
 page4:Toggle("God Mode For Enemies", false, function(gxd)
     _G.god = gxd
-end)
-
-spawn(function()
-    while wait(2) do -- รอทุก 0.2 วิ เพื่อลดภาระ CPU
-        if _G.god then
-            pcall(function()
-                -- 1. ลบ TouchTransmitter จากมอนสเตอร์
-                for _, obj in pairs(workspace.Enemies:GetDescendants()) do
-                    if obj:IsA("TouchTransmitter") then
-                        obj:Destroy()
-                    end
-                end
-
-                -- 2. ปิดการสัมผัส Part ของผู้เล่นทั้งหมด
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    local character = player.Character
-                    if character then
-                        for _, part in pairs(character:GetDescendants()) do
-                            if part:IsA("BasePart") then
-                                part.CanTouch = false
-                                part.CanCollide = false
-                                part.CanQuery = false
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
 end)
 
 page4:Label("↑ Pls Wait a Moment, It Works ↑")
