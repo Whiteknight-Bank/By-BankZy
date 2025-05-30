@@ -1128,7 +1128,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if _G.rumblefarm then
+            if _G.none then
                 local player = game.Players.LocalPlayer
                 local char = player.Character
                 local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
@@ -1171,6 +1171,51 @@ spawn(function()
                     end
                 end
             end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.rumblefarm then
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
+                if not rumble then return end
+
+                for _, v in pairs(workspace.Enemies:GetChildren()) do  
+                    if v.Name == "Lv2 Angry Bob" and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then  
+                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude  
+                        if dist < 1000 then  
+                            local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
+
+                            v.HumanoidRootPart.CanCollide = false  
+                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
+
+                            rumble.RemoteEvent:FireServer(  
+                                VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil  
+                            )  
+
+                            task.wait(0.45)
+
+                            local args = {  
+                                [1] = VTQ,  
+                                [2] = "RumblePower2",  
+                                [3] = "StopCharging",  
+                                [4] = v.HumanoidRootPart.Position,  
+                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),  
+                                [6] = 200,  
+                                [7] = char.HumanoidRootPart.Position  
+                            }  
+
+                            rumble.RemoteEvent:FireServer(unpack(args))  
+
+                            task.wait(0.25)
+                        end  
+                    end  
+                end  
+            end  
         end)
     end
 end)
