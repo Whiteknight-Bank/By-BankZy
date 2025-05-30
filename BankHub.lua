@@ -1184,35 +1184,49 @@ spawn(function()
                 local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
                 if not rumble then return end
 
+                -- ลิสต์คำที่ต้องการกรอง
+                local targetKeywords = { "Angry", "Boar", "Crab" }
+
                 for _, v in pairs(workspace.Enemies:GetChildren()) do  
-                    if v.Name == "Lv2 Angry Bob" and v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 then  
-                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude  
-                        if dist < 1000 then  
-                            local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
+                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then  
+                        -- ตรวจสอบว่าชื่อตรงกับคีย์เวิร์ดใดในลิสต์ไหม
+                        local match = false
+                        for _, keyword in ipairs(targetKeywords) do
+                            if string.find(v.Name, keyword) then
+                                match = true
+                                break
+                            end
+                        end
 
-                            v.HumanoidRootPart.CanCollide = false  
-                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
+                        if match then
+                            local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude  
+                            if dist < 1000 then  
+                                -- รีเฟรช VTQ  
+                                local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
 
-                            rumble.RemoteEvent:FireServer(  
-                                VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil  
-                            )  
+                                v.HumanoidRootPart.CanCollide = false  
+                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
 
-                            task.wait(0.45)
+                                -- ชาร์จพลัง  
+                                rumble.RemoteEvent:FireServer(VTQ, "RumblePower2", "StartCharging")
 
-                            local args = {  
-                                [1] = VTQ,  
-                                [2] = "RumblePower2",  
-                                [3] = "StopCharging",  
-                                [4] = v.HumanoidRootPart.Position,  
-                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),  
-                                [6] = 200,  
-                                [7] = char.HumanoidRootPart.Position  
-                            }  
+                                task.wait(0.45)
 
-                            rumble.RemoteEvent:FireServer(unpack(args))  
+                                -- ปล่อยพลัง  
+                                local args = {
+                                    [1] = VTQ,
+                                    [2] = "RumblePower2",
+                                    [3] = "StopCharging",
+                                    [4] = v.HumanoidRootPart.Position,
+                                    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
+                                    [6] = 200,
+                                    [7] = char.HumanoidRootPart.Position
+                                }
 
-                            task.wait(0.25)
-                        end  
+                                rumble.RemoteEvent:FireServer(unpack(args))
+                                task.wait(0.25)
+                            end
+                        end
                     end  
                 end  
             end  
