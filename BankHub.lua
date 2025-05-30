@@ -1125,25 +1125,28 @@ page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
     _G.rumblefarm = rlb
 end)
 
-local points = {
-    CFrame.new(-1277, 400, -1696),
-    CFrame.new(-76, 215, -892),
-    CFrame.new(1237, 340, -244),
-    CFrame.new(-1668, 317, -300),
-    CFrame.new(-1109, 341, 1645),
-    CFrame.new(1079, 445, -3334),
-    CFrame.new(4646, 316, 5191),
-    CFrame.new(2222, 300, -631)
-}
-
 spawn(function()
     while wait() do
         if _G.rumblefarm then
-            for i, cf in ipairs(points) do
                 pcall(function()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
-                end)
-                wait(10)
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1277, 400, -1696)
+		    wait(10)
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-76, 215, -892)
+		    wait(10)
+		    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1237, 340, -244)
+		    wait(10)
+	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1237, 340, -244)
+		    wait(10)
+	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1668, 317, -300)
+	            wait(10)
+	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1109, 341, 1645)
+		    wait(10)
+	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1079, 445, -3334)
+		    wait(10)
+	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4646, 316, 5191)
+		    wait(10)
+		    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2222, 300, -631)
+		end)
             end
         end
     end
