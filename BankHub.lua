@@ -1293,9 +1293,49 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
+local connectionAdded, connectionRemoved, connectionDescendant
+
 page4:Toggle("God Mode For Enemies", false, function(gxd)
     _G.god = gxd
+
+    -- ล้างการเชื่อมต่อเดิมก่อน
+    if connectionAdded then connectionAdded:Disconnect() end
+    if connectionRemoved then connectionRemoved:Disconnect() end
+    if connectionDescendant then connectionDescendant:Disconnect() end
+
+    local enemies = workspace:FindFirstChild("Enemies")
+    if not enemies then return end
+
+    local function removeTouchInterests()
+        if not _G.god then return end
+        pcall(function()
+            for _, obj in pairs(enemies:GetDescendants()) do
+                if obj:IsA("TouchInterest") then
+                    obj:Destroy()
+                end
+            end
+        end)
+    end
+
+    if gxd then
+        -- รันตอนเปิด toggle ครั้งแรก
+        removeTouchInterests()
+
+        -- เมื่อ Enemy ใหม่ถูกเพิ่ม
+        connectionDescendant = enemies.DescendantAdded:Connect(function(obj)
+            if obj:IsA("TouchInterest") then
+                pcall(function()
+                    obj:Destroy()
+                end)
+            end
+        end)
+
+        -- เมื่อ Enemy โดนเพิ่มหรือลบ ให้สแกนใหม่ทั้งหมด
+        connectionAdded = enemies.ChildAdded:Connect(removeTouchInterests)
+        connectionRemoved = enemies.ChildRemoved:Connect(removeTouchInterests)
+    end
 end)
+
 
 page4:Label("↑ Pls Wait a Moment, It Works ↑")
 
@@ -1384,8 +1424,8 @@ spawn(function()
 end)
 
 page4:Label("┇ Spam Dash Player ┇")
-page4:Toggle("Spam Dash (In Select Player)", false, function(dsh)
-	_G.dash = dsh
+page4:Toggle("Spam Dash (Select Player)", false, function(dsh)
+	_G.autodash = dsh
 end)
 
 spawn(function()
