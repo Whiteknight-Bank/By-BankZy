@@ -1149,7 +1149,7 @@ spawn(function()
                                 VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil
                             )
 
-                            task.wait(1.2) -- รอให้เต็ม
+                            task.wait(0.05) -- รอให้เต็ม
 
                             -- ปล่อยพลัง
                             local args = {
@@ -1164,8 +1164,6 @@ spawn(function()
 
                             rumble.RemoteEvent:FireServer(unpack(args))
 
-                            -- รอให้ cooldown/reset state ก่อนวนใหม่
-                            task.wait(0.25)
                         end
                     end
                 end
