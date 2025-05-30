@@ -22,25 +22,27 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
 
-    -- เน€เธกเธเธนเธซเธฅเธฑเธ
+    -- เมนูหลัก
     local main = Instance.new("Frame")
     main.Size = UDim2.new(0, 500, 0, 350)
     main.Position = UDim2.new(0.5, -250, 0.5, -175)
     main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)BackgroundTransparency = 0.4
     main.BackgroundTransparency = 0.3
     main.BorderSizePixel = 0
     main.Parent = gui
     main.ClipsDescendants = true
 
-    -- เน€เธชเนเธเธเธญเธเธเธฒเธงเธฃเธญเธเธเธฅเนเธญเธ
+    -- เส้นขอบขาวรอบกล่อง
     local border = Instance.new("UIStroke", main)
     border.Thickness = 2
     border.Color = Color3.fromRGB(255, 255, 255)
 
-    -- เธเธธเนเธก "Bank Hub" เธฅเธญเธขเธญเธขเธนเนเธเนเธฒเธขเธเธเน€เธกเธเธนเธ•เธฅเธญเธ”
+    -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด
     local toggleButton = Instance.new("TextButton")
     toggleButton.Size = UDim2.new(0, 80, 0, 30)
     toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)BackgroundTransparency = 0.4
     toggleButton.BackgroundTransparency = 0.2
     toggleButton.Text = "Bank Hub"
     toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -49,11 +51,12 @@ function library:Win(title)
     toggleButton.ZIndex = 10
     toggleButton.Parent = gui
 
-    -- Title bar (เนเธเนเธฅเธฒเธ)
+    -- Title bar (ใช้ลาก)
     local titleBar = Instance.new("TextLabel")
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
     titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
     titleBar.BackgroundTransparency = 0.2
     titleBar.Text = title
     titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -67,6 +70,7 @@ function library:Win(title)
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
     tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
     tabButtons.BackgroundTransparency = 0.3
 
     local tabLayout = Instance.new("UIListLayout", tabButtons)
@@ -78,7 +82,7 @@ function library:Win(title)
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
 
-    -- Dragging Menu by titleBar (เธฅเธฒเธเน€เธกเธเธน)
+    -- Dragging Menu by titleBar (ลากเมนู)
     local dragging, dragStart, startPos
     titleBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -99,12 +103,12 @@ function library:Win(title)
         end
     end)
 
-    -- เธ•เธณเนเธซเธเนเธเธเธธเนเธกเธ•เธดเธ”เธเนเธฒเธขเธเธเน€เธกเธเธนเน€เธชเธกเธญ
+    -- ตำแหน่งปุ่มติดซ้ายบนเมนูเสมอ
     RunService.RenderStepped:Connect(function()
         toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X - 85, 0, main.AbsolutePosition.Y)
     end)
 
-    -- Toggle เธเธดเธ”/เน€เธเธดเธ”เน€เธกเธเธนเนเธเธเธกเธตเนเธญเธเธดเน€เธกเธเธฑเธ
+    -- Toggle ปิด/เปิดเมนูแบบมีแอนิเมชัน
     local isOpen = true
     local fullSize = main.Size
     local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -130,7 +134,8 @@ local tabs = {}
 function tabs:Taps(name)  
     local tabButton = Instance.new("TextButton", tabButtons)  
     tabButton.Size = UDim2.new(1, -10, 0, 30)  
-    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
+    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)BackgroundTransparency = 0.4  
     tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
     tabButton.Font = Enum.Font.SourceSans  
     tabButton.TextSize = 16  
@@ -172,7 +177,8 @@ function tabs:Taps(name)
     function newPage:Button(text, callback)  
         local button = Instance.new("TextButton", page)  
         button.Size = UDim2.new(1, -10, 0, 30)  
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)  
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)BackgroundTransparency = 0.4  
         button.TextColor3 = Color3.fromRGB(255, 255, 255)  
         button.Font = Enum.Font.SourceSans  
         button.TextSize = 16  
@@ -203,7 +209,7 @@ function newPage:Dropdown(title, items, callback)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
     arrow.BackgroundTransparency = 1
-    arrow.Text = "โ—"
+    arrow.Text = "◂"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
@@ -212,6 +218,7 @@ function newPage:Dropdown(title, items, callback)
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
     dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)BackgroundTransparency = 0.4
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
@@ -228,7 +235,7 @@ function newPage:Dropdown(title, items, callback)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "โ“" or "โ"
+        arrow.Text = opened and "↓" or "←"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -244,6 +251,7 @@ function newPage:Dropdown(title, items, callback)
                 local option = Instance.new("TextButton", optionContainer)
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -252,7 +260,7 @@ function newPage:Dropdown(title, items, callback)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "โ"
+                    arrow.Text = "←"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
@@ -286,7 +294,7 @@ end
         function newPage:Section(txt)
             local section = Instance.new("TextLabel", page)
             section.Size = UDim2.new(1, -10, 0, 25)
-            section.Text = "โ”€ " .. txt .. " โ”€"
+            section.Text = "─ " .. txt .. " ─"
             section.TextColor3 = Color3.fromRGB(200, 200, 200)
             section.Font = Enum.Font.SourceSansBold
             section.TextSize = 16
@@ -298,6 +306,7 @@ end
     local toggleFrame = Instance.new("Frame", page)
     toggleFrame.Size = UDim2.new(1, -10, 0, 30)
     toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)BackgroundTransparency = 0.4
     toggleFrame.BorderSizePixel = 0
 
     local label = Instance.new("TextLabel", toggleFrame)
@@ -314,6 +323,7 @@ end
     toggleBtn.Size = UDim2.new(0, 40, 0, 20)
     toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
     toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)BackgroundTransparency = 0.4
     toggleBtn.Text = ""
     toggleBtn.BorderSizePixel = 0
     toggleBtn.AutoButtonColor = false
@@ -354,6 +364,7 @@ end
             local button = Instance.new("TextButton", page)
             button.Size = UDim2.new(1, -10, 0, 30)
             button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)BackgroundTransparency = 0.4
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
             button.TextSize = 16
@@ -384,7 +395,7 @@ function newPage:Dropdown(title, items, callback)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
     arrow.BackgroundTransparency = 1
-    arrow.Text = "โ—"
+    arrow.Text = "◂"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
@@ -393,6 +404,7 @@ function newPage:Dropdown(title, items, callback)
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
     dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)BackgroundTransparency = 0.4
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
@@ -409,7 +421,7 @@ function newPage:Dropdown(title, items, callback)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "โ“" or "โ"
+        arrow.Text = opened and "↓" or "←"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -425,6 +437,7 @@ function newPage:Dropdown(title, items, callback)
                 local option = Instance.new("TextButton", optionContainer)
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -433,7 +446,7 @@ function newPage:Dropdown(title, items, callback)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "โ"
+                    arrow.Text = "←"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
@@ -466,6 +479,7 @@ function library:Notifile(title, msg, duration)
     notif.Position = UDim2.new(1, 310, 1, -80)
     notif.AnchorPoint = Vector2.new(1, 1)
     notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)BackgroundTransparency = 0.4
     notif.BorderSizePixel = 0
 
     local label = Instance.new("TextLabel", notif)
