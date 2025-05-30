@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้ Auto Kaizu Death ใช้ได้ 50/50%\n- แก้ไข Auto Farm Compass ใช้งานได้!!!\n- เพิ่ม Auto Death Kaizu\n- เพิ่ม Anti Love"
+label.Text = "- แก้ Auto Kaizu Death ใช้ได้ 50/50%\n- แก้ไข Auto Farm Compass ใช้งานได้!!!\n- แก้ไข Spam Dash ก่อกวนผ้เล่นได้ปกติ\n- เพิ่ม Function Kill Players กำลังจะมา"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -1293,8 +1293,6 @@ workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extr
 game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
 end)
 
-page4:Label("↑ Pls Wait a Moment, It Works ↑")
-
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
@@ -1398,7 +1396,7 @@ end
     end
 end)
 
-page4:Label("┇ Kill Player ┇")
+page4:Label("┇ Function Kill Players ┇")
 page4:Section("Is Coming Soon . . .")
 		
 plr = game.Players.LocalPlayer
