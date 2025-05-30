@@ -24,10 +24,11 @@ function library:Win(title)
 
     -- เมนูหลัก
     local main = Instance.new("Frame")
+    -- added by patch
+    local main.BackgroundTransparency = 0.4
     main.Size = UDim2.new(0, 500, 0, 350)
     main.Position = UDim2.new(0.5, -250, 0.5, -175)
-    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)BackgroundTransparency = 0.4
+    main.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     main.BackgroundTransparency = 0.3
     main.BorderSizePixel = 0
     main.Parent = gui
@@ -39,40 +40,26 @@ function library:Win(title)
     border.Color = Color3.fromRGB(255, 255, 255)
 
     -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด
-    -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด และมีขนาดพอดีกับข้อความ
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "BankHubToggle"
-toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Position = UDim2.new(0, 10, 0, 10) -- ซ้ายบนมีระยะห่างนิดหน่อย
-toggleButton.Size = UDim2.new(0, 100, 0, 30) -- กำหนดค่าเริ่มต้นก่อนจะขยายตามข้อความ
-toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-toggleButton.BackgroundTransparency = 0.2
-toggleButton.Text = "Bank Hub"
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 16
-toggleButton.ZIndex = 10
-toggleButton.AutomaticSize = Enum.AutomaticSize.X -- ขยายแนวนอนตามข้อความ
-toggleButton.TextWrapped = false
-toggleButton.Parent = gui
-
--- ให้ปุ่มปรับขนาดตามข้อความ
-local textSizeConstraint = Instance.new("UITextSizeConstraint")
-textSizeConstraint.MaxTextSize = 16
-textSizeConstraint.MinTextSize = 10
-textSizeConstraint.Parent = toggleButton
-
--- Optional: ใส่ UICorner เพื่อให้ปุ่มมีมุมโค้ง
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = toggleButton
+    local toggleButton = Instance.new("TextButton")
+    -- added by patch
+    local toggleButton.BackgroundTransparency = 0.4
+    toggleButton.Size = UDim2.new(0, 80, 0, 30)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    toggleButton.BackgroundTransparency = 0.2
+    toggleButton.Text = "Bank Hub"
+    toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 16
+    toggleButton.ZIndex = 10
+    toggleButton.Parent = gui
 
     -- Title bar (ใช้ลาก)
     local titleBar = Instance.new("TextLabel")
+    -- added by patch
+    local titleBar.BackgroundTransparency = 0.4
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
-    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
+    titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     titleBar.BackgroundTransparency = 0.2
     titleBar.Text = title
     titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -83,10 +70,11 @@ corner.Parent = toggleButton
 
     -- Layouts
     local tabButtons = Instance.new("Frame", main)
+    -- added by patch
+    local tabButtons.BackgroundTransparency = 0.4
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
+    tabButtons.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     tabButtons.BackgroundTransparency = 0.3
 
     local tabLayout = Instance.new("UIListLayout", tabButtons)
@@ -94,6 +82,8 @@ corner.Parent = toggleButton
     tabLayout.Padding = UDim.new(0, 5)
 
     local pages = Instance.new("Frame", main)
+    -- added by patch
+    local pages.BackgroundTransparency = 0.4
     pages.Size = UDim2.new(1, -130, 1, -45)
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
@@ -149,15 +139,18 @@ local tabs = {}
 
 function tabs:Taps(name)  
     local tabButton = Instance.new("TextButton", tabButtons)  
+    -- added by patch
+    local tabButton.BackgroundTransparency = 0.4
     tabButton.Size = UDim2.new(1, -10, 0, 30)  
-    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)BackgroundTransparency = 0.4  
+    tabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)  
     tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
     tabButton.Font = Enum.Font.SourceSans  
     tabButton.TextSize = 16  
     tabButton.Text = name  
 
     local page = Instance.new("ScrollingFrame", pages)  
+    -- added by patch
+    local page.BackgroundTransparency = 0.4
     page.Size = UDim2.new(1, 0, 1, 0)  
     page.Visible = false  
     page.ScrollBarThickness = 6  
@@ -192,9 +185,10 @@ function tabs:Taps(name)
           
     function newPage:Button(text, callback)  
         local button = Instance.new("TextButton", page)  
+    -- added by patch
+    local button.BackgroundTransparency = 0.4
         button.Size = UDim2.new(1, -10, 0, 30)  
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)BackgroundTransparency = 0.4  
+        button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)  
         button.TextColor3 = Color3.fromRGB(255, 255, 255)  
         button.Font = Enum.Font.SourceSans  
         button.TextSize = 16  
@@ -208,11 +202,15 @@ function tabs:Taps(name)
         
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
+    -- added by patch
+    local container.BackgroundTransparency = 0.4
     container.Size = UDim2.new(1, -10, 0, 30)
     container.BackgroundTransparency = 1
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
+    -- added by patch
+    local titleLabel.BackgroundTransparency = 0.4
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = title
@@ -222,6 +220,8 @@ function newPage:Dropdown(title, items, callback)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local arrow = Instance.new("TextLabel", container)
+    -- added by patch
+    local arrow.BackgroundTransparency = 0.4
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
     arrow.BackgroundTransparency = 1
@@ -231,10 +231,11 @@ function newPage:Dropdown(title, items, callback)
     arrow.TextSize = 16
 
     local dropdownButton = Instance.new("TextButton", container)
+    -- added by patch
+    local dropdownButton.BackgroundTransparency = 0.4
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)BackgroundTransparency = 0.4
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
@@ -242,6 +243,8 @@ function newPage:Dropdown(title, items, callback)
 
     local opened = false
     local optionContainer = Instance.new("Frame", page)
+    -- added by patch
+    local optionContainer.BackgroundTransparency = 0.4
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
     optionContainer.BackgroundTransparency = 1
     optionContainer.ClipsDescendants = true
@@ -265,9 +268,10 @@ function newPage:Dropdown(title, items, callback)
             end
             for _, item in ipairs(items) do
                 local option = Instance.new("TextButton", optionContainer)
+    -- added by patch
+    local option.BackgroundTransparency = 0.4
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -299,6 +303,8 @@ end
 
         function newPage:Label(txt)
             local label = Instance.new("TextLabel", page)
+    -- added by patch
+    local label.BackgroundTransparency = 0.4
             label.Size = UDim2.new(1, -10, 0, 25)
             label.Text = txt
             label.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -309,6 +315,8 @@ end
 
         function newPage:Section(txt)
             local section = Instance.new("TextLabel", page)
+    -- added by patch
+    local section.BackgroundTransparency = 0.4
             section.Size = UDim2.new(1, -10, 0, 25)
             section.Text = "─ " .. txt .. " ─"
             section.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -320,12 +328,15 @@ end
 
         function newPage:Toggle(text, default, callback)
     local toggleFrame = Instance.new("Frame", page)
+    -- added by patch
+    local toggleFrame.BackgroundTransparency = 0.4
     toggleFrame.Size = UDim2.new(1, -10, 0, 30)
-    toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)BackgroundTransparency = 0.4
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     toggleFrame.BorderSizePixel = 0
 
     local label = Instance.new("TextLabel", toggleFrame)
+    -- added by patch
+    local label.BackgroundTransparency = 0.4
     label.Size = UDim2.new(1, -50, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
     label.BackgroundTransparency = 1
@@ -336,19 +347,22 @@ end
     label.Text = text
 
     local toggleBtn = Instance.new("TextButton", toggleFrame)
+    -- added by patch
+    local toggleBtn.BackgroundTransparency = 0.4
     toggleBtn.Size = UDim2.new(0, 40, 0, 20)
     toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
-    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)BackgroundTransparency = 0.4
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     toggleBtn.Text = ""
     toggleBtn.BorderSizePixel = 0
     toggleBtn.AutoButtonColor = false
     toggleBtn.Name = "ToggleSwitch"
 
     local circle = Instance.new("Frame", toggleBtn)
+    -- added by patch
+    local circle.BackgroundTransparency = 0.4
     circle.Size = UDim2.new(0, 18, 0, 18)
     circle.Position = default and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)
-    circle.BackgroundColor3 = default and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+    circle.BackgroundColor3 = default and Color3.fromRGB(40, 40, 40) or Color3.fromRGB(40, 40, 40)
     circle.BorderSizePixel = 0
     circle.Name = "SwitchKnob"
     circle.ZIndex = 2
@@ -361,12 +375,14 @@ end
 
     Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
     Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
+    -- added by patch
+    Instance.new("UICorner", toggleFrame).CornerRadius.BackgroundTransparency = 0.4
 
     local toggled = default
     toggleBtn.MouseButton1Click:Connect(function()
         toggled = not toggled
         circle:TweenPosition(toggled and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
-        circle.BackgroundColor3 = toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+        circle.BackgroundColor3 = toggled and Color3.fromRGB(40, 40, 40) or Color3.fromRGB(40, 40, 40)
         if callback then callback(toggled) end
     end)
 
@@ -378,9 +394,10 @@ end
         
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
+    -- added by patch
+    local button.BackgroundTransparency = 0.4
             button.Size = UDim2.new(1, -10, 0, 30)
-            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)BackgroundTransparency = 0.4
+            button.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
             button.TextSize = 16
@@ -394,11 +411,15 @@ end
 
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
+    -- added by patch
+    local container.BackgroundTransparency = 0.4
     container.Size = UDim2.new(1, -10, 0, 30)
     container.BackgroundTransparency = 1
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
+    -- added by patch
+    local titleLabel.BackgroundTransparency = 0.4
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = title
@@ -408,6 +429,8 @@ function newPage:Dropdown(title, items, callback)
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local arrow = Instance.new("TextLabel", container)
+    -- added by patch
+    local arrow.BackgroundTransparency = 0.4
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
     arrow.BackgroundTransparency = 1
@@ -417,10 +440,11 @@ function newPage:Dropdown(title, items, callback)
     arrow.TextSize = 16
 
     local dropdownButton = Instance.new("TextButton", container)
+    -- added by patch
+    local dropdownButton.BackgroundTransparency = 0.4
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)BackgroundTransparency = 0.4
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
@@ -428,6 +452,8 @@ function newPage:Dropdown(title, items, callback)
 
     local opened = false
     local optionContainer = Instance.new("Frame", page)
+    -- added by patch
+    local optionContainer.BackgroundTransparency = 0.4
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
     optionContainer.BackgroundTransparency = 1
     optionContainer.ClipsDescendants = true
@@ -451,9 +477,10 @@ function newPage:Dropdown(title, items, callback)
             end
             for _, item in ipairs(items) do
                 local option = Instance.new("TextButton", optionContainer)
+    -- added by patch
+    local option.BackgroundTransparency = 0.4
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -495,7 +522,6 @@ function library:Notifile(title, msg, duration)
     notif.Position = UDim2.new(1, 310, 1, -80)
     notif.AnchorPoint = Vector2.new(1, 1)
     notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)BackgroundTransparency = 0.4
     notif.BorderSizePixel = 0
 
     local label = Instance.new("TextLabel", notif)
