@@ -1125,6 +1125,38 @@ page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
     _G.rumblefarm = rlb
 end)
 
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+spawn(function()
+    while task.wait() do
+        if _G.rumblefarm then
+            pcall(function()
+                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                local hrp = character:WaitForChild("HumanoidRootPart")
+
+                local positions = {
+                    Vector3.new(-1277, 400, -1696),
+                    Vector3.new(-76, 215, -892),
+                    Vector3.new(1237, 340, -244),
+                    Vector3.new(1237, 340, -244),
+                    Vector3.new(-1668, 317, -300),
+                    Vector3.new(-1109, 341, 1645),
+                    Vector3.new(1079, 445, -3334),
+                    Vector3.new(4646, 316, 5191),
+                    Vector3.new(2222, 300, -631)
+                }
+
+                for _, pos in ipairs(positions) do
+                    hrp.CFrame = CFrame.new(pos)
+                    task.wait(10)
+                end
+            end)
+        end
+    end
+end)
+
+
 spawn(function()
     while task.wait() do
         pcall(function()
