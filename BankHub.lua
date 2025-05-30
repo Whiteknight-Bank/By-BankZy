@@ -1709,25 +1709,33 @@ page7:Toggle("Auto Farm Compass", false, function(atrs)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(2) do
         pcall(function()
             if _G.farmcomp then
-                -- ส่งคำสั่งรับ Weekly3
-                local A_1 = "Claim"
-                local A_2 = "Weekly3"
-                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-                Event:FireServer(A_1, A_2)
-
-                -- รอเฉพาะหลังจากรัน ChallengeRemote
-                task.wait(2.7)
-
-                -- ค่อยยิง Stats
+		task.wait(2)
                 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
             end
         end)
     end
 end)
-	
+		
+page7:Toggle("Auto Farm Compass", false, function(clmw)
+    _G.claimwek = clmw
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.claimwek then
+                -- ส่งคำสั่งรับ Weekly3
+                local A_1 = "Claim"
+                local A_2 = "Weekly3"
+                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+                Event:FireServer(A_1, A_2)
+            end
+        end)
+    end
+end)	
 page7:Label("┇ Function Quest Sam ┇")
 page7:Section("Warning: If You Want Unlimited, Pls Click Dupe")
 
