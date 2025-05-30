@@ -1147,7 +1147,6 @@ spawn(function()
 		    wait(10)
 		    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2222, 300, -631)
 		end)
-            end
         end
     end
 end)
