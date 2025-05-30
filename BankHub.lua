@@ -1126,11 +1126,11 @@ page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
 end)
 
 local points = {
-    CFrame.new(-1277, 600, -1696),
-    CFrame.new(-76, 615, -892),
-    CFrame.new(1237, 240, -244),
-    CFrame.new(-1668, 217, -300),
-    CFrame.new(-1109, 341, 1645)
+    CFrame.new(-1277, 400, -1696),
+    CFrame.new(-76, 215, -892),
+    CFrame.new(1237, 340, -244),
+    CFrame.new(-1668, 317, -300),
+    CFrame.new(-1109, 441, 1645)
 }
 
 spawn(function()
