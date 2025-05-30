@@ -1185,7 +1185,7 @@ spawn(function()
                 if not rumble then return end
 
                 -- ลิสต์คำที่ต้องการกรอง
-                local targetKeywords = { "Angry", "Boar", "Crab" }
+                local targetKeywords = { "Angry", "Boar", "Crab", "Bandit", "Cave", "Gunslingers", "Thug" ,"Thief" "Freddy" }
 
                 for _, v in pairs(workspace.Enemies:GetChildren()) do  
                     if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then  
