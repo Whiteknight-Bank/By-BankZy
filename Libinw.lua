@@ -22,7 +22,7 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
 
-    -- เมนูหลัก
+    -- เน€เธกเธเธนเธซเธฅเธฑเธ
     local main = Instance.new("Frame")
     main.Size = UDim2.new(0, 500, 0, 350)
     main.Position = UDim2.new(0.5, -250, 0.5, -175)
@@ -32,12 +32,12 @@ function library:Win(title)
     main.Parent = gui
     main.ClipsDescendants = true
 
-    -- เส้นขอบขาวรอบกล่อง
+    -- เน€เธชเนเธเธเธญเธเธเธฒเธงเธฃเธญเธเธเธฅเนเธญเธ
     local border = Instance.new("UIStroke", main)
     border.Thickness = 2
     border.Color = Color3.fromRGB(255, 255, 255)
 
-    -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด
+    -- เธเธธเนเธก "Bank Hub" เธฅเธญเธขเธญเธขเธนเนเธเนเธฒเธขเธเธเน€เธกเธเธนเธ•เธฅเธญเธ”
     local toggleButton = Instance.new("TextButton")
     toggleButton.Size = UDim2.new(0, 80, 0, 30)
     toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -49,7 +49,7 @@ function library:Win(title)
     toggleButton.ZIndex = 10
     toggleButton.Parent = gui
 
-    -- Title bar (ใช้ลาก)
+    -- Title bar (เนเธเนเธฅเธฒเธ)
     local titleBar = Instance.new("TextLabel")
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
@@ -78,7 +78,7 @@ function library:Win(title)
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
 
-    -- Dragging Menu by titleBar (ลากเมนู)
+    -- Dragging Menu by titleBar (เธฅเธฒเธเน€เธกเธเธน)
     local dragging, dragStart, startPos
     titleBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -99,12 +99,12 @@ function library:Win(title)
         end
     end)
 
-    -- ตำแหน่งปุ่มติดซ้ายบนเมนูเสมอ
+    -- เธ•เธณเนเธซเธเนเธเธเธธเนเธกเธ•เธดเธ”เธเนเธฒเธขเธเธเน€เธกเธเธนเน€เธชเธกเธญ
     RunService.RenderStepped:Connect(function()
         toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X - 85, 0, main.AbsolutePosition.Y)
     end)
 
-    -- Toggle ปิด/เปิดเมนูแบบมีแอนิเมชัน
+    -- Toggle เธเธดเธ”/เน€เธเธดเธ”เน€เธกเธเธนเนเธเธเธกเธตเนเธญเธเธดเน€เธกเธเธฑเธ
     local isOpen = true
     local fullSize = main.Size
     local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
@@ -141,7 +141,7 @@ function tabs:Taps(name)
     page.Visible = false  
     page.ScrollBarThickness = 6  
     page.CanvasSize = UDim2.new(0, 0, 0, 0)  
-    page.BackgroundTransparency = 0.5
+    page.BackgroundTransparency = 1  
     page.Name = name .. "_Page"  
 
     local layout = Instance.new("UIListLayout", page)  
@@ -187,12 +187,12 @@ function tabs:Taps(name)
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 0.5
+    container.BackgroundTransparency = 1
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
-    titleLabel.BackgroundTransparency = 0.5
+    titleLabel.BackgroundTransparency = 1
     titleLabel.Text = title
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.Font = Enum.Font.SourceSans
@@ -202,8 +202,8 @@ function newPage:Dropdown(title, items, callback)
     local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
-    arrow.BackgroundTransparency = 0.5
-    arrow.Text = "◂"
+    arrow.BackgroundTransparency = 1
+    arrow.Text = "โ—"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
@@ -220,7 +220,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 0.5
+    optionContainer.BackgroundTransparency = 1
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
@@ -228,7 +228,7 @@ function newPage:Dropdown(title, items, callback)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "↓" or "←"
+        arrow.Text = opened and "โ“" or "โ"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -252,7 +252,7 @@ function newPage:Dropdown(title, items, callback)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "←"
+                    arrow.Text = "โ"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
@@ -286,7 +286,7 @@ end
         function newPage:Section(txt)
             local section = Instance.new("TextLabel", page)
             section.Size = UDim2.new(1, -10, 0, 25)
-            section.Text = "─ " .. txt .. " ─"
+            section.Text = "โ”€ " .. txt .. " โ”€"
             section.TextColor3 = Color3.fromRGB(200, 200, 200)
             section.Font = Enum.Font.SourceSansBold
             section.TextSize = 16
@@ -303,7 +303,7 @@ end
     local label = Instance.new("TextLabel", toggleFrame)
     label.Size = UDim2.new(1, -50, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 0.5
+    label.BackgroundTransparency = 1
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 16
@@ -353,7 +353,7 @@ end
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
             button.Size = UDim2.new(1, -10, 0, 30)
-            button.BackgroundColor3 = 0.5
+            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
             button.TextSize = 16
@@ -368,7 +368,7 @@ end
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 0.5
+    container.BackgroundTransparency = 1
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
@@ -383,8 +383,8 @@ function newPage:Dropdown(title, items, callback)
     local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
-    arrow.BackgroundTransparency = 0.5
-    arrow.Text = "◂"
+    arrow.BackgroundTransparency = 1
+    arrow.Text = "โ—"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
@@ -401,7 +401,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 0.5
+    optionContainer.BackgroundTransparency = 1
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
@@ -409,7 +409,7 @@ function newPage:Dropdown(title, items, callback)
 
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
-        arrow.Text = opened and "↓" or "←"
+        arrow.Text = opened and "โ“" or "โ"
         optionContainer:TweenSize(
             UDim2.new(1, -10, 0, opened and (#items * 25) or 0),
             Enum.EasingDirection.Out,
@@ -433,7 +433,7 @@ function newPage:Dropdown(title, items, callback)
                     dropdownButton.Text = item
                     if callback then callback(item) end
                     opened = false
-                    arrow.Text = "←"
+                    arrow.Text = "โ"
                     optionContainer:TweenSize(
                         UDim2.new(1, -10, 0, 0),
                         Enum.EasingDirection.Out,
