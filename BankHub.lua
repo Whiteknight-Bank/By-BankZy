@@ -1125,53 +1125,24 @@ page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
     _G.rumblefarm = rlb
 end)
 
+local points = {
+    CFrame.new(-1277, 600, -1696),
+    CFrame.new(-76, 615, -892),
+    CFrame.new(1237, 240, -244),
+    CFrame.new(-1668, 217, -300),
+    CFrame.new(-1109, 341, 1645)
+}
+
 spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.none then
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
-                if not rumble then return end
-
-                for _, v in pairs(workspace.Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
-                        local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if dist < 1000 then
-                            -- รีเฟรช VTQ ทุกครั้ง
-                            local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
-
-                            v.HumanoidRootPart.CanCollide = false
-                            v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-
-                            -- ชาร์จพลัง
-                            rumble.RemoteEvent:FireServer(
-                                VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil
-                            )
-
-                            task.wait(0.45) -- รอให้เต็ม
-
-                            -- ปล่อยพลัง
-                            local args = {
-                                [1] = VTQ,
-                                [2] = "RumblePower2",
-                                [3] = "StopCharging",
-                                [4] = v.HumanoidRootPart.Position,
-                                [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
-                                [6] = 200,
-                                [7] = char.HumanoidRootPart.Position
-                            }
-
-                            rumble.RemoteEvent:FireServer(unpack(args))
-
-                          task.wait(0.25)
-
-
-                        end
-                    end
-                end
+    while wait() do
+        if _G.rumblefarm then
+            for i, cf in ipairs(points) do
+                pcall(function()
+                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = cf
+                end)
+                wait(4)
             end
-        end)
+        end
     end
 end)
 
