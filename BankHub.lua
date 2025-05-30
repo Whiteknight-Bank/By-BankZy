@@ -1126,32 +1126,6 @@ page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
 end)
 
 spawn(function()
-    while wait() do
-        if _G.rumblefarm then
-                pcall(function()
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1277, 400, -1696)
-		    wait(10)
-                    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-76, 215, -892)
-		    wait(10)
-		    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1237, 340, -244)
-		    wait(10)
-	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1237, 340, -244)
-		    wait(10)
-	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1668, 317, -300)
-	            wait(10)
-	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1109, 341, 1645)
-		    wait(10)
-	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1079, 445, -3334)
-		    wait(10)
-	            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4646, 316, 5191)
-		    wait(10)
-		    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2222, 300, -631)
-		end)
-        end
-    end
-end)
-
-spawn(function()
     while task.wait() do
         pcall(function()
             if _G.rumblefarm then
