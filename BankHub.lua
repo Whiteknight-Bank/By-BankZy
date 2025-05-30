@@ -1712,7 +1712,7 @@ spawn(function()
     while wait(2) do
         pcall(function()
             if _G.farmcomp then
-		task.wait(2)
+		task.wait(1)
                 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
             end
         end)
@@ -1746,7 +1746,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if not AutoComp then return end;
+            if not AutoComp or _G.farmcomp then return end;
             local Compass = game.Players.LocalPlayer.Backpack:FindFirstChild("Compass");
             local Compass2 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
 	    local Compass3 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
