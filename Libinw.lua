@@ -125,7 +125,7 @@ function library:Win(title)
         isOpen = not isOpen
     end)
 
-  local tabs = {}
+ local tabs = {}
 
 function tabs:Taps(name)
     local tabButton = Instance.new("TextButton", tabButtons)
