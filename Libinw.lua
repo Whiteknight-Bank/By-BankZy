@@ -141,7 +141,7 @@ function tabs:Taps(name)
     page.Visible = false  
     page.ScrollBarThickness = 6  
     page.CanvasSize = UDim2.new(0, 0, 0, 0)  
-    page.BackgroundTransparency = 1  
+    page.BackgroundTransparency = 0.5
     page.Name = name .. "_Page"  
 
     local layout = Instance.new("UIListLayout", page)  
@@ -187,12 +187,12 @@ function tabs:Taps(name)
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 1
+    container.BackgroundTransparency = 0.5
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
-    titleLabel.BackgroundTransparency = 1
+    titleLabel.BackgroundTransparency = 0.5
     titleLabel.Text = title
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.Font = Enum.Font.SourceSans
@@ -202,7 +202,7 @@ function newPage:Dropdown(title, items, callback)
     local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
-    arrow.BackgroundTransparency = 1
+    arrow.BackgroundTransparency = 0.5
     arrow.Text = "◂"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
@@ -220,7 +220,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 1
+    optionContainer.BackgroundTransparency = 0.5
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
@@ -303,7 +303,7 @@ end
     local label = Instance.new("TextLabel", toggleFrame)
     label.Size = UDim2.new(1, -50, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 1
+    label.BackgroundTransparency = 0.5
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 16
@@ -353,7 +353,7 @@ end
         function newPage:Button(text, callback)
             local button = Instance.new("TextButton", page)
             button.Size = UDim2.new(1, -10, 0, 30)
-            button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            button.BackgroundColor3 = 0.5
             button.TextColor3 = Color3.fromRGB(255, 255, 255)
             button.Font = Enum.Font.SourceSans
             button.TextSize = 16
@@ -368,7 +368,7 @@ end
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 1
+    container.BackgroundTransparency = 0.5
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
@@ -383,7 +383,7 @@ function newPage:Dropdown(title, items, callback)
     local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
-    arrow.BackgroundTransparency = 1
+    arrow.BackgroundTransparency = 0.5
     arrow.Text = "◂"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
@@ -401,7 +401,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 1
+    optionContainer.BackgroundTransparency = 0.5
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
