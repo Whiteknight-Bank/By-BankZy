@@ -125,7 +125,7 @@ function library:Win(title)
         isOpen = not isOpen
     end)
 
-   local tabs = {}
+  local tabs = {}
 
 function tabs:Taps(name)
     local tabButton = Instance.new("TextButton", tabButtons)
@@ -188,6 +188,9 @@ function tabs:Taps(name)
             end
         end)
     end
+
+    return newPage
+end
         
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
