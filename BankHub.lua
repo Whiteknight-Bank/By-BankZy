@@ -1130,7 +1130,10 @@ local points = {
     CFrame.new(-76, 215, -892),
     CFrame.new(1237, 340, -244),
     CFrame.new(-1668, 317, -300),
-    CFrame.new(-1109, 441, 1645)
+    CFrame.new(-1109, 341, 1645),
+    CFrame.new(1079, 445, -3334),
+    CFrame.new(4646, 316, 5191),
+    CFrame.new(2222, 300, -631)
 }
 
 spawn(function()
@@ -1180,6 +1183,23 @@ spawn(function()
 
                                 -- ชาร์จพลัง  
                                 rumble.RemoteEvent:FireServer(VTQ, "RumblePower2", "StartCharging")
+
+                                task.wait(0.45)
+
+                                -- ปล่อยพลัง  
+                                local args = {
+                                    [1] = VTQ,
+                                    [2] = "RumblePower2",
+                                    [3] = "StopCharging",
+                                    [4] = v.HumanoidRootPart.Position,
+                                    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
+                                    [6] = 200,
+                                    [7] = char.HumanoidRootPart.Position
+                                }
+
+                                rumble.RemoteEvent:FireServer(unpack(args))
+                                task.wait(0.25)
+				rumble.RemoteEvent:FireServer(VTQ, "RumblePower2", "StartCharging")
 
                                 task.wait(0.45)
 
