@@ -1137,7 +1137,7 @@ spawn(function()
                 for _, v in pairs(workspace.Enemies:GetChildren()) do
                     if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then
                         local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude
-                        if dist < 10000000000000000000000 then
+                        if dist < 1000 then
                             -- รีเฟรช VTQ ทุกครั้ง
                             local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()
 
@@ -1149,7 +1149,7 @@ spawn(function()
                                 VTQ, "RumblePower2", "StartCharging", nil, nil, nil, nil
                             )
 
-                            task.wait(0.7) -- รอให้เต็ม
+                            task.wait(0.45) -- รอให้เต็ม
 
                             -- ปล่อยพลัง
                             local args = {
@@ -1164,7 +1164,7 @@ spawn(function()
 
                             rumble.RemoteEvent:FireServer(unpack(args))
 
-                          task.wait(0.45)
+                          task.wait(0.25)
 
 
                         end
