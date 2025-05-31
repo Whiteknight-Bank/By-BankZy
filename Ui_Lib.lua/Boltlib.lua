@@ -1,3 +1,5 @@
+local TweenService = game:GetService("TweenService")
+
 -- รีโหลด UI หากมีอยู่ก่อน
 pcall(function()
     game.CoreGui:FindFirstChild("redui"):Destroy()
@@ -60,6 +62,79 @@ function UiLibrary:Window(titleText)
     ContentHolder.ClipsDescendants = true
     ContentHolder.Parent = MainSceen
 
+    local TopBar = Instance.new("Frame")
+    TopBar.Size = UDim2.new(1, -20, 0, 40)
+    TopBar.Position = UDim2.new(0, 10, 0, 0)
+    TopBar.BackgroundTransparency = 1
+    TopBar.Parent = MainSceen
+
+    -- Title Text
+    local Title = Instance.new("TextLabel")
+    Title.Size = UDim2.new(1, -100, 1, 0)
+    Title.Position = UDim2.new(0, 0, 0, 0)
+    Title.BackgroundTransparency = 1
+    Title.Text = titleText or "Bank Hub"
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 20
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.Parent = TopBar
+
+    -- ปุ่มย่อ (Minimize)
+    local MinimizeBtn = Instance.new("TextButton")
+    MinimizeBtn.Size = UDim2.new(0, 30, 0, 30)
+    MinimizeBtn.Position = UDim2.new(1, -70, 0.5, -15)
+    MinimizeBtn.Text = "-"
+    MinimizeBtn.TextSize = 18
+    MinimizeBtn.Font = Enum.Font.GothamBold
+    MinimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    MinimizeBtn.Parent = TopBar
+    Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 8)
+
+    -- ปุ่มปิด (Close)
+    local CloseBtn = Instance.new("TextButton")
+    CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+    CloseBtn.Position = UDim2.new(1, -35, 0.5, -15)
+    CloseBtn.Text = "X"
+    CloseBtn.TextSize = 18
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+    CloseBtn.Parent = TopBar
+    Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 8)
+
+    -- ปิด UI
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+
+    -- ย่อ/ขยาย Animation
+    local isMinimized = false
+    local fullSize = MainSceen.Size
+    local collapsedSize = UDim2.new(0, 200, 0, 50)
+
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        if not isMinimized then
+            for _, v in pairs(MainSceen:GetChildren()) do
+                if v ~= TopBar then v.Visible = false end
+            end
+            TweenService:Create(MainSceen, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                Size = collapsedSize
+            }):Play()
+        else
+            TweenService:Create(MainSceen, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                Size = fullSize
+            }):Play()
+            task.delay(0.3, function()
+                for _, v in pairs(MainSceen:GetChildren()) do
+                    if v ~= TopBar then v.Visible = true end
+                end
+            end)
+        end
+        isMinimized = not isMinimized
+    end)
+    
     local Pages = {}
 
     function UiLibrary:Taps(name)
