@@ -1,1 +1,10 @@
+local lib = loadstring(game:HttpGet("URL-ของ-Library-นี้"))()
+local win = lib:CreateWindow("💎 Bank Hub 💎")
 
+win:Label("ระบบหลัก")
+win:Toggle("Auto Claim Expertise", function(on)
+    print("Toggle:", on)
+end)
+win:Button("Button", function()
+    print("ปุ่มถูกกดแล้ว!")
+end)
