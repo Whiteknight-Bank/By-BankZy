@@ -87,56 +87,6 @@ task.spawn(function()
 	updateLoading = false
 	wait(0.5)
 	ScreenGui:Destroy()
-
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
--- UI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "UpdatePopupCenter"
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
--- Main Frame (กลางจอจริง ๆ แนวตั้ง+แนวนอน)
-local mainFrame = Instance.new("Frame")
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-mainFrame.Size = UDim2.new(0, 500, 0, 50)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-mainFrame.BackgroundTransparency = 0.3
-mainFrame.BorderSizePixel = 0
-mainFrame.ClipsDescendants = true
-mainFrame.Parent = screenGui
-
--- ปุ่มลูกศรซ้าย
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 40, 0, 50)
-toggleButton.Position = UDim2.new(0, 0, 0, 0)
-toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "▼"
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 22
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Parent = mainFrame
-
--- ปุ่มปิดขวา
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 40, 0, 50)
-closeButton.AnchorPoint = Vector2.new(1, 0)
-closeButton.Position = UDim2.new(1, 0, 0, 0)
-closeButton.BackgroundTransparency = 1
-closeButton.Text = "✖"
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 22
-closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-closeButton.Parent = mainFrame
-
--- ปุ่มปิดทั้งหมด
-closeButton.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-end)
 		
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
 local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
