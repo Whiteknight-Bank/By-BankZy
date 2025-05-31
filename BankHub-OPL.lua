@@ -88,8 +88,8 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 		
-local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Libinw.lua"))()
-local Window = create:Win("Bank Hub : For Map OPL:Anarchy")
+local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
+local Window = create:Win("Bank Hub : For Map One Piece: Legendary")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
 
