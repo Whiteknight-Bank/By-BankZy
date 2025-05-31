@@ -1,4 +1,4 @@
-local lib = loadstring(game:HttpGet("URL-ของ-Library-นี้"))()
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib.lua/Boltlib.lua"))()
 local win = lib:CreateWindow("💎 Bank Hub 💎")
 
 win:Label("ระบบหลัก")
