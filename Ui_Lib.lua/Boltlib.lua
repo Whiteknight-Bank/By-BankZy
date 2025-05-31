@@ -1,4 +1,9 @@
---// UI LIBRARY เริ่มต้น local TweenService = game:GetService("TweenService") local Players = game:GetService("Players") local player = Players.LocalPlayer local PlayerGui = player:WaitForChild("PlayerGui")
+--// UI LIBRARY เริ่มต้น 
+
+local TweenService = game:GetService("TweenService") 
+local Players = game:GetService("Players") 
+local player = Players.LocalPlayer 
+local PlayerGui = player:WaitForChild("PlayerGui")
 
 local UiLibrary = {}
 
