@@ -1,10 +1,11 @@
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib.lua/Boltlib.lua"))()
 local win = lib:CreateWindow("💎 Bank Hub 💎")
 
-win:Label("ระบบหลัก")
-win:Toggle("Auto Claim Expertise", function(on)
-    print("Toggle:", on)
+local page = window:Taps("Main")
+page:Toggle("Auto Claim Expertise", function(state)
+    print("Toggle:", state)
 end)
-win:Button("Button", function()
-    print("ปุ่มถูกกดแล้ว!")
+
+page:Button("Button", function()
+    print("ปุ่มถูกกด")
 end)
