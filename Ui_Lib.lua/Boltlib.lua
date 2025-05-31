@@ -1,83 +1,91 @@
-local CoreGui = game:GetService("CoreGui")
+-- รีโหลดสคริปต์ตัวเองก่อน
+pcall(function()
+    game.CoreGui:FindFirstChild("redui"):Destroy()
+end)
 
+-- UI Library
 local UiLibrary = {}
 UiLibrary.__index = UiLibrary
 
-function UiLibrary:CreateWindow(title)
-    local ScreenGui = Instance.new("ScreenGui", CoreGui)
-    ScreenGui.Name = "SmoothUILibrary"
+function UiLibrary:Window(title)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "redui"
     ScreenGui.IgnoreGuiInset = true
     ScreenGui.ResetOnSpawn = false
+    ScreenGui.Parent = game:GetService("CoreGui")
 
-    local MainFrame = Instance.new("Frame", ScreenGui)
-    MainFrame.Size = UDim2.new(0, 550, 0, 380)
-    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    MainFrame.BackgroundTransparency = 0.05
-    MainFrame.BorderSizePixel = 0
-    MainFrame.Active = true
-    MainFrame.Draggable = true
+    local MainSceen = Instance.new("Frame")
+    MainSceen.Name = "MainSceen"
+    MainSceen.Size = UDim2.new(0, 550, 0, 380)
+    MainSceen.Position = UDim2.new(0.5, 0, 0.5, 0)
+    MainSceen.AnchorPoint = Vector2.new(0.5, 0.5)
+    MainSceen.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    MainSceen.BackgroundTransparency = 0.1
+    MainSceen.BorderSizePixel = 0
+    MainSceen.ClipsDescendants = true
+    MainSceen.Active = true
+    MainSceen.Draggable = true
+    MainSceen.Parent = ScreenGui
 
-    local UICorner = Instance.new("UICorner", MainFrame)
+    local UICorner = Instance.new("UICorner")
     UICorner.CornerRadius = UDim.new(0, 16)
+    UICorner.Parent = MainSceen
 
-    local Title = Instance.new("TextLabel", MainFrame)
-    Title.Size = UDim2.new(1, 0, 0, 40)
-    Title.BackgroundTransparency = 1
-    Title.Text = title or "UI Library"
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.GothamBold
-    Title.TextSize = 20
-
-    local UIListLayout = Instance.new("UIListLayout", MainFrame)
+    local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.Padding = UDim.new(0, 8)
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = MainSceen
 
-    function UiLibrary:Toggle(text, callback)
-        local holder = Instance.new("Frame", MainFrame)
-        holder.Size = UDim2.new(1, -20, 0, 40)
-        holder.BackgroundTransparency = 1
-        holder.LayoutOrder = 2
+    local page = {}
 
-        local label = Instance.new("TextLabel", holder)
-        label.Text = text
-        label.Size = UDim2.new(1, -60, 1, 0)
-        label.Position = UDim2.new(0, 10, 0, 0)
-        label.BackgroundTransparency = 1
-        label.TextColor3 = Color3.fromRGB(255, 255, 255)
-        label.Font = Enum.Font.Gotham
-        label.TextSize = 16
-        label.TextXAlignment = Enum.TextXAlignment.Left
+    function page:Toggle(text, callback)
+        local Holder = Instance.new("Frame")
+        Holder.Size = UDim2.new(1, -40, 0, 40)
+        Holder.BackgroundTransparency = 1
+        Holder.LayoutOrder = 1
+        Holder.Parent = MainSceen
 
-        local toggleBtn = Instance.new("TextButton", holder)
-        toggleBtn.Size = UDim2.new(0, 40, 0, 22)
-        toggleBtn.Position = UDim2.new(1, -50, 0.5, -11)
-        toggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        toggleBtn.Text = ""
-        toggleBtn.AutoButtonColor = false
+        local Label = Instance.new("TextLabel")
+        Label.Text = text
+        Label.Size = UDim2.new(1, -60, 1, 0)
+        Label.Position = UDim2.new(0, 10, 0, 0)
+        Label.BackgroundTransparency = 1
+        Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Label.Font = Enum.Font.Gotham
+        Label.TextSize = 16
+        Label.TextXAlignment = Enum.TextXAlignment.Left
+        Label.Parent = Holder
 
-        local corner = Instance.new("UICorner", toggleBtn)
-        corner.CornerRadius = UDim.new(1, 0)
+        local Toggle = Instance.new("TextButton")
+        Toggle.Size = UDim2.new(0, 40, 0, 22)
+        Toggle.Position = UDim2.new(1, -50, 0.5, -11)
+        Toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        Toggle.Text = ""
+        Toggle.AutoButtonColor = false
+        Toggle.Parent = Holder
 
-        local knob = Instance.new("Frame", toggleBtn)
-        knob.Size = UDim2.new(0, 18, 0, 18)
-        knob.Position = UDim2.new(0, 2, 0.5, -9)
-        knob.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-        knob.BorderSizePixel = 0
+        local Corner = Instance.new("UICorner", Toggle)
+        Corner.CornerRadius = UDim.new(1, 0)
 
-        local knobCorner = Instance.new("UICorner", knob)
-        knobCorner.CornerRadius = UDim.new(1, 0)
+        local Knob = Instance.new("Frame")
+        Knob.Size = UDim2.new(0, 18, 0, 18)
+        Knob.Position = UDim2.new(0, 2, 0.5, -9)
+        Knob.BackgroundColor3 = Color3.fromRGB(220, 220, 220)
+        Knob.BorderSizePixel = 0
+        Knob.Parent = Toggle
+
+        local KnobCorner = Instance.new("UICorner", Knob)
+        KnobCorner.CornerRadius = UDim.new(1, 0)
 
         local toggled = false
-        toggleBtn.MouseButton1Click:Connect(function()
+        Toggle.MouseButton1Click:Connect(function()
             toggled = not toggled
             if toggled then
-                toggleBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
-                knob:TweenPosition(UDim2.new(1, -20, 0.5, -9), "Out", "Quad", 0.2, true)
+                Toggle.BackgroundColor3 = Color3.fromRGB(0, 170, 127)
+                Knob:TweenPosition(UDim2.new(1, -20, 0.5, -9), "Out", "Quad", 0.2, true)
             else
-                toggleBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-                knob:TweenPosition(UDim2.new(0, 2, 0.5, -9), "Out", "Quad", 0.2, true)
+                Toggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                Knob:TweenPosition(UDim2.new(0, 2, 0.5, -9), "Out", "Quad", 0.2, true)
             end
             if callback then
                 callback(toggled)
@@ -85,26 +93,31 @@ function UiLibrary:CreateWindow(title)
         end)
     end
 
-    function UiLibrary:Button(text, callback)
-        local btn = Instance.new("TextButton", MainFrame)
-        btn.Size = UDim2.new(1, -40, 0, 36)
-        btn.Position = UDim2.new(0, 20, 0, 0)
-        btn.BackgroundColor3 = Color3.fromRGB(30, 120, 255)
-        btn.Text = text
-        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.Font = Enum.Font.GothamBold
-        btn.TextSize = 16
-        btn.AutoButtonColor = true
-        btn.LayoutOrder = 3
+    function page:Button(text, callback)
+        local Button = Instance.new("TextButton")
+        Button.Size = UDim2.new(1, -40, 0, 36)
+        Button.Position = UDim2.new(0, 20, 0, 0)
+        Button.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+        Button.Text = text
+        Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Button.Font = Enum.Font.GothamBold
+        Button.TextSize = 16
+        Button.AutoButtonColor = true
+        Button.LayoutOrder = 2
+        Button.Parent = MainSceen
 
-        local btnCorner = Instance.new("UICorner", btn)
-        btnCorner.CornerRadius = UDim.new(0, 8)
+        local ButtonCorner = Instance.new("UICorner", Button)
+        ButtonCorner.CornerRadius = UDim.new(0, 8)
 
-        btn.MouseButton1Click:Connect(function()
+        Button.MouseButton1Click:Connect(function()
             if callback then
                 callback()
             end
         end)
+    end
+
+    function UiLibrary:Taps(name)
+        return page
     end
 
     return UiLibrary
