@@ -2011,7 +2011,7 @@ page5:Button("Click to Tp" , function()
         elseif getgenv().tpmerchant == "Krizma" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
 	elseif getgenv().tpmerchant == "Heavy Weapon" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2610, 258, 1110)
         elseif getgenv().tpmerchant == "Sword" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1005, 224, -3339)
         elseif getgenv().tpmerchant == "Sniper" then
@@ -2023,7 +2023,7 @@ page5:Button("Click to Tp" , function()
         elseif getgenv().tpmerchant == "Fish" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1983, 218, 566)
 	elseif getgenv().tpmerchant == "Friend" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1242, 229, -3243)
         elseif getgenv().tpmerchant == "Expertise" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
         end
