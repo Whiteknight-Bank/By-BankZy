@@ -908,7 +908,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-page1:Toggle("Auto Farm Haki (Very Ping)", false, function(gthi)
+page1:Toggle("Auto Get Haki", false, function(gthi)
     getgenv().haki = gthi
 while getgenv().haki do
             wait()
