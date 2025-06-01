@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- เพิ่ม Function Storage เข้ามา กับ Stealing Fruity\n- Coming Soon . . ."
+label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- เพิ่ม Function Storage เข้ามา กับ Stealing Fruity\n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -544,15 +544,27 @@ spawn(function()
 end)
 
 page1:Toggle("Auto Fishing", false, function(fsh)
-    AutoFishing = fsh
+    AutoFish = fsh
 end)
 
-spawn(function() -- fish farm
+spawn(function() 
     while wait(0) do
         pcall(function()
-            if AutoFishing then
+            if AutoFish then
                 wait(0.5)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-20000, 218, 20000)
+                local CharacterName = game.Players.LocalPlayer.Character
+                local position = CharacterName.HumanoidRootPart.CFrame * CFrame.new(0, 0, -15)
+                local char = CharacterName.HumanoidRootPart
+                char.CFrame = CFrame.new(-20000, 218, 20000)
+        
+                local b1 = Instance.new("Part")
+                b1.Shape = "Block"
+                b1.Material = "Neon"
+                b1.BrickColor = BrickColor.new("Hot Pink")
+                b1.Anchored = true
+                b1.Parent = game.Workspace
+                b1.CFrame = CFrame.new(-20000, 213, 20000)
+                b1.Size = Vector3.new(5, 0.1, 5)
                 wait(0.5)
                 for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                     if string.find(v.Name, "Rod") then
@@ -895,6 +907,22 @@ game:GetService('RunService').RenderStepped:connect(function()
         end
     end
 end)
+
+page1:Toggle("Auto Farm Haki (Very Ping)", false, function(gthi)
+    getgenv().haki = gthi
+while getgenv().haki do
+            wait()
+            pcall(function()
+                workspace:WaitForChild("Merchants")
+                    :WaitForChild("QuestHakiMerchant")
+                    :WaitForChild("Clickable")
+                    :WaitForChild("Retum")
+                    :FireServer()
+                wait(2)
+            end)
+	end
+end)
+
 
 page1:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 
