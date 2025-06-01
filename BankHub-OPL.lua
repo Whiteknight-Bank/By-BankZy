@@ -2191,33 +2191,33 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Drop Compass", false, function(drpc)
-    AutoDropComp = drpc
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not AutoDropComp then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDropCompass"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value.Parent = game.Workspace;
-                end
-            end
-        end)
-    end
-end)
-
 page7:Button("Check You Compass", function()
 create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. " Compass", 5)
 end)
 
-page7:Toggle("Check Notifile Rare Fruity", false, function(drpc)
+page7:Label("Check Rare Who Got it On Sever")
+page7:Toggle("Check Rare Fruity", false, function(drpc)
     AutoDropComp = drpc
 end)
-	
+
+page7:Toggle("Check Rare Box", false, function(drpc)
+    AutoDropComp = drpc
+end)
+
+page7:Label("Function Storage")
+page7:Section("↓ ยังใช้งานไม่ได้น้าา Steal Fruit กับ Auto Storage ↓")
+page7:Toggle("Auto Storage", false, function(drpc)
+    AutoDropComp = drpc
+end)
+
+page7:Toggle("Auto Steal Rare Fruit ( Noob Players )", false, function(drpc)
+    AutoDropComp = drpc
+end)
+page7:Label("↓ Use Quake to Steal Fruit ↓")
+page7:Toggle("Auto Quake Steal Rare Fruit ( Pro Players )", false, function(drpc)
+    AutoDropComp = drpc
+end)
+
 local Tab8 = Window:Taps("Misc")
 local page8 = Tab8:newpage()
 
