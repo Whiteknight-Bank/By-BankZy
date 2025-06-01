@@ -886,6 +886,41 @@ spawn(function()
     end
 end)
 
+page2:Toggle("Auto Click", false, function(state)
+    _G.autoclick = state
+end)
+
+spawn(function() 
+game:GetService("RunService").RenderStepped:Connect(function() 
+pcall(function() 
+if _G.autoclick then 
+game:GetService'VirtualUser':CaptureController() 
+game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
+end 
+end) 
+end) 
+end)
+
+page2:Toggle("Auto Equip", false, function(state)
+    _G.autoequip = state
+end)
+
+spawn(function() -- auto equip
+    while wait(0) do
+        pcall(function()
+            if _G.autoequip then
+                repeat
+                    wait(0.05)
+                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
+                until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
+                if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
+                    game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
+                end
+            end
+        end)
+    end
+end)
+
 page2:Label("┇ Function Farm with Cannon Ball ┇")
 page2:Toggle("Auto Farm Cannon Ball ( Slow)", false, function(bll)
     _G.autocannonslow = bll
@@ -1126,42 +1161,6 @@ spawn(function() -- autofarm cannon
                             v:Destroy()
                         end
                     end
-                end
-            end
-        end)
-    end
-end)
-
-page2:Label("┇ Function Weapon ┇")
-page2:Toggle("Auto Click", false, function(state)
-    _G.autoclick = state
-end)
-
-spawn(function() 
-game:GetService("RunService").RenderStepped:Connect(function() 
-pcall(function() 
-if _G.autoclick then 
-game:GetService'VirtualUser':CaptureController() 
-game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
-end 
-end) 
-end) 
-end)
-
-page2:Toggle("Auto Equip", false, function(state)
-    _G.autoequip = state
-end)
-
-spawn(function() -- auto equip
-    while wait(0) do
-        pcall(function()
-            if _G.autoequip then
-                repeat
-                    wait(0.05)
-                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
-                until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
-                if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-                    game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
                 end
             end
         end)
@@ -1707,6 +1706,16 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
+page4:Section("↓ ใช้งานไม่ได้↓")
+page4:Toggle("Auto Bring Player( All )", false, function(dops)
+	DropDrinks = dops
+end)
+
+page4:Toggle("Lock Aim Players", false, function(dops)
+	DropDrinks = dops
+end)
+page4:Section("↑ ใช้งานไม่ได้↑")
+
 page4:Label("┇ Shop ┇")
 page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
@@ -1769,24 +1778,11 @@ spawn(function()
     end
 end)
 
-page4:Label("┇ Spam Dash Player ┇")
-page4:Toggle("Spam Dash (Select Player)", false, function(dsh)
+page4:Label("┇ Hobbied Player ┇")
+page4:Toggle("Auto Hobby (All)", false, function(dsh)
 	_G.autodash = dsh
 end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.autodash then
-	for i,v in pairs(game:GetService("Workspace")[selectedPlayer]:GetChildren()) do
-if string.find(v.Name, "Dash") then
-v:FireServer(CFrame.new(game.Players[selectedPlayer].Character.HumanoidRootPart.Position),workspace.Water)
-end
-end
-            end
-        end)
-    end
-end)
+page4:Section("↑ ใช้งานไม่ได้ ↑")
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Kill Cannon Ball", false, function(bplr)
