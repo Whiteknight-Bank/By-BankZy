@@ -1988,7 +1988,7 @@ page5:Button("Click to Tp" , function()
     end)
 
 page5:Label("┇ NPCs ┇")
-page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise"}, function(n)
+page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
@@ -2010,6 +2010,8 @@ page5:Button("Click to Tp" , function()
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1702, 216, -325)
         elseif getgenv().tpmerchant == "Krizma" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
+	elseif getgenv().tpmerchant == "Heavy Weapon" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
         elseif getgenv().tpmerchant == "Sword" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1005, 224, -3339)
         elseif getgenv().tpmerchant == "Sniper" then
@@ -2020,6 +2022,8 @@ page5:Button("Click to Tp" , function()
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(113, 278, 4952)
         elseif getgenv().tpmerchant == "Fish" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(1983, 218, 566)
+	elseif getgenv().tpmerchant == "Friend" then
+            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
         elseif getgenv().tpmerchant == "Expertise" then
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
         end
