@@ -1464,7 +1464,7 @@ game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.B, false
     end
 end)
 
-page4:Toggle("Auto Skill N", false, function(nn)
+page3:Toggle("Auto Skill N", false, function(nn)
 	_G.skilln = nn
 end)
 
