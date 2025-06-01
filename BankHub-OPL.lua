@@ -2662,7 +2662,7 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol
                     [3] = false, -- melee
                     [4] = false, -- sniper
                     [5] = false, -- sword
-                    [6] = "Gem"
+                    [6] = "Gems"
                 }
 
                 if AffDefense1 == 2 then args1[2] = 0/0 end
@@ -2722,7 +2722,7 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg
                     [3] = false, -- melee
                     [4] = false, -- sniper
                     [5] = false, -- sword
-                    [6] = "Gem"
+                    [6] = "Gems"
                 }
 
                 if AffDefense2 == 2 then args2[2] = 0/0 end
