@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- Coming Soon . . ."
+label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- เพิ่ม Function Storage เข้ามา กับ Stealing Fruity\n- Coming Soon . . ."
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -1807,7 +1807,7 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Section("↓ ใช้งานไม่ได้↓")
+page4:Section("↓ ใช้งานไม่ได้ ↓")
 page4:Toggle("Auto Bring Player( All )", false, function(dops)
 	DropDrinks = dops
 end)
@@ -1815,7 +1815,7 @@ end)
 page4:Toggle("Lock Aim Players", false, function(dops)
 	DropDrinks = dops
 end)
-page4:Section("↑ ใช้งานไม่ได้↑")
+page4:Section("↑ ใช้งานไม่ได้ ↑")
 
 page4:Label("┇ Shop ┇")
 page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
@@ -2205,16 +2205,16 @@ page7:Toggle("Check Rare Box", false, function(drpc)
 end)
 
 page7:Label("Function Storage")
-page7:Section("↓ ยังใช้งานไม่ได้น้าา Steal Fruit กับ Auto Storage ↓")
+page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit กับ Auto Storage ↓")
 page7:Toggle("Auto Storage", false, function(drpc)
     AutoDropComp = drpc
 end)
 
-page7:Toggle("Auto Steal Rare Fruit ( Noob Players )", false, function(drpc)
+page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(drpc)
     AutoDropComp = drpc
 end)
 page7:Label("↓ Use Quake to Steal Fruit ↓")
-page7:Toggle("Auto Quake Steal Rare Fruit ( Pro Players )", false, function(drpc)
+page7:Toggle("Auto Quake Steal Rare Fruit ( สำหรับผู้เล่นเลือดเยอะ )", false, function(drpc)
     AutoDropComp = drpc
 end)
 
