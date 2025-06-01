@@ -665,7 +665,7 @@ local A_1 = "RewardMark"
 end)
 
 page1:Toggle("Auto Claim Gift (Gems)", false, function(gxm)
-_G.gemgift = gxm
+_G.gemsgift = gxm
 end)
 
 spawn(function()
