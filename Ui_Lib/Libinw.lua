@@ -233,7 +233,7 @@ function newPage:Dropdown(title, items, callback)
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
     dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)BackgroundTransparency = 0.4
+    dropdownButton.BackgroundTransparency = 0.4
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
@@ -266,7 +266,7 @@ function newPage:Dropdown(title, items, callback)
                 local option = Instance.new("TextButton", optionContainer)
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
+                option.BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -291,11 +291,17 @@ function newPage:Dropdown(title, items, callback)
             end
         end
     end)
-end
-            
-            return newPage
-        end
 
+    -- ✅ เพิ่มความสามารถ Destroy ได้
+    local dropdownObject = {}
+    function dropdownObject:Destroy()
+        container:Destroy()
+        optionContainer:Destroy()
+    end
+
+    return dropdownObject
+end
+        
         function newPage:Label(txt)
             local label = Instance.new("TextLabel", page)
             label.Size = UDim2.new(1, -10, 0, 25)
