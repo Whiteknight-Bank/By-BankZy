@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- เพิ่ม Function Storage เข้ามา กับ Stealing Fruity\n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
+label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage เข้ามา กับ Stealing Fruity \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -201,6 +201,14 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
+
+local rareFruits = {
+    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
+    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
+    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
+    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
+    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
+		}
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
@@ -543,7 +551,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Fishing", false, function(fsh)
+page1:Toggle("Auto Fishing & Cooking", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -2234,7 +2242,7 @@ end)
 local Players = game:GetService("Players")
 
 spawn(function()
-	while wait(5) do
+	while wait(3) do
 		if _G.checkrare then
 			pcall(function()
 				local players = Players:GetPlayers()
@@ -2249,8 +2257,9 @@ spawn(function()
 							local item = backpackItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									create:Notifile("", "พบผลไม้หายากใน Backpack: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
-									-- ใส่ notify ได้ที่นี่
+									local msg = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msg, 5)
 								end
 							end
 						end
@@ -2264,8 +2273,9 @@ spawn(function()
 							local item = characterItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									create:Notifile("", "พบผลไม้หายากใน Character: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
-									-- ใส่ notify ได้ที่นี่
+									local msg = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msg, 5)
 								end
 							end
 						end
@@ -2274,7 +2284,7 @@ spawn(function()
 			end)
 		end
 	end
-			end)
+end)
 
 page7:Toggle("Check Rare Box (ไม่ทำงาน)", false, function(drpc)
     AutoDropComp = drpc
