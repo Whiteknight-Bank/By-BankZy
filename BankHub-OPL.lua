@@ -2157,12 +2157,11 @@ local npcMapping = {
 }
 
 -- Setup dropdown handler
-local currentDropdown
-local reverseLookup = {}
+local currentDropdown -- เก็บ dropdown ที่ใช้ปัจจุบัน
 
 local function updateDropdown()
     if currentDropdown then
-        currentDropdown:Clear() -- เคลียร์ตัวเก่าออก
+        currentDropdown:Destroy() -- ลบ dropdown เดิมออกก่อน
     end
 
     local options = {}
@@ -2177,7 +2176,7 @@ local function updateDropdown()
         end
     end
 
-    -- สร้างใหม่
+page5:Label("┇ Secret Weapon Progress ┇")
     currentDropdown = page5:Dropdown("Select to View Progress", options, function(select)
         local realName = reverseLookup[select]
     end)
