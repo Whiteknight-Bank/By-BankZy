@@ -2156,12 +2156,11 @@ local npcMapping = {
     end,
 }
 
--- Setup dropdown handler
-local currentDropdown -- เก็บ dropdown ที่ใช้ปัจจุบัน
+local currentDropdown -- เก็บ dropdown ปัจจุบัน
 
 local function updateDropdown()
     if currentDropdown then
-        currentDropdown:Destroy() -- ลบ dropdown เดิมออกก่อน
+        currentDropdown:Destroy() -- 🔄 ลบของเก่า
     end
 
     local options = {}
@@ -2176,22 +2175,18 @@ local function updateDropdown()
         end
     end
 
-page5:Label("┇ Secret Weapon Progress ┇")
-    currentDropdown = page5:Dropdown("Select to View Progress", options, function(select)
-        local realName = reverseLookup[select]
+    -- สร้าง dropdown ใหม่และเก็บไว้
+    currentDropdown = page5:Dropdown("Select to View Progress", options, function(selected)
+        print("You Select:", reverseLookup[selected])
     end)
 end
 
--- เริ่มต้น dropdown
-updateDropdown()
+-- ปุ่ม Refresh
+page5:Button("🔄 Refresh", function()
+    updateDropdown()
+end)
 
--- เชื่อม event เปลี่ยนค่า
-for name in pairs(npcMapping) do
-    local obj = myData:FindFirstChild(name)
-    if obj and obj:IsA("ValueBase") then
-        obj:GetPropertyChangedSignal("Value"):Connect(updateDropdown)
-    end
-end
+updateDropdown()
 
 local Tab6 = Window:Taps("Storage")
 local page6 = Tab6:newpage()
