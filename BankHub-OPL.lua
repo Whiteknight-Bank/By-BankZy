@@ -2128,76 +2128,71 @@ local UserDataFolder = workspace:WaitForChild("UserData")
 local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
 local myData = myUserFolder:WaitForChild("Data")
 
--- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
+-- Mapping: Display Logic
 local npcMapping = {
     NPC_Activation_Chef = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 1000000 then
-            return "Aqua Staff: Done!"
-        else
-            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
-        end
+        return value and value >= 1000000 and "Aqua Staff: Done!" or "Aqua Staff: " .. (value or "Unknown") .. "/1,000,000"
     end,
-
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 50000000 then
-            return "Scissor Blade: Done!"
-        else
-            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
-        end
+        return value and value >= 50000000 and "Scissor Blade: Done!" or "Scissor Blade: " .. (value or "Unknown") .. "/50,000,000"
     end,
     NPC_Activation_Expert = function(obj)
-    local value = tonumber(obj.Value)
-    if value and value >= 1000 then
-        return "NPC_Activation_Expert: Done!"
-    else
-        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
-    end
-end,
+        local value = tonumber(obj.Value)
+        return value and value >= 1000 and "NPC_Activation_Expert: Done!" or "NPC_Activation_Expert: " .. (value or "Unknown") .. "/1000"
+    end,
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 100000000 then
-            return "Kanshou and Bakuya: Done!"
-        else
-            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
-        end
+        return value and value >= 100000000 and "Kanshou and Bakuya: Done!" or "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100,000,000"
     end,
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 200 then
-            return "Lightning Sword: Done!"
-        else
-            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
-        end
+        return value and value >= 200 and "Lightning Sword: Done!" or "Lightning Sword: " .. (value or "Unknown") .. "/200"
     end,
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 1000 then
-            return "Meteorite Sword: Done!"
-        else
-            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
-        end
-    end
+        return value and value >= 1000 and "Meteorite Sword: Done!" or "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
+    end,
 }
 
--- รวมรายการที่มีอยู่ใน Data
-local displayOptions = {}
+-- Setup dropdown handler
+local currentDropdown
 local reverseLookup = {}
 
-for name, transform in pairs(npcMapping) do
-    local found = myData:FindFirstChild(name)
-    if found then
-        local displayName = transform(found)
-        table.insert(displayOptions, displayName)
-        reverseLookup[displayName] = name
+local function updateDropdown()
+    if currentDropdown then
+        currentDropdown:Clear() -- เคลียร์ตัวเก่าออก
     end
+
+    local options = {}
+    reverseLookup = {}
+
+    for name, transform in pairs(npcMapping) do
+        local obj = myData:FindFirstChild(name)
+        if obj then
+            local display = transform(obj)
+            table.insert(options, display)
+            reverseLookup[display] = name
+        end
+    end
+
+    -- สร้างใหม่
+    currentDropdown = page5:Dropdown("Select to View Progress", options, function(select)
+        local realName = reverseLookup[select]
+    end)
 end
 
-page5:Label("┇ The Secret Weapon Progress ┇")
-page5:Dropdown("Select to View Progress", displayOptions, function(select)
-    local originalName = reverseLookup[select]
-end)
+-- เริ่มต้น dropdown
+updateDropdown()
+
+-- เชื่อม event เปลี่ยนค่า
+for name in pairs(npcMapping) do
+    local obj = myData:FindFirstChild(name)
+    if obj and obj:IsA("ValueBase") then
+        obj:GetPropertyChangedSignal("Value"):Connect(updateDropdown)
+    end
+end
 
 local Tab6 = Window:Taps("Storage")
 local page6 = Tab6:newpage()
