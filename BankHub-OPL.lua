@@ -202,14 +202,6 @@ Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
-local rareFruits = {
-    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
-    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
-    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
-    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
-    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
-		}
-
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -2287,6 +2279,14 @@ spawn(function()
 page7:Toggle("Check Rare Box (ไม่ทำงาน)", false, function(drpc)
     AutoDropComp = drpc
 end)
+
+local rareFruits = {
+    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
+    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
+    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
+    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
+    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
+		}
 
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
