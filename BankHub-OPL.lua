@@ -2286,8 +2286,61 @@ spawn(function()
 	end
 end)
 
-page7:Toggle("Check Rare Box (ไม่ทำงาน)", false, function(drpc)
-    AutoDropComp = drpc
+page7:Toggle("Check Rare Box", false, function(chbx)
+    _G.checkbox = chbx
+end)
+
+local Players = game:GetService("Players")
+
+-- รายการกล่องที่ต้องการเช็ค
+local targetBoxes = {
+	"Rare Box",
+	"Ultra Rare Box"
+}
+
+spawn(function()
+	while wait(5) do
+		if _G.checkbox then
+			pcall(function()
+				local players = Players:GetPlayers()
+
+				for i = 1, #players do
+					local player = players[i]
+
+					-- เช็คใน Backpack
+					if player:FindFirstChild("Backpack") then
+						local backpackItems = player.Backpack:GetChildren()
+						for j = 1, #backpackItems do
+							local item = backpackItems[j]
+							for k = 1, #targetBoxes do
+								if item.Name == targetBoxes[k] then
+									local msb = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
+									print(msb)
+									create:Notifile("", msb, 5)
+								end
+							end
+						end
+					end
+
+					-- เช็คใน Character
+					local character = workspace:FindFirstChild(player.Name)
+					if character then
+						local characterItems = character:GetChildren()
+						for j = 1, #characterItems do
+							local item = characterItems[j]
+							for k = 1, #targetBoxes do
+								if item.Name == targetBoxes[k] then
+									local msb = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msb, 5)
+								end
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
 end)
 
 local Cache = {
@@ -2326,7 +2379,7 @@ local function HandleFruits()
 end
 
 page7:Label("Function Storage")
-page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit ↓")
+page7:Section("↓ ยังใช้งานไม่ได้นะ Auto Storage ↓")
 
 for Index = 1, 12 do
 page7:Toggle("Auto Storage No. " .. Index, false, function(value)
@@ -2340,8 +2393,8 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(drpc)
-    AutoDropComp = drpc
+page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(cnns)
+    _G.cannonsteal = cnns
 end)
 page7:Label("↓ Use Quake to Steal Fruit ↓")
 page7:Toggle("Auto Quake Steal Rare Fruit ( สำหรับผู้เล่นเลือดเยอะ )", false, function(drpc)
