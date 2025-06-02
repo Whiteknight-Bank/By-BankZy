@@ -1843,6 +1843,12 @@ spawn(function()--autofruit
     end
 end)
 
+page4:Label("┇ Player ┇")
+page4:Dropdown("Select Player:", getPlayerNames(), function(name)
+    selectedPlayer = name
+end)
+
+
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
