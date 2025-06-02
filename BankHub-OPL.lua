@@ -2236,11 +2236,56 @@ create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.Loca
 end)
 
 page7:Label("Check Rare Who Got it On Sever")
-page7:Toggle("Check Rare Fruity", false, function(drpc)
-    AutoDropComp = drpc
+page7:Toggle("Check Rare Fruity", false, function(chre)
+    _G.checkrare = chre
 end)
 
-page7:Toggle("Check Rare Box", false, function(drpc)
+local Players = game:GetService("Players")
+
+spawn(function()
+	while wait(5) do
+		if _G.checkrare then
+			pcall(function()
+				local players = Players:GetPlayers()
+
+				for i = 1, #players do
+					local player = players[i]
+
+					-- เช็คใน Backpack
+					if player:FindFirstChild("Backpack") then
+						local backpackItems = player.Backpack:GetChildren()
+						for j = 1, #backpackItems do
+							local item = backpackItems[j]
+							for k = 1, #rareFruits do
+								if item.Name == rareFruits[k] then
+									create:Notifile("พบผลไม้หายากใน Backpack: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
+									-- ใส่ notify ได้ที่นี่
+								end
+							end
+						end
+					end
+
+					-- เช็คใน workspace.Character
+					local character = workspace:FindFirstChild(player.Name)
+					if character then
+						local characterItems = character:GetChildren()
+						for j = 1, #characterItems do
+							local item = characterItems[j]
+							for k = 1, #rareFruits do
+								if item.Name == rareFruits[k] then
+									create:Notifile("พบผลไม้หายากใน Character: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
+									-- ใส่ notify ได้ที่นี่
+								end
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+			end)
+
+page7:Toggle("Check Rare Box (ไม่ทำงาน)", false, function(drpc)
     AutoDropComp = drpc
 end)
 
