@@ -2326,9 +2326,12 @@ end
 
 page7:Label("Function Storage")
 page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit กับ Auto Storage ↓")
-page7:Toggle("Auto Storage", false, function(drpc)
+
+for Index = 1, 12 do
+page7:Toggle("Auto Storage", false, function(value)
     Cache.Boolean.StorageUsingGroup[Index] = Value
 end)
+		end
 
 page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(drpc)
     AutoDropComp = drpc
