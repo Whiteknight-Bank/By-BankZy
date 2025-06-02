@@ -2128,39 +2128,80 @@ local UserDataFolder = workspace:WaitForChild("UserData")
 local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
 local myData = myUserFolder:WaitForChild("Data")
 
--- Mapping: Display Logic
+-- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
 local npcMapping = {
     NPC_Activation_Chef = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 1000000 and "Aqua Staff: Done!" or "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
+        if value and value >= 1000000 then
+            return "Aqua Staff: Done!"
+        else
+            return "Aqua Staff: " .. (value or "Unknown") .. "/1,000,000"
+        end
     end,
+
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 50000000 and "Scissor Blade: Done!" or "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
+        if value and value >= 50000000 then
+            return "Scissor Blade: Done!"
+        else
+            return "Scissor Blade: " .. (value or "Unknown") .. "/50,000,000"
+        end
     end,
+
     NPC_Activation_Expert = function(obj)
-        local value = tonumber(obj.Value)
-        return value and value >= 1000 and "NPC_Activation_Expert: Done!" or "NPC_Activation_Expert: " .. (value or "Unknown") .. "/1000"
-    end,
+    local value = tonumber(obj.Value)
+    if value and value >= 1000 then
+        return "NPC_Activation_Expert: Done!"
+    else
+        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
+    end
+end,
+
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 100000000 and "Kanshou and Bakuya: Done!" or "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
+        if value and value >= 100000000 then
+            return "Kanshou and Bakuya: Done!"
+        else
+            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100,000,000"
+        end
     end,
+
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 200 and "Lightning Sword: Done!" or "Lightning Sword: " .. (value or "Unknown") .. "/200"
+        if value and value >= 200 then
+            return "Lightning Sword: Done!"
+        else
+            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
+        end
     end,
+
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 1000 and "Meteorite Sword: Done!" or "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
-    end,
+        if value and value >= 1000 then
+            return "Meteorite Sword: Done!"
+        else
+            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
+        end
+    end
 }
 
-page5:Label("┇ The Secret Weaon Progress ┇")
-page5:Dropdown("Select to View Progress", options, function(selected)
-        print("You Select:", reverseLookup[selected])
-    end)
+-- รวมรายการที่มีอยู่ใน Data
+local displayOptions = {}
+local reverseLookup = {}
+
+for name, transform in pairs(npcMapping) do
+    local found = myData:FindFirstChild(name)
+    if found then
+        local displayName = transform(found)
+        table.insert(displayOptions, displayName)
+        reverseLookup[displayName] = name
+    end
 end
+
+page5:Label("┇ The Secret Weapon Progress ┇")
+page5:Dropdown("Check Progress Weapon", displayOptions, function(selected)
+    local originalName = reverseLookup[selected]
+end)
 
 local Tab6 = Window:Taps("Storage")
 local page6 = Tab6:newpage()
