@@ -2143,12 +2143,11 @@ local npcMapping = {
         return "Kanshou and Bakuya: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
     end,
     NPC_Activation_Merlin = function(obj)
-    local val = obj:FindFirstChild("Lightning Sword")
-    return "Lightning Sword: " .. (val and val.Value or "Unknown")
+    return "Lightning Sword: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
 end,
+
 NPC_Activation_Sam = function(obj)
-    local val = obj:FindFirstChild("Meteorite Sword")
-    return "Meteorite Sword: " .. (val and val.Value or "Unknown")
+    return "Meteorite Sword: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
 end
 }
 
