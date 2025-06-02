@@ -2152,7 +2152,7 @@ local npcMapping = {
     if value and value >= 1000 then
         return "NPC_Activation_Expert: Done!"
     else
-        return "NPC_Activation_Expert: " .. (value or "Unknown") .. "/1000"
+        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
     end
 end,
     NPC_Activation_Lucy = function(obj)
@@ -2199,126 +2199,60 @@ page5:Dropdown("Select to View Progress", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
 
-local Tab6 = Window:Taps("Anti DF")
+local Tab6 = Window:Taps("Storage")
 local page6 = Tab6:newpage()
 
-page6:Label("┇ Function Anti Devil Fruit ┇")
-page6:Toggle("Anti Dark&Venom Pool", false, function(ndmg)
-    _G.antivedark = ndmg
-end)
+page6:Label("┇ Function Storage Fruit ┇")
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
 
-spawn(function()
-    while wait() do
-        if _G.antivedark then
-            local success, err = pcall(function()
-                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
 
-                if ResourceHolder then
-                    for _, player in pairs(game.Players:GetPlayers()) do
-                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
-                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
 
-                        if playerResourceFolder then
-                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
-
-                            if magmaPool then
-                                for _, item in pairs(magmaPool:GetDescendants()) do
-                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
-                                        item:Destroy()
-                                    end
-				end
-				end
+local function HandleFruits()
+    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
+        if IsActive and CheckStorage(Index) then
+            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if Fruit:IsA("Tool") then
+                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
+                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
+                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
+                            StoreFruit(Index, Fruit)
+                            break
                         end
-		end
-                end
-            end)
-        end
-    end
-end)
-
-spawn(function()
-    while wait() do
-        if _G.antity then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomPool")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
                     end
-		end
+                end
             end
         end
     end
+end
+
+page6:Label("Function Storage")
+page6:Button("Add Rare Fruitlist To Storage", function()
+table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
 end)
 
-page6:Toggle("Anti Love", false, function(lve)
-    _G.antilove = lve
+for Index = 1, 12 do
+page6:Toggle("Auto Storage No. " .. Index, false, function(value)
+    Cache.Boolean.StorageUsingGroup[Index] = value
 end)
+		end
 
 spawn(function()
-	while wait() do
-		if _G.antilove then
-			pcall(function()
-				local models = getAllPlayerModelsInWorkspace()
-
-				for _, model in pairs(models) do
-					local powers = model:FindFirstChild("Powers")
-					if powers then
-						local love = powers:FindFirstChild("Love")
-						if love then
-							local projectiles = love:FindFirstChild("Projectiles")
-							if projectiles then
-
-								-- 💘 LoveHeartTrimFill > TouchInterest
-								local heartTrim = projectiles:FindFirstChild("LoveHeartTrim")
-								if heartTrim then
-									local fill = heartTrim:FindFirstChild("LoveHeartTrimFill")
-									if fill then
-										local touch = fill:FindFirstChild("TouchInterest")
-										if touch then
-											touch:Destroy()
-											print("[ลบแล้ว] TouchInterest: LoveHeartTrimFill ของ", model.Name)
-										end
-									end
-								end
-
-								-- 🏹 LoveArrow > Tip > TouchInterest
-								local arrow = projectiles:FindFirstChild("LoveArrow")
-								if arrow then
-									local tip = arrow:FindFirstChild("Tip")
-									if tip then
-										local touch = tip:FindFirstChild("TouchInterest")
-										if touch then
-											touch:Destroy()
-											print("[ลบแล้ว] TouchInterest: Tip ของ", model.Name)
-										end
-									end
-								end
-
-							end
-						end
-					end
-				end
-			end)
-		end
-	end
+    while wait(1) do
+        pcall(HandleFruits)
+    end
 end)
   
 local Tab7 = Window:Taps("Quest Sam")
@@ -2475,58 +2409,6 @@ spawn(function()
 			end)
 		end
 	end
-end)
-
-local Cache = {
-    Player = { Inputfruitlist = {}, Inputfruitname = "" },
-    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
-}
-
-local function CheckStorage(Number)
-    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
-    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
-end
-
-local function StoreFruit(Index, Fruit)
-    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
-    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-    Fruit.Parent = game.Players.LocalPlayer.Character
-    storagePath:FireServer("StoredDF" .. Index)
-end
-
-local function HandleFruits()
-    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
-        if IsActive and CheckStorage(Index) then
-            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if Fruit:IsA("Tool") then
-                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
-                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
-                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
-                            StoreFruit(Index, Fruit)
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-page7:Label("Function Storage")
-page7:Button("Add Rare Fruitlist To Storage", function()
-table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
-end)
-
-for Index = 1, 12 do
-page7:Toggle("Auto Storage No. " .. Index, false, function(value)
-    Cache.Boolean.StorageUsingGroup[Index] = value
-end)
-		end
-
-spawn(function()
-    while wait(1) do
-        pcall(HandleFruits)
-    end
 end)
 
 page7:Label("┇ Function Steal Fruity ┇")
@@ -2764,6 +2646,124 @@ page8:Toggle("Anti AFK", false, function(state)
             afkConnection = nil
         end
     end
+end)
+
+page8:Toggle("Anti Dark&Venom Pool", false, function(ndmg)
+    _G.antivedark = ndmg
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antivedark then
+            local success, err = pcall(function()
+                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+
+                if ResourceHolder then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
+                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+
+                        if playerResourceFolder then
+                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
+
+                            if magmaPool then
+                                for _, item in pairs(magmaPool:GetDescendants()) do
+                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
+                                        item:Destroy()
+                                    end
+				end
+				end
+                        end
+		end
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.antity then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
+        end
+    end
+end)
+
+page8:Toggle("Anti Love", false, function(lve)
+    _G.antilove = lve
+end)
+
+spawn(function()
+	while wait() do
+		if _G.antilove then
+			pcall(function()
+				local models = getAllPlayerModelsInWorkspace()
+
+				for _, model in pairs(models) do
+					local powers = model:FindFirstChild("Powers")
+					if powers then
+						local love = powers:FindFirstChild("Love")
+						if love then
+							local projectiles = love:FindFirstChild("Projectiles")
+							if projectiles then
+
+								-- 💘 LoveHeartTrimFill > TouchInterest
+								local heartTrim = projectiles:FindFirstChild("LoveHeartTrim")
+								if heartTrim then
+									local fill = heartTrim:FindFirstChild("LoveHeartTrimFill")
+									if fill then
+										local touch = fill:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: LoveHeartTrimFill ของ", model.Name)
+										end
+									end
+								end
+
+								-- 🏹 LoveArrow > Tip > TouchInterest
+								local arrow = projectiles:FindFirstChild("LoveArrow")
+								if arrow then
+									local tip = arrow:FindFirstChild("Tip")
+									if tip then
+										local touch = tip:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: Tip ของ", model.Name)
+										end
+									end
+								end
+
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
 end)
 
 page8:Label("┇ Function Unbox ┇")
