@@ -449,11 +449,24 @@ local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Spawn┇")
-page1:Toggle("Auto Spawn", false, function(aspw)
-        _Gmautospawn = aspw
+page1:Toggle("Auto Spawn", false, function(rspw)
+        _G.autorespawn = rspw
 end)
 
 
+spawn(function()--autorespawn
+    while wait() do
+        if _G.autorespawn then
+            pcall(function()
+                if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
+                    for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
+                        v.Function()
+                    end
+                end
+            end)
+        end
+    end
+end)
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
