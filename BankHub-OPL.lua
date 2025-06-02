@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
+label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- แก้ Bring Player และ Lock Aim Player ใช้ได้งานได้แล้ว"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -1843,15 +1843,54 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Section("↓ ใช้งานไม่ได้ ↓")
-page4:Toggle("Auto Bring Player( All )", false, function(dops)
-	DropDrinks = dops
+page4:Toggle("Auto Bring Player( All )", false, function(plal)
+	_G.BringAllPlayer = plal
 end)
 
-page4:Toggle("Lock Aim Players", false, function(dops)
-	DropDrinks = dops
+spawn(function() -- bring Plr
+    while wait() do
+        if _G.BringAllPlayer then
+            pcall(function()
+                for i,v in pairs(game.Players:GetChildren()) do
+                    if v.Name ~= game.Players.LocalPlayer.Name then
+                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-15 or getgenv().disbring)
+                        if v.Character.Humanoid.Health == 0 then
+                        	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                        end
+                    end
+                end
+            end)
+        end
+    end
 end)
-page4:Section("↑ ใช้งานไม่ได้ ↑")
+
+page4:Toggle("Lock Aim Players", false, function(asmt)
+	aimsilent = asmt
+end)
+
+spawn(function()--aim silent 
+    pcall(function()
+        while true do wait()
+            pcall(function()
+                local plr1 = game.Players.LocalPlayer.Character
+                local plr2 = game.Players:FindFirstChild(PlayerName1)
+                if aimsilent then
+                    cacacac = plr2.Character.HumanoidRootPart.CFrame
+                end
+            end)
+        end
+    end)
+end)
+
+local index = mta.__index
+cf = CFrame.new(1, 2, 3)
+setreadonly(mta, false)
+mta.__index = newcclosure(function(a, b, c)
+    if tostring(b):lower() == 'hit' and aimsilent then
+        return cacacac
+    end
+    return index(a, b, c)
+end)
 
 page4:Label("┇ Shop ┇")
 page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
@@ -2400,10 +2439,10 @@ page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นก
     _G.cannonsteal = cnns
 end)
 
-page7:Label("↓ Use Quake to Steal Fruit ↓")
 page7:Toggle("Auto Quake Steal Rare Fruit ( สำหรับผู้เล่นเลือดเยอะ )", false, function(drpc)
     AutoDropComp = drpc
 end)
+page7:Label("↑ Use Quake to Steal Fruit ↑")
 
 local Tab8 = Window:Taps("Misc")
 local page8 = Tab8:newpage()
