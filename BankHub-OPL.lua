@@ -2325,10 +2325,10 @@ local function HandleFruits()
 end
 
 page7:Label("Function Storage")
-page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit กับ Auto Storage ↓")
+page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit ↓")
 
 for Index = 1, 12 do
-page7:Toggle("Auto Storage", false, function(value)
+page7:Toggle("Auto Storage No. " .. Index, false, function(value)
     Cache.Boolean.StorageUsingGroup[Index] = Value
 end)
 		end
