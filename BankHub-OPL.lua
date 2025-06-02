@@ -2147,11 +2147,14 @@ local npcMapping = {
             return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
         end
     end,
-
     NPC_Activation_Expert = function(obj)
-        return "NPC_Activation_Expert"
-    end,
-
+    local value = tonumber(obj.Value)
+    if value and value >= 1000 then
+        return "NPC_Activation_Expert: Done!"
+    else
+        return "NPC_Activation_Expert: " .. (value or "Unknown") .. "/1000"
+    end
+end,
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 100000000 then
@@ -2160,7 +2163,6 @@ local npcMapping = {
             return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
         end
     end,
-
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 200 then
@@ -2169,7 +2171,6 @@ local npcMapping = {
             return "Lightning Sword: " .. (value or "Unknown") .. "/200"
         end
     end,
-
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 1000 then
