@@ -202,6 +202,14 @@ Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
+local rareFruits = {
+    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
+    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
+    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
+    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
+    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
+		}
+
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -2236,10 +2244,45 @@ page7:Toggle("Check Rare Box", false, function(drpc)
     AutoDropComp = drpc
 end)
 
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
+
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
+
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
+
+local function HandleFruits()
+    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
+        if IsActive and CheckStorage(Index) then
+            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if Fruit:IsA("Tool") then
+                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
+                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
+                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
+                            StoreFruit(Index, Fruit)
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 page7:Label("Function Storage")
 page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fruit กับ Auto Storage ↓")
 page7:Toggle("Auto Storage", false, function(drpc)
-    AutoDropComp = drpc
+    Cache.Boolean.StorageUsingGroup[Index] = Value
 end)
 
 page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(drpc)
