@@ -2156,35 +2156,11 @@ local npcMapping = {
     end,
 }
 
-local currentLabel
-
-local function updateDropdown()
-    if currentDropdown then currentDropdown:Destroy() end
-    if currentLabel then currentLabel:Destroy() end
-
-    local options = {}
-    reverseLookup = {}
-
-    for name, transform in pairs(npcMapping) do
-        local obj = myData:FindFirstChild(name)
-        if obj then
-            local display = transform(obj)
-            table.insert(options, display)
-            reverseLookup[display] = name
-        end
-    end
-
-    currentLabel = page5:Label("┇ The Secret Weaon Progress ┇")
-    currentDropdown = page5:Dropdown("Select to View Progress", options, function(selected)
+page5:Label("┇ The Secret Weaon Progress ┇")
+page5:Dropdown("Select to View Progress", options, function(selected)
         print("You Select:", reverseLookup[selected])
     end)
 end
-
-page5:Button("🔄 Refresh", function()
-    updateDropdown()
-end)
-
-updateDropdown()
 
 local Tab6 = Window:Taps("Storage")
 local page6 = Tab6:newpage()
