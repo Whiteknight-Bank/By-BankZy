@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- แก้ Bring Player และ Lock Aim Player ใช้ได้งานได้แล้ว"
+label.Text = "- อัพเมนูดความคืบหน้าดาบลับแต่ละอันในนั้น เพิ่มใน Island \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- แก้ Bring Player และ Lock Aim Player ใช้ได้งานได้แล้ว"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -1842,11 +1842,6 @@ spawn(function()--autofruit
         end)
     end
 end)
-		
-page4:Label("┇ Player ┇")
-page4:Dropdown("Select Player:", getPlayerNames(), function(name)
-    selectedPlayer = name
-end)
 
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
@@ -2125,6 +2120,55 @@ page5:Button("Click to Tp" , function()
             plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
         end
     end)
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local UserDataFolder = workspace:WaitForChild("UserData")
+local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
+local myData = myUserFolder:WaitForChild("Data")
+
+-- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
+local npcMapping = {
+    NPC_Activation_Chef = function(obj)
+        return "Aqua Staff: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
+    end,
+    NPC_Activation_Drinks = function(obj)
+        return "Scissor Blade: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
+    end,
+    NPC_Activation_Expert = function(obj)
+        return "NPC_Activation_Expert"
+    end,
+    NPC_Activation_Lucy = function(obj)
+        return "Kanshou and Bakuya: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
+    end,
+    NPC_Activation_Merlin = function(obj)
+        local val = obj:FindFirstChild("Lightning Sword")
+        return "Lightning Sword: " .. (val and val:IsA("ValueBase") and val.Value or "Unknown")
+    end,
+    NPC_Activation_Sam = function(obj)
+        local val = obj:FindFirstChild("Meteorite Sword")
+        return "Meteorite Sword: " .. (val and val:IsA("ValueBase") and val.Value or "Unknown")
+    end
+}
+
+-- รวมรายการที่มีอยู่ใน Data
+local displayOptions = {}
+local reverseLookup = {}
+
+for name, transform in pairs(npcMapping) do
+    local found = myData:FindFirstChild(name)
+    if found then
+        local displayName = transform(found)
+        table.insert(displayOptions, displayName)
+        reverseLookup[displayName] = name
+    end
+		end
+
+page5:Label("┇ The Success of The Secret Weapon ┇")
+page5:Dropdown("เลือกดู ความคืบหน้า", displayOptions, function(select)
+    local originalName = reverseLookup[select]
+end)
 
 local Tab6 = Window:Taps("Anti DF")
 local page6 = Tab6:newpage()
