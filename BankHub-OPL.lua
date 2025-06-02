@@ -2175,7 +2175,7 @@ local function updateDropdown()
         end
     end
 
-    -- สร้าง dropdown ใหม่และเก็บไว้
+  page5:Label("┇ The Secret Weaon Progress ┇")
     currentDropdown = page5:Dropdown("Select to View Progress", options, function(selected)
         print("You Select:", reverseLookup[selected])
     end)
