@@ -2135,19 +2135,17 @@ local npcMapping = {
         if value and value >= 1000000 then
             return "Aqua Staff: Done!"
         else
-            return "Aqua Staff: " .. (value or "Unknown") .. "/1,000,000"
+            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
         end
     end,
-
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 50000000 then
             return "Scissor Blade: Done!"
         else
-            return "Scissor Blade: " .. (value or "Unknown") .. "/50,000,000"
+            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
         end
     end,
-
     NPC_Activation_Expert = function(obj)
     local value = tonumber(obj.Value)
     if value and value >= 1000 then
@@ -2156,16 +2154,14 @@ local npcMapping = {
         return "Divine Axe: " .. (value or "Unknown") .. "/1000"
     end
 end,
-
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 100000000 then
             return "Kanshou and Bakuya: Done!"
         else
-            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100,000,000"
+            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
         end
     end,
-
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 200 then
@@ -2174,7 +2170,6 @@ end,
             return "Lightning Sword: " .. (value or "Unknown") .. "/200"
         end
     end,
-
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 1000 then
@@ -2199,8 +2194,8 @@ for name, transform in pairs(npcMapping) do
 end
 
 page5:Label("┇ The Secret Weapon Progress ┇")
-page5:Dropdown("Check Progress Weapon", displayOptions, function(selected)
-    local originalName = reverseLookup[selected]
+page5:Dropdown("Check Progress Weapon", displayOptions, function(select)
+    local originalName = reverseLookup[select]
 end)
 
 local Tab6 = Window:Taps("Storage")
