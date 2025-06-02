@@ -279,6 +279,28 @@ spawn(function()
     end
 end)
 
+function CheckHobbied()
+    if not (_G.BringAllPlayer and _G.skillx and _G.autohobbied) then return end
+
+    local me = game.Players.LocalPlayer
+    local powers = workspace:FindFirstChild(me.Name) and workspace[me.Name]:FindFirstChild("Powers")
+    local hobbied = powers and powers:FindFirstChild("Hobbied")
+
+    if not hobbied then return end
+
+    local allIn = true
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player ~= me and not hobbied:FindFirstChild(player.Name) then
+            allIn = false
+            break
+        end
+    end
+
+    if allIn then
+        _G.BringAllPlayer = false
+        _G.skillx = false
+    end
+		end
 -- ฟังก์ชัน: หาผู้เล่นทุกคนที่อยู่ใน Workspace
 local function getAllPlayerModelsInWorkspace()
 	local players = {}
@@ -1955,8 +1977,8 @@ spawn(function()
 end)
 
 page4:Label("┇ Hobbied Player ┇")
-page4:Toggle("Auto Hobby (All)", false, function(dsh)
-	_G.autodash = dsh
+page4:Toggle("Auto Hobby (All)", false, function(ahbb)
+	_G.autohobbied = ahbb
 end)
 page4:Section("↑ ใช้งานไม่ได้ ↑")
 
