@@ -2290,14 +2290,6 @@ page7:Toggle("Check Rare Box (ไม่ทำงาน)", false, function(drpc)
     AutoDropComp = drpc
 end)
 
-local rareFruits = {
-    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
-    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
-    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
-    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
-    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
-		}
-
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
@@ -2338,7 +2330,7 @@ page7:Section("↓ ยังใช้งานไม่ได้นะ Steal Fru
 
 for Index = 1, 12 do
 page7:Toggle("Auto Storage No. " .. Index, false, function(value)
-    Cache.Boolean.StorageUsingGroup[Index] = Value
+    Cache.Boolean.StorageUsingGroup[Index] = value
 end)
 		end
 
