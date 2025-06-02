@@ -2191,7 +2191,6 @@ local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
 
 page7:Label("┇ Function Quest Sam ┇")
-page7:Section("Warning: If You Want Unlimited, Pls Click Dupe")
 
 page7:Toggle("Auto Find", false, function(comp)
     AutoComp = comp
@@ -2258,7 +2257,7 @@ spawn(function()
 							local item = backpackItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									create:Notifile("พบผลไม้หายากใน Backpack: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
+									create:Notifile("", "พบผลไม้หายากใน Backpack: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
 									-- ใส่ notify ได้ที่นี่
 								end
 							end
@@ -2273,7 +2272,7 @@ spawn(function()
 							local item = characterItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									create:Notifile("พบผลไม้หายากใน Character: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
+									create:Notifile("", "พบผลไม้หายากใน Character: " .. item.Name .. " ของผู้เล่น " .. player.Name, 5)
 									-- ใส่ notify ได้ที่นี่
 								end
 							end
