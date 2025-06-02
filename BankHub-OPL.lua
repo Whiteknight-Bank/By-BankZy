@@ -2131,24 +2131,53 @@ local myData = myUserFolder:WaitForChild("Data")
 -- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
 local npcMapping = {
     NPC_Activation_Chef = function(obj)
-        return "Aqua Staff: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
+        local value = tonumber(obj.Value)
+        if value and value >= 1000000 then
+            return "Aqua Staff: Done!"
+        else
+            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
+        end
     end,
+
     NPC_Activation_Drinks = function(obj)
-        return "Scissor Blade: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
+        local value = tonumber(obj.Value)
+        if value and value >= 50000000 then
+            return "Scissor Blade: Done!"
+        else
+            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
+        end
     end,
+
     NPC_Activation_Expert = function(obj)
         return "NPC_Activation_Expert"
     end,
-    NPC_Activation_Lucy = function(obj)
-        return "Kanshou and Bakuya: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
-    end,
-    NPC_Activation_Merlin = function(obj)
-    return "Lightning Sword: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
-end,
 
-NPC_Activation_Sam = function(obj)
-    return "Meteorite Sword: " .. (obj:IsA("ValueBase") and obj.Value or "Unknown")
-end
+    NPC_Activation_Lucy = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 100000000 then
+            return "Kanshou and Bakuya: Done!"
+        else
+            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
+        end
+    end,
+
+    NPC_Activation_Merlin = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 200 then
+            return "Lightning Sword: Done!"
+        else
+            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
+        end
+    end,
+
+    NPC_Activation_Sam = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 1000 then
+            return "Meteorite Sword: Done!"
+        else
+            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
+        end
+    end
 }
 
 -- รวมรายการที่มีอยู่ใน Data
@@ -2162,10 +2191,10 @@ for name, transform in pairs(npcMapping) do
         table.insert(displayOptions, displayName)
         reverseLookup[displayName] = name
     end
-		end
+end
 
-page5:Label("┇ The Success of The Secret Weapon ┇")
-page5:Dropdown("เลือกดู ความคืบหน้า", displayOptions, function(select)
+page5:Label("┇ The Secret Weapon Progress ┇")
+page5:Dropdown("Select to View Progress", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
 
