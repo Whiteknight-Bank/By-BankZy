@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage เข้ามา กับ Stealing Fruity \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
+label.Text = "- แก้สคริปทั้งหมดให้เข้ากับแมพ \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- Coming Soon . . ."
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -2395,9 +2395,11 @@ spawn(function()
     end
 end)
 
+page7:Label("┇ Function Steal Fruity ┇")
 page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(cnns)
     _G.cannonsteal = cnns
 end)
+
 page7:Label("↓ Use Quake to Steal Fruit ↓")
 page7:Toggle("Auto Quake Steal Rare Fruit ( สำหรับผู้เล่นเลือดเยอะ )", false, function(drpc)
     AutoDropComp = drpc
