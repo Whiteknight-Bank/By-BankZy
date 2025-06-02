@@ -2379,7 +2379,9 @@ local function HandleFruits()
 end
 
 page7:Label("Function Storage")
-page7:Section("↓ ยังใช้งานไม่ได้นะ Auto Storage ↓")
+page7:Button("Add Rare Fruitlist To Storage", function()
+table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
+end)
 
 for Index = 1, 12 do
 page7:Toggle("Auto Storage No. " .. Index, false, function(value)
