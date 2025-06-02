@@ -2156,12 +2156,11 @@ local npcMapping = {
     end,
 }
 
-local currentDropdown -- เก็บ dropdown ปัจจุบัน
+local currentLabel
 
 local function updateDropdown()
-    if currentDropdown then
-        currentDropdown:Destroy() -- 🔄 ลบของเก่า
-    end
+    if currentDropdown then currentDropdown:Destroy() end
+    if currentLabel then currentLabel:Destroy() end
 
     local options = {}
     reverseLookup = {}
@@ -2175,7 +2174,7 @@ local function updateDropdown()
         end
     end
 
-page5:Label("┇ The Secret Weaon Progress ┇")
+    currentLabel = page5:Label("┇ The Secret Weaon Progress ┇")
     currentDropdown = page5:Dropdown("Select to View Progress", options, function(selected)
         print("You Select:", reverseLookup[selected])
     end)
