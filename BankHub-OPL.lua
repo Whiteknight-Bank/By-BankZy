@@ -448,6 +448,12 @@ end)
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
+page1:Label("┇ Function Spawn┇")
+page1:Toggle("Auto Spawn", false, function(aspw)
+        _Gmautospawn = aspw
+end)
+
+
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
