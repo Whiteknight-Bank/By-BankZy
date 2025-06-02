@@ -2132,11 +2132,11 @@ local myData = myUserFolder:WaitForChild("Data")
 local npcMapping = {
     NPC_Activation_Chef = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 1000000 and "Aqua Staff: Done!" or "Aqua Staff: " .. (value or "Unknown") .. "/1,000,000"
+        return value and value >= 1000000 and "Aqua Staff: Done!" or "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
     end,
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 50000000 and "Scissor Blade: Done!" or "Scissor Blade: " .. (value or "Unknown") .. "/50,000,000"
+        return value and value >= 50000000 and "Scissor Blade: Done!" or "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
     end,
     NPC_Activation_Expert = function(obj)
         local value = tonumber(obj.Value)
@@ -2144,7 +2144,7 @@ local npcMapping = {
     end,
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
-        return value and value >= 100000000 and "Kanshou and Bakuya: Done!" or "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100,000,000"
+        return value and value >= 100000000 and "Kanshou and Bakuya: Done!" or "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
     end,
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
@@ -2175,13 +2175,12 @@ local function updateDropdown()
         end
     end
 
-  page5:Label("┇ The Secret Weaon Progress ┇")
+page5:Label("┇ The Secret Weaon Progress ┇")
     currentDropdown = page5:Dropdown("Select to View Progress", options, function(selected)
         print("You Select:", reverseLookup[selected])
     end)
 end
 
--- ปุ่ม Refresh
 page5:Button("🔄 Refresh", function()
     updateDropdown()
 end)
