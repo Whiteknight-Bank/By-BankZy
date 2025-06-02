@@ -2334,6 +2334,12 @@ page7:Toggle("Auto Storage No. " .. Index, false, function(value)
 end)
 		end
 
+spawn(function()
+    while wait(1) do
+        pcall(HandleFruits)
+    end
+end)
+
 page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(drpc)
     AutoDropComp = drpc
 end)
