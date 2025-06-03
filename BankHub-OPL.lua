@@ -494,45 +494,64 @@ Spawn(function()
 
 	while wait(0.5) do
 		if _G.automission then
+			print("[✅] Auto Mission Enabled")
+
 			local userDataFolder = workspace:FindFirstChild("UserData")
-			if userDataFolder then
-				local myUserFolder = userDataFolder:FindFirstChild(folderName)
-				if myUserFolder then
-					local data = myUserFolder:FindFirstChild("Data")
-					if data then
-						local missionObjective = data:FindFirstChild("MissionObjective")
-						local missionProgress = data:FindFirstChild("MissionProgress")
-						local missionRequirement = data:FindFirstChild("MissionRequirement")
+			if not userDataFolder then
+				print("[⚠️] ไม่พบ UserData ใน workspace")
+				continue
+			end
 
-						if missionObjective and missionProgress and missionRequirement then
-							local objective = missionObjective.Value
-							local progress = missionProgress.Value
-							local requirement = missionRequirement.Value
+			local myUserFolder = userDataFolder:FindFirstChild(folderName)
+			if not myUserFolder then
+				print("[⚠️] ไม่พบโฟลเดอร์ของผู้เล่น:", folderName)
+				continue
+			end
 
-							if requirement <= 0 or objective == "" then
-								-- ไม่มีภารกิจให้ทำ
-								isDoingMission = false
-								continue
-							end
+			local data = myUserFolder:FindFirstChild("Data")
+			if not data then
+				print("[⚠️] ไม่พบโฟลเดอร์ Data")
+				continue
+			end
 
-							if progress >= requirement then
-								-- ภารกิจเสร็จแล้ว หยุดทำงาน
-								isDoingMission = false
-								continue
-							end
+			local missionObjective = data:FindFirstChild("MissionObjective")
+			local missionProgress = data:FindFirstChild("MissionProgress")
+			local missionRequirement = data:FindFirstChild("MissionRequirement")
 
-							-- เริ่มทำภารกิจถ้าเงื่อนไขครบและยังไม่ได้ทำ
-							if not isDoingMission and (objective == "Kill" or objective == "Money" or objective == "Damage") then
-								isDoingMission = true
-								pcall(function()
-									if _G.autocannonslow then
-										_G.autocannonslow()
-									end
-								end)
-							end
-						end
+			if not missionObjective or not missionProgress or not missionRequirement then
+				print("[⚠️] ไม่พบ MissionObjective หรือ Progress หรือ Requirement")
+				continue
+			end
+
+			local objective = missionObjective.Value
+			local progress = missionProgress.Value
+			local requirement = missionRequirement.Value
+
+			print("[📌] Objective:", objective, "Progress:", progress, "/", requirement)
+
+			if requirement <= 0 or objective == "" then
+				print("[ℹ️] ไม่มีภารกิจที่ทำอยู่ (Objective ว่างหรือ Requirement = 0)")
+				isDoingMission = false
+				continue
+			end
+
+			if progress >= requirement then
+				print("[✅] ภารกิจเสร็จแล้ว รอเควสใหม่")
+				isDoingMission = false
+				continue
+			end
+
+			if not isDoingMission and (objective == "Kill" or objective == "Money" or objective == "Damage") then
+				print("[🚀] เริ่มทำภารกิจ:", objective)
+				isDoingMission = true
+				pcall(function()
+					if _G.autocannonslow then
+						print("[⚙️] เรียกใช้งาน _G.autocannonslow()")
+						_G.autocannonslow()
+					else
+						print("[⚠️] _G.autocannonslow ไม่มีอยู่")
 					end
-				end
+				end)
 			end
 		end
 	end
