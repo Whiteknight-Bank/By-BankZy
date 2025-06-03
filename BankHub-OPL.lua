@@ -2714,13 +2714,43 @@ spawn(function()
 end)
 
 page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Steal Rare Fruit ( สำหรับผู้เล่นกาก )", false, function(cnns)
-    _G.cannonsteal = cnns
+page7:Toggle("Auto Quake Steal Rare Fruit", false, function(drpc)
+    _G.Quakesteal = drpc
 end)
 
-page7:Toggle("Auto Quake Steal Rare Fruit ( สำหรับผู้เล่นเลือดเยอะ )", false, function(drpc)
-    AutoDropComp = drpc
+spawn(function() -- auto farm quake
+    while task.wait(0) do
+        pcall(function()
+            if _G.Quakesteal and game.Players.LocalPlayer.Character.Humanoid.Health > 0 then
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    -- ยิงเฉพาะคนที่อยู่ใน TargetedRarePlayers
+                    if table.find(TargetedRarePlayers, player.Name) then
+                        if player.Name ~= "SetInstances"
+                        and player.Name ~= game.Players.LocalPlayer.Name
+                        and player.Character
+                        and player.Character:FindFirstChild("Humanoid")
+                        and player.Character.Humanoid.Health > 0 then
+
+                            task.wait(0.1)
+                            local args = {
+                                [1] = tonumber(serializeTable(remotes)),
+                                [2] = "QuakePower4",
+                                [3] = "StopCharging",
+                                [4] = player.Character.HumanoidRootPart.CFrame,
+                                [5] = player.Character.HumanoidRootPart.CFrame,
+                                [6] = 100,
+                                [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
+                            }
+
+                            game.Players.LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)
+
 page7:Label("↑ Use Quake to Steal Fruit ↑")
 
 local Tab8 = Window:Taps("Misc")
