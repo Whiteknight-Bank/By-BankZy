@@ -482,7 +482,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("Auto Complete Mission", false, function(miss)
+page1:Toggle("Auto Complete Mission (ไม่ทำงาน)", false, function(miss)
         _G.automission = miss
 
     spawn(function()
