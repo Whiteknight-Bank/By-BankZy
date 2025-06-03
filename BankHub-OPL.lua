@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- อัพเมนูดความคืบหน้าดาบลับแต่ละอันในนั้น เพิ่มใน Island \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- ปรับ Auto Fishing ให้ใช้งานดีขึ้น ปิ้งและขายปลาขณะตกปลา\n- แก้ Bring Player และ Lock Aim Player ใช้ได้งานได้แล้ว"
+label.Text = "- อัพเมนูดความคืบหน้าดาบลับแต่ละอันในนั้น เพิ่มใน Island \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- เพิ่ม Auto Complete Mission ทำภารกิจออโต้"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -480,6 +480,62 @@ spawn(function()
             end) 
         end 
     end 
+end)
+
+page1:Toggle("Auto Complete Mission", false, function(miss)
+        _G.automission = miss
+end)
+
+Spawn(function()
+	local userId = game.Players.LocalPlayer.UserId
+	local folderName = "User_" .. tostring(userId)
+
+	local isDoingMission = false
+
+	while wait(0.5) do
+		if _G.automission then
+			local userDataFolder = workspace:FindFirstChild("UserData")
+			if userDataFolder then
+				local myUserFolder = userDataFolder:FindFirstChild(folderName)
+				if myUserFolder then
+					local data = myUserFolder:FindFirstChild("Data")
+					if data then
+						local missionObjective = data:FindFirstChild("MissionObjective")
+						local missionProgress = data:FindFirstChild("MissionProgress")
+						local missionRequirement = data:FindFirstChild("MissionRequirement")
+
+						if missionObjective and missionProgress and missionRequirement then
+							local objective = missionObjective.Value
+							local progress = missionProgress.Value
+							local requirement = missionRequirement.Value
+
+							if requirement <= 0 or objective == "" then
+								-- ไม่มีภารกิจให้ทำ
+								isDoingMission = false
+								continue
+							end
+
+							if progress >= requirement then
+								-- ภารกิจเสร็จแล้ว หยุดทำงาน
+								isDoingMission = false
+								continue
+							end
+
+							-- เริ่มทำภารกิจถ้าเงื่อนไขครบและยังไม่ได้ทำ
+							if not isDoingMission and (objective == "Kill" or objective == "Money" or objective == "Damage") then
+								isDoingMission = true
+								pcall(function()
+									if _G.autocannonslow then
+										_G.autocannonslow()
+									end
+								end)
+							end
+						end
+					end
+				end
+			end
+		end
+	end
 end)
 
 page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
