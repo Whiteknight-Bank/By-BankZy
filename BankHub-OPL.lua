@@ -484,77 +484,41 @@ end)
 
 page1:Toggle("Auto Complete Mission", false, function(miss)
         _G.automission = miss
-end)
 
-Spawn(function()
-	local userId = game.Players.LocalPlayer.UserId
-	local folderName = "User_" .. tostring(userId)
+    spawn(function()
+        while task.wait(1) do
+            pcall(function()
+                if _G.automission then
+                    local userId = game.Players.LocalPlayer.UserId
+                    local data = workspace:FindFirstChild("UserData")
+                    if data and data:FindFirstChild("User_" .. userId) then
+                        local playerData = data["User_" .. userId]:FindFirstChild("Data")
+                        if playerData then
+                            local objectives = playerData:FindFirstChild("Objectives")
+                            local progress = playerData:FindFirstChild("Progress")
+                            local requirement = playerData:FindFirstChild("Requirement")
 
-	local isDoingMission = false
-
-	while wait(0.5) do
-		if _G.automission then
-			print("[✅] Auto Mission Enabled")
-
-			local userDataFolder = workspace:FindFirstChild("UserData")
-			if not userDataFolder then
-				print("[⚠️] ไม่พบ UserData ใน workspace")
-				continue
-			end
-
-			local myUserFolder = userDataFolder:FindFirstChild(folderName)
-			if not myUserFolder then
-				print("[⚠️] ไม่พบโฟลเดอร์ของผู้เล่น:", folderName)
-				continue
-			end
-
-			local data = myUserFolder:FindFirstChild("Data")
-			if not data then
-				print("[⚠️] ไม่พบโฟลเดอร์ Data")
-				continue
-			end
-
-			local missionObjective = data:FindFirstChild("MissionObjective")
-			local missionProgress = data:FindFirstChild("MissionProgress")
-			local missionRequirement = data:FindFirstChild("MissionRequirement")
-
-			if not missionObjective or not missionProgress or not missionRequirement then
-				print("[⚠️] ไม่พบ MissionObjective หรือ Progress หรือ Requirement")
-				continue
-			end
-
-			local objective = missionObjective.Value
-			local progress = missionProgress.Value
-			local requirement = missionRequirement.Value
-
-			print("[📌] Objective:", objective, "Progress:", progress, "/", requirement)
-
-			if requirement <= 0 or objective == "" then
-				print("[ℹ️] ไม่มีภารกิจที่ทำอยู่ (Objective ว่างหรือ Requirement = 0)")
-				isDoingMission = false
-				continue
-			end
-
-			if progress >= requirement then
-				print("[✅] ภารกิจเสร็จแล้ว รอเควสใหม่")
-				isDoingMission = false
-				continue
-			end
-
-			if not isDoingMission and (objective == "Kill" or objective == "Money" or objective == "Damage") then
-				print("[🚀] เริ่มทำภารกิจ:", objective)
-				isDoingMission = true
-				pcall(function()
-					if _G.autocannonslow then
-						print("[⚙️] เรียกใช้งาน _G.autocannonslow()")
-						_G.autocannonslow()
-					else
-						print("[⚠️] _G.autocannonslow ไม่มีอยู่")
-					end
-				end)
-			end
-		end
-	end
+                            if objectives and progress and requirement then
+                                if requirement.Value == 0 or progress.Value >= requirement.Value then
+                                    _G.autocannonslow = false
+                                elseif objectives.Value == "Kill" then
+                                    _G.autocannonslow = true
+                                elseif objectives.Value == "Money" then
+                                    _G.autocannonslow = true
+                                elseif objectives.Value == "Damage" then
+                                    _G.autocannonslow = true
+                                else
+                                    _G.autocannonslow = false
+                                end
+                            end
+                        end
+                    end
+                else
+                    _G.autocannonslow = false
+                end
+            end)
+        end
+    end)
 end)
 
 page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
