@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- อัพเมนูดความคืบหน้าดาบลับแต่ละอันในนั้น เพิ่มใน Island \n- แก้ Function Storage ใช้งานได้ \n- เพิ่ม Auto Get Haki\n- เพิ่ม Auto Complete Mission ทำภารกิจออโต้"
+label.Text = "- ปรับแก้เมนูแต่ละอันให้เข้าถึงง่ายขึ้น\n- Auto Complete Mission อยู่ในการแก้ไข"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -881,6 +881,204 @@ local A_1 = "RewardMark"
     end
 end)
 
+page1:Label("┇ Function Farm Fruity ┇")
+page1:Toggle("Auto Farm Stats", false, function(stts)
+    _G.automixer = stts
+end)
+
+spawn(function() -- auto mixer
+    while wait() do
+        pcall(function()
+            if _G.automixer then
+                wait(1)
+                for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+
+spawn(function() -- auto drink mixer
+    while wait() do
+        pcall(function()
+            if _G.automixer then
+                wait(1)
+                local args = {
+                    [1] = "Claim",
+                    [2] = "Challenge13"
+                }
+                game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
+
+                wait(1)
+                for a, h in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if h:IsA("Tool") and string.find(h.Name, "Juice") or string.find(h.Name, "Milk") or
+                    string.find(h.Name, "Cider") or string.find(h.Name, "Lemonade") or
+                    string.find(h.Name, "Smoothie") or string.find(h.Name, "Golden") then
+                        game.Players.LocalPlayer.Character.Humanoid:EquipTool(h)
+                        game:GetService 'VirtualUser':CaptureController()
+                        game:GetService 'VirtualUser':Button1Down(Vector2.new(1280, 672))
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()--autofruit
+    while wait() do
+        pcall(function()
+            if _G.automixer then
+                wait(1.5)
+                for i,v in pairs(game:GetService("Workspace").Barrels.Crates:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
+                for i,v in pairs(game:GetService("Workspace").Barrels.Barrels:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
+            end
+        end)
+    end
+end)
+spawn(function()--autofruit
+    while wait() do
+    pcall(function()
+        if _G.automixer then
+            local Players = game:GetService("Players")
+            local LocalPlayer = Players.LocalPlayer
+            local PopperClient = LocalPlayer:WaitForChild("PlayerScripts").PlayerModule.CameraModule.ZoomController.Popper
+            
+            for i, v in next, getgc() do
+                if getfenv(v).script == PopperClient and typeof(v) == "function" then
+                    for i2, v2 in next, debug.getconstants(v) do
+                        if tonumber(v2) == 0.25 then
+                            debug.setconstant(v, i2, 0)
+                       -- elseif tonumber(v2) == 0 then
+                           -- debug.setconstant(v, i2, 0.25)
+                        end
+                    end
+                end
+            end
+            --Barrels
+            wait(0.8)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-12, 216, -351)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4, 216, -378)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-114, 216, -750)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-133, 216, -710)
+            wait(0.3)
+    
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-204, 224, -206)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 217, -327)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1706, 217, -326)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 216, -217)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1550, 217, -307)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1494, 217, -306)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1493, 217, -290)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1871, 218, 823)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1858, 218, 814)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1882, 219, 838)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 235, 568)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1970, 219, 576)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 218, 561)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1981, 217, 553)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1517, 217, -289)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1186, 217, -285)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1173, 217, -286)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1009, 220, 3342)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2601, 254, 1111)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2618, 254, 1110)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(989, 224, -3337)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(916, 216, 3409)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(882, 218, 3364)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1167, 219, 3228)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1072, 224, -3429)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1195, 224, -3372)
+            wait(0.3)
+
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1238, 224, -3231)
+            wait(0.3)
+            for i,v in pairs(game.Workspace:GetChildren()) do 
+                if v.ClassName == "Tool" then
+                    v.Handle.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                end
+            end
+            wait(0.2)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+            wait(7)
+            end
+        end)
+    end
+end)
+		
 page1:Label("┇ Function Haki ┇")
 page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
     AutoHaki = hki
@@ -1703,204 +1901,6 @@ end)
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
-page4:Label("┇ Farm Fruity ┇")
-page4:Toggle("Auto Farm Stats", false, function(stts)
-    _G.automixer = stts
-end)
-
-spawn(function() -- auto mixer
-    while wait() do
-        pcall(function()
-            if _G.automixer then
-                wait(1)
-                for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-
-spawn(function() -- auto drink mixer
-    while wait() do
-        pcall(function()
-            if _G.automixer then
-                wait(1)
-                local args = {
-                    [1] = "Claim",
-                    [2] = "Challenge13"
-                }
-                game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
-
-                wait(1)
-                for a, h in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                    if h:IsA("Tool") and string.find(h.Name, "Juice") or string.find(h.Name, "Milk") or
-                    string.find(h.Name, "Cider") or string.find(h.Name, "Lemonade") or
-                    string.find(h.Name, "Smoothie") or string.find(h.Name, "Golden") then
-                        game.Players.LocalPlayer.Character.Humanoid:EquipTool(h)
-                        game:GetService 'VirtualUser':CaptureController()
-                        game:GetService 'VirtualUser':Button1Down(Vector2.new(1280, 672))
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-spawn(function()--autofruit
-    while wait() do
-        pcall(function()
-            if _G.automixer then
-                wait(1.5)
-                for i,v in pairs(game:GetService("Workspace").Barrels.Crates:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-                for i,v in pairs(game:GetService("Workspace").Barrels.Barrels:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-            end
-        end)
-    end
-end)
-spawn(function()--autofruit
-    while wait() do
-    pcall(function()
-        if _G.automixer then
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-            local PopperClient = LocalPlayer:WaitForChild("PlayerScripts").PlayerModule.CameraModule.ZoomController.Popper
-            
-            for i, v in next, getgc() do
-                if getfenv(v).script == PopperClient and typeof(v) == "function" then
-                    for i2, v2 in next, debug.getconstants(v) do
-                        if tonumber(v2) == 0.25 then
-                            debug.setconstant(v, i2, 0)
-                       -- elseif tonumber(v2) == 0 then
-                           -- debug.setconstant(v, i2, 0.25)
-                        end
-                    end
-                end
-            end
-            --Barrels
-            wait(0.8)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-12, 216, -351)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4, 216, -378)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-114, 216, -750)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-133, 216, -710)
-            wait(0.3)
-    
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-204, 224, -206)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 217, -327)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1706, 217, -326)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 216, -217)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1550, 217, -307)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1494, 217, -306)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1493, 217, -290)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1871, 218, 823)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1858, 218, 814)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1882, 219, 838)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 235, 568)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1970, 219, 576)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 218, 561)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1981, 217, 553)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1517, 217, -289)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1186, 217, -285)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1173, 217, -286)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1009, 220, 3342)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2601, 254, 1111)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2618, 254, 1110)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(989, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(916, 216, 3409)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(882, 218, 3364)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1167, 219, 3228)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1072, 224, -3429)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1195, 224, -3372)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1238, 224, -3231)
-            wait(0.3)
-            for i,v in pairs(game.Workspace:GetChildren()) do 
-                if v.ClassName == "Tool" then
-                    v.Handle.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                end
-            end
-            wait(0.2)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-            wait(7)
-            end
-        end)
-    end
-end)
-
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
@@ -2035,11 +2035,83 @@ spawn(function()
     end
 end)
 
-page4:Label("┇ Hobbied Player ┇")
-page4:Toggle("Auto Hobby (All)", false, function(ahbb)
-	_G.autohobbied = ahbb
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local UserDataFolder = workspace:WaitForChild("UserData")
+local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
+local myData = myUserFolder:WaitForChild("Data")
+
+-- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
+local npcMapping = {
+    NPC_Activation_Chef = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 1000000 then
+            return "Aqua Staff: Done!"
+        else
+            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
+        end
+    end,
+    NPC_Activation_Drinks = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 50000000 then
+            return "Scissor Blade: Done!"
+        else
+            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
+        end
+    end,
+    NPC_Activation_Expert = function(obj)
+    local value = tonumber(obj.Value)
+    if value and value >= 1000 then
+        return "NPC_Activation_Expert: Done!"
+    else
+        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
+    end
+end,
+    NPC_Activation_Lucy = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 100000000 then
+            return "Kanshou and Bakuya: Done!"
+        else
+            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
+        end
+    end,
+    NPC_Activation_Merlin = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 200 then
+            return "Lightning Sword: Done!"
+        else
+            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
+        end
+    end,
+    NPC_Activation_Sam = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 1000 then
+            return "Meteorite Sword: Done!"
+        else
+            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
+        end
+    end
+}
+
+-- รวมรายการที่มีอยู่ใน Data
+local displayOptions = {}
+local reverseLookup = {}
+
+for name, transform in pairs(npcMapping) do
+    local found = myData:FindFirstChild(name)
+    if found then
+        local displayName = transform(found)
+        table.insert(displayOptions, displayName)
+        reverseLookup[displayName] = name
+    end
+end
+
+page4:Label("┇ The Secret Weapon Progress ┇")
+page4:Dropdown("Check Progress Weapon", displayOptions, function(select)
+    local originalName = reverseLookup[select]
 end)
-page4:Section("↑ ใช้งานไม่ได้ ↑")
+page4:Section("↑ Excutor Again, It will Refresh ↑")
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Kill Cannon Ball", false, function(bplr)
@@ -2185,81 +2257,248 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
+page5:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
 
-local UserDataFolder = workspace:WaitForChild("UserData")
-local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
-local myData = myUserFolder:WaitForChild("Data")
+local isRunning1 = false
+local task1Thread
 
--- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
-local npcMapping = {
-    NPC_Activation_Chef = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 1000000 then
-            return "Aqua Staff: Done!"
-        else
-            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
-        end
-    end,
-    NPC_Activation_Drinks = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 50000000 then
-            return "Scissor Blade: Done!"
-        else
-            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
-        end
-    end,
-    NPC_Activation_Expert = function(obj)
-    local value = tonumber(obj.Value)
-    if value and value >= 1000 then
-        return "NPC_Activation_Expert: Done!"
-    else
-        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
+page5:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
+    isRunning1 = rol
+
+    if isRunning1 then
+        task1Thread = task.spawn(function()
+            while isRunning1 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT1
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
+                    isRunning1 = false
+                    break
+                end
+
+                local args1 = {
+                    [1] = "DFT1",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense1 == 2 then args1[2] = 0/0 end
+                if AffMelee1 == 2 then args1[3] = 0/0 end
+                if AffSniper1 == 2 then args1[4] = 0/0 end
+                if AffSword1 == 2 then args1[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
     end
-end,
-    NPC_Activation_Lucy = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 100000000 then
-            return "Kanshou and Bakuya: Done!"
-        else
-            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
-        end
-    end,
-    NPC_Activation_Merlin = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 200 then
-            return "Lightning Sword: Done!"
-        else
-            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
-        end
-    end,
-    NPC_Activation_Sam = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 1000 then
-            return "Meteorite Sword: Done!"
-        else
-            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
-        end
+end)
+
+local isRunning2 = false
+local task2Thread
+
+page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
+    isRunning2 = roll
+
+    if isRunning2 then
+        task2Thread = task.spawn(function()
+            while isRunning2 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT2
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
+                    isRunning2 = false
+                    break
+                end
+
+                local args2 = {
+                    [1] = "DFT2",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense2 == 2 then args2[2] = 0/0 end
+                if AffMelee2 == 2 then args2[3] = 0/0 end
+                if AffSniper2 == 2 then args2[4] = 0/0 end
+                if AffSword2 == 2 then args2[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args2))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
     end
-}
+end)
 
--- รวมรายการที่มีอยู่ใน Data
-local displayOptions = {}
-local reverseLookup = {}
+page5:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
 
-for name, transform in pairs(npcMapping) do
-    local found = myData:FindFirstChild(name)
-    if found then
-        local displayName = transform(found)
-        table.insert(displayOptions, displayName)
-        reverseLookup[displayName] = name
+local isRunning3 = false
+local task3Thread
+
+page5:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
+    isRunning3 = rolg
+
+    if isRunning3 then
+        task3Thread = task.spawn(function()
+            while isRunning3 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT1
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
+                    isRunning1 = false
+                    break
+                end
+
+                local args1 = {
+                    [1] = "DFT1",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Gems"
+                }
+
+                if AffDefense1 == 2 then args1[2] = 0/0 end
+                if AffMelee1 == 2 then args1[3] = 0/0 end
+                if AffSniper1 == 2 then args1[4] = 0/0 end
+                if AffSword1 == 2 then args1[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
     end
-end
+end)
 
-page5:Label("┇ The Secret Weapon Progress ┇")
-page5:Dropdown("Check Progress Weapon", displayOptions, function(select)
-    local originalName = reverseLookup[select]
+local isRunning4 = false
+local task4Thread
+
+page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
+    isRunning4 = rollg
+
+    if isRunning4 then
+        task4Thread = task.spawn(function()
+            while isRunning4 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT2
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
+                    isRunning2 = false
+                    break
+                end
+
+                local args2 = {
+                    [1] = "DFT2",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Gems"
+                }
+
+                if AffDefense2 == 2 then args2[2] = 0/0 end
+                if AffMelee2 == 2 then args2[3] = 0/0 end
+                if AffSniper2 == 2 then args2[4] = 0/0 end
+                if AffSword2 == 2 then args2[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args2))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 local Tab6 = Window:Taps("Storage")
@@ -2888,250 +3127,15 @@ spawn(function()
     end
 end)
 
-page8:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
+page8:Label("┇ Fake Weapon ┇")
+page8:Button("Aqua Staff ( Need 500 Melee )" , function()
 
-local isRunning1 = false
-local task1Thread
-
-page8:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
-    isRunning1 = rol
-
-    if isRunning1 then
-        task1Thread = task.spawn(function()
-            while isRunning1 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
 end)
 
-local isRunning2 = false
-local task2Thread
+page8:Button("Seastone Cestus ( Need 500 Melee )" , function()
 
-page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
-    isRunning2 = roll
-
-    if isRunning2 then
-        task2Thread = task.spawn(function()
-            while isRunning2 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
 end)
 
-page8:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
-
-local isRunning3 = false
-local task3Thread
-
-page8:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
-    isRunning3 = rolg
-
-    if isRunning3 then
-        task3Thread = task.spawn(function()
-            while isRunning3 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isRunning4 = false
-local task4Thread
-
-page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
-    isRunning4 = rollg
-
-    if isRunning4 then
-        task4Thread = task.spawn(function()
-            while isRunning4 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-		
 local Tab9 = Window:Taps("Dupe Gems")
 local page9 = Tab9:newpage()
 
