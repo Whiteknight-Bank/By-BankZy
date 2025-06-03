@@ -2114,10 +2114,14 @@ end)
 page4:Section("↑ Excutor Again, It will Refresh ↑")
 
 page4:Label("┇ Function Kill Players ┇")
-page4:Toggle("Auto Kill Cannon Ball", false, function(bplr)
+page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
     _G.autocannonplr = bplr
 end)
-		
+
+page4:Toggle("Auto Quake Kill", false, function(qkkl)
+	_G.Quakekill = qkkl
+end)
+
 plr = game.Players.LocalPlayer
 
 local Tab5 = Window:Taps("Island")
@@ -2714,8 +2718,8 @@ spawn(function()
 end)
 
 page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Quake Steal Rare Fruit", false, function(drpc)
-    _G.Quakesteal = drpc
+page7:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
+    _G.Quakesteal = qkst
 end)
 
 spawn(function() -- auto farm quake
