@@ -3006,9 +3006,13 @@ spawn(function()
     end
 end)
 
+page8:Toggle("Anti Venom (75%)", false, function(vnom)
+    _G.antivenom = vnom
+end)
+		
 spawn(function()
     while wait() do
-        if _G.antipool then
+        if _G.antivenom then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
@@ -3037,6 +3041,40 @@ spawn(function()
         end
     end
 end)
+
+spawn(function()
+    while wait() do
+        if _G.antivenom then
+            pcall(function()
+                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
+                    if modelInWorkspace:IsA("Model") then
+                        -- เจาะจงเฉพาะ 6 ชิ้นส่วนที่ระบุเท่านั้น
+                        local demonPartsToCheck = {
+                            "DemonHead",
+                            "DemonTorso",
+                            "DemonRightArm",
+                            "DemonLeftArm",
+                            "DemonRightWing",
+                            "DemonLeftWing"
+                        }
+
+                        for _, partName in ipairs(demonPartsToCheck) do
+                            local part = modelInWorkspace:FindFirstChild(partName)
+                            if part then
+                                for _, child in pairs(part:GetChildren()) do
+                                    if child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 
 page8:Toggle("Anti Love", false, function(lve)
     _G.antilove = lve
