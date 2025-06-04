@@ -2973,7 +2973,7 @@ page8:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page8:Toggle("Anti Dark&Venom Pool", false, function(ndmg)
+page8:Toggle("Anti Dark Pool", false, function(ndmg)
     _G.antipool = ndmg
 end)
 
@@ -3076,7 +3076,7 @@ spawn(function()
 end)
 
 
-page8:Toggle("Anti Love", false, function(lve)
+page8:Toggle("Anti Love (50/50%)", false, function(lve)
     _G.antilove = lve
 end)
 
