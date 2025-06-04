@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "Bank Hub Loading" .. dots[dotIndex]
+			title.Text = "InW Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -87,110 +87,9 @@ task.spawn(function()
 	updateLoading = false
 	wait(0.5)
 	ScreenGui:Destroy()
-
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
--- UI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "UpdatePopupCenter"
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
--- Main Frame (กลางจอจริง ๆ แนวตั้ง+แนวนอน)
-local mainFrame = Instance.new("Frame")
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-mainFrame.Size = UDim2.new(0, 500, 0, 50)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-mainFrame.BackgroundTransparency = 0.3
-mainFrame.BorderSizePixel = 0
-mainFrame.ClipsDescendants = true
-mainFrame.Parent = screenGui
-
--- ปุ่มลูกศรซ้าย
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 40, 0, 50)
-toggleButton.Position = UDim2.new(0, 0, 0, 0)
-toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "▼"
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 22
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Parent = mainFrame
-
--- ปุ่มปิดขวา
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 40, 0, 50)
-closeButton.AnchorPoint = Vector2.new(1, 0)
-closeButton.Position = UDim2.new(1, 0, 0, 0)
-closeButton.BackgroundTransparency = 1
-closeButton.Text = "✖"
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 22
-closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-closeButton.Parent = mainFrame
-
--- หัวข้อ NEW UPDATE (กลางบน)
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -100, 0, 50)
-titleLabel.Position = UDim2.new(0, 50, 0, 0)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW UPDATE"
-titleLabel.TextColor3 = Color3.new(1, 1, 1)
-titleLabel.Font = Enum.Font.GothamBlack
-titleLabel.TextSize = 22
-titleLabel.TextXAlignment = Enum.TextXAlignment.Center
-titleLabel.TextYAlignment = Enum.TextYAlignment.Center
-titleLabel.Parent = mainFrame
-
--- เนื้อหา
-local contentFrame = Instance.new("Frame")
-contentFrame.Size = UDim2.new(1, 0, 0, 160)
-contentFrame.Position = UDim2.new(0, 0, 0, 50)
-contentFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-contentFrame.BackgroundTransparency = 0.4
-contentFrame.BorderSizePixel = 0
-contentFrame.Parent = mainFrame
-
-local label = Instance.new("TextLabel")
-label.Size = UDim2.new(1, -30, 1, -30)
-label.Position = UDim2.new(0, 15, 0, 15)
-label.BackgroundTransparency = 1
-label.Text = "- ปรับแก้เมนูแต่ละอันให้เข้าถึงง่ายขึ้น\n- Auto Complete Mission อยู่ในการแก้ไข"
-label.TextColor3 = Color3.new(1, 1, 1)
-label.TextWrapped = true
-label.Font = Enum.Font.Gotham
-label.TextSize = 16
-label.TextXAlignment = Enum.TextXAlignment.Left
-label.TextYAlignment = Enum.TextYAlignment.Top
-label.Parent = contentFrame
-
--- Animation
-local expandedSize = UDim2.new(0, 500, 0, 210)
-local collapsedSize = UDim2.new(0, 500, 0, 50)
-local isOpen = false
-
--- ปุ่มลูกศร: เปิด/ปิดกล่อง
-toggleButton.MouseButton1Click:Connect(function()
-	isOpen = not isOpen
-	local newSize = isOpen and expandedSize or collapsedSize
-	toggleButton.Text = isOpen and "▲" or "▼"
-
-	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Size = newSize
-	}):Play()
-end)
-
--- ปุ่มปิดทั้งหมด
-closeButton.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-end)
 		
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("Bank Hub : For Map One Piece: Legendary")
+local Window = create:Win("InW Hub : For Map One Piece: Legendary")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
 
@@ -526,12 +425,10 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
             if _G.automission then
                 local toolname = "Cannon Ball"
                 if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
                     LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
-		end
 		end
             end
         end)
@@ -542,14 +439,13 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
             if _G.automission then
                 for i = 1, 2 do
                     local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
                     local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
                     if cannon and cannon:FindFirstChild("RemoteEvent") then
                         cannon.RemoteEvent:FireServer(unpack(args))
-                    end
+                    
                     task.wait(0)
                 end
 	end
@@ -566,7 +462,6 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
             if _G.automission then
                 for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
                     if v.Name == "CannonBall" then
@@ -578,7 +473,6 @@ spawn(function()
                             Noclip.MaxForce = Vector3.new(100000,100000,100000)
                             Noclip.Velocity = Vector3.new(0,20,0)
                             Noclip.Parent = v
-		        end
                         end
                     end
                 end
@@ -591,12 +485,10 @@ end)
 spawn(function()
     while task.wait(15) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
             if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name == "Cannon Ball" then
                         v:Destroy()
-			end
                     end
                 end
             end
@@ -608,12 +500,10 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
             if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
                         v:Destroy()
-		end
                     end
                 end
             end
@@ -625,7 +515,6 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-	if progVal > 0 and reqVal > 0 then
            if _G.automission then
                 fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
                 task.wait(0)
@@ -635,7 +524,7 @@ spawn(function()
                 else
                     task.wait(0.5)
                     workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-		end
+	
 		end
             end
         end)
@@ -1378,7 +1267,7 @@ local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob", false, function(dthh)
+page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -1397,7 +1286,7 @@ spawn(function()
     end
 end)
 
-page2:Toggle("Auto Death Kaizu' Boss (50/50%)", false, function(zki)
+page2:Toggle("Auto Death Kaizu' Boss (100%)", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -1499,7 +1388,7 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ Function Farm with Cannon Ball ┇")
-page2:Toggle("Auto Farm Cannon Ball ( Slow)", false, function(bll)
+page2:Toggle("Auto Farm Cannon Ball ( Slow )", false, function(bll)
     _G.autocannonslow = bll
 end)
 
@@ -2116,7 +2005,7 @@ spawn(function()--aim silent
         while true do wait()
             pcall(function()
                 local plr1 = game.Players.LocalPlayer.Character
-                local plr2 = game.Players:FindFirstChild(PlayerName1)
+                local plr2 = game.Players:FindFirstChild(selectedPlayer)
                 if aimsilent then
                     cacacac = plr2.Character.HumanoidRootPart.CFrame
                 end
@@ -2154,25 +2043,6 @@ local args = {
 
 workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
 
-            end
-        end)
-    end
-end)
-
-page4:Toggle("Auto Drop Drink", false, function(dops)
-	DropDrinks = dops
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not DropDrinks then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value.Parent = game.Workspace;
-                end
             end
         end)
     end
@@ -2273,7 +2143,7 @@ page4:Label("┇ The Secret Weapon Progress ┇")
 page4:Dropdown("Check Progress Weapon", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
-page4:Section("↑ Excutor Again, It will Refresh ↑")
+page4:Section("↑ Execute Again, It will Refresh ↑")
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
@@ -2710,6 +2580,7 @@ page6:Label("Function Storage")
 page6:Button("Add Rare Fruitlist To Storage", function()
 table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
 end)
+page6:Section("↑ Add Before Using Auto Storage ↑")
 
 for Index = 1, 12 do
 page6:Toggle("Auto Storage No. " .. Index, false, function(value)
@@ -2766,11 +2637,7 @@ spawn(function()
     end
 end)
 
-page7:Button("Check You Compass", function()
-create:Notifile("", "You Have " .. workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Data.CompassTokens.Value .. " Compass", 5)
-end)
-
-page7:Label("Check Rare Who Got it On Sever")
+page7:Label("Check Rare Fruity Who Got it On Sever")
 page7:Toggle("Check Rare Fruity", false, function(chre)
     _G.checkrare = chre
 end)
@@ -2880,7 +2747,7 @@ spawn(function()
 end)
 
 page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
+page7:Toggle("Auto Quake Steal Rare Fruit (ไม่ทำงาน)", false, function(qkst)
     _G.Quakesteal = qkst
 end)
 
@@ -3324,11 +3191,11 @@ spawn(function()
 end)
 
 page8:Label("┇ Fake Weapon ┇")
-page8:Button("Aqua Staff ( Need 500 Melee )" , function()
+page8:Button("Aqua Staff ( ใช้งานไม่ได้ )" , function()
 
 end)
 
-page8:Button("Seastone Cestus ( Need 500 Melee )" , function()
+page8:Button("Seastone Cestus ( ใช้งานไม่ได้ )" , function()
 
 end)
 
