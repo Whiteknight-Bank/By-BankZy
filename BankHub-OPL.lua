@@ -3091,7 +3091,7 @@ spawn(function()
 	end
 end)
 
-page8:Toggle("Anti Love", false, function(smlt)
+page8:Toggle("Anti Smelt Spew", false, function(smlt)
     _G.antismeltspew = smlt
 end)
 
@@ -3117,40 +3117,6 @@ spawn(function()
 					end
 				end
 			end
-		end
-	end
-end)
-
-local partsToClean = {
-	"Head", "HumanoidRootPart", "Left Arm", "Right Arm", "Left Leg", "Right Leg", "Torso",
-	"SmeltB1", "SmeltB2", "SmeltB3", "SmeltB4", "SmeltB5", "SmeltB6"
-}
-
-spawn(function()
-	while wait() do
-		if _G.antismeltspew then
-			pcall(function()
-				for _, model in ipairs(workspace:GetDescendants()) do
-					if model:IsA("Model") and model:FindFirstChild("Humanoid") then
-						for _, partName in ipairs(partsToClean) do
-							local part = model:FindFirstChild(partName)
-							if part and part:IsA("BasePart") then
-								-- ลบ TouchInterest
-								for _, child in ipairs(part:GetChildren()) do
-									if child:IsA("TouchTransmitter") or child.Name == "TouchInterest" then
-										child:Destroy()
-									end
-								end
-
-								-- ถ้าเป็น Right Arm และมี SmeltSword → ปิด CanTouch
-								if part.Name == "Right Arm" and part:FindFirstChild("SmeltSword") then
-									part.CanTouch = false
-								end
-							end
-						end
-					end
-				end
-			end)
 		end
 	end
 end)
