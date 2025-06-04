@@ -627,7 +627,6 @@ spawn(function()
     end
 end)
 
--- วาปมอนที่ตรงกับ MissionObjectiveTarget มาไว้หน้าเรา
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
@@ -636,15 +635,33 @@ spawn(function()
             local targetName = dataPath:FindFirstChild("MissionObjectiveTarget") and dataPath.MissionObjectiveTarget.Value or nil
             if not targetName then return end
 
-            for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-                if enemy:FindFirstChild("HumanoidRootPart") and string.find(enemy.Name, targetName) then
-                    enemy.HumanoidRootPart.Anchored = true
-                    enemy.HumanoidRootPart.CanCollide = false
-                    enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                    enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
+            -- 🔹 กรณี ObjectiveTarget = "None" หรือ "NONE" → ล็อกทุกมอน
+            if targetName == "None" or targetName == "NONE" then
+                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+                    if enemy:FindFirstChild("HumanoidRootPart") then
+                        enemy.HumanoidRootPart.Anchored = true
+                        enemy.HumanoidRootPart.CanCollide = false
+                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
 
-                    if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
-                        enemy:Destroy()
+                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
+                            enemy:Destroy()
+                        end
+                    end
+                end
+
+            -- 🔹 ถ้าไม่ใช่ None → ล็อกเฉพาะเป้าหมาย
+            else
+                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+                    if enemy:FindFirstChild("HumanoidRootPart") and string.find(enemy.Name, targetName) then
+                        enemy.HumanoidRootPart.Anchored = true
+                        enemy.HumanoidRootPart.CanCollide = false
+                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
+
+                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
+                            enemy:Destroy()
+                        end
                     end
                 end
             end
