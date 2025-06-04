@@ -505,7 +505,7 @@ spawn(function()
             local progress = dataPath.Progress.Value
             local requirement = dataPath.Requirement.Value
 
-            if objective == "Kill" or objective == "Quests" and progress > 0 and requirement > 0 then
+            if objective == "Kill" or objective == "Damage" or objective == "Money" and progress > 0 and requirement > 0 then
                 _G.automission = true
             else
                 _G.automission = false
