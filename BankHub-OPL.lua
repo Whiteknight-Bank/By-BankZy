@@ -3109,43 +3109,39 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
+page8:Button("Add Rare Fruitlist To Storage", function()
+table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
+end)
+page8:Section("↑ Add Before Using Auto Storage ↑")
+
+page8:Toggle("Auto Storage All", false, function(value)
+    Cache.Boolean.StorageAll = value
+end)
+
 local function HandleFruits()
-    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
-        if IsActive and CheckStorage(Index) then
-            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if Fruit:IsA("Tool") then
-                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
-                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
-                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
-                            StoreFruit(Index, Fruit)
-                            break
+    if Cache.Boolean.StorageAll then
+        for Index = 1, 12 do
+            if CheckStorage(Index) then
+                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if Fruit:IsA("Tool") then
+                        for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
+                            if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
+                               (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
+                                StoreFruit(Index, Fruit)
+                                break
+                            end
                         end
                     end
                 end
             end
         end
     end
-		end
-
-page8:Button("Add Rare Fruitlist To Storage", function()
-table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
-end)
-page8:Section("↑ Add Before Using Auto Storage ↑")
-
-for Index = 1, 12 do
-page8:Toggle("Auto Storage No. " .. Index, false, function(value)
-    Cache.Boolean.StorageUsingGroup[Index] = value
-end)
-		end
+end
 
 spawn(function()
     while wait(1) do
         pcall(HandleFruits)
     end
-end)
-		
-page8:Toggle("Auto Storage", false, function(store)
-    _G.autostorage = store
 end)
 
 page8:Label("┇ Fake Weapon ┇")
