@@ -485,40 +485,66 @@ end)
 page1:Toggle("Auto Complete Mission (ไม่ทำงาน)", false, function(miss)
         _G.automission = miss
 
-    spawn(function()
-        while task.wait(1) do
-            pcall(function()
-                if _G.automission then
-                    local userId = game.Players.LocalPlayer.UserId
-                    local data = workspace:FindFirstChild("UserData")
-                    if data and data:FindFirstChild("User_" .. userId) then
-                        local playerData = data["User_" .. userId]:FindFirstChild("Data")
-                        if playerData then
-                            local objectives = playerData:FindFirstChild("Objectives")
-                            local progress = playerData:FindFirstChild("Progress")
-                            local requirement = playerData:FindFirstChild("Requirement")
+    -- Auto Mission Script: Kill Objective Only
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local userId = LocalPlayer.UserId
+local userDataPath = workspace.UserData["User_" .. userId].Data
 
-                            if objectives and progress and requirement then
-                                if requirement.Value == 0 or progress.Value >= requirement.Value then
-                                    _G.autocannonslow = false
-                                elseif objectives.Value == "Kill" then
-                                    _G.autocannonslow = true
-                                elseif objectives.Value == "Money" then
-                                    _G.autocannonslow = true
-                                elseif objectives.Value == "Damage" then
-                                    _G.autocannonslow = true
-                                else
-                                    _G.autocannonslow = false
-                                end
-                            end
-                        end
-                    end
+local safeCFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0) -- <-- เปลี่ยนจุดปลอดภัยตรงนี้ได้
+
+spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            if not userDataPath:FindFirstChild("Objective") or not userDataPath:FindFirstChild("Progress") or not userDataPath:FindFirstChild("Requirement") then
+                return
+            end
+
+            local objective = userDataPath.Objective.Value
+            local progress = userDataPath.Progress.Value
+            local requirement = userDataPath.Requirement.Value
+            local target = userDataPath:FindFirstChild("MissionObjectiveTarget") and userDataPath.MissionObjectiveTarget.Value or nil
+
+            if objective == "Kill" then
+                if progress > 0 and requirement > 0 then
+                    _G.automission = true
                 else
-                    _G.autocannonslow = false
+                    _G.automission = false
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
+                    end
                 end
-            end)
-        end
-    end)
+            else
+                _G.automission = false
+            end
+        end)
+    end
+end)
+
+-- Auto Warp to Target Enemies
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.automission then return end
+
+            local data = workspace.UserData["User_" .. userId].Data
+            local targetName = data:FindFirstChild("MissionObjectiveTarget") and data.MissionObjectiveTarget.Value or nil
+            if not targetName then return end
+
+            for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+                if enemy:FindFirstChild("HumanoidRootPart") and string.find(enemy.Name, targetName) then
+                    enemy.HumanoidRootPart.CanCollide = false
+                    enemy.HumanoidRootPart.Anchored = true
+                    enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                    enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
+
+                    if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
+                        enemy:Destroy()
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
