@@ -3091,10 +3091,6 @@ spawn(function()
 	end
 end)
 
-page8:Toggle("Anti Smelt Spew", false, function(smlt)
-    _G.antismeltspew = smlt
-end)
-
 page8:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
