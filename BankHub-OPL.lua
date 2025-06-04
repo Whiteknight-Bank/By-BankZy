@@ -3091,6 +3091,36 @@ spawn(function()
 	end
 end)
 
+page8:Toggle("Anti Smelt Spew", false, function(smlt)
+    _G.antismelt = smlt
+end)
+
+spawn(function()
+	while wait() do
+		if _G.antismelt then
+			for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("Smelt")
+					if smelt then
+						local resources = smelt:FindFirstChild("Resources")
+						if resources then
+							local smeltSpew = resources:FindFirstChild("SmeltSpew")
+							if smeltSpew then
+								for _, child in ipairs(smeltSpew:GetChildren()) do
+									if child.Name == "TouchInterest" then
+										child:Destroy()
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
 page8:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
