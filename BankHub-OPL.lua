@@ -3132,7 +3132,7 @@ spawn(function()
 				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
 					local powers = powers:FindFirstChild("Right Arm")
 					if powers then
-						local resources = smelt:FindFirstChild("RumbleStaff")
+						local resources = powers:FindFirstChild("RumbleStaff")
 						if resources then
 							local smeltSpew = resources:FindFirstChild("DamagePart")
 							if smeltSpew then
