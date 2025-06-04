@@ -522,17 +522,17 @@ spawn(function()
         end)
     end
 end)
-
-local validObjectives = { Kill = true, Money = true, Damage = true }
 			
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission and validObjectives[dataPath.Objective.Value] then
+	if progVal > 0 and reqVal > 0 then
+            if _G.automission then
                 local toolname = "Cannon Ball"
                 if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
                     LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
-                end
+		end
+		end
             end
         end)
     end
@@ -542,7 +542,8 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission and validObjectives[dataPath.Objective.Value] then
+	if progVal > 0 and reqVal > 0 then
+            if _G.automission then
                 for i = 1, 2 do
                     local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
                     local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
@@ -551,7 +552,7 @@ spawn(function()
                     end
                     task.wait(0)
                 end
-
+	end
                 local ball = workspace.ResourceHolder["Resources_" .. userId]:FindFirstChild("CannonBall")
                 if ball then
                     ball.CanCollide = false
@@ -565,7 +566,8 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission and validObjectives[dataPath.Objective.Value] then
+	if progVal > 0 and reqVal > 0 then
+            if _G.automission then
                 for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
                     if v.Name == "CannonBall" then
                         v.CFrame = LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
@@ -576,6 +578,7 @@ spawn(function()
                             Noclip.MaxForce = Vector3.new(100000,100000,100000)
                             Noclip.Velocity = Vector3.new(0,20,0)
                             Noclip.Parent = v
+		        end
                         end
                     end
                 end
@@ -588,10 +591,12 @@ end)
 spawn(function()
     while task.wait(15) do
         pcall(function()
-            if _G.automission and validObjectives[dataPath.Objective.Value] and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+	if progVal > 0 and reqVal > 0 then
+            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name == "Cannon Ball" then
                         v:Destroy()
+			end
                     end
                 end
             end
@@ -603,10 +608,12 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission and validObjectives[dataPath.Objective.Value] and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+	if progVal > 0 and reqVal > 0 then
+            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
                         v:Destroy()
+		end
                     end
                 end
             end
@@ -618,7 +625,8 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-           if _G.automission and validObjectives[dataPath.Objective.Value] then
+	if progVal > 0 and reqVal > 0 then
+           if _G.automission then
                 fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
                 task.wait(0)
                 local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
@@ -627,7 +635,8 @@ spawn(function()
                 else
                     task.wait(0.5)
                     workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-                end
+		end
+		end
             end
         end)
     end
@@ -655,7 +664,6 @@ spawn(function()
                         end
                     end
                 end
-
             -- 🔹 ถ้าไม่ใช่ None → ล็อกเฉพาะเป้าหมาย
             else
                 for _, enemy in pairs(workspace.Enemies:GetChildren()) do
