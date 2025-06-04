@@ -3047,7 +3047,7 @@ spawn(function()
 		if _G.antilove then
 			pcall(function()
 				for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
+				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
 				local powers = model:FindFirstChild("Powers")
 					if powers then
 						local love = powers:FindFirstChild("Love")
