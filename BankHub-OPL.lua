@@ -2024,49 +2024,6 @@ mta.__index = newcclosure(function(a, b, c)
     return index(a, b, c)
 end)
 
-page4:Label("┇ Shop ┇")
-page4:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
-    selectedDrinks = knrd
-end)
-
-page4:Toggle("Auto Buy Drinks", false, function(bdy)
-	_G.buydrink = bdy
-end)
-
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.buydrink then
-local args = {
-    [1] = selectedDrinks
-}
-
-workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
-
-            end
-        end)
-    end
-end)
-
-page4:Toggle("Auto Drinks All", false, function(drks)
-	AutoDrinks = drks
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not AutoDrinks then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
-                end
-            end
-        end)
-    end
-end)
-
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
@@ -2293,12 +2250,58 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-page5:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
+local Tab6 = Window:Taps("NPCs")
+local page6 = Tab6:newpage()
+
+page6:Label("┇ Shop ┇")
+page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
+    selectedDrinks = knrd
+end)
+
+page6:Toggle("Auto Buy Drinks", false, function(bdy)
+	_G.buydrink = bdy
+end)
+
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.buydrink then
+local args = {
+    [1] = selectedDrinks
+}
+
+workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
+
+            end
+        end)
+    end
+end)
+
+page6:Toggle("Auto Drinks All", false, function(drks)
+	AutoDrinks = drks
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoDrinks then return end;
+            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
+                    Value.Parent = game.Players.LocalPlayer.Character;
+                    Value:Activate();
+                end
+            end
+        end)
+    end
+end)
+
+page6:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
 
 local isRunning1 = false
 local task1Thread
 
-page5:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
+page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -2358,7 +2361,7 @@ end)
 local isRunning2 = false
 local task2Thread
 
-page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
+page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
     isRunning2 = roll
 
     if isRunning2 then
@@ -2415,12 +2418,12 @@ page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
     end
 end)
 
-page5:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
+page6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
 
 local isRunning3 = false
 local task3Thread
 
-page5:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
+page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
     isRunning3 = rolg
 
     if isRunning3 then
@@ -2480,7 +2483,7 @@ end)
 local isRunning4 = false
 local task4Thread
 
-page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
+page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
     isRunning4 = rollg
 
     if isRunning4 then
@@ -2536,63 +2539,6 @@ page5:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg
         end)
     end
 end)
-
-local Tab6 = Window:Taps("Storage")
-local page6 = Tab6:newpage()
-
-page6:Label("┇ Function Storage Fruit ┇")
-local Cache = {
-    Player = { Inputfruitlist = {}, Inputfruitname = "" },
-    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
-}
-
-local function CheckStorage(Number)
-    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
-    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
-end
-
-local function StoreFruit(Index, Fruit)
-    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
-    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-    Fruit.Parent = game.Players.LocalPlayer.Character
-    storagePath:FireServer("StoredDF" .. Index)
-end
-
-local function HandleFruits()
-    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
-        if IsActive and CheckStorage(Index) then
-            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if Fruit:IsA("Tool") then
-                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
-                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
-                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
-                            StoreFruit(Index, Fruit)
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-page6:Label("Function Storage")
-page6:Button("Add Rare Fruitlist To Storage", function()
-table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
-end)
-page6:Section("↑ Add Before Using Auto Storage ↑")
-
-for Index = 1, 12 do
-page6:Toggle("Auto Storage No. " .. Index, false, function(value)
-    Cache.Boolean.StorageUsingGroup[Index] = value
-end)
-		end
-
-spawn(function()
-    while wait(1) do
-        pcall(HandleFruits)
-    end
-end)
   
 local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
@@ -2623,14 +2569,28 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Claim Compass", false, function(clmp)
-    AutoClaimComp = clmp
+page7:Toggle("Auto Claim 1 Compass", false, function(clmp)
+    AutoClaimComp1 = clmp
 end)
 
 spawn(function()
     while wait() do
         pcall(function()
-            if not AutoClaimComp then return end;
+            if not AutoClaimComp1 then return end;
+            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim1");
+            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim1");
+        end)
+    end
+end)
+
+page7:Toggle("Auto Claim 10 Compass", false, function(clmpp)
+    AutoClaimComp2 = clmpp
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not AutoClaimComp2 then return end;
             game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
             game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
         end)
@@ -3131,72 +3091,74 @@ spawn(function()
 	end
 end)
 
-page8:Label("┇ Function Unbox ┇")
+page8:Label("┇ Function Storage ┇")
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
 
-page8:Toggle("Auto Unbox Common", false, function(bxcm)
-    UnboxCM = bxcm
-end)
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not UnboxCM then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfBox1"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
+
+local function HandleFruits()
+    for Index, IsActive in pairs(Cache.Boolean.StorageUsingGroup) do
+        if IsActive and CheckStorage(Index) then
+            for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if Fruit:IsA("Tool") then
+                    for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
+                        if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
+                           (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
+                            StoreFruit(Index, Fruit)
+                            break
+                        end
+                    end
                 end
             end
-        end)
+        end
     end
-end)
+		end
 
-page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
-    UnboxUn = bxun
+page8:Button("Add Rare Fruitlist To Storage", function()
+table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
 end)
+page8:Section("↑ Add Before Using Auto Storage ↑")
+
+for Index = 1, 12 do
+page8:Toggle("Auto Storage No. " .. Index, false, function(value)
+    Cache.Boolean.StorageUsingGroup[Index] = value
+end)
+		end
 
 spawn(function()
-    while wait() do
-        pcall(function()
-            if not UnboxUn then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfBox2"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
-                end
-            end
-        end)
+    while wait(1) do
+        pcall(HandleFruits)
     end
 end)
-
-page8:Toggle("Auto Unbox Rare&Ultra", false, function(bxrl)
-    UnboxRUL = bxrl
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not UnboxRUL then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfBox3"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
-                end
-            end
-        end)
-    end
+		
+page8:Toggle("Auto Storage", false, function(store)
+    _G.autostorage = store
 end)
 
 page8:Label("┇ Fake Weapon ┇")
-page8:Button("Aqua Staff ( ใช้งานไม่ได้ )" , function()
-
+page8:Button("Aqua Staff" , function()
+local A_1 = "Aqua Staff"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
+    Event:FireServer(A_1)
 end)
 
-page8:Button("Seastone Cestus ( ใช้งานไม่ได้ )" , function()
-
+page8:Button("Seastone Cestus ( Need 500 Melee )" , function()
+local A_1 = "Seastone Cestus"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
+    Event:FireServer(A_1)
 end)
 
 local Tab9 = Window:Taps("Dupe Gems")
