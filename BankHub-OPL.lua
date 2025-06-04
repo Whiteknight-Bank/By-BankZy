@@ -2985,12 +2985,12 @@ page8:Toggle("Anti AFK", false, function(state)
 end)
 
 page8:Toggle("Anti Dark&Venom Pool", false, function(ndmg)
-    _G.antivedark = ndmg
+    _G.antipool = ndmg
 end)
 
 spawn(function()
     while wait() do
-        if _G.antivedark then
+        if _G.antipool then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
 
@@ -3019,7 +3019,7 @@ end)
 
 spawn(function()
     while wait() do
-        if _G.antity then
+        if _G.antipool then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
