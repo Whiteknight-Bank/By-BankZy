@@ -517,11 +517,12 @@ spawn(function()
     end
 end)
 
--- ดึง Cannon Ball
+local validObjectives = { Kill = true, Money = true, Damage = true }
+			
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission then
+            if _G.automission and validObjectives[dataPath.Objective.Value] then
                 local toolname = "Cannon Ball"
                 if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
                     LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
@@ -535,7 +536,7 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission then
+            if _G.automission and validObjectives[dataPath.Objective.Value] then
                 for i = 1, 2 do
                     local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
                     local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
@@ -558,7 +559,7 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission then
+            if _G.automission and validObjectives[dataPath.Objective.Value] then
                 for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
                     if v.Name == "CannonBall" then
                         v.CFrame = LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
@@ -581,7 +582,7 @@ end)
 spawn(function()
     while task.wait(15) do
         pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+            if _G.automission and validObjectives[dataPath.Objective.Value] and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name == "Cannon Ball" then
                         v:Destroy()
@@ -596,7 +597,7 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+            if _G.automission and validObjectives[dataPath.Objective.Value] and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
                 for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
                     if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
                         v:Destroy()
@@ -611,7 +612,7 @@ end)
 spawn(function()
     while task.wait(0) do
         pcall(function()
-            if _G.automission then
+           if _G.automission and validObjectives[dataPath.Objective.Value] then
                 fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
                 task.wait(0)
                 local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
