@@ -1952,6 +1952,133 @@ end)
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
+page4:Label("┇ Local Player ┇")
+page4:Toggle("Gode Mode (15%)", false, function(gxd)
+	_G.godmode = gxd
+end)
+
+spawn(function()
+    while wait() do
+        if _G.godmode then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Attack")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("DPart")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.godmode then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.godmode then
+            pcall(function()
+                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
+                    if modelInWorkspace:IsA("Model") then
+                        -- เจาะจงเฉพาะ 6 ชิ้นส่วนที่ระบุเท่านั้น
+                        local demonPartsToCheck = {
+                            "DemonHead",
+                            "DemonTorso",
+                            "DemonRightArm",
+                            "DemonLeftArm",
+                            "DemonRightWing",
+                            "DemonLeftWing"
+                        }
+
+                        for _, partName in ipairs(demonPartsToCheck) do
+                            local part = modelInWorkspace:FindFirstChild(partName)
+                            if part then
+                                for _, child in pairs(part:GetChildren()) do
+                                    if child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+	while wait() do
+		if _G.godmode then
+			for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("Smelt")
+					if smelt then
+						local resources = smelt:FindFirstChild("Resources")
+						if resources then
+							local smeltSpew = resources:FindFirstChild("SmeltSpew")
+							if smeltSpew then
+								for _, child in ipairs(smeltSpew:GetChildren()) do
+									if child.Name == "TouchInterest" then
+										child:Destroy()
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
