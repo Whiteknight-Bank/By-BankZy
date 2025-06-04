@@ -87,7 +87,108 @@ task.spawn(function()
 	updateLoading = false
 	wait(0.5)
 	ScreenGui:Destroy()
-		
+
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- UI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "UpdatePopupCenter"
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Main Frame (กลางจอจริง ๆ แนวตั้ง+แนวนอน)
+local mainFrame = Instance.new("Frame")
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.Size = UDim2.new(0, 500, 0, 50)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BackgroundTransparency = 0.3
+mainFrame.BorderSizePixel = 0
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = screenGui
+
+-- ปุ่มลูกศรซ้าย
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 40, 0, 50)
+toggleButton.Position = UDim2.new(0, 0, 0, 0)
+toggleButton.BackgroundTransparency = 1
+toggleButton.Text = "▼"
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 22
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Parent = mainFrame
+
+-- ปุ่มปิดขวา
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 40, 0, 50)
+closeButton.AnchorPoint = Vector2.new(1, 0)
+closeButton.Position = UDim2.new(1, 0, 0, 0)
+closeButton.BackgroundTransparency = 1
+closeButton.Text = "✖"
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 22
+closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
+closeButton.Parent = mainFrame
+
+-- หัวข้อ NEW UPDATE (กลางบน)
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -100, 0, 50)
+titleLabel.Position = UDim2.new(0, 50, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "NEW GOD MODE (15%)"
+titleLabel.TextColor3 = Color3.new(1, 1, 1)
+titleLabel.Font = Enum.Font.GothamBlack
+titleLabel.TextSize = 22
+titleLabel.TextXAlignment = Enum.TextXAlignment.Center
+titleLabel.TextYAlignment = Enum.TextYAlignment.Center
+titleLabel.Parent = mainFrame
+
+-- เนื้อหา
+local contentFrame = Instance.new("Frame")
+contentFrame.Size = UDim2.new(1, 0, 0, 160)
+contentFrame.Position = UDim2.new(0, 0, 0, 50)
+contentFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+contentFrame.BackgroundTransparency = 0.4
+contentFrame.BorderSizePixel = 0
+contentFrame.Parent = mainFrame
+
+local label = Instance.new("TextLabel")
+label.Size = UDim2.new(1, -30, 1, -30)
+label.Position = UDim2.new(0, 15, 0, 15)
+label.BackgroundTransparency = 1
+label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กำลังเข้ามา . . ."
+label.TextColor3 = Color3.new(1, 1, 1)
+label.TextWrapped = true
+label.Font = Enum.Font.Gotham
+label.TextSize = 16
+label.TextXAlignment = Enum.TextXAlignment.Left
+label.TextYAlignment = Enum.TextYAlignment.Top
+label.Parent = contentFrame
+
+-- Animation
+local expandedSize = UDim2.new(0, 500, 0, 210)
+local collapsedSize = UDim2.new(0, 500, 0, 50)
+local isOpen = false
+
+-- ปุ่มลูกศร: เปิด/ปิดกล่อง
+toggleButton.MouseButton1Click:Connect(function()
+	isOpen = not isOpen
+	local newSize = isOpen and expandedSize or collapsedSize
+	toggleButton.Text = isOpen and "▲" or "▼"
+
+	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+		Size = newSize
+	}):Play()
+end)
+
+-- ปุ่มปิดทั้งหมด
+closeButton.MouseButton1Click:Connect(function()
+	mainFrame.Visible = false
+end)
+
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("InW Hub : For Map One Piece: Legendary")
 
@@ -2079,6 +2180,7 @@ spawn(function()
 		end
 	end
 end)
+
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
