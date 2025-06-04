@@ -491,27 +491,33 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local userId = LocalPlayer.UserId
 local dataPath = workspace.UserData["User_" .. userId].Data
-local safeCFrame = CFrame.new(0, 200, 0) -- จุดปลอดภัย
+local safeCFrame = CFrame.new(-1526, 364, 10510) -- จุดปลอดภัย
 
 -- ตั้งค่า _G.automission ตามเงื่อนไข
 spawn(function()
     while task.wait(1) do
         pcall(function()
-            if not dataPath:FindFirstChild("Objective") or not dataPath:FindFirstChild("Progress") or not dataPath:FindFirstChild("Requirement") then
-                return
-            end
+            local objective = dataPath:FindFirstChild("Objective")
+            local progress = dataPath:FindFirstChild("Progress")
+            local requirement = dataPath:FindFirstChild("Requirement")
 
-            local objective = dataPath.Objective.Value
-            local progress = dataPath.Progress.Value
-            local requirement = dataPath.Requirement.Value
+            if not objective or not progress or not requirement then return end
 
-            if objective == "Kill" or objective == "Damage" or objective == "Money" and progress > 0 and requirement > 0 then
-                _G.automission = true
+            local objValue = objective.Value
+            local progVal = progress.Value
+            local reqVal = requirement.Value
+
+            if (objValue == "Kill" or objValue == "Damage" or objValue == "Money") then
+                if progVal > 0 and reqVal > 0 then
+                    _G.automission = true
+                elseif progVal == 0 and reqVal == 0 then
+                    _G.automission = false
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
+                    end
+                end
             else
                 _G.automission = false
-                if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
-                end
             end
         end)
     end
