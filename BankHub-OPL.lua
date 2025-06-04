@@ -3046,10 +3046,9 @@ spawn(function()
 	while wait() do
 		if _G.antilove then
 			pcall(function()
-				local models = getAllPlayerModelsInWorkspace()
-
-				for _, model in pairs(models) do
-					local powers = model:FindFirstChild("Powers")
+				for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+				local powers = model:FindFirstChild("Powers")
 					if powers then
 						local love = powers:FindFirstChild("Love")
 						if love then
@@ -3068,7 +3067,7 @@ spawn(function()
 										end
 									end
 								end
-
+								end
 								-- 🏹 LoveArrow > Tip > TouchInterest
 								local arrow = projectiles:FindFirstChild("LoveArrow")
 								if arrow then
