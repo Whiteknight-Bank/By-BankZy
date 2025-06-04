@@ -3121,21 +3121,20 @@ spawn(function()
 	end
 end)
 
-page8:Toggle("Anti Magma Ball", false, function(mag)
-    _G.antimagu = mag
+page8:Toggle("Anti Rumble Staff", false, function(mag)
+    _G.antistaff = mag
 end)
 
 spawn(function()
 	while wait() do
-		if _G.antimagu then
+		if _G.antistaff then
 			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("Magma")
-					if smelt then
-						local resources = smelt:FindFirstChild("Shots")
+				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
+					local powers = powers:FindFirstChild("Right Arm")
+					if powers then
+						local resources = smelt:FindFirstChild("Rumble Staff")
 						if resources then
-							local smeltSpew = resources:FindFirstChild("MagmaBall")
+							local smeltSpew = resources:FindFirstChild("DamagePart")
 							if smeltSpew then
 								for _, child in ipairs(smeltSpew:GetChildren()) do
 									if child.Name == "TouchInterest" then
