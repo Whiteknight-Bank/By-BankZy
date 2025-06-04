@@ -484,6 +484,7 @@ end)
 
 page1:Toggle("Auto Complete Mission (ไม่ทำงาน)", false, function(miss)
         _G.automission = miss
+end)
 
     -- Auto Mission Script: Kill Objective Only
 local Players = game:GetService("Players")
