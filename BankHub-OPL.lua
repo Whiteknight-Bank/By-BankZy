@@ -2097,7 +2097,7 @@ spawn(function()
 					if smelt then
 						local resources = smelt:FindFirstChild("Cones")
 						if resources then
-							local smeltSpew = resources:FindFirstChild("Cone")
+							local smeltSpew = resources:FindFirstChild("StringCone")
 							if smeltSpew then
 								for _, child in ipairs(smeltSpew:GetChildren()) do
 									if child.Name == "TouchInterest" then
@@ -2123,7 +2123,7 @@ spawn(function()
 					if smelt then
 						local resources = smelt:FindFirstChild("Strings")
 						if resources then
-							local smeltSpew = resources:FindFirstChild("WeldString")
+							local smeltSpew = resources:FindFirstChild("WeldablePart")
 							if smeltSpew then
 								for _, child in ipairs(smeltSpew:GetChildren()) do
 									if child.Name == "Attachment" then
