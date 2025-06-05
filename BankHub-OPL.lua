@@ -138,7 +138,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -100, 0, 50)
 titleLabel.Position = UDim2.new(0, 50, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW GOD MODE (15%)"
+titleLabel.Text = "NEW GOD MODE (18%)"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Font = Enum.Font.GothamBlack
 titleLabel.TextSize = 22
@@ -2054,7 +2054,7 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode (15%)", false, function(gxd)
+page4:Toggle("Gode Mode (18%)", false, function(gxd)
 	_G.godmode = gxd
 end)
 
