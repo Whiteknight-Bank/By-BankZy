@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- กันด้ายดึงตกน้ำ และกันด้ายสคริปบังคับเกิด"
+label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- กันด้ายดึงตกน้ำ และเพิ่ม Anti String Void"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -2114,32 +2114,6 @@ spawn(function()
 end)
 
 spawn(function()
-	while wait() do
-		if _G.godmode then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("String")
-					if smelt then
-						local resources = smelt:FindFirstChild("Strings")
-						if resources then
-							local smeltSpew = resources:FindFirstChild("WeldablePart")
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "Attachment" then
-										child:Destroy()
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end)
-
-spawn(function()
     while wait() do
         if _G.godmode then
             local resourceHolder = workspace:FindFirstChild("UserData")
@@ -3283,8 +3257,8 @@ page8:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page8:Toggle("Anti Dark Pool", false, function(ndmg)
-    _G.antipool = ndmg
+page8:Toggle("Anti Dark Pool", false, function(pol)
+    _G.antipool = pol
 end)
 
 spawn(function()
@@ -3468,23 +3442,24 @@ spawn(function()
 	end
 end)
 
-page8:Toggle("Anti Rumble Staff", false, function(mag)
+page8:Toggle("Anti String Void", false, function(mag)
     _G.antistaff = mag
 end)
 
 spawn(function()
 	while wait() do
-		if _G.antistaff then
+		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
-					local powers = powers:FindFirstChild("Right Arm")
-					if powers then
-						local resources = powers:FindFirstChild("RumbleStaff")
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("String")
+					if smelt then
+						local resources = smelt:FindFirstChild("Strings")
 						if resources then
-							local smeltSpew = resources:FindFirstChild("DamagePart")
+							local smeltSpew = resources:FindFirstChild("WeldablePart")
 							if smeltSpew then
 								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "TouchInterest" then
+									if child.Name == "Attachment" then
 										child:Destroy()
 									end
 								end
