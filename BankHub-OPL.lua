@@ -2061,6 +2061,87 @@ end)
 spawn(function()
     while wait() do
         if _G.godmode then
+            local success, err = pcall(function()
+                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+
+                if ResourceHolder then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
+                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+
+                        if playerResourceFolder then
+                            local magmaPool = playerResourceFolder:FindFirstChild("StringBarrier")
+
+                            if magmaPool then
+                                for _, item in pairs(magmaPool:GetDescendants()) do
+                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
+                                        item:Destroy()
+                                    end
+				end
+				end
+                        end
+		end
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+	while wait() do
+		if _G.godmode then
+			for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("String")
+					if smelt then
+						local resources = smelt:FindFirstChild("Cones")
+						if resources then
+							local smeltSpew = resources:FindFirstChild("Cone")
+							if smeltSpew then
+								for _, child in ipairs(smeltSpew:GetChildren()) do
+									if child.Name == "TouchInterest" then
+										child:Destroy()
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+spawn(function()
+	while wait() do
+		if _G.godmode then
+			for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("String")
+					if smelt then
+						local resources = smelt:FindFirstChild("Strings")
+						if resources then
+							local smeltSpew = resources:FindFirstChild("WeldString")
+							if smeltSpew then
+								for _, child in ipairs(smeltSpew:GetChildren()) do
+									if child.Name == "Attachment" then
+										child:Destroy()
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.godmode then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
