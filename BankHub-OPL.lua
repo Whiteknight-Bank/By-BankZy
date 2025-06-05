@@ -2091,7 +2091,7 @@ spawn(function()
 	while wait() do
 		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
+				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
 					local powers = model.Powers
 					local smelt = powers:FindFirstChild("String")
 					if smelt then
@@ -2113,25 +2113,30 @@ spawn(function()
 	end
 end)
 
-local Fingers = {"Finger1", "Finger2", "Finger3", "Finger4", "Finger5", "Finger6", "Finger7",
-	       "Finger8", "Finger9", "Finger10", "Finger11", "Finger12", "Finger13", "Finger14", "Finger15", "Finger16"			
+local Fingers = {
+	"Finger1", "Finger2", "Finger3", "Finger4", "Finger5", "Finger6", "Finger7",
+	"Finger8", "Finger9", "Finger10", "Finger11", "Finger12", "Finger13", "Finger14", "Finger15", "Finger16"
 }
+
 spawn(function()
 	while wait() do
 		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
+				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
 					local powers = model.Powers
 					local smelt = powers:FindFirstChild("String")
 					if smelt then
-						local resources = smelt:FindFirstChild("GodThread")
-						if resources then
-							local smeltSpew = resources:FindFirstChild(Fingers)
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "Attachment" then
-										child:Destroy()
-									   child.CanTouch = false
+						local godThread = smelt:FindFirstChild("GodThread")
+						if godThread then
+							for _, fingerName in ipairs(Fingers) do
+								local fingerPart = godThread:FindFirstChild(fingerName)
+								if fingerPart then
+									for _, child in ipairs(fingerPart:GetChildren()) do
+										if child:IsA("Attachment") then
+											child:Destroy()
+										elseif child:IsA("BasePart") then
+											child.CanTouch = false
+										end
 									end
 								end
 							end
