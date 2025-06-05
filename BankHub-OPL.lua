@@ -138,7 +138,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -100, 0, 50)
 titleLabel.Position = UDim2.new(0, 50, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW GOD MODE (18%)"
+titleLabel.Text = "NEW GOD MODE (35%)"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Font = Enum.Font.GothamBlack
 titleLabel.TextSize = 22
@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- เพิ่ม Anti String Void กันด้ายดึงเกิด"
+label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- เพิ่ม Anti String Void กันด้ายดึงเกิด\n- กันดาเมจจากมอนทุกตัว ยกเว้น Gunslinger, Boss Gunner, Bruno, Bucky, Buster"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -2054,7 +2054,7 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode (40%%)", false, function(gxd)
+page4:Toggle("Gode Mode (35%)", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -3309,76 +3309,6 @@ spawn(function()
     end
 end)
 
-page8:Toggle("Anti Venom (75%)", false, function(vnom)
-    _G.antivenom = vnom
-end)
-		
-spawn(function()
-    while wait() do
-        if _G.antivenom then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomPool")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
-        end
-    end
-end)
-
-spawn(function()
-    while wait() do
-        if _G.antivenom then
-            pcall(function()
-                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
-                    if modelInWorkspace:IsA("Model") then
-                        -- เจาะจงเฉพาะ 6 ชิ้นส่วนที่ระบุเท่านั้น
-                        local demonPartsToCheck = {
-                            "DemonHead",
-                            "DemonTorso",
-                            "DemonRightArm",
-                            "DemonLeftArm",
-                            "DemonRightWing",
-                            "DemonLeftWing"
-                        }
-
-                        for _, partName in ipairs(demonPartsToCheck) do
-                            local part = modelInWorkspace:FindFirstChild(partName)
-                            if part then
-                                for _, child in pairs(part:GetChildren()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-
 page8:Toggle("Anti Love (50/50%)", false, function(lve)
     _G.antilove = lve
 end)
@@ -3427,36 +3357,6 @@ spawn(function()
 					end
 				end
 			end)
-		end
-	end
-end)
-
-page8:Toggle("Anti Smelt Spew", false, function(smlt)
-    _G.antismelt = smlt
-end)
-
-spawn(function()
-	while wait() do
-		if _G.antismelt then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("Smelt")
-					if smelt then
-						local resources = smelt:FindFirstChild("Resources")
-						if resources then
-							local smeltSpew = resources:FindFirstChild("SmeltSpew")
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "TouchInterest" then
-										child:Destroy()
-									end
-								end
-							end
-						end
-					end
-				end
-			end
 		end
 	end
 end)
