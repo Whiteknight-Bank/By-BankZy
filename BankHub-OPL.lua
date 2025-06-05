@@ -138,7 +138,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -100, 0, 50)
 titleLabel.Position = UDim2.new(0, 50, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW GOD MODE (35%)"
+titleLabel.Text = "NEW GOD MODE (36%)"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Font = Enum.Font.GothamBlack
 titleLabel.TextSize = 22
@@ -2113,35 +2113,41 @@ spawn(function()
 	end
 end)
 
-local Fingers = {
-	"Finger1", "Finger2", "Finger3", "Finger4", "Finger5", "Finger6", "Finger7",
-	"Finger8", "Finger9", "Finger10", "Finger11", "Finger12", "Finger13", "Finger14", "Finger15", "Finger16"
-}
+local fingerNames = {}
+for i = 1, 16 do
+	table.insert(fingerNames, "Finger" .. i)
+end
 
 spawn(function()
-	while wait() do
+	while wait(1) do
 		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("String")
-					if smelt then
-						local godThread = smelt:FindFirstChild("GodThread")
-						if godThread then
-							for _, fingerName in ipairs(Fingers) do
-								local fingerPart = godThread:FindFirstChild(fingerName)
-								if fingerPart then
-									for _, child in ipairs(fingerPart:GetChildren()) do
-										if child:IsA("Attachment") then
-											child:Destroy()
-										elseif child:IsA("BasePart") then
-											child.CanTouch = false
+				if model:IsA("Model") 
+					and not model:FindFirstChild("Humanoid") 
+					and not model:FindFirstChild("Humanoid") then
+
+					local powers = model:FindFirstChild("Powers")
+					if powers then
+						local smelt = powers:FindFirstChild("String")
+						if smelt then
+							local godThread = smelt:FindFirstChild("GodThread")
+							if godThread then
+								for _, name in ipairs(fingerNames) do
+									local finger = godThread:FindFirstChild(name)
+									if finger then
+										for _, item in ipairs(finger:GetDescendants()) do
+											if item:IsA("Attachment") then
+												item:Destroy()
+											elseif item:IsA("BasePart") then
+												item.CanTouch = false
+											end
 										end
 									end
 								end
 							end
 						end
 					end
+
 				end
 			end
 		end
