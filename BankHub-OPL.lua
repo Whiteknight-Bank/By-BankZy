@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- กันด้ายดึงตกน้ำ และเพิ่ม Anti String Void"
+label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- เพิ่ม Anti String Void กันด้ายดึงเกิด"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -2054,7 +2054,7 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode (18%)", false, function(gxd)
+page4:Toggle("Gode Mode (40%%)", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2176,6 +2176,25 @@ spawn(function()
         end
     end
 end)
+
+spawn(function()
+    while wait() do
+        if _G.godmode then
+            pcall(function()
+                for _, enemie in pairs(workspace.Enemies:GetChildren()) do
+                    if enemie:IsA("Model") then
+                      for _, child in pairs(enemie.Torso:GetChildren()) do
+                                    if child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                                end  
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 
 spawn(function()
     while wait() do
