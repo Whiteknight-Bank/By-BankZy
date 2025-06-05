@@ -2301,7 +2301,6 @@ page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
 end)
 
-
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
@@ -2621,6 +2620,21 @@ workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForC
     end
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.buydrink then
+local A_1 = "Claim"
+local A_2 = "Challenge11"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+            end
+        end)
+    end
+end)
+
+
 page6:Toggle("Auto Drinks All", false, function(drks)
 	AutoDrinks = drks
 end)
@@ -2635,6 +2649,20 @@ spawn(function()
                     Value.Parent = game.Players.LocalPlayer.Character;
                     Value:Activate();
                 end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if AutoDrinks then
+local A_1 = "Claim"
+local A_2 = "Challenge13"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
             end
         end)
     end
