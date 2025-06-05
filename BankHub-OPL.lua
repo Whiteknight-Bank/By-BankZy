@@ -2070,7 +2070,7 @@ spawn(function()
                         local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
 
                         if playerResourceFolder then
-                            local magmaPool = playerResourceFolder:FindFirstChild("StringBarrier")
+                            local magmaPool = playerResourceFolder:FindFirstChild("StringCageBarrier")
 
                             if magmaPool then
                                 for _, item in pairs(magmaPool:GetDescendants()) do
