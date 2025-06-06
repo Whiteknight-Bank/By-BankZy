@@ -3669,18 +3669,15 @@ task.spawn(function()
                     if game.Players:FindFirstChild(obj.Name) then
                         local powers = obj:FindFirstChild("Powers")
                         if powers then
-
-                            -- Powers.Hollow → หาไว้เฉยๆ
                             local hollow = powers:FindFirstChild("Hollow")
                             if hollow then
-                                -- Powers.Hollow.Hollows → Hollow → ลบ TouchInterest
                                 local hollowsInHollow = hollow:FindFirstChild("Hollows")
                                 if hollowsInHollow then
-                                    local hollow2 = hollowsInHollow:FindFirstChild("Hollow")
-                                    if hollow2 then
-                                        local hrp2 = hollow2:FindFirstChild("HumanoidRootPart")
-                                        if hrp2 then
-                                            for _, child in pairs(hrp2:GetChildren()) do
+                                    local hollowModel = hollowsInHollow:FindFirstChild("Hollow")
+                                    if hollowModel and hollowModel:IsA("Model") then
+                                        local hrp = hollowModel:FindFirstChild("HumanoidRootPart")
+                                        if hrp then
+                                            for _, child in pairs(hrp:GetChildren()) do
                                                 if child:IsA("TouchInterest") then
                                                     child:Destroy()
                                                 end
@@ -3690,11 +3687,10 @@ task.spawn(function()
                                 end
                             end
 
-                            -- Powers.HollowsMini → HollowMini → ลบ TouchInterest
                             local hollowsMini = powers:FindFirstChild("HollowsMini")
                             if hollowsMini then
                                 local hollowMini = hollowsMini:FindFirstChild("HollowMini")
-                                if hollowMini then
+                                if hollowMini and hollowMini:IsA("Model") then
                                     local hrp3 = hollowMini:FindFirstChild("HumanoidRootPart")
                                     if hrp3 then
                                         for _, child in pairs(hrp3:GetChildren()) do
@@ -3705,7 +3701,6 @@ task.spawn(function()
                                     end
                                 end
                             end
-
                         end
                     end
                 end
