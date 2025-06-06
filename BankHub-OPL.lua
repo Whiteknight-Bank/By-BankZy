@@ -3671,31 +3671,18 @@ task.spawn(function()
                         if powers then
                             local hollow = powers:FindFirstChild("Hollow")
                             if hollow then
-                                local hollowsInHollow = hollow:FindFirstChild("Hollows")
-                                if hollowsInHollow then
-                                    local hollowModel = hollowsInHollow:FindFirstChild("Hollow")
-                                    if hollowModel and hollowModel:IsA("Model") then
-                                        local hrp = hollowModel:FindFirstChild("HumanoidRootPart")
-                                        if hrp then
-                                            for _, child in pairs(hrp:GetChildren()) do
-                                                if child:IsA("TouchInterest") then
-                                                    child:Destroy()
-                                                end
-                                            end
-                                        end
+                                local hollows = hollow:FindFirstChild("Hollows") -- หา DarkParts ตรงนี้เลย
+                                if hollows then
+                                    for _, part in pairs(hollows:GetChildren()) do
+                                        local hollowPart = part:IsA("Model") and part:FindFirstChild("Hollow")
+                                        if hollowPart then
+                                            local hmp = hollowPart:FindFirstChildOfClass("HumanoidRootPart")
+                                            if hmp then
+                                                for _, child in pairs(hollowPart:Getdescendants()) do
+                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                       child:Destroy()
                                     end
-                                end
-                            end
-
-                            local hollowsMini = powers:FindFirstChild("HollowsMini")
-                            if hollowsMini then
-                                local hollowMini = hollowsMini:FindFirstChild("HollowMini")
-                                if hollowMini and hollowMini:IsA("Model") then
-                                    local hrp3 = hollowMini:FindFirstChild("HumanoidRootPart")
-                                    if hrp3 then
-                                        for _, child in pairs(hrp3:GetChildren()) do
-                                            if child:IsA("TouchInterest") then
-                                                child:Destroy()
+					end
                                             end
                                         end
                                     end
