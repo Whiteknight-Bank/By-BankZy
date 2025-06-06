@@ -2334,6 +2334,29 @@ task.spawn(function()
 	end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.godmode then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local rightArm = obj:FindFirstChild("Right Arm")
+                        if rightArm then
+                            local rumbleStaff = rightArm:FindFirstChild("RumbleStaff")
+                            if rumbleStaff then
+                                local damagePart = rumbleStaff:FindFirstChild("DamagePart")
+                                if damagePart then
+                                    damagePart:Destroy()
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 page4:Label("┇ Player ┇")
 page4:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
