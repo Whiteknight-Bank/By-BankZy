@@ -3424,13 +3424,13 @@ page8:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page8:Toggle("Anti Dark Pool", false, function(pol)
-    _G.antipool = pol
+page8:Toggle("Anti Stun", false, function(pol)
+    _G.anti = pol
 end)
 
-spawn(function()
-    while wait() do
-        if _G.antipool then
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
 
@@ -3457,13 +3457,9 @@ spawn(function()
     end
 end)
 
-page8:Toggle("Anti Love (50/50%)", false, function(lve)
-    _G.antilove = lve
-end)
-
-spawn(function()
-	while wait() do
-		if _G.antilove then
+task.spawn(function()
+	while task.wait(0.01) do
+		if _G.anti then
 			pcall(function()
 				for _, model in ipairs(workspace:GetChildren()) do
 				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
@@ -3509,6 +3505,28 @@ spawn(function()
 	end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local leftArm = obj:FindFirstChild("Left Arm")
+                        if leftArm then
+                            local weldablePart = leftArm:FindFirstChild("WeldablePart")
+                            if weldablePart then
+                                local bodyVelocity = weldablePart:FindFirstChildOfClass("BodyVelocity")
+                                if bodyVelocity then
+                                    bodyVelocity:Destroy()
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
 page8:Toggle("Anti String Void", false, function(mag)
     _G.antistaff = mag
 end)
