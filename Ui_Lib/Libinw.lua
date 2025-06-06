@@ -150,7 +150,8 @@ function tabs:Taps(name)
     local tabButton = Instance.new("TextButton", tabButtons)  
     tabButton.Size = UDim2.new(1, -10, 0, 30)  
     tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)BackgroundTransparency = 0.4  
+    tabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    tabButton.BackgroundTransparency = 0.4  
     tabButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
     tabButton.Font = Enum.Font.SourceSans  
     tabButton.TextSize = 16  
@@ -216,7 +217,7 @@ local titleLabel = Instance.new("TextLabel", container)
 titleLabel.Size = UDim2.new(0.5, 0, 1, 0)  
 titleLabel.BackgroundTransparency = 1
 titleLabel.Text = title  
-titleLabel.TextColor3 = Color3.fromRGB(55, 55, 55)  
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 355)  
 titleLabel.Font = Enum.Font.SourceSans  
 titleLabel.TextSize = 16  
 titleLabel.TextXAlignment = Enum.TextXAlignment.Left  
@@ -235,7 +236,7 @@ dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
 dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)  
 dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)  
 dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-dropdownButton.BackgroundTransparency = 1
+dropdownButton.BackgroundTransparency = 0.4
 dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
 dropdownButton.Font = Enum.Font.SourceSans  
 dropdownButton.TextSize = 16  
