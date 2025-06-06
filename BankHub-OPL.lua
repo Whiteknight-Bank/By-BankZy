@@ -3589,17 +3589,17 @@ task.spawn(function()
                         local returnBall1 = obj:FindFirstChild("ReturnBall1")
                         if returnBall1 then
                             for _, child in pairs(returnBall1:GetDescendants()) do
-                                if child:IsA("TouchInterest") then
-                                    child:Destroy()
-                                end
+                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
                             end
 			end
                         local returnBall2 = obj:FindFirstChild("ReturnBall2")
                         if returnBall2 then
                             for _, child in pairs(returnBall2:GetDescendants()) do
-                                if child:IsA("TouchInterest") then
-                                    child:Destroy()
-                                end
+                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                       child:Destroy()
+                                    end
                             end
                         end
                     end
