@@ -1035,7 +1035,11 @@ local A_1 = "RewardMark"
 end)
 
 page1:Label("┇ Spam Yoru (ไม่ทำงาน) ┇")
-page1:Toggle("Fast Yoru", false, function(yru)
+page1:Textbox("Hit Yoru", "Enter Number", function(text)
+    print("ผู้ใช้พิมพ์: ", text)
+end)
+
+page1:Toggle("Auto Fast Yoru", false, function(yru)
 _G.yoru = yru
 end)
 
