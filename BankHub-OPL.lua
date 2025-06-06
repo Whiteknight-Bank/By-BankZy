@@ -3590,6 +3590,41 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local powers = obj:FindFirstChild("Powers")
+                        if powers then
+                            local dark = powers:FindFirstChild("Dark")
+                            if dark then
+                                local darkParts = dark:FindFirstChild("DarkParts") -- หา DarkParts ตรงนี้เลย
+                                if darkParts then
+                                    -- วนทุก child ใน DarkParts
+                                    for _, part in pairs(darkParts:GetChildren()) do
+                                        -- หา WeldablePart ในแต่ละ part
+                                        local weldablePart = part:FindFirstChild("WeldablePart")
+                                        if weldablePart then
+                                            -- หา Attachment ใน WeldablePart
+                                            local attachment = weldablePart:FindFirstChildOfClass("Attachment")
+                                            if attachment then
+                                                attachment:Destroy()
+                                                print("ลบ Attachment ใน WeldablePart ของผู้เล่น " .. obj.Name)
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 page8:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
