@@ -2137,8 +2137,8 @@ page4:Toggle("Gode Mode (35%)", false, function(gxd)
 	_G.godmode = gxd
 end)
 
-spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(0.01) do
         if _G.godmode then
             local success, err = pcall(function()
                 local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
@@ -2166,8 +2166,8 @@ spawn(function()
     end
 end)
 
-spawn(function()
-	while wait() do
+task.spawn(function()
+	while task.wait(0.01) do
 		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
 				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
@@ -2192,49 +2192,8 @@ spawn(function()
 	end
 end)
 
-local fingerNames = {}
-for i = 1, 16 do
-	table.insert(fingerNames, "Finger" .. i)
-end
-
-spawn(function()
-	while wait(1) do
-		if _G.godmode then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") 
-					and not model:FindFirstChild("Humanoid") 
-					and not model:FindFirstChild("Humanoid") then
-
-					local powers = model:FindFirstChild("Powers")
-					if powers then
-						local smelt = powers:FindFirstChild("String")
-						if smelt then
-							local godThread = smelt:FindFirstChild("GodThread")
-							if godThread then
-								for _, name in ipairs(fingerNames) do
-									local finger = godThread:FindFirstChild(name)
-									if finger then
-										for _, item in ipairs(finger:GetDescendants()) do
-											if item:IsA("Attachment") then
-												item:Destroy()
-											elseif item:IsA("BasePart") then
-												item.CanTouch = false
-											end
-										end
-									end
-								end
-							end
-						end
-					end
-
-				end
-			end
-		end
-	end
-end)
-
-spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(0.01) do
         if _G.godmode then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
@@ -2265,8 +2224,8 @@ spawn(function()
     end
 end)
 
-spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(0.01) do
         if _G.godmode then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
@@ -2297,8 +2256,8 @@ spawn(function()
     end
 end)
 
-spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(0.01) do
         if _G.godmode then
             pcall(function()
                 for _, enemie in pairs(workspace.Enemies:GetChildren()) do
@@ -2316,8 +2275,8 @@ spawn(function()
 end)
 
 
-spawn(function()
-    while wait() do
+task.spawn(function()
+    while task.wait(0.01) do
         if _G.godmode then
             pcall(function()
                 for _, modelInWorkspace in pairs(workspace:GetChildren()) do
@@ -2349,8 +2308,8 @@ spawn(function()
     end
 end)
 
-spawn(function()
-	while wait() do
+task.spawn(function()
+	while task.wait(0.01) do
 		if _G.godmode then
 			for _, model in ipairs(workspace:GetChildren()) do
 				if model:IsA("Model") and model:FindFirstChild("Powers") then
@@ -3611,6 +3570,35 @@ task.spawn(function()
                                             end
                                         end
                                     end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local returnBall1 = obj:FindFirstChild("ReturnBall1")
+                        if returnBall1 then
+                            for _, child in pairs(returnBall1:GetDescendants()) do
+                                if child:IsA("TouchInterest") then
+                                    child:Destroy()
+                                end
+                            end
+			end
+                        local returnBall2 = obj:FindFirstChild("ReturnBall2")
+                        if returnBall2 then
+                            for _, child in pairs(returnBall2:GetDescendants()) do
+                                if child:IsA("TouchInterest") then
+                                    child:Destroy()
                                 end
                             end
                         end
