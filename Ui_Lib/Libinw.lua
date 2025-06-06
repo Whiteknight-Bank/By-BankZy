@@ -214,7 +214,7 @@ container.LayoutOrder = 0
 
 local titleLabel = Instance.new("TextLabel", container)  
 titleLabel.Size = UDim2.new(0.5, 0, 1, 0)  
-titleLabel.BackgroundTransparency = 0.4
+titleLabel.BackgroundTransparency = 1
 titleLabel.Text = title  
 titleLabel.TextColor3 = Color3.fromRGB(55, 55, 55)  
 titleLabel.Font = Enum.Font.SourceSans  
@@ -244,7 +244,7 @@ dropdownButton.Text = "Select"
 local opened = false  
 local optionContainer = Instance.new("Frame", page)  
 optionContainer.Size = UDim2.new(1, -10, 0, 0)  
-optionContainer.BackgroundTransparency = 1  
+optionContainer.BackgroundTransparency = 0.4  
 optionContainer.ClipsDescendants = true  
 
 local UIListLayout = Instance.new("UIListLayout", optionContainer)  
@@ -415,7 +415,7 @@ function newPage:Textbox(title, placeholder, callback)
     local label = Instance.new("TextLabel", container)
     label.Size = UDim2.new(0.4, 0, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 0.4
+    label.BackgroundTransparency = 1
     label.Text = title
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
