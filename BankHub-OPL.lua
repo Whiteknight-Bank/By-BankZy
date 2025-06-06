@@ -3602,16 +3602,12 @@ task.spawn(function()
                             if dark then
                                 local darkParts = dark:FindFirstChild("DarkParts") -- หา DarkParts ตรงนี้เลย
                                 if darkParts then
-                                    -- วนทุก child ใน DarkParts
                                     for _, part in pairs(darkParts:GetChildren()) do
-                                        -- หา WeldablePart ในแต่ละ part
                                         local weldablePart = part:FindFirstChild("WeldablePart")
                                         if weldablePart then
-                                            -- หา Attachment ใน WeldablePart
                                             local attachment = weldablePart:FindFirstChildOfClass("Attachment")
                                             if attachment then
                                                 attachment:Destroy()
-                                                print("ลบ Attachment ใน WeldablePart ของผู้เล่น " .. obj.Name)
                                             end
                                         end
                                     end
