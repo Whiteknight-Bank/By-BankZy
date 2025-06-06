@@ -1082,12 +1082,12 @@ end)
     return tmp
 end
 
-page1:Label("┇ Spam Yoru (ไม่ทำงาน) ┇")
+page1:Label("┇ Spam Yoru ┇")
 page1:Textbox("Hit Yoru", "Enter Number", function(hty)
     _G.yoruhit = hty
 end)
 
-page1:Toggle("Auto Fast Yoru", false, function(yru)
+page1:Toggle("Auto Spam Yoru", false, function(yru)
 _G.yorufast = yru
 end)
 
@@ -2026,11 +2026,11 @@ local page3 = Tab3:newpage()
 
 page3:Label("┇ Spam Skill ┇")
 
-page3:Dropdown("Select Spam Fruit", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(spdf)
+page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Light", "Bomb"}, function(spdf)
     spdf = s
 end)
 
-page3:Dropdown("Select Spam Skill", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(sps)
+page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
     spskill = sps
 end)
 
@@ -2043,17 +2043,11 @@ page3:Toggle("Max Charge Skill (100%)", false, function(smx)
 	_G.skillmax = smx
 end)
 
-page3:Label("┇ Auto Press Skill DF ┇")
-
-page3:Toggle("Auto Skill Z", false, function(zz)
-	_G.skillz = zz
-end)
-
 local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode (35%)", false, function(gxd)
+page4:Toggle("Gode Mode (36%)", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2651,18 +2645,110 @@ end)
 
 page6:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
 
-page6:Dropdown("Select Fruit Reroll:", {"", ""}, function(dfs)
+-- Prepare dropdownDF
+local player = game.Players.LocalPlayer
+local char = workspace:FindFirstChild(player.Name)
+
+local dropdownDF = {}
+if char then
+    local df1 = char:FindFirstChild("DevilFruit")
+    local df2 = char:FindFirstChild("DevilFruit2")
+
+    if df1 then
+        table.insert(dropdownDF, "DevilFruit")
+    end
+    if df2 then
+        table.insert(dropdownDF, "DevilFruit2")
+    end
+end
+
+-- Global variables
+local selectedDF = nil
+local lockvalue = nil
+
+-- UI
+page6:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
 
-page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0"}, function(lkvs)
-    lockvalue = lkvs
+page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+    lockvalue = tonumber(lkvs)
 end)
 
-page6:Toggle("Auto Reroll", false, function(drks)
-	AutoDrinks = drks
-end)
+local isRunning1 = false
+local task1Thread
 
+page6:Toggle("Auto Reroll Affinity (Left/ซ้าย)", false, function(rol)
+    isRunning1 = rol
+
+    if isRunning1 then
+        task1Thread = task.spawn(function()
+            while isRunning1 do
+                task.wait(8)
+
+                -- Check selections
+                if not selectedDF or not lockvalue then
+                    warn("Please select Fruit Reroll and Lock Value first.")
+                    continue
+                end
+
+                -- Get UserData
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- Determine DFT name
+                local dftName = "DFT1"
+                if selectedDF == "DevilFruit2" then
+                    dftName = "DFT2"
+                end
+
+                -- Read affinities
+                local AffMelee = userDataName.Data[dftName .. "Melee"].Value
+                local AffSniper = userDataName.Data[dftName .. "Sniper"].Value
+                local AffDefense = userDataName.Data[dftName .. "Defense"].Value
+                local AffSword = userDataName.Data[dftName .. "Sword"].Value
+
+                -- Stop if all affinities >= lockvalue
+                if AffSniper >= lockvalue and AffSword >= lockvalue and AffMelee >= lockvalue and AffDefense >= lockvalue then
+                    isRunning1 = false
+                    break
+                end
+
+                -- Prepare args
+                local args1 = {
+                    [1] = dftName,
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense >= lockvalue then args1[2] = 0/0 end
+                if AffMelee >= lockvalue then args1[3] = 0/0 end
+                if AffSniper >= lockvalue then args1[4] = 0/0 end
+                if AffSword >= lockvalue then args1[5] = 0/0 end
+
+                -- Fire Retum
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
 
 --[[
 local isRunning1 = false
