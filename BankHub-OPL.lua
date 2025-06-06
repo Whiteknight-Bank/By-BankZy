@@ -3574,7 +3574,10 @@ task.spawn(function()
                                         local bodyVelocity = darkStarBit:FindFirstChildOfClass("BodyVelocity")
                                         if bodyVelocity then
                                             bodyVelocity:Destroy()
-                                            print("ลบ BodyVelocity ใน DarkStarBit ของผู้เล่น " .. obj.Name)
+                                        end
+                                        local attachment = darkStarBit:FindFirstChildOfClass("Attachment")
+                                        if attachment then
+                                            attachment:Destroy()
                                         end
                                     end
                                 end
