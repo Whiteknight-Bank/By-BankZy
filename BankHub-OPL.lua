@@ -2678,6 +2678,10 @@ page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", 
     lockvalue = tonumber(lkvs)
 end)
 
+page6:Dropdown("Select Reroll:", {"Beri", "Gems"}, function(srll)
+    selectedrol = srll
+end)
+
 local isRunning1 = false
 local task1Thread
 
@@ -2715,9 +2719,8 @@ page6:Toggle("Auto Reroll", false, function(rol)
                 local AffSword = userDataName.Data[dftName .. "Sword"].Value
 
                 -- Stop if all affinities >= lockvalue
-                if AffSniper >= lockvalue and AffSword >= lockvalue and AffMelee >= lockvalue and AffDefense >= lockvalue then
+                if AffSniper == lockvalue and AffSword == lockvalue and AffMelee == lockvalue and AffDefense == lockvalue then
                     isRunning1 = false
-                    warn("Affinity Target Reached! Stopping Auto Reroll.")
                     break
                 end
 
@@ -2728,7 +2731,7 @@ page6:Toggle("Auto Reroll", false, function(rol)
                     [3] = false, -- melee
                     [4] = false, -- sniper
                     [5] = false, -- sword
-                    [6] = "Cash"
+                    [6] = (selectedrol == "Beri" and "Cash") or (selectedrol == "Gems" and "Gems") or "Cash"
                 }
 
                 if AffDefense >= lockvalue then args1[2] = 0/0 end
