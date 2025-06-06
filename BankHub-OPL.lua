@@ -3661,6 +3661,65 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local powers = obj:FindFirstChild("Powers")
+                        if powers then
+                            local hollows = powers:FindFirstChild("Hollows")
+                            if hollows then
+                                local hollow = hollows:FindFirstChild("Hollow")
+                                if hollow then
+                                    for _, descendant in pairs(hollow:GetDescendants()) do
+                                        if descendant:IsA("BasePart") and descendant.Name == "HumanoidRootPart" then
+                                            for _, child in pairs(descendant:GetDescendants()) do
+                                                if child:IsA("TouchInterest") then
+                                                    child:Destroy()
+                                                end
+                                            end
+                                        end
+                                    end
+                                    local targetParts = {Head=true, Torso=true, ["Left Arm"]=true, ["Right Arm"]=true}
+                                    for _, descendant in pairs(hollow:GetDescendants()) do
+                                        if descendant:IsA("BasePart") and targetParts[descendant.Name] then
+                                            descendant.CanTouch = false
+                                        end
+                                    end
+                                end
+                            end
+                            local hollowsMini = powers:FindFirstChild("HollowsMini")
+                            if hollowsMini then
+                                local hollowMini = hollowsMini:FindFirstChild("HollowMini")
+                                if hollowMini then
+                                    -- ลบ TouchInterest ใน HumanoidRootPart (ใช้ GetDescendants)
+                                    for _, descendant in pairs(hollowMini:GetDescendants()) do
+                                        if descendant:IsA("BasePart") and descendant.Name == "HumanoidRootPart" then
+                                            for _, child in pairs(descendant:GetDescendants()) do
+                                                if child:IsA("TouchInterest") then
+                                                    child:Destroy()
+                                                end
+                                            end
+                                        end
+                                    end
+                                    local targetParts = {Head=true, Torso=true, ["Left Arm"]=true, ["Right Arm"]=true}
+                                    for _, descendant in pairs(hollowMini:GetDescendants()) do
+                                        if descendant:IsA("BasePart") and targetParts[descendant.Name] then
+                                            descendant.CanTouch = false
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 page8:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
