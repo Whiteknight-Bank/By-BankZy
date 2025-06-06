@@ -235,7 +235,7 @@ dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
 dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)  
 dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)  
 dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-dropdownButton.BackgroundTransparency = 0.4  
+dropdownButton.BackgroundTransparency = 1
 dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
 dropdownButton.Font = Enum.Font.SourceSans  
 dropdownButton.TextSize = 16  
@@ -321,7 +321,7 @@ return newPage
     local label = Instance.new("TextLabel", sectionFrame)
     label.Size = UDim2.new(1, -10, 1, 0)
     label.Position = UDim2.new(0, 5, 0, 0)
-    label.Text = "─ " .. txt .. " ─"
+    label.Text = "^| " .. txt .. " |^"
     label.TextColor3 = Color3.fromRGB(200, 200, 200)
     label.Font = Enum.Font.SourceSansBold
     label.TextSize = 16
