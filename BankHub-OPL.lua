@@ -3676,10 +3676,10 @@ task.spawn(function()
                                     for _, part in pairs(hollows:GetChildren()) do
                                         local hollowPart = part:IsA("Model") and part:FindFirstChild("Hollow")
                                         if hollowPart then
-                                            local hmp = hollowPart:FindFirstChildOfClass("HumanoidRootPart")
+                                            local hmp = hollowPart:FindFirstChild("HumanoidRootPart")
                                             if hmp then
-                                                for _, child in pairs(hollowPart:Getdescendants()) do
-                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                                for _, child in pairs(hollowPart:GetDescendants()) do
+                                if child.Name == "TouchInterest" then
                                        child:Destroy()
                                     end
 					end
