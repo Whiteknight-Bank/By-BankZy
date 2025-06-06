@@ -486,7 +486,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 1
+    optionContainer.BackgroundTransparency = 0.4
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
