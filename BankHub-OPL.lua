@@ -2650,23 +2650,26 @@ local player = game.Players.LocalPlayer
 local char = workspace:FindFirstChild(player.Name)
 
 local dropdownDF = {}
+local dfMap = {} -- Map สำหรับเก็บว่าเลือกผลไหนเป็น DFT1 หรือ DFT2
+
 if char then
     local df1 = char:FindFirstChild("DevilFruit")
     local df2 = char:FindFirstChild("DevilFruit2")
 
-    if df1 then
-        table.insert(dropdownDF, "DevilFruit")
+    if df1 and df1:IsA("StringValue") and df1.Value ~= "" then
+        table.insert(dropdownDF, df1.Value)
+        dfMap[df1.Value] = "DFT1" -- เก็บ mapping
     end
-    if df2 then
-        table.insert(dropdownDF, "DevilFruit2")
+
+    if df2 and df2:IsA("StringValue") and df2.Value ~= "" then
+        table.insert(dropdownDF, df2.Value)
+        dfMap[df2.Value] = "DFT2"
     end
 end
 
--- Global variables
 local selectedDF = nil
 local lockvalue = nil
 
--- UI
 page6:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
@@ -2678,7 +2681,7 @@ end)
 local isRunning1 = false
 local task1Thread
 
-page6:Toggle("Auto Reroll Affinity (Left/ซ้าย)", false, function(rol)
+page6:Toggle("Auto Reroll", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -2698,10 +2701,11 @@ page6:Toggle("Auto Reroll Affinity (Left/ซ้าย)", false, function(rol)
                 local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
                 if not userDataName then continue end
 
-                -- Determine DFT name
-                local dftName = "DFT1"
-                if selectedDF == "DevilFruit2" then
-                    dftName = "DFT2"
+                -- Determine DFT name from dfMap
+                local dftName = dfMap[selectedDF]
+                if not dftName then
+                    warn("Invalid fruit selection!")
+                    continue
                 end
 
                 -- Read affinities
@@ -2713,6 +2717,7 @@ page6:Toggle("Auto Reroll Affinity (Left/ซ้าย)", false, function(rol)
                 -- Stop if all affinities >= lockvalue
                 if AffSniper >= lockvalue and AffSword >= lockvalue and AffMelee >= lockvalue and AffDefense >= lockvalue then
                     isRunning1 = false
+                    warn("Affinity Target Reached! Stopping Auto Reroll.")
                     break
                 end
 
