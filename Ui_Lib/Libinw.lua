@@ -95,7 +95,7 @@ corner.Parent = toggleButton
     local pages = Instance.new("Frame", main)
     pages.Size = UDim2.new(1, -130, 1, -45)
     pages.Position = UDim2.new(0, 130, 0, 40)
-    pages.BackgroundTransparency = 1
+    pages.BackgroundTransparency = 0.4
 
     -- Dragging Menu by titleBar (ลากเมนู)
     local dragging, dragStart, startPos
@@ -161,7 +161,7 @@ function tabs:Taps(name)
     page.Visible = false  
     page.ScrollBarThickness = 6  
     page.CanvasSize = UDim2.new(0, 0, 0, 0)  
-    page.BackgroundTransparency = 1  
+    page.BackgroundTransparency = 0.4  
     page.Name = name .. "_Page"  
 
     local layout = Instance.new("UIListLayout", page)  
@@ -208,12 +208,12 @@ function tabs:Taps(name)
 function newPage:Dropdown(title, items, callback)
 local container = Instance.new("Frame", page)
 container.Size = UDim2.new(1, -10, 0, 30)
-container.BackgroundTransparency = 1
+container.BackgroundTransparency = 0.4
 container.LayoutOrder = 0
 
 local titleLabel = Instance.new("TextLabel", container)  
 titleLabel.Size = UDim2.new(0.5, 0, 1, 0)  
-titleLabel.BackgroundTransparency = 1  
+titleLabel.BackgroundTransparency = 0.4
 titleLabel.Text = title  
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)  
 titleLabel.Font = Enum.Font.SourceSans  
@@ -223,7 +223,7 @@ titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 local arrow = Instance.new("TextLabel", container)  
 arrow.Size = UDim2.new(0, 20, 1, 0)  
 arrow.Position = UDim2.new(1, -20, 0, 0)  
-arrow.BackgroundTransparency = 1  
+arrow.BackgroundTransparency = 0.4 
 arrow.Text = "◂"  
 arrow.TextColor3 = Color3.fromRGB(255, 255, 255)  
 arrow.Font = Enum.Font.SourceSans  
@@ -242,7 +242,7 @@ dropdownButton.Text = "Select"
 local opened = false  
 local optionContainer = Instance.new("Frame", page)  
 optionContainer.Size = UDim2.new(1, -10, 0, 0)  
-optionContainer.BackgroundTransparency = 1  
+optionContainer.BackgroundTransparency = 0.4  
 optionContainer.ClipsDescendants = true  
 
 local UIListLayout = Instance.new("UIListLayout", optionContainer)  
@@ -309,16 +309,25 @@ return newPage
         end
 
         function newPage:Section(txt)
-            local section = Instance.new("TextLabel", page)
-            section.Size = UDim2.new(1, -10, 0, 25)
-            section.Text = "─ " .. txt .. " ─"
-            section.TextColor3 = Color3.fromRGB(200, 200, 200)
-            section.Font = Enum.Font.SourceSansBold
-            section.TextSize = 16
-            section.BackgroundTransparency = 1
-            section.TextXAlignment = Enum.TextXAlignment.Left
-        end
+    local sectionFrame = Instance.new("Frame", page)
+    sectionFrame.Size = UDim2.new(1, -10, 0, 30)
+    sectionFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    sectionFrame.BackgroundTransparency = 0.4
+    sectionFrame.BorderSizePixel = 0
 
+    local label = Instance.new("TextLabel", sectionFrame)
+    label.Size = UDim2.new(1, -10, 1, 0)
+    label.Position = UDim2.new(0, 5, 0, 0)
+    label.Text = "─ " .. txt .. " ─"
+    label.TextColor3 = Color3.fromRGB(200, 200, 200)
+    label.Font = Enum.Font.SourceSansBold
+    label.TextSize = 16
+    label.BackgroundTransparency = 0.4
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    Instance.new("UICorner", sectionFrame).CornerRadius = UDim.new(0, 6)
+end
+        
         function newPage:Toggle(text, default, callback)
     local toggleFrame = Instance.new("Frame", page)
     toggleFrame.Size = UDim2.new(1, -10, 0, 30)
@@ -329,7 +338,7 @@ return newPage
     local label = Instance.new("TextLabel", toggleFrame)
     label.Size = UDim2.new(1, -50, 1, 0)
     label.Position = UDim2.new(0, 10, 0, 0)
-    label.BackgroundTransparency = 1
+    label.BackgroundTransparency = 0.4
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 16
@@ -393,15 +402,57 @@ end
             end)
         end
 
+function newPage:Textbox(title, placeholder, callback)
+    local container = Instance.new("Frame", page)
+    container.Size = UDim2.new(1, -10, 0, 30)
+    container.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    container.BackgroundTransparency = 0.4
+    container.BorderSizePixel = 0
+
+    local label = Instance.new("TextLabel", container)
+    label.Size = UDim2.new(0.4, 0, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 0.4
+    label.Text = title
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.SourceSans
+    label.TextSize = 16
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    local box = Instance.new("TextBox", container)
+    box.Size = UDim2.new(0.5, -20, 0, 25)
+    box.Position = UDim2.new(0.5, 0, 0.5, -12)
+    box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    box.BackgroundTransparency = 0.4
+    box.PlaceholderText = placeholder or "Type..."
+    box.Text = ""
+    box.TextColor3 = Color3.fromRGB(255, 255, 255)
+    box.Font = Enum.Font.SourceSans
+    box.TextSize = 16
+
+    box.FocusLost:Connect(function(enter)
+        if enter and callback then
+            pcall(callback, box.Text)
+        end
+    end)
+
+    -- มุมโค้ง
+    local uic1 = Instance.new("UICorner", container)
+    uic1.CornerRadius = UDim.new(0, 6)
+
+    local uic2 = Instance.new("UICorner", box)
+    uic2.CornerRadius = UDim.new(0, 4)
+end
+
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 1
+    container.BackgroundTransparency = 0.4
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
-    titleLabel.BackgroundTransparency = 1
+    titleLabel.BackgroundTransparency = 0.4
     titleLabel.Text = title
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.Font = Enum.Font.SourceSans
@@ -411,7 +462,7 @@ function newPage:Dropdown(title, items, callback)
     local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
-    arrow.BackgroundTransparency = 1
+    arrow.BackgroundTransparency = 0.4
     arrow.Text = "◂"
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
@@ -430,7 +481,7 @@ function newPage:Dropdown(title, items, callback)
     local opened = false
     local optionContainer = Instance.new("Frame", page)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
-    optionContainer.BackgroundTransparency = 1
+    optionContainer.BackgroundTransparency = 0.4
     optionContainer.ClipsDescendants = true
 
     local UIListLayout = Instance.new("UIListLayout", optionContainer)
@@ -506,7 +557,7 @@ function library:Notifile(title, msg, duration)
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 18
-    label.BackgroundTransparency = 1
+    label.BackgroundTransparency = 0.4
     label.TextXAlignment = Enum.TextXAlignment.Left
 
     local tweenIn = TweenService:Create(notif, TweenInfo.new(0.3), {
