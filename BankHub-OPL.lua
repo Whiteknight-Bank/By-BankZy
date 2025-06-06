@@ -467,6 +467,7 @@ spawn(function()--autorespawn
         end
     end
 end)
+
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
@@ -1033,8 +1034,57 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Label("┇ Function Farm Fruity ┇")
-page1:Toggle("Auto Farm Stats", false, function(stts)
+page1:Label("┇ Spam Yoru (ไม่ทำงาน) ┇")
+page1:Toggle("Fast Yoru", false, function(yru)
+_G.yoru = yru
+end)
+
+local Tab2 = Window:Taps("Farming")
+local page2 = Tab2:newpage()
+
+--[[ -- Auto Death page --
+page2:Label("┇ Function Enemies ┇")
+page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
+    _G.autodie = dthh
+end)
+
+spawn(function()
+   while wait(2) do
+        if _G.autodie then 
+	pcall(function()
+            for _,v in pairs(workspace.Enemies:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
+end)
+
+page2:Toggle("Auto Death Kaizu' Boss (100%)", false, function(zki)
+    _G.autokaizu = zki
+end)
+
+spawn(function()
+    while wait() do
+        if _G.autokaizu then 
+	pcall(function()
+            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
+end)
+]]
+
+page2:Label("┇ Function Farm Fruity ┇")
+page2:Toggle("Auto Farm Stats", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1231,181 +1281,6 @@ spawn(function()--autofruit
     end
 end)
 		
-page1:Label("┇ Function Haki ┇")
-page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
-    AutoHaki = hki
-end)
-
-game:GetService('RunService').RenderStepped:connect(function()
-    if AutoHaki then
-        for i = 1, 5 do
-            local args = {
-                [1] = "On",
-                [2] = 1
-            }
-            task.wait(0.1)
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "On",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "On",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "On",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "On",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
-                [1] = "Off",
-                [2] = 1
-            }
-
-            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-        end
-    end
-end)
-
-page1:Toggle("Auto Get Haki", false, function(gthi)
-    getgenv().haki = gthi
-while getgenv().haki do
-            wait()
-            pcall(function()
-                workspace:WaitForChild("Merchants")
-                    :WaitForChild("QuestHakiMerchant")
-                    :WaitForChild("Clickable")
-                    :WaitForChild("Retum")
-                    :FireServer()
-                wait(2)
-            end)
-	end
-end)
-
-
-page1:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
-
-local Tab2 = Window:Taps("Farming")
-local page2 = Tab2:newpage()
-
-page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
-    _G.autodie = dthh
-end)
-
-spawn(function()
-    while wait(2) do
-        if _G.autodie then 
-	pcall(function()
-            for _,v in pairs(workspace.Enemies:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
-page2:Toggle("Auto Death Kaizu' Boss (100%)", false, function(zki)
-    _G.autokaizu = zki
-end)
-
-spawn(function()
-    while wait() do
-        if _G.autokaizu then 
-	pcall(function()
-            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
@@ -1942,6 +1817,138 @@ spawn(function()
     end
 end)
 
+page2:Label("┇ Function Haki ┇")
+page2:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
+    AutoHaki = hki
+end)
+
+game:GetService('RunService').RenderStepped:connect(function()
+    if AutoHaki then
+        for i = 1, 5 do
+            local args = {
+                [1] = "On",
+                [2] = 1
+            }
+            task.wait(0.1)
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "On",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "On",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "On",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "On",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+            task.wait(0.1)
+            local args = {
+                [1] = "Off",
+                [2] = 1
+            }
+
+            workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
+        end
+    end
+end)
+
+page2:Toggle("Auto Get Haki", false, function(gthi)
+    getgenv().haki = gthi
+while getgenv().haki do
+            wait()
+            pcall(function()
+                workspace:WaitForChild("Merchants")
+                    :WaitForChild("QuestHakiMerchant")
+                    :WaitForChild("Clickable")
+                    :WaitForChild("Retum")
+                    :FireServer()
+                wait(2)
+            end)
+	end
+end)
+
+page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
+		
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
