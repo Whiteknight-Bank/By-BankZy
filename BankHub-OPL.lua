@@ -2149,6 +2149,35 @@ task.spawn(function()
 
                     if userFolder then
                         local success, err = pcall(function()
+                            local projects = userFolder:FindFirstChild("Projectiles")
+                            if projects then
+                                local water = projects:FindFirstChild("Water")
+                                if water then
+                                        local touchInterest = water:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.godmode then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
                             local specials = userFolder:FindFirstChild("Specials")
                             if specials then
                                 local venom = specials:FindFirstChild("Venom")
