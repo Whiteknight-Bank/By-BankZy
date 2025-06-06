@@ -2024,7 +2024,7 @@ page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ Spam Skill ┇")
+page3:Label("┇ Spam Skill (ไม่ทำงาน)┇")
 
 page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Light", "Bomb"}, function(spdf)
     spdf = s
