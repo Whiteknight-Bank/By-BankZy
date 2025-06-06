@@ -3669,45 +3669,65 @@ task.spawn(function()
                     if game.Players:FindFirstChild(obj.Name) then
                         local powers = obj:FindFirstChild("Powers")
                         if powers then
+                            -- Hollows
                             local hollows = powers:FindFirstChild("Hollows")
                             if hollows then
+                                print("[INFO] เจอ Hollows ของผู้เล่น:", obj.Name)
                                 local hollow = hollows:FindFirstChild("Hollow")
                                 if hollow then
+                                    print("[INFO] เจอ Hollow ใน Hollows ของผู้เล่น:", obj.Name)
+                                    
+                                    -- ลบ TouchInterest ใน HumanoidRootPart
                                     for _, descendant in pairs(hollow:GetDescendants()) do
                                         if descendant:IsA("BasePart") and descendant.Name == "HumanoidRootPart" then
+                                            print("[INFO] เจอ HumanoidRootPart ใน Hollow ของผู้เล่น:", obj.Name)
                                             for _, child in pairs(descendant:GetDescendants()) do
                                                 if child:IsA("TouchInterest") then
                                                     child:Destroy()
+                                                    print("[ACTION] ลบ TouchInterest ใน HumanoidRootPart ของผู้เล่น:", obj.Name)
                                                 end
                                             end
                                         end
                                     end
+
+                                    -- ปิด CanTouch ของ Part ต่างๆ
                                     local targetParts = {Head=true, Torso=true, ["Left Arm"]=true, ["Right Arm"]=true}
                                     for _, descendant in pairs(hollow:GetDescendants()) do
                                         if descendant:IsA("BasePart") and targetParts[descendant.Name] then
                                             descendant.CanTouch = false
+                                            print("[ACTION] ปิด CanTouch ของ", descendant.Name, "ใน Hollow ของผู้เล่น:", obj.Name)
                                         end
                                     end
                                 end
                             end
+
+                            -- HollowsMini
                             local hollowsMini = powers:FindFirstChild("HollowsMini")
                             if hollowsMini then
+                                print("[INFO] เจอ HollowsMini ของผู้เล่น:", obj.Name)
                                 local hollowMini = hollowsMini:FindFirstChild("HollowMini")
                                 if hollowMini then
-                                    -- ลบ TouchInterest ใน HumanoidRootPart (ใช้ GetDescendants)
+                                    print("[INFO] เจอ HollowMini ใน HollowsMini ของผู้เล่น:", obj.Name)
+
+                                    -- ลบ TouchInterest ใน HumanoidRootPart
                                     for _, descendant in pairs(hollowMini:GetDescendants()) do
                                         if descendant:IsA("BasePart") and descendant.Name == "HumanoidRootPart" then
+                                            print("[INFO] เจอ HumanoidRootPart ใน HollowMini ของผู้เล่น:", obj.Name)
                                             for _, child in pairs(descendant:GetDescendants()) do
                                                 if child:IsA("TouchInterest") then
                                                     child:Destroy()
+                                                    print("[ACTION] ลบ TouchInterest ใน HumanoidRootPart ของผู้เล่น:", obj.Name)
                                                 end
                                             end
                                         end
                                     end
+
+                                    -- ปิด CanTouch ของ Part ต่างๆ
                                     local targetParts = {Head=true, Torso=true, ["Left Arm"]=true, ["Right Arm"]=true}
                                     for _, descendant in pairs(hollowMini:GetDescendants()) do
                                         if descendant:IsA("BasePart") and targetParts[descendant.Name] then
                                             descendant.CanTouch = false
+                                            print("[ACTION] ปิด CanTouch ของ", descendant.Name, "ใน HollowMini ของผู้เล่น:", obj.Name)
                                         end
                                     end
                                 end
