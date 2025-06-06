@@ -2024,9 +2024,21 @@ page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ Spam Skill For Premiums ! ! ! ┇")
-page3:Section("Coming Soon . . .")
+page3:Label("┇ Spam Skill ┇")
 
+page3:Dropdown("Select Spam Fruit", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(spdf)
+    spdf = s
+end)
+
+page3:Dropdown("Select Spam Skill", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(sps)
+    spskill = sps
+end)
+
+page3:Toggle("Auto Spam (100%)", false, function(smx)
+	_G.skillmax = smx
+end)
+
+page3:Label("┇ Max Charge Skill ┇")
 page3:Toggle("Max Charge Skill (100%)", false, function(smx)
 	_G.skillmax = smx
 end)
@@ -2035,98 +2047,6 @@ page3:Label("┇ Auto Press Skill DF ┇")
 
 page3:Toggle("Auto Skill Z", false, function(zz)
 	_G.skillz = zz
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skillz then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Z, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Z, false, game)
-            end)
-        end
-    end
-end)
-
-page3:Toggle("Auto Skill X", false, function(xx)
-	_G.skillx = xx
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skillx then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.X, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.X, false, game)
-            end)
-        end
-    end
-end)
-
-page3:Toggle("Auto Skill C", false, function(cc)
-	_G.skillc = cc
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skillc then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.C, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.C, false, game)
-            end)
-        end
-    end
-end)
-
-page3:Toggle("Auto Skill V", false, function(vv)
-	_G.skillv = vv
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skillv then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.V, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.V, false, game)
-            end)
-        end
-    end
-end)
-
-page3:Toggle("Auto Skill B", false, function(bb)
-	_G.skillb = bb
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skillb then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.B, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.B, false, game)
-            end)
-        end
-    end
-end)
-
-page3:Toggle("Auto Skill N", false, function(nn)
-	_G.skilln = nn
-end)
-
-spawn(function()
-    while wait() do
-        if _G.skilln then
-            pcall(function()
-game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.N, false, game)
-task.wait(0.1)
-game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.N, false, game)
-            end)
-        end
-    end
 end)
 
 local Tab4 = Window:Taps("Players")
@@ -2731,6 +2651,20 @@ end)
 
 page6:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
 
+page6:Dropdown("Select Fruit Reroll:", {"", ""}, function(dfs)
+    selectedDF = dfs
+end)
+
+page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0"}, function(lkvs)
+    lockvalue = lkvs
+end)
+
+page6:Toggle("Auto Reroll", false, function(drks)
+	AutoDrinks = drks
+end)
+
+
+--[[
 local isRunning1 = false
 local task1Thread
 
@@ -2972,6 +2906,7 @@ page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg
         end)
     end
 end)
+]]--
   
 local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
