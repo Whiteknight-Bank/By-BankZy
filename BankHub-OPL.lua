@@ -2026,16 +2026,55 @@ local page3 = Tab3:newpage()
 
 page3:Label("┇ Spam Skill (ไม่ทำงาน)┇")
 
+local selectedSpamFruit = ""
+local selectedSpamSkill = ""
+
 page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Light", "Bomb"}, function(spdf)
-    spdf = s
+    selectedSpamFruit = spdf
 end)
 
 page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
-    spskill = sps
+    selectedSpamSkill = sps
 end)
 
-page3:Toggle("Auto Spam (100%)", false, function(smx)
-	_G.skillmax = smx
+page3:Toggle("Auto Spam (100%)", false, function(spam)
+    _G.skillspam = spam
+end)
+
+-- Spawn Auto Spam loop
+spawn(function()
+    while wait() do
+        pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+
+                -- StopCharging
+                local args1 = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "BombPower5",
+                    [3] = "StopCharging",
+                    [4] = Mouse.Hit,
+                    [5] = Mouse.Target,
+                    [6] = 100
+                }
+
+                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args1))
+
+                -- StartCharging
+                local args2 = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "BombPower5",
+                    [3] = "StartCharging",
+                    [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
+                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                    [6] = "Right"
+                }
+
+                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+            end
+        end)
+    end
 end)
 
 page3:Label("┇ Max Charge Skill ┇")
