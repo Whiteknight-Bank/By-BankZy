@@ -3914,28 +3914,51 @@ task.spawn(function()
     while task.wait(0.01) do
         if _G.anti then
             pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local powers = obj:FindFirstChild("Powers")
+                for _, playerChar in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerChar.Name) then
+                        local powers = playerChar:FindFirstChild("Powers")
                         if powers then
                             local hollow = powers:FindFirstChild("Hollow")
                             if hollow then
-                                local hollows = hollow:FindFirstChild("Hollows") -- หา DarkParts ตรงนี้เลย
+
+                                -- Hollows → Hollow → HRP → TouchInterest
+                                local hollows = hollow:FindFirstChild("Hollows")
                                 if hollows then
-                                    for _, part in pairs(hollows:GetChildren()) do
-                                        local hollowPart = part:IsA("Model") and part:FindFirstChild("Hollow")
-                                        if hollowPart then
-                                            local hmp = hollowPart:FindFirstChild("HumanoidRootPart")
-                                            if hmp then
-                                                for _, child in pairs(hollowPart:GetDescendants()) do
-                                if child.Name == "TouchInterest" then
-                                       child:Destroy()
-                                    end
-					end
+                                    for _, modelHollow in pairs(hollows:GetChildren()) do
+                                        if modelHollow:IsA("Model") and modelHollow.Name == "Hollow" then
+                                            print("[AntiHollow] Found Hollow model in:", playerChar.Name)
+
+                                            local hrp = modelHollow:FindFirstChild("HumanoidRootPart")
+                                            if hrp then
+                                                local ti = hrp:FindFirstChildOfClass("TouchTransmitter") or hrp:FindFirstChild("TouchInterest")
+                                                if ti then
+                                                    print("[AntiHollow] Destroying TouchInterest in Hollow →", playerChar.Name)
+                                                    ti:Destroy()
+                                                end
                                             end
                                         end
                                     end
                                 end
+
+                                -- HollowsMini → HollowMini → HRP → TouchInterest
+                                local hollowsMini = hollow:FindFirstChild("HollowsMini")
+                                if hollowsMini then
+                                    for _, modelMini in pairs(hollowsMini:GetChildren()) do
+                                        if modelMini:IsA("Model") and modelMini.Name == "HollowMini" then
+                                            print("[AntiHollowMini] Found HollowMini model in:", playerChar.Name)
+
+                                            local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
+                                            if hrpMini then
+                                                local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
+                                                if tiMini then
+                                                    print("[AntiHollowMini] Destroying TouchInterest in HollowMini →", playerChar.Name)
+                                                    tiMini:Destroy()
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+
                             end
                         end
                     end
