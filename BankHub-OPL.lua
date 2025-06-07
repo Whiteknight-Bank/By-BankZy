@@ -3990,13 +3990,10 @@ task.spawn(function()
                                 if hollows then
                                     for _, modelHollow in pairs(hollows:GetChildren()) do
                                         if modelHollow:IsA("Model") and modelHollow.Name == "Hollow" then
-                                            print("[AntiHollow] Found Hollow model in:", playerChar.Name)
-
                                             local hrp = modelHollow:FindFirstChild("HumanoidRootPart")
                                             if hrp then
                                                 local ti = hrp:FindFirstChildOfClass("TouchTransmitter") or hrp:FindFirstChild("TouchInterest")
                                                 if ti then
-                                                    print("[AntiHollow] Destroying TouchInterest in Hollow →", playerChar.Name)
                                                     ti:Destroy()
                                                 end
                                             end
@@ -4005,17 +4002,14 @@ task.spawn(function()
                                 end
 
                                 -- HollowsMini → HollowMini → HRP → TouchInterest
-                                local hollowsMini = hollow:FindFirstChild("HollowsMini")
-                                if hollowsMini then
-                                    for _, modelMini in pairs(hollowsMini:GetChildren()) do
-                                        if modelMini:IsA("Model") and modelMini.Name == "HollowMini" then
-                                            print("[AntiHollowMini] Found HollowMini model in:", playerChar.Name)
-
+                                local hollowsBody = hollow:FindFirstChild("HollowBody")
+                                if hollowsBody then
+                                    for _, modelMini in pairs(hollowsBody:GetChildren()) do
+                                        if modelMini:IsA("Model") and modelMini.Name == "GhostHollow" then
                                             local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
                                             if hrpMini then
                                                 local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
                                                 if tiMini then
-                                                    print("[AntiHollowMini] Destroying TouchInterest in HollowMini →", playerChar.Name)
                                                     tiMini:Destroy()
                                                 end
                                             end
