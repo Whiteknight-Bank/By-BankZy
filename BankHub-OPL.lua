@@ -2537,6 +2537,31 @@ task.spawn(function()
 end)
 
 task.spawn(function()
+    while task.wait(0.1) do
+        if _G.godmode then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local rightArm = obj:FindFirstChild("Right Arm")
+                        if rightArm then
+                            local sword = rightArm:FindFirstChild("Sword")
+                            if sword then
+                                -- หา BasePart ทั้งหมดใน Sword Model แล้วปิด CanTouch
+                                for _, part in pairs(sword:GetDescendants()) do
+                                    if part:IsA("BasePart") then
+                                        part.CanTouch = false
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
+task.spawn(function()
     while task.wait(0.01) do
         if _G.godmode then
             pcall(function()
@@ -3998,35 +4023,6 @@ task.spawn(function()
                                     end
                                 end
 
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-page8:Toggle("Anti Sword", false, function(swod)
-    _G.antiSword = swod
-end)
-
-task.spawn(function()
-    while task.wait(0.1) do
-        if _G.antiSword then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local rightArm = obj:FindFirstChild("Right Arm")
-                        if rightArm then
-                            local sword = rightArm:FindFirstChild("Sword")
-                            if sword then
-                                -- ลบ TouchInterest ใน Sword (ใช้ GetDescendants เผื่อมีซ้อนหลายชั้น)
-                                for _, child in pairs(sword:GetDescendants()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end
                             end
                         end
                     end
