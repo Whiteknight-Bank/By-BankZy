@@ -2029,7 +2029,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb", "Light(ไม่ทำงาน)", "Magma(ไม่ทำงาน)"}, function(spdf)
+page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb"}, function(spdf)
     selectedSpamFruit = spdf
 end)
 
@@ -2046,7 +2046,7 @@ page3:Toggle("Auto Spam (100%)", false, function(spam)
 end)
 
 spawn(function()
-    while wait(getgenv().spamtime) do
+    while wait(0.01) do
         pcall(function()
 
             -- Bomb Skill B
@@ -2220,7 +2220,6 @@ spawn(function()
                 }
                 game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
             end
-
         end)
     end
 end)
