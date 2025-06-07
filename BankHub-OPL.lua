@@ -2029,7 +2029,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Light", "Bomb"}, function(spdf)
+page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb", "Light(ไม่ทำงาน)", "Magma(ไม่ทำงาน)"}, function(spdf)
     selectedSpamFruit = spdf
 end)
 
@@ -2048,7 +2048,7 @@ end)
 spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
-							
+
             -- Bomb Skill B
             if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
                 local pla = game.Players.LocalPlayer;
@@ -2193,6 +2193,32 @@ spawn(function()
                     [7] = "Right"
                 }
                 game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
+            end
+
+            -- Chilly Skill B
+            if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
+                local pla = game.Players.LocalPlayer;
+                local Mouse = pla:GetMouse();
+
+                local args = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "ChillyPower11",
+                    [3] = "StopCharging",
+                    [4] = Mouse.Hit,
+                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                    [6] = 100
+                }
+                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
+
+                local args = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "ChillyPower11",
+                    [3] = "StartCharging",
+                    [4] = CFrame.new(Vector3.new(-3.38, 213, -366.82), Vector3.new(0.05, -0.29, -0.95)),
+                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                    [6] = "Right"
+                }
+                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
             end
 
         end)
