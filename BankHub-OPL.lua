@@ -2045,14 +2045,95 @@ page3:Toggle("Auto Spam (100%)", false, function(spam)
     _G.skillspam = spam
 end)
 
+-- Quake
 spawn(function()
-    while wait(0.01) do
+    while wait(getgenv().spamtime) do
         pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Quake" then
+                if selectedSpamSkill == "Skill Z" and _G.quake3 then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+                    local humanoid = pla.Character.HumanoidRootPart
+                    local X = humanoid.Position.X
+                    local Y = humanoid.Position.Y
+                    local Z = humanoid.Position.Z
 
-            -- Bomb Skill B
-            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower1",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(X, Y, Z)
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+                elseif selectedSpamSkill == "Skill C" and _G.quake2 then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+                    local humanoid = pla.Character.HumanoidRootPart
+                    local Xx = humanoid.Position.X
+                    local Yy = humanoid.Position.Y
+                    local Zz = humanoid.Position.Z
+
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower3",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(Xx, Yy, Zz)
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower3",
+                        [3] = "StartCharging",
+                        [5] = "Right"
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
+                elseif selectedSpamSkill == "Skill V" and _G.quake1 then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower4",
+                        [3] = "StartCharging",
+                        [5] = "Right"
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower4",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
+                end
+            end
+        end)
+    end
+end)
+
+-- Bomb
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" and _G.bomb1 then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
 
                 local args = {
                     [1] = tonumber(serializeTable(remotes)),
@@ -2062,163 +2143,80 @@ spawn(function()
                     [5] = Mouse.Target,
                     [6] = 100
                 }
+
                 game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
 
-                local args = {
+                local args2 = {
                     [1] = tonumber(serializeTable(remotes)),
                     [2] = "BombPower5",
                     [3] = "StartCharging",
-                    [4] = CFrame.new(Vector3.new(-3.38, 213, -366.82), Vector3.new(0.05, -0.29, -0.95)),
+                    [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
                     [5] = workspace.IslandWindmill.Dock.Boards.Board,
                     [6] = "Right"
                 }
-                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
+                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
             end
+        end)
+    end
+end)
 
-            -- Quake Skill Z
-            if _G.skillspam and selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill Z" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-                local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "QuakePower1",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Target,
-                    [5] = Mouse.Hit,
-                    [6] = 100,
-                    [7] = Vector3.new(hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-            end
+-- Flare
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Flare" then
+                if selectedSpamSkill == "Skill X" and _G.flare1 then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
 
-            -- Quake Skill C
-            if _G.skillspam and selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill C" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-                local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "QuakePower3",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Target,
-                    [5] = Mouse.Hit,
-                    [6] = 100,
-                    [7] = Vector3.new(hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "FlarePower2",
+                        [3] = "StopCharging",
+                        [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
+                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+                        [6] = 100
+                    }
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "QuakePower3",
-                    [3] = "StartCharging",
-                    [5] = "Right"
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-            end
+                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
 
-            -- Quake Skill V
-            if _G.skillspam and selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill V" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-                local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "FlarePower2",
+                        [3] = "StartCharging",
+                        [4] = CFrame.new(-550.802795, 244, 26.3580341, -0.63954407, 0.15401715, -0.753168106, -0, 0.979725122, 0.200346366, 0.768754423, 0.128130332, -0.626577377),
+                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+                        [7] = "Left"
+                    }
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "QuakePower4",
-                    [3] = "StartCharging",
-                    [5] = "Right"
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
+                elseif selectedSpamSkill == "Skill B" and _G.flare2 then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "QuakePower4",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Target,
-                    [5] = Mouse.Hit,
-                    [6] = 100,
-                    [7] = Vector3.new(hrp.Position.X, hrp.Position.Y, hrp.Position.Z)
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-            end
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "FlarePower5",
+                        [3] = "StopCharging",
+                        [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
+                        [5] = workspace:WaitForChild("IslandTown"):WaitForChild("Grass"):WaitForChild("Grass"),
+                        [6] = 100
+                    }
 
-            -- Flare Skill X
-            if _G.skillspam and selectedSpamFruit == "Flare" and selectedSpamSkill == "Skill X" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
+                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "FlarePower2",
-                    [3] = "StopCharging",
-                    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-                    [5] = workspace:IslandWindmill.OutterDune.Beach,
-                    [6] = 100
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "FlarePower5",
+                        [3] = "StartCharging",
+                        [4] = CFrame.new(-87.2900391, 213.999969, -985.91748, -0.656417644, 0.341256171, -0.757590711, 1.49011612e-08, 0.911768198, 0.410705268, 0.830902815, 0.228523642, -0.607323861),
+                        [5] = workspace:WaitForChild("IslandTown"):WaitForChild("Grass"):WaitForChild("Grass"),
+                        [7] = "Right"
+                    }
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "FlarePower2",
-                    [3] = "StartCharging",
-                    [4] = CFrame.new(-550.8, 244, 26.35),
-                    [5] = workspace:IslandWindmill.OutterDune.Beach,
-                    [7] = "Left"
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
-            end
-
-            -- Flare Skill B
-            if _G.skillspam and selectedSpamFruit == "Flare" and selectedSpamSkill == "Skill B" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "FlarePower5",
-                    [3] = "StopCharging",
-                    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-                    [5] = workspace:IslandTown.Grass.Grass,
-                    [6] = 100
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
-
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "FlarePower5",
-                    [3] = "StartCharging",
-                    [4] = CFrame.new(-87.29, 213.99, -985.91),
-                    [5] = workspace:IslandTown.Grass.Grass,
-                    [7] = "Right"
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
-            end
-
-            -- Chilly Skill B
-            if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "ChillyPower11",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Hit,
-                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                    [6] = 100
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
-
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "ChillyPower11",
-                    [3] = "StartCharging",
-                    [4] = CFrame.new(Vector3.new(-3.38, 213, -366.82), Vector3.new(0.05, -0.29, -0.95)),
-                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                    [6] = "Right"
-                }
-                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
+                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
+                end
             end
         end)
     end
