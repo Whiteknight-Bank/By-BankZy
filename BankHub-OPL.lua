@@ -4005,7 +4005,7 @@ task.spawn(function()
                                 local hollowsBody = hollow:FindFirstChild("HollowBody")
                                 if hollowsBody then
                                     for _, modelMini in pairs(hollowsBody:GetChildren()) do
-                                        if modelMini:IsA("Model") and modelMini.Name == "GhostHollow" then
+                                        if modelMini:IsA("Model") and modelMini.Name == "GhostBody" then
                                             local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
                                             if hrpMini then
                                                 local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
