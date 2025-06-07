@@ -2390,6 +2390,45 @@ end)
 task.spawn(function()
     while task.wait(0.01) do
         if _G.godmode then
+            pcall(function()
+                for _, playerChar in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerChar.Name) then
+                        local powers = playerChar:FindFirstChild("Powers")
+                        if powers then
+                            local hollow = powers:FindFirstChild("Hollow")
+                            if hollow then
+
+                                -- HollowsMini → HollowMini → HRP → TouchInterest
+                                local hollowsMini = hollow:FindFirstChild("HollowsMini")
+                                if hollowsMini then
+                                    for _, modelMini in pairs(hollowsMini:GetChildren()) do
+                                        if modelMini:IsA("Model") and modelMini.Name == "HollowMini" then
+                                            print("[AntiHollowMini] Found HollowMini model in:", playerChar.Name)
+
+                                            local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
+                                            if hrpMini then
+                                                local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
+                                                if tiMini then
+                                                    print("[AntiHollowMini] Destroying TouchInterest in HollowMini →", playerChar.Name)
+                                                    tiMini:Destroy()
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.godmode then
             local resourceHolder = workspace:FindFirstChild("UserData")
             if resourceHolder then
                 for _, player in ipairs(game.Players:GetPlayers()) do
