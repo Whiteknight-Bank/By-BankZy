@@ -2050,7 +2050,7 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Quake" then
-                if selectedSpamSkill == "Skill Z" and _G.quake3 then
+                if selectedSpamSkill == "Skill Z" then
                     local pla = game.Players.LocalPlayer
                     local Mouse = pla:GetMouse()
                     local humanoid = pla.Character.HumanoidRootPart
@@ -2069,7 +2069,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-                elseif selectedSpamSkill == "Skill C" and _G.quake2 then
+                elseif selectedSpamSkill == "Skill C" then
                     local pla = game.Players.LocalPlayer
                     local Mouse = pla:GetMouse()
                     local humanoid = pla.Character.HumanoidRootPart
@@ -2097,7 +2097,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
-                elseif selectedSpamSkill == "Skill V" and _G.quake1 then
+                elseif selectedSpamSkill == "Skill V" then
                     local pla = game.Players.LocalPlayer
                     local Mouse = pla:GetMouse()
 
@@ -2131,7 +2131,7 @@ end)
 spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" and _G.bomb1 then
+            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
                 local pla = game.Players.LocalPlayer
                 local Mouse = pla:GetMouse()
 
@@ -2166,7 +2166,7 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Flare" then
-                if selectedSpamSkill == "Skill X" and _G.flare1 then
+                if selectedSpamSkill == "Skill X" then
                     local pla = game.Players.LocalPlayer
                     local Mouse = pla:GetMouse()
 
@@ -2191,7 +2191,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
-                elseif selectedSpamSkill == "Skill B" and _G.flare2 then
+                elseif selectedSpamSkill == "Skill B" then
                     local pla = game.Players.LocalPlayer
                     local Mouse = pla:GetMouse()
 
