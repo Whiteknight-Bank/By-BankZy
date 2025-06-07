@@ -2024,13 +2024,17 @@ page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ Spam Skill (ไม่ทำงาน)┇")
+page3:Label("┇ Spam Skill ┇")
 
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
 page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Light", "Bomb"}, function(spdf)
     selectedSpamFruit = spdf
+end)
+
+page3:Textbox("Per Second:", "Enter Number", function(xtx)
+    getgenv().spamtime = xtx
 end)
 
 page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
@@ -2043,7 +2047,7 @@ end)
 
 -- Spawn Auto Spam loop
 spawn(function()
-    while wait() do
+    while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
                 local pla = game.Players.LocalPlayer
