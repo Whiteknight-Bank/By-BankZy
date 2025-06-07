@@ -138,7 +138,7 @@ local titleLabel = Instance.new("TextLabel")
 titleLabel.Size = UDim2.new(1, -100, 0, 50)
 titleLabel.Position = UDim2.new(0, 50, 0, 0)
 titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW GOD MODE (36%)"
+titleLabel.Text = "NEW UPDATE"
 titleLabel.TextColor3 = Color3.new(1, 1, 1)
 titleLabel.Font = Enum.Font.GothamBlack
 titleLabel.TextSize = 22
@@ -159,7 +159,7 @@ local label = Instance.new("TextLabel")
 label.Size = UDim2.new(1, -30, 1, -30)
 label.Position = UDim2.new(0, 15, 0, 15)
 label.BackgroundTransparency = 1
-label.Text = "- กัน Venom ยกเว้นสกิล Hydra กับ ลมหายใจ ที่ไม่กัน\n- กัน Smelt สกิล Spew\n- กันคลื่นดาบทุกดาบ\n- กัน String กรงนก สกิล Flapping Thread กันไม่100%\n- เพิ่ม Anti String Void กันด้ายดึงเกิด\n- กันดาเมจจากมอนทุกตัว ยกเว้น Gunslinger, Boss Gunner, Bruno, Bucky, Buster"
+label.Text = "- เพิ่ม Spam Skill ให้ทำงานได้ มีหลายตัวเลือกให้ใช้"
 label.TextColor3 = Color3.new(1, 1, 1)
 label.TextWrapped = true
 label.Font = Enum.Font.Gotham
@@ -2217,6 +2217,42 @@ spawn(function()
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
                 end
+            end
+        end)
+    end
+end)
+
+-- Chilly Skill B
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+
+                -- StopCharging
+                local args = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "ChillyPower11",
+                    [3] = "StopCharging",
+                    [4] = Mouse.Hit,
+                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                    [6] = 100
+                }
+
+                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
+
+                -- StartCharging
+                local args2 = {
+                    [1] = tonumber(serializeTable(remotes)),
+                    [2] = "ChillyPower11",
+                    [3] = "StartCharging",
+                    [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
+                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                    [6] = "Right"
+                }
+
+                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args2))
             end
         end)
     end
