@@ -2081,6 +2081,77 @@ spawn(function()
     end
 end)
 
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+            if _G.skillspam then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+                local humanoid = game.Players.LocalPlayer.Character.HumanoidRootPart
+                local Xx = humanoid.Position.x
+                local Yy = humanoid.Position.y
+                local Zz = humanoid.Position.z
+
+                -- Quake Skill Z
+                if selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill Z" then
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower1",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(Xx, Yy, Zz)
+                    }
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+
+                -- Quake Skill C
+                elseif selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill C" then
+                    local args1 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower3",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(Xx, Yy, Zz)
+                    }
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args1))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower3",
+                        [3] = "StartCharging",
+                        [5] = "Right"
+                    }
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
+
+                -- Quake Skill V
+                elseif selectedSpamFruit == "Quake" and selectedSpamSkill == "Skill V" then
+                    local args1 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower4",
+                        [3] = "StartCharging",
+                        [5] = "Right"
+                    }
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args1))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "QuakePower4",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Target,
+                        [5] = Mouse.Hit,
+                        [6] = 100,
+                        [7] = Vector3.new(humanoid.Position)
+                    }
+                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
+                end
+            end
+        end)
+    end
+end)
+		
 page3:Label("┇ Max Charge Skill ┇")
 page3:Toggle("Max Charge Skill (100%)", false, function(smx)
 	_G.skillmax = smx
