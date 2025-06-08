@@ -2784,6 +2784,43 @@ page4:Toggle("Auto Quake Kill", false, function(qkkl)
 	_G.Quakekill = qkkl
 end)
 
+page4:Toggle("Auto Bomb Kill", false, function(kbmb)
+    _G.killbomb = kbmb
+end)
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if _G.killbomb then
+                -- วนยิงทุก player
+                local pla = game.Players.LocalPlayer
+                local char = pla.Character or pla.CharacterAdded:Wait()
+
+                for i, targetPlayer in pairs(game.Players:GetPlayers()) do
+                    if targetPlayer ~= pla and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local targetHRP = targetPlayer.Character.HumanoidRootPart
+
+                        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 10, 0))
+                        local hit = CFrame.new(targetHRP.Position)
+
+                        local args = {
+                            [1] = tonumber(serializeTable(remotes)),
+                            [2] = "BombPower5",
+                            [3] = "StopCharging",
+                            [4] = hit,
+                            [5] = targetHRP,
+                            [6] = 100
+                        }
+
+                        game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+                        wait(0.5)
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 plr = game.Players.LocalPlayer
 
 local Tab5 = Window:Taps("Island")
