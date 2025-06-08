@@ -1,4 +1,4 @@
-ฟlocal TweenService = game:GetService("TweenService")
+local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 
 if CoreGui:FindFirstChild("LoadingScreen") then
