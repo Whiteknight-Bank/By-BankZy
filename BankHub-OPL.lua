@@ -1,4 +1,4 @@
-local TweenService = game:GetService("TweenService")
+ฟlocal TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 
 if CoreGui:FindFirstChild("LoadingScreen") then
@@ -2135,15 +2135,15 @@ spawn(function()
                 local pla = game.Players.LocalPlayer
                 local Mouse = pla:GetMouse()
 
-                -- Skill Z (แก้ให้เหมือน Skill B แล้ว)
+                -- Skill Z
                 if selectedSpamSkill == "Skill Z" then
                     local args = {
-                        [1] = tonumber(serializeTable(remotes)), -- <<< เปลี่ยนแล้ว ไม่ใช้เลข fix
+                        [1] = tonumber(serializeTable(remotes)),
                         [2] = "BombPower1",
                         [3] = "StopCharging",
-                        [4] = Mouse.Hit, -- ใช้ Mouse.Hit
-                        [5] = Mouse.Target, -- ใช้ Mouse.Target
-                        [6] = 100
+                        [4] = Mouse.Hit,
+                        [5] = Mouse.Target,
+                        [6] = 5
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
@@ -2171,6 +2171,32 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+
+                -- Skill C
+                elseif selectedSpamSkill == "Skill C" then
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower3",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Hit,
+                        [5] = Mouse.Target,
+                        [6] = 29
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
+                -- Skill V
+                elseif selectedSpamSkill == "Skill V" then
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower4",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Hit,
+                        [5] = Mouse.Target,
+                        [6] = 100
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
                 end
             end
         end)
