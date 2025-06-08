@@ -435,6 +435,7 @@ local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Spawn ┇")
+
 _G.savedCFrame = nil
 
 function SaveCFrame()
@@ -447,7 +448,7 @@ function SaveCFrame()
     end
 end
 
-page:Button("Save Point", function()
+page1:Button("Save Point", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
