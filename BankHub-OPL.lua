@@ -2792,7 +2792,6 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if _G.killbomb then
-                -- วนยิงทุก player
                 local pla = game.Players.LocalPlayer
                 local char = pla.Character or pla.CharacterAdded:Wait()
 
@@ -2800,27 +2799,40 @@ spawn(function()
                     if targetPlayer ~= pla and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                         local targetHRP = targetPlayer.Character.HumanoidRootPart
 
+                        -- วาร์ปสูง 20 หน่วย
                         char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 20, 0))
-                        local hit = CFrame.new(targetHRP.Position)
 
-                        local args = {
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+
+			local args = {
                             [1] = tonumber(serializeTable(remotes)),
                             [2] = "BombPower5",
                             [3] = "StopCharging",
-                            [4] = hit,
+                            [4] = CFrame.new(targetHRP.Position),
                             [5] = targetHRP,
                             [6] = 100
                         }
 
                         game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                        wait(0.5)
+
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower5",
+                        [3] = "StartCharging",
+                        [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
+                        [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                        [6] = "Right"
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+                        wait(0.5) -- เว้นก่อนยิง player ถัดไป
                     end
                 end
             end
         end)
     end
 end)
-
+		
 plr = game.Players.LocalPlayer
 
 local Tab5 = Window:Taps("Island")
