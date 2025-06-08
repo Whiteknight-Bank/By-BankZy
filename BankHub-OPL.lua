@@ -241,7 +241,7 @@ local Camera = workspace.CurrentCamera
 spawn(function() -- autofarm velocity
     while wait(0) do
         pcall(function()
-            if AutoFish or AutoPack or _G.behindfarm or _G.rumblefarm then
+            if AutoFish or AutoPack or _G.behindfarm or _G.rumblefarm or _G.killbomb then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                     local Noclip = Instance.new("BodyVelocity")
                     Noclip.Name = "BodyClip"
@@ -250,7 +250,7 @@ spawn(function() -- autofarm velocity
                     Noclip.Velocity = Vector3.new(0,0,0)
                 end
                 game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
-            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false or _G.rumblefarm == false then
+            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false or _G.rumblefarm == false or _G.killbomb == false then
                 --if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
                 wait(1)
@@ -2800,7 +2800,7 @@ spawn(function()
                     if targetPlayer ~= pla and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
                         local targetHRP = targetPlayer.Character.HumanoidRootPart
 
-                        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 10, 0))
+                        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 20, 0))
                         local hit = CFrame.new(targetHRP.Position)
 
                         local args = {
