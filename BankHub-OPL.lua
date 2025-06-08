@@ -447,22 +447,32 @@ function SaveCFrame()
     end
 end
 
-function TeleportToSavedCFrame()
+page:Button("Save Point", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp and _G.savedCFrame then
-        hrp.CFrame = _G.savedCFrame
-        print("✅ Teleported to saved CFrame.")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+        print("✅ Saved CFrame:", _G.savedCFrame)
+        create:Notifile("Saved Point!", "Your position has been saved.", 3)
+    else
+        warn("❌ Cannot save CFrame. No Character found.")
     end
-		end
-
-page1:Button("Save Spawn Point", function()
-    SaveCFrame()
-    create:Notify("Saved Spawn Point!", "Your position has been saved.", 3)
 end)
 
 page1:Toggle("Auto Spawn", false, function(rspw)
         _G.autorespawn = rspw
 end)
+
+function TeleportToSavedCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and _G.savedCFrame then
+        print("✅ Teleporting to saved CFrame:", _G.savedCFrame)
+        -- รอแป๊บให้ Engine Server sync ให้เสร็จก่อน
+        wait(0.5)
+        -- วาป
+        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0) -- เผื่อสูง 5 จะได้ไม่ติดพื้น
+        print("✅ Teleported!")
+    end
+end
 
 spawn(function()
     while wait() do
@@ -473,8 +483,13 @@ spawn(function()
                     for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
                         v.Function()
                     end
-                    -- รอตัวละครเกิดก่อน แล้ว Teleport
-                    repeat wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    -- รอ Character โหลดจริง + HP > 0
+                    repeat wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
+                    
+                    -- รออีกแป๊บให้ Engine เซ็ตเสร็จ
+                    wait(0.5)
+                    
+                    -- วาป
                     TeleportToSavedCFrame()
                 end
             end)
