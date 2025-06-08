@@ -467,11 +467,8 @@ function TeleportToSavedCFrame()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp and _G.savedCFrame then
         print("✅ Teleporting to saved CFrame:", _G.savedCFrame)
-        -- รอแป๊บให้ Engine Server sync ให้เสร็จก่อน
         wait(0.5)
-        -- วาป
-        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0) -- เผื่อสูง 5 จะได้ไม่ติดพื้น
-        print("✅ Teleported!")
+        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
     end
 end
 
@@ -488,7 +485,7 @@ spawn(function()
                     repeat wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
                     
                     -- รออีกแป๊บให้ Engine เซ็ตเสร็จ
-                    wait(0.5)
+                    wait(2)
                     
                     -- วาป
                     TeleportToSavedCFrame()
