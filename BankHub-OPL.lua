@@ -2143,7 +2143,7 @@ spawn(function()
                         [3] = "StopCharging",
                         [4] = Mouse.Hit,
                         [5] = Mouse.Target,
-                        [6] = 5
+                        [6] = 100
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
@@ -2180,7 +2180,7 @@ spawn(function()
                         [3] = "StopCharging",
                         [4] = Mouse.Hit,
                         [5] = Mouse.Target,
-                        [6] = 29
+                        [6] = 100
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
