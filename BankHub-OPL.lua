@@ -430,38 +430,52 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.autodash then
-	for i,v in pairs(game:GetService("Workspace")[selectedPlayer]:GetChildren()) do
-if string.find(v.Name, "ShaveServer") then
-v:Destroy()
-end
-	end
-            end
-        end)
-    end
-end)
-
 -- สร้างแท็บชื่อ Autos
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Spawn┇")
+page1:Label("┇ Function Spawn ┇")
+_G.savedCFrame = nil
+
+function SaveCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+        print("✅ Saved CFrame:", _G.savedCFrame)
+    else
+        warn("Character not found, cannot save CFrame.")
+    end
+end
+
+function TeleportToSavedCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and _G.savedCFrame then
+        hrp.CFrame = _G.savedCFrame
+        print("✅ Teleported to saved CFrame.")
+    end
+		end
+
+page1:Button("Save Spawn Point", function()
+    SaveCFrame()
+    create:Notify("Saved Spawn Point!", "Your position has been saved.", 3)
+end)
+
 page1:Toggle("Auto Spawn", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
-
-spawn(function()--autorespawn
+spawn(function()
     while wait() do
         if _G.autorespawn then
             pcall(function()
-                if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
-                    for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
+                local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+                if playerGui.Load and playerGui.Load.Frame.Visible == true then
+                    for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
                         v.Function()
                     end
+                    -- รอตัวละครเกิดก่อน แล้ว Teleport
+                    repeat wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    TeleportToSavedCFrame()
                 end
             end)
         end
