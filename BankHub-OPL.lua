@@ -2131,31 +2131,47 @@ end)
 spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Bomb" and selectedSpamSkill == "Skill B" then
+            if _G.skillspam and selectedSpamFruit == "Bomb" then
                 local pla = game.Players.LocalPlayer
                 local Mouse = pla:GetMouse()
 
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "BombPower5",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Hit,
-                    [5] = Mouse.Target,
-                    [6] = 100
-                }
+                -- Skill Z (แก้ให้เหมือน Skill B แล้ว)
+                if selectedSpamSkill == "Skill Z" then
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)), -- <<< เปลี่ยนแล้ว ไม่ใช้เลข fix
+                        [2] = "BombPower1",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Hit, -- ใช้ Mouse.Hit
+                        [5] = Mouse.Target, -- ใช้ Mouse.Target
+                        [6] = 100
+                    }
 
-                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
 
-                local args2 = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "BombPower5",
-                    [3] = "StartCharging",
-                    [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
-                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                    [6] = "Right"
-                }
+                -- Skill B
+                elseif selectedSpamSkill == "Skill B" then
+                    local args = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower5",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Hit,
+                        [5] = Mouse.Target,
+                        [6] = 100
+                    }
 
-                game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower5",
+                        [3] = "StartCharging",
+                        [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
+                        [5] = workspace.IslandWindmill.Dock.Boards.Board,
+                        [6] = "Right"
+                    }
+
+                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+                end
             end
         end)
     end
