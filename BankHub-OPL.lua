@@ -279,39 +279,6 @@ spawn(function()
     end
 end)
 
-function CheckHobbied()
-    if not (_G.BringAllPlayer and _G.skillx and _G.autohobbied) then return end
-
-    local me = game.Players.LocalPlayer
-    local powers = workspace:FindFirstChild(me.Name) and workspace[me.Name]:FindFirstChild("Powers")
-    local hobbied = powers and powers:FindFirstChild("Hobbied")
-
-    if not hobbied then return end
-
-    local allIn = true
-    for _, player in pairs(game.Players:GetPlayers()) do
-        if player ~= me and not hobbied:FindFirstChild(player.Name) then
-            allIn = false
-            break
-        end
-    end
-
-    if allIn then
-        _G.BringAllPlayer = false
-        _G.skillx = false
-    end
-		end
--- ฟังก์ชัน: หาผู้เล่นทุกคนที่อยู่ใน Workspace
-local function getAllPlayerModelsInWorkspace()
-	local players = {}
-	for _, v in pairs(game.Workspace:GetChildren()) do
-		if v:IsA("Model") and game.Players:FindFirstChild(v.Name) then
-			table.insert(players, v)
-		end
-	end
-	return players
-		end
-
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
 	local names = {}
@@ -451,12 +418,28 @@ page1:Button("Save Point", function()
         _G.savedCFrame = hrp.CFrame
         print("✅ Saved CFrame:", _G.savedCFrame)
         create:Notifile("Saved Point!", "Your position has been saved.", 3)
-    else
-        warn("❌ Cannot save CFrame. No Character found.")
     end
 end)
+		
+page1:Toggle("Auto Spawn", false, function(aspw)
+        _G.respawn = aspw
+end)
 
-page1:Toggle("Auto Spawn", false, function(rspw)
+spawn(function()--autorespawn
+while wait() do
+if _G.respawn then
+pcall(function()
+if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
+for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
+v.Function()
+end
+end
+end)
+end
+end
+end)
+		
+page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
