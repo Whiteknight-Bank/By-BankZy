@@ -2681,11 +2681,13 @@ spawn(function() -- bring Plr
     end
 end)
 
-page4:Toggle("Lock Aim Players", false, function(asmt)
-	aimsilent = asmt
+-- ตัวอย่าง toggle aim
+page:Toggle("Aim Silent", false, function(value)
+    aimsilent = value
 end)
 
-spawn(function()--aim silent 
+-- ตามด้วย script ของคุณ:
+spawn(function() -- aim silent 
     pcall(function()
         while true do wait()
             pcall(function()
@@ -2699,16 +2701,18 @@ spawn(function()--aim silent
     end)
 end)
 
-local index = mta.__index
-cf = CFrame.new(1, 2, 3)
-setreadonly(mta, false)
-mta.__index = newcclosure(function(a, b, c)
-    if tostring(b):lower() == 'hit' and aimsilent then
-        return cacacac
-    end
-    return index(a, b, c)
-end)
+local mouse = game.Players.LocalPlayer:GetMouse()
+local oldIndex = nil
 
+oldIndex = hookmetamethod(game, "__index", function(self, key)
+    if self == mouse and key == "hit" and aimsilent and selectedPlayer then
+        local targetPlr = game.Players:FindFirstChild(selectedPlayer)
+        if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
+            return targetPlr.Character.HumanoidRootPart.CFrame
+        end
+    end
+    return oldIndex(self, key)
+end)
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
