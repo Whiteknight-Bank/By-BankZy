@@ -2709,83 +2709,6 @@ mta.__index = newcclosure(function(a, b, c)
     return index(a, b, c)
 end)
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-local UserDataFolder = workspace:WaitForChild("UserData")
-local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
-local myData = myUserFolder:WaitForChild("Data")
-
--- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
-local npcMapping = {
-    NPC_Activation_Chef = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 1000000 then
-            return "Aqua Staff: Done!"
-        else
-            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
-        end
-    end,
-    NPC_Activation_Drinks = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 50000000 then
-            return "Scissor Blade: Done!"
-        else
-            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
-        end
-    end,
-    NPC_Activation_Expert = function(obj)
-    local value = tonumber(obj.Value)
-    if value and value >= 1000 then
-        return "NPC_Activation_Expert: Done!"
-    else
-        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
-    end
-end,
-    NPC_Activation_Lucy = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 100000000 then
-            return "Kanshou and Bakuya: Done!"
-        else
-            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
-        end
-    end,
-    NPC_Activation_Merlin = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 200 then
-            return "Lightning Sword: Done!"
-        else
-            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
-        end
-    end,
-    NPC_Activation_Sam = function(obj)
-        local value = tonumber(obj.Value)
-        if value and value >= 1000 then
-            return "Meteorite Sword: Done!"
-        else
-            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
-        end
-    end
-}
-
--- รวมรายการที่มีอยู่ใน Data
-local displayOptions = {}
-local reverseLookup = {}
-
-for name, transform in pairs(npcMapping) do
-    local found = myData:FindFirstChild(name)
-    if found then
-        local displayName = transform(found)
-        table.insert(displayOptions, displayName)
-        reverseLookup[displayName] = name
-    end
-end
-
-page4:Label("┇ The Secret Weapon Progress ┇")
-page4:Dropdown("Check Progress Weapon", displayOptions, function(select)
-    local originalName = reverseLookup[select]
-end)
-page4:Section("↑ Execute Again, It will Refresh ↑")
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
@@ -4180,6 +4103,89 @@ spawn(function()
     while wait(1) do
         pcall(HandleFruits)
     end
+end)
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local UserDataFolder = workspace:WaitForChild("UserData")
+local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
+local myData = myUserFolder:WaitForChild("Data")
+
+-- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
+local npcMapping = {
+    NPC_Activation_Chef = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 1000000 then
+            return "Aqua Staff: Done!"
+        else
+            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
+        end
+    end,
+    NPC_Activation_Drinks = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 50000000 then
+            return "Scissor Blade: Done!"
+        else
+            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
+        end
+    end,
+    NPC_Activation_Expert = function(obj)
+    local value = tonumber(obj.Value)
+    if value and value >= 1000 then
+        return "NPC_Activation_Expert: Done!"
+    else
+        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
+    end
+end,
+    NPC_Activation_Lucy = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 100000000 then
+            return "Kanshou and Bakuya: Done!"
+        else
+            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
+        end
+    end,
+    NPC_Activation_Merlin = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 200 then
+            return "Lightning Sword: Done!"
+        else
+            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
+        end
+    end,
+    NPC_Activation_Sam = function(obj)
+        local value = tonumber(obj.Value)
+        if value and value >= 1000 then
+            return "Meteorite Sword: Done!"
+        else
+            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
+        end
+    end
+}
+
+-- รวมรายการที่มีอยู่ใน Data
+local displayOptions = {}
+local reverseLookup = {}
+
+for name, transform in pairs(npcMapping) do
+    local found = myData:FindFirstChild(name)
+    if found then
+        local displayName = transform(found)
+        table.insert(displayOptions, displayName)
+        reverseLookup[displayName] = name
+    end
+end
+
+page8:Label("┇ The Secret Weapon Progress ┇")
+page8:Dropdown("Check Progress Weapon:", displayOptions, function(select)
+    local originalName = reverseLookup[select]
+end)
+page8:Section("↑ Execute Again, It will Refresh ↑")
+page8:Button("Check!!!" , function()
+local A_1 = "Aqua Staff"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
+    Event:FireServer(A_1)
 end)
 
 page8:Label("┇ Fake Weapon ┇")
