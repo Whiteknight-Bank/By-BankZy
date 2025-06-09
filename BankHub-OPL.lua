@@ -2680,13 +2680,11 @@ spawn(function() -- bring Plr
         end
     end
 end)
-
--- ตัวอย่าง toggle aim
-page:Toggle("Aim Silent", false, function(value)
+		
+page4:Toggle("Aim Silent", false, function(value)
     aimsilent = value
 end)
 
--- ตามด้วย script ของคุณ:
 spawn(function() -- aim silent 
     pcall(function()
         while true do wait()
