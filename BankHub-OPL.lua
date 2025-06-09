@@ -3398,7 +3398,61 @@ spawn(function()
     end
 end)
 
-page7:Label("Check Rare Fruity Who Got it On Sever")
+page7:Label("Check Rare and Function Storage")
+
+page7:Label("┇ Function Storage ┇")
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
+
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
+
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
+
+page7:Button("Add Rare Fruitlist To Storage", function()
+table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
+end)
+page7:Section("↑ Add Before Using Auto Storage ↑")
+
+page7:Toggle("Auto Storage All", false, function(value)
+    Cache.Boolean.StorageAll = value
+end)
+
+local function HandleFruits()
+    if Cache.Boolean.StorageAll then
+        for Index = 1, 12 do
+            if CheckStorage(Index) then
+                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if Fruit:IsA("Tool") then
+                        for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
+                            if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
+                               (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
+                                StoreFruit(Index, Fruit)
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+spawn(function()
+    while wait(1) do
+        pcall(HandleFruits)
+    end
+end)
+
 page7:Toggle("Check Rare Fruity", false, function(chre)
     _G.checkrare = chre
 end)
@@ -3406,7 +3460,7 @@ end)
 local Players = game:GetService("Players")
 
 spawn(function()
-	while wait(3) do
+	while wait(1) do
 		if _G.checkrare then
 			pcall(function()
 				local players = Players:GetPlayers()
@@ -3423,7 +3477,7 @@ spawn(function()
 								if item.Name == rareFruits[k] then
 									local msg = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
 									print(msg)
-									create:Notifile("", msg, 5)
+									create:Notifile("", msg, 3)
 								end
 							end
 						end
@@ -3439,7 +3493,7 @@ spawn(function()
 								if item.Name == rareFruits[k] then
 									local msg = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
 									print(msg)
-									create:Notifile("", msg, 5)
+									create:Notifile("", msg, 3)
 								end
 							end
 						end
@@ -3448,10 +3502,6 @@ spawn(function()
 			end)
 		end
 	end
-end)
-
-page7:Toggle("Check Rare Box", false, function(chbx)
-    _G.checkbox = chbx
 end)
 
 local Players = game:GetService("Players")
@@ -3463,8 +3513,8 @@ local targetBoxes = {
 }
 
 spawn(function()
-	while wait(5) do
-		if _G.checkbox then
+	while wait(1) do
+		if _G.checkrare then
 			pcall(function()
 				local players = Players:GetPlayers()
 
@@ -3480,7 +3530,7 @@ spawn(function()
 								if item.Name == targetBoxes[k] then
 									local msb = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
 									print(msb)
-									create:Notifile("", msb, 5)
+									create:Notifile("", msb, 3)
 								end
 							end
 						end
@@ -3496,7 +3546,7 @@ spawn(function()
 								if item.Name == targetBoxes[k] then
 									local msb = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
 									print(msg)
-									create:Notifile("", msb, 5)
+									create:Notifile("", msb, 3)
 								end
 							end
 						end
@@ -4049,59 +4099,6 @@ task.spawn(function()
                 end
             end)
         end
-    end
-end)
-
-page8:Label("┇ Function Storage ┇")
-local Cache = {
-    Player = { Inputfruitlist = {}, Inputfruitname = "" },
-    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
-}
-
-local function CheckStorage(Number)
-    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
-    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
-end
-
-local function StoreFruit(Index, Fruit)
-    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
-    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-    Fruit.Parent = game.Players.LocalPlayer.Character
-    storagePath:FireServer("StoredDF" .. Index)
-end
-
-page8:Button("Add Rare Fruitlist To Storage", function()
-table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
-end)
-page8:Section("↑ Add Before Using Auto Storage ↑")
-
-page8:Toggle("Auto Storage All", false, function(value)
-    Cache.Boolean.StorageAll = value
-end)
-
-local function HandleFruits()
-    if Cache.Boolean.StorageAll then
-        for Index = 1, 12 do
-            if CheckStorage(Index) then
-                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                    if Fruit:IsA("Tool") then
-                        for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
-                            if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
-                               (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
-                                StoreFruit(Index, Fruit)
-                                break
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-spawn(function()
-    while wait(1) do
-        pcall(HandleFruits)
     end
 end)
 
