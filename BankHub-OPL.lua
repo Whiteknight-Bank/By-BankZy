@@ -442,9 +442,6 @@ function SaveCFrame()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
-        print("✅ Saved CFrame:", _G.savedCFrame)
-    else
-        warn("Character not found, cannot save CFrame.")
     end
 end
 
@@ -467,7 +464,6 @@ function TeleportToSavedCFrame()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp and _G.savedCFrame then
         print("✅ Teleporting to saved CFrame:", _G.savedCFrame)
-        wait(0.5)
         hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
     end
 end
@@ -481,20 +477,26 @@ spawn(function()
                     for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
                         v.Function()
                     end
-                    -- รอ Character โหลดจริง + HP > 0
-                    repeat wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
+                    -- รอ Character + Health > 0
+                    repeat wait() until game.Players.LocalPlayer.Character 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
                     
-                    -- รออีกแป๊บให้ Engine เซ็ตเสร็จ
-                    wait(2)
+                    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     
-                    -- วาป
+                    -- รอจน Y < 220
+                    repeat
+                        wait(0.1)
+                        hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    until hrp and hrp.Position.Y < 220
+                    
                     TeleportToSavedCFrame()
                 end
             end)
         end
     end
 end)
-
+		
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
