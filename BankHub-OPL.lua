@@ -3929,13 +3929,55 @@ task.spawn(function()
         end
     end
 end)
-page8:Toggle("Anti String Void", false, function(mag)
-    _G.antistaff = mag
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, playerFolder in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerFolder.Name) then
+                        local punchFolder = playerFolder:FindFirstChild("Powers")
+                        if punchFolder then
+                            local chillyFolder = punchFolder:FindFirstChild("Chilly")
+                            if chillyFolder then
+                                local punch = chillyFolder:FindFirstChild("Punch")
+                                if punch then
+                                    local part = punch:FindFirstChild("Part")
+                                    if part then
+                                        for _, desc in pairs(part:GetDescendants()) do
+                                            if desc.Name == "TouchInterest" then
+                                                desc:Destroy()
+                                            end
+                                        end
+                                    end
+
+                                    local rock1 = punch:FindFirstChild("Rock1")
+                                    if rock1 then
+                                        for _, child in pairs(rock1:GetChildren()) do
+                                            if child:IsA("BodyVelocity") then
+                                                child:Destroy()
+                                            end
+                                        end
+
+                                        for _, desc in pairs(rock1:GetDescendants()) do
+                                            if desc.Name == "TouchInterest" then
+                                                desc:Destroy()
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
 end)
 
-spawn(function()
-	while wait() do
-		if _G.godmode then
+task.spawn(function()
+	while task.wait(0.01) do
+		if _G.anti then
 			for _, model in ipairs(workspace:GetChildren()) do
 				if model:IsA("Model") and model:FindFirstChild("Powers") then
 					local powers = model.Powers
