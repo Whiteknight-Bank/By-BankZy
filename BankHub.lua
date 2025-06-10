@@ -856,8 +856,236 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Label("┇ Function Haki ┇")
-page1:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
+            if _G.berigift then
+local A_1 = "RewardMark"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardHourly
+    Event:FireServer(A_1)
+            end
+        end)
+    end
+end)
+
+page1:Toggle("Auto Claim Gift (Gems)", false, function(gxm)
+_G.gemsgift = gxm
+end)
+
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.gemsgift then
+local A_1 = "RewardMark"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardDaily
+    Event:FireServer(A_1)
+            end
+        end)
+    end
+end)
+
+local attackremote = {}    
+
+local a
+a=hookmetamethod(game,"__namecall",function(self,...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if method == "FireServer" or method == "InvokeServer" then
+        if self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
+            attackremote[self.Name] = args[1]
+            return a(self,unpack(args))
+        elseif self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
+            attackremote[self.Name] = ""
+        end
+    end
+      return a(self,...)
+end)
+    
+    function serializeTable(val, name, skipnewlines, depth)
+    skipnewlines = skipnewlines or false
+    depth = depth or 0
+ 
+    local tmp = string.rep("", depth)
+ 
+    if name then tmp = tmp end
+ 
+    if type(val) == "table" then
+        tmp = tmp .. (not skipnewlines and "" or "")
+ 
+        for k, v in pairs(val) do
+            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. (not skipnewlines and "" or "")
+        end
+ 
+        tmp = tmp .. string.rep("", depth) 
+    elseif type(val) == "number" then
+        tmp = tmp .. tostring(val)
+    elseif type(val) == "string" then
+        tmp = tmp .. string.format("%q", val)
+    elseif type(val) == "boolean" then
+        tmp = tmp .. (val and "true" or "false")
+    elseif type(val) == "function" then
+        tmp = tmp  .. "func: " .. debug.getinfo(val).name
+    else
+        tmp = tmp .. tostring(val)
+    end
+ 
+    return tmp
+end
+
+page1:Label("┇ Spam Yoru ┇")
+page1:Textbox("Hit Yoru", "Enter Number", function(hty)
+    _G.yoruhit = hty
+end)
+
+page1:Toggle("Auto Spam Yoru", false, function(yru)
+_G.yorufast = yru
+end)
+
+spawn(function() -- yoru 
+while wait(0) do 
+pcall(function() 
+if _G.yorufast then 
+if game.Players.LocalPlayer.Character:FindFirstChild("Yoru") and tonumber(serializeTable(attackremote)) ~= nil and tonumber(serializeTable(attackremote)) ~= "" then 
+repeat wait(0.3) 
+for i = 1, _G.yoruhit do 
+local args = { 
+		[1] = tonumber(serializeTable(attackremote)) 
+} 
+											
+game:GetService("Players").LocalPlayer.Character.Yoru.RequestAnimation:FireServer(unpack(args)) 
+end 
+until _G.yorufast == false or game.Players.LocalPlayer.Character.Humanoid.Health == 0 
+end 
+end 
+end) 
+end 
+end)
+
+local Tab2 = Window:Taps("Farming")
+local page2 = Tab2:newpage()
+
+page2:Label("┇ Function Enemies ┇")
+page2:Toggle("Auto Death Mob", false, function(dthh)
+    _G.autodie = dthh
+end)
+
+spawn(function()
+    while wait(2) do
+        if _G.autodie then 
+	pcall(function()
+            for _,v in pairs(workspace.Enemies:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
+end)
+
+page2:Toggle("Auto Death Kaizu' Boss (50/50%)", false, function(zki)
+    _G.autokaizu = zki
+end)
+
+spawn(function()
+    while wait() do
+        if _G.autokaizu then 
+	pcall(function()
+            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
+                if v:IsA("Model") and 
+		v:FindFirstChild("Humanoid") then
+                    v.Humanoid.Health = 0
+                end
+            end
+        end) 
+    end
+    end
+end)
+
+page2:Section("↑ Is Coming Soon . . . ↑")
+
+page2:Label("┇ Function Farming ┇")
+page2:Dropdown("Select Weapon:", Wapon, function(wapn)
+    Wapon = wapn
+end)
+
+page2:Toggle("Auto Farm", false, function(befrm)
+    _G.behindFarm = befrm
+end)
+
+local MobList = { "Boar", "Crab", "Angry", "Thief", "Gunslinger", "Freddy" }
+
+local function IsMobAllowed(mobName)
+    for _, allowedMob in ipairs(MobList) do
+        if string.find(mobName, allowedMob) then
+            return true
+        end
+    end
+    return false
+end
+
+spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            if _G.behindFarm then
+                for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") 
+                       and mob.Humanoid.Health > 0 and IsMobAllowed(mob.Name) then
+                        while mob.Humanoid.Health > 0 and _G.behindFarm do
+                            local mobRoot = mob.HumanoidRootPart
+                            local playerRoot = game.Players.LocalPlayer.Character.HumanoidRootPart
+                            playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 0, 4)
+                            local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+                            if tool then
+                                tool:Activate()
+                            else
+                                game.Players.LocalPlayer.Character.Humanoid:MoveTo(mobRoot.Position)
+                            end
+                            task.wait(0.1)
+                        end
+                        break
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+page2:Toggle("Auto Click", false, function(state)
+    _G.autoclick = state
+end)
+
+spawn(function() 
+game:GetService("RunService").RenderStepped:Connect(function() 
+pcall(function() 
+if _G.autoclick then 
+game:GetService'VirtualUser':CaptureController() 
+game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
+end 
+end) 
+end) 
+end)
+
+page2:Toggle("Auto Equip", false, function(state)
+    _G.autoequip = state
+end)
+
+spawn(function() -- auto equip
+    while wait(0) do
+        pcall(function()
+            if _G.autoequip then
+                repeat
+                    wait(0.05)
+                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
+                until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
+                if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
+                    game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
+                end
+            end
+        end)
+    end
+end)
+
+page2:Label("┇ Function Haki ┇")
+page2:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -971,134 +1199,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-page1:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
-
-local Tab2 = Window:Taps("Farming")
-local page2 = Tab2:newpage()
-
-page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob", false, function(dthh)
-    _G.autodie = dthh
-end)
-
-spawn(function()
-    while wait(2) do
-        if _G.autodie then 
-	pcall(function()
-            for _,v in pairs(workspace.Enemies:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
-page2:Toggle("Auto Death Kaizu' Boss (50/50%)", false, function(zki)
-    _G.autokaizu = zki
-end)
-
-spawn(function()
-    while wait() do
-        if _G.autokaizu then 
-	pcall(function()
-            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
-page2:Section("↑ Is Coming Soon . . . ↑")
-
-page2:Label("┇ Function Farming ┇")
-page2:Dropdown("Select Weapon:", Wapon, function(wapn)
-    Wapon = wapn
-end)
-
-page2:Toggle("Auto Farm", false, function(befrm)
-    _G.behindFarm = befrm
-end)
-
-local MobList = { "Boar", "Crab", "Angry", "Thief", "Gunslinger", "Freddy" }
-
-local function IsMobAllowed(mobName)
-    for _, allowedMob in ipairs(MobList) do
-        if string.find(mobName, allowedMob) then
-            return true
-        end
-    end
-    return false
-end
-
-spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            if _G.behindFarm then
-                for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") 
-                       and mob.Humanoid.Health > 0 and IsMobAllowed(mob.Name) then
-                        while mob.Humanoid.Health > 0 and _G.behindFarm do
-                            local mobRoot = mob.HumanoidRootPart
-                            local playerRoot = game.Players.LocalPlayer.Character.HumanoidRootPart
-                            playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 0, 4)
-                            local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-                            if tool then
-                                tool:Activate()
-                            else
-                                game.Players.LocalPlayer.Character.Humanoid:MoveTo(mobRoot.Position)
-                            end
-                            task.wait(0.1)
-                        end
-                        break
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-page2:Label("┇ Function Weapon ┇")
-page2:Toggle("Auto Click", false, function(state)
-    _G.autoclick = state
-end)
-
-spawn(function() 
-game:GetService("RunService").RenderStepped:Connect(function() 
-pcall(function() 
-if _G.autoclick then 
-game:GetService'VirtualUser':CaptureController() 
-game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
-end 
-end) 
-end) 
-end)
-
-page2:Toggle("Auto Equip", false, function(state)
-    _G.autoequip = state
-end)
-
-spawn(function() -- auto equip
-    while wait(0) do
-        pcall(function()
-            if _G.autoequip then
-                repeat
-                    wait(0.05)
-                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
-                until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
-                if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-                    game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
-                end
-            end
-        end)
-    end
-end)
+page2:Section(" Warning: You Maybe Kicked Out Of The Map ")
 
 page2:Label("┇ Other Farming With Skill DF ┇")
 page2:Toggle("Auto Farm Quake (Very Lag)", false, function(qke)
