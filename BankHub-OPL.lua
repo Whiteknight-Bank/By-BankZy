@@ -1126,7 +1126,6 @@ end)
 local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
---[[ -- Auto Death page --
 page2:Label("┇ Function Enemies ┇")
 page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
     _G.autodie = dthh
@@ -1165,7 +1164,6 @@ spawn(function()
     end
     end
 end)
-]]
 
 page2:Label("┇ Function Farm Fruity ┇")
 page2:Toggle("Auto Farm Stats", false, function(stts)
