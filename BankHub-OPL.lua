@@ -1850,21 +1850,15 @@ spawn(function()
 
                         if match then
                             local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude  
-                            if dist < 1000 then  
+                            if dist < 10000000000000000000000 then  
                                 -- รีเฟรช VTQ  
-                                local VTQ = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
+                                local VTR = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
 
                                 v.HumanoidRootPart.CanCollide = false  
                                 v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
 
-                                -- ชาร์จพลัง  
-                                rumble.RemoteEvent:FireServer(VTQ, "RumblePower2", "StartCharging")
-
-                                task.wait(0.45)
-
-                                -- ปล่อยพลัง  
                                 local args = {
-                                    [1] = VTQ,
+                                    [1] = VTR,
                                     [2] = "RumblePower2",
                                     [3] = "StopCharging",
                                     [4] = v.HumanoidRootPart.Position,
@@ -1874,24 +1868,7 @@ spawn(function()
                                 }
 
                                 rumble.RemoteEvent:FireServer(unpack(args))
-                                task.wait(0.25)
-				rumble.RemoteEvent:FireServer(VTQ, "RumblePower2", "StartCharging")
-
-                                task.wait(0.45)
-
-                                -- ปล่อยพลัง  
-                                local args = {
-                                    [1] = VTQ,
-                                    [2] = "RumblePower2",
-                                    [3] = "StopCharging",
-                                    [4] = v.HumanoidRootPart.Position,
-                                    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
-                                    [6] = 200,
-                                    [7] = char.HumanoidRootPart.Position
-                                }
-
-                                rumble.RemoteEvent:FireServer(unpack(args))
-                                task.wait(0.25)
+                                task.wait(0.5)
                             end
                         end
                     end  
