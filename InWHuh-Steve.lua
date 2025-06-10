@@ -303,7 +303,7 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ Function Farm ┇")
-page2:Dropdown("Select Mobs:", {"Thisf(Lvl:5)" "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", ""}, function(pcns)
+page2:Dropdown("Select Mobs:", {"Thief(Lvl:5)" "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", ""}, function(pcns)
     Npcs = pcns
 end)
 
