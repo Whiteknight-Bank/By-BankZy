@@ -364,6 +364,8 @@ end)
 
 ]]
 
+local Tab2 = Window:Taps("Farm")
+local page2 = Tab2:newpage()
 		
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
@@ -484,15 +486,15 @@ page2:Toggle("Auto Ken Haki", false, function(gthi)
     _G.genhaki = gthi
 end)
 		
-local Tab4 = Window:Taps("Players")
-local page4 = Tab4:newpage()
+local Tab3 = Window:Taps("Players")
+local page3 = Tab3:newpage()
 
-page4:Label("┇ Player ┇")
-page4:Dropdown("Select Player:", getPlayerNames(), function(name)
+page3:Label("┇ Player ┇")
+page3:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
 end)
 
-page4:Button("Click to Tp", function()
+page3:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
@@ -509,7 +511,7 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Toggle("Auto Bring Player( All )", false, function(plal)
+page3:Toggle("Auto Bring Player( All )", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -532,15 +534,15 @@ end)
 
 plr = game.Players.LocalPlayer
 
-local Tab5 = Window:Taps("Island")
-local page5 = Tab5:newpage()
+local Tab4 = Window:Taps("Island")
+local page4 = Tab4:newpage()
 
-page5:Label("┇ ISLANDS ┇")
-page5:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+page4:Label("┇ ISLANDS ┇")
+page4:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-page5:Button("Click to Tp" , function()
+page4:Button("Click to Tp" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -608,12 +610,12 @@ page5:Button("Click to Tp" , function()
                 end
 end)
 
-page5:Label("┇ SAFE ZONE ┇")
-page5:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page4:Label("┇ SAFE ZONE ┇")
+page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-page5:Button("Click to Tp" , function()
+page4:Button("Click to Tp" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -627,12 +629,12 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-page5:Label("┇ NPCs ┇")
-page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+page4:Label("┇ NPCs ┇")
+page4:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-page5:Button("Click to Tp" , function()
+page4:Button("Click to Tp" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -669,32 +671,32 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-local Tab6 = Window:Taps("NPCs")
-local page6 = Tab6:newpage()
+local Tab5 = Window:Taps("NPCs")
+local page5 = Tab5:newpage()
 
-page6:Label("┇ Shop Item ┇")
-page6:Dropdown("Select Item:", Cache.DevConfig["ListOfDrink"], function(knrd)
+page5:Label("┇ Shop Item ┇")
+page5:Dropdown("Select Item:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
   
-local Tab7 = Window:Taps("Fruit")
+local Tab6 = Window:Taps("Fruit")
+local page6 = Tab6:newpage()
+
+page6:Label("┇ Random Fruit ┇")
+
+
+local Tab7 = Window:Taps("Misc")
 local page7 = Tab7:newpage()
 
-page7:Label("┇ Random Fruit ┇")
-
-
-local Tab8 = Window:Taps("Misc")
-local page8 = Tab8:newpage()
-
-page8:Label("┇ Function Sever ┇")
-page8:Button("Rejoin Server", function()
+page7:Label("┇ Function Sever ┇")
+page7:Button("Rejoin Server", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page8:Button("Hop Server", function()
+page7:Button("Hop Server", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -773,7 +775,7 @@ local PlaceID = game.PlaceId
 
 end)
 
-page8:Button("Boost Fps", function()
+page7:Button("Boost Fps", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -891,7 +893,7 @@ end)
 
 local afkConnection
 
-page8:Toggle("Anti AFK", false, function(state)
+page7:Toggle("Anti AFK", false, function(state)
 
     if state then
 	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
