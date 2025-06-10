@@ -302,16 +302,16 @@ spawn(function() -- auto equip
     end
 end)
 
-page2:Label("┇ Function Farm with Cannon Ball ┇")
-page2:Dropdown("Select Mob:", {""}, function(wapn)
-    Wapon = wapn
+page2:Label("┇ Function Farm ┇")
+page2:Dropdown("Select Mobs:", {"Thisf(Lvl:5)" "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", ""}, function(pcns)
+    Npcs = pcns
 end)
 
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
 
-spawn(function() -- autofarm cannon
+spawn(function()
     while wait(0) do
         pcall(function()
             if _G.autocannon or _G.autocannonslow then
