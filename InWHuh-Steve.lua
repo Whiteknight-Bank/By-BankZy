@@ -436,15 +436,15 @@ local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ ISLANDS ┇")
-page4:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+page4:Dropdown("Select Islands", {"Thief Island", "Buggy Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
 page4:Button("Click to Tp" , function()
-    if getgenv().tpisland == "Grassy" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
-      elseif getgenv().tpisland == "Kaizu Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1526.0230712891, 364.99990844727, 10510.020507812)
+    if getgenv().tpisland == "Thief Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+      elseif getgenv().tpisland == "Buggy Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
       elseif getgenv().tpisland == "Snowy Mountains"  then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(6501, 408, -1261)
       elseif getgenv().tpisland == "Pursuer Island" then
