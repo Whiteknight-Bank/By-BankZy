@@ -338,7 +338,7 @@ page1:Toggle("Auto Tp Chest", false, function(chst)
         AutoMission = chst
 end)
 		
-local Tab2 = Window:Taps("Farming")
+local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
 
 --[[ -- Auto Death page --
@@ -361,13 +361,9 @@ spawn(function()
     end
     end
 end)
-
 ]]
-
-local Tab2 = Window:Taps("Farm")
-local page2 = Tab2:newpage()
 		
-page2:Label("┇ Function Farming ┇")
+page2:Label("┇ Function Farm ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
@@ -408,6 +404,9 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ Function Farm with Cannon Ball ┇")
+page2:Dropdown("Select Mob:", {""}, function(wapn)
+    Wapon = wapn
+end)
 
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
