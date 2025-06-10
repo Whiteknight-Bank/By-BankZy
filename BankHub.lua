@@ -419,6 +419,81 @@ local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Autos ┇")
+
+_G.savedCFrame = nil
+
+function SaveCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+    end
+end
+
+page1:Button("Save Point", function()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+        create:Notifile("Saved Point!", "Your position has been saved.", 3)
+    end
+end)
+		
+page1:Toggle("Auto Spawn", false, function(aspw)
+        _G.respawn = aspw
+end)
+
+spawn(function()--autorespawn
+while wait() do
+if _G.respawn then
+pcall(function()
+if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
+for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
+v.Function()
+end
+end
+end)
+end
+end
+end)
+		
+page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
+        _G.autorespawn = rspw
+end)
+
+function TeleportToSavedCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and _G.savedCFrame then
+        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
+    end
+end
+
+spawn(function()
+    while wait() do
+        if _G.autorespawn then
+            pcall(function()
+                local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+                if playerGui.Load and playerGui.Load.Frame.Visible == true then
+                    for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
+                        v.Function()
+		end
+                    
+		repeat wait() until game.Players.LocalPlayer.Character 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
+                    
+                    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    
+                    repeat
+                        wait(0.1)
+                        hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    until hrp and hrp.Position.Y < 220
+                    
+                    TeleportToSavedCFrame()
+                end
+            end)
+        end
+    end
+end)
+
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
 end)
