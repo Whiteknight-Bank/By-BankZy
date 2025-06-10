@@ -192,47 +192,21 @@ end)
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("InW Hub : For Map One Piece: Legendary")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to Steve's One Piece", 5)
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBox1"] = {"Common Box"};
-Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
+Cache.DevConfig["ListOfBox1"] = {""};
+Cache.DevConfig["ListOfBox2"] = {""};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
-Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
-
-local rareFruits = {
-    "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
-    "Ope Fruit", "Venom Fruit", "Candy Fruit", "Hollow Fruit",
-    "Chilly Fruit", "Gas Fruit", "Flare Fruit", "Light Fruit",
-    "Smoke Fruit", "Sand Fruit", "Rumble Fruit", "Magma Fruit",
-    "Snow Fruit", "Gravity Fruit", "Plasma Fruit"
-		}
+Cache.DevConfig["ListOfBox3"] = {""};
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
     SafeZoneOuterSpace.Position = Vector3.new((math.random(-1000000, 1000000)), (math.random(10000, 50000)), (math.random(-1000000, 1000000)))
     SafeZoneOuterSpace.Anchored = true
-
-local SafeZoneLightFarm = Instance.new("Part",game.Workspace)
-    SafeZoneLightFarm.Name = "SafeZoneLightPart2"
-    SafeZoneLightFarm.Size = Vector3.new(30,2,30)
-    SafeZoneLightFarm.Position = Vector3.new(3750, 3623, -615)
-    SafeZoneLightFarm.Anchored = true
-
-local b1 = Instance.new("Part",game.Workspace)
-        b1.Name = "SafeZoneLightPart1"
-        b1.Position = Vector3.new(-169, 630, -54)
-        b1.Size = Vector3.new(5, 0.1, 5)
-        b1.Anchored = true
-
-local SafeZoneUnderSea = Instance.new("Part",game.Workspace)
-    SafeZoneUnderSea.Name = "SafeZoneUnderSeaPart"
-    SafeZoneUnderSea.Size = Vector3.new(200,3,200)
-    SafeZoneUnderSea.Position = Vector3.new((math.random(-5000, 5000)), -491, (math.random(-5000, 5000)))
-    SafeZoneUnderSea.Anchored = true
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -261,24 +235,6 @@ spawn(function() -- autofarm velocity
     end
 end)
 
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.behindfarm or _G.lightfarm or quakefarm then
-                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-
-            end
-        end)
-    end
-end)
-
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
 	local names = {}
@@ -288,108 +244,6 @@ local function getPlayerNames()
 	return names
 end
 
---hook
-local mta = getrawmetatable(game)
-local namecall = mta.__namecall
-local setreadonly = setreadonly or make_writable
-
-
-setreadonly(mta, false)
-
-mta.__namecall = newcclosure(function(self, ...)
-    local args = {...}
-    local arguments = args
-    local a = {}
-    for i = 1, #arguments - 1 do
-        a[i] = arguments[i]
-    end
-    local method = getnamecallmethod() 
-
-    if method == 'FireServer' or method == "InvokeServer" then
-        if self.Name == 'Drown' and _G.nodmgwater then
-            if args[1] then
-                return nil
-            end
-        end
-    end
-    
-    return namecall(self, ...)    
-end)
-
-local attackremote = {}    
-
-local a
-a=hookmetamethod(game,"__namecall",function(self,...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
-            attackremote[self.Name] = args[1]
-            return a(self,unpack(args))
-        elseif self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-            attackremote[self.Name] = ""
-        end
-    end
-      return a(self,...)
-end)
-
-aaxc = hookmetamethod(game, "__namecall", function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RemoteEvent" and args[3] == "StopCharging" and _G.skillmax then
-            args[6] = 100
-            return aaxc(self, unpack(args))
-        end
-    end
-    return aaxc(self, ...)
-end)
-
-local remotes = {}
-    local azc
-    azc=hookmetamethod(game,"__namecall",function(self,...)
-        local args = {...}
-        local method = getnamecallmethod()
-        if method == "FireServer" or method == "InvokeServer" then
-            if self.Name == "RemoteEvent" and args[3] == "StopCharging" then
-                remotes[self.Name] = args[1]
-                return azc(self,unpack(args))
-            end
-        end
-          return azc(self,...)
-    end)
-    
-    function serializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
- 
-    local tmp = string.rep("", depth)
- 
-    if name then tmp = tmp end
- 
-    if type(val) == "table" then
-        tmp = tmp .. (not skipnewlines and "" or "")
- 
-        for k, v in pairs(val) do
-            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. (not skipnewlines and "" or "")
-        end
- 
-        tmp = tmp .. string.rep("", depth) 
-    elseif type(val) == "number" then
-        tmp = tmp .. tostring(val)
-    elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
-    elseif type(val) == "boolean" then
-        tmp = tmp .. (val and "true" or "false")
-    elseif type(val) == "function" then
-        tmp = tmp  .. "func: " .. debug.getinfo(val).name
-    else
-        tmp = tmp .. tostring(val)
-    end
- 
-    return tmp
-end
-
 local Wapon = {}
 for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
@@ -397,7 +251,6 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
--- สร้างแท็บชื่อ Autos
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
