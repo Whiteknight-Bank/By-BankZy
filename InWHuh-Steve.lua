@@ -497,7 +497,7 @@ page3:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Toggle("View", false, function(state)
+page3:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -670,32 +670,29 @@ page4:Button("Click to Tp" , function()
         end
     end)
 
-local Tab5 = Window:Taps("NPCs")
+local Tab5 = Window:Taps("Shop")
 local page5 = Tab5:newpage()
 
 page5:Label("┇ Shop Item ┇")
 page5:Dropdown("Select Item:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
-  
-local Tab6 = Window:Taps("Fruit")
+
+page5:Label("┇ Shop Random Fruit ┇")
+
+
+local Tab6 = Window:Taps("Misc")
 local page6 = Tab6:newpage()
 
-page6:Label("┇ Random Fruit ┇")
-
-
-local Tab7 = Window:Taps("Misc")
-local page7 = Tab7:newpage()
-
-page7:Label("┇ Function Sever ┇")
-page7:Button("Rejoin Server", function()
+page6:Label("┇ Function Sever ┇")
+page6:Button("Rejoin Server", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page7:Button("Hop Server", function()
+page6:Button("Hop Server", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -774,7 +771,7 @@ local PlaceID = game.PlaceId
 
 end)
 
-page7:Button("Boost Fps", function()
+page6:Button("Boost Fps", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -892,10 +889,10 @@ end)
 
 local afkConnection
 
-page7:Toggle("Anti AFK", false, function(state)
+page6:Toggle("Anti AFK", false, function(state)
 
     if state then
-	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
+	create:Notifile("", "Protect Kick AFK You Can AFK Now :)", 3)
         local vu = game:GetService("VirtualUser")
         afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
             vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
