@@ -2612,9 +2612,10 @@ page8:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
     end
 end)
 
-		local Tab9 = Window:Taps("การติดต่อ")
+local Tab9 = Window:Taps("การติดต่อ")
 local page9 = Tab9:newpage()
 
 page9:Label("┇ FB: Bank Kesee or Discord: Rattanakorn0242 ┇")
 
 	end)
+end
