@@ -150,6 +150,53 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
+local Players = game:GetService("Players")
+local lp = Players.LocalPlayer
+
+local function scanAndDestroy()
+    local char = lp.Character or workspace:FindFirstChild(lp.Name)
+    if not char then return false end
+
+    local found = false
+
+    for _, scriptObj in pairs(char:GetChildren()) do
+        if scriptObj:IsA("Script") then
+            for _, child in pairs(scriptObj:GetChildren()) do
+                if child:IsA("LocalScript") and child.Name == "" then
+                    scriptObj:Destroy()
+                    found = true
+                    break
+                end
+            end
+        end
+    end
+
+    return found
+end
+
+local function waitForRespawn()
+    repeat wait() until lp.Character and lp.Character:FindFirstChild("Humanoid")
+    local hum = lp.Character:WaitForChild("Humanoid")
+    repeat wait() until hum.Health > 0
+end
+
+spawn(function()
+    while true do
+        repeat
+            local deleted = scanAndDestroy()
+            wait(0.5)
+        until not deleted
+
+        local hum = lp.Character and lp.Character:FindFirstChild("Humanoid")
+        if hum then
+            hum.Died:Wait()
+            waitForRespawn()
+        else
+            waitForRespawn()
+        end
+    end
+end)
+
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
