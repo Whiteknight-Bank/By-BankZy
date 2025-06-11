@@ -95,9 +95,9 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to InW Hub 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBox1"] = {""};
-Cache.DevConfig["ListOfBox2"] = {""};
-Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
+Cache.DevConfig["ListOfGun"] = {"Flintlock | Price: 5000", "Rifle | Price: 5000"};
+Cache.DevConfig["ListOfMelee"] = {"BlackLeg | Price: 10000", "Ryusoken | Price: 75000"};
+Cache.DevConfig["ListOfSword"] = {"Wooden Sword| Prices: 100", "Katana | Price: 5000", "Cutlass | Price: 7500", "Pipe | Price: 30000", "Jitte | Price: 65000", "Nonosama Bo | Price: 150000", "Bisento | Price: 3000000", "Gryphon | Price: 7500000"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {""};
 
@@ -509,21 +509,13 @@ page4:Button("Click to Tp" , function()
 end)
 
 page4:Label("┇ SAFE ZONE ┇")
-page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)"}, function(s)
     getgenv().tpsafezone = s
 end)
 
 page4:Button("Click to Tp" , function()
-        if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
-        game.Players.LocalPlayer.Character.Humanoid.Sit = true
-        wait(0.15)
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneUnderSeaPart"].CFrame * CFrame.new(0, 5, 0)
-    elseif getgenv().tpsafezone == "Safe Zone (Sky)" then
+        if getgenv().tpsafezone == "Safe Zone (Sky)" then
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-    elseif getgenv().tpsafezone == "Safe Zone Light Affinities 1.0" then
-       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneLightPart1"].CFrame * CFrame.new(0, 5, 0)
-	elseif getgenv().tpsafezone == "Safe Zone Light Affinities 2.0" then
-       game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneLightPart2"].CFrame * CFrame.new(0, 5, 0)
         end
     end)
 
@@ -573,9 +565,29 @@ local Tab5 = Window:Taps("Shop")
 local page5 = Tab5:newpage()
 
 page5:Label("┇ Shop Item ┇")
-page5:Dropdown("Select Item:", Cache.DevConfig["ListOfDrink"], function(knrd)
-    selectedDrinks = knrd
+page5:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(knrd)
+    selectedSwords = knrd
 end)
+
+page5:Button("Click to Buy" , function()
+        print("Buy")
+    end)
+
+page5:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
+    selectedMekees = knrd
+end)
+
+page5:Button("Click to Buy" , function()
+        print("Buy")
+    end)
+
+page5:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
+    selectedSinpers = knrd
+end)
+
+page5:Button("Click to Buy" , function()
+        print("Buy")
+			end)
 
 page5:Label("┇ Shop Random Fruit ┇")
 
