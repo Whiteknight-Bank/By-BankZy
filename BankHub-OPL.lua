@@ -2639,7 +2639,7 @@ page4:Button("Check Data Players!!!", function()
     for _, folder in pairs(userData:GetChildren()) do
         if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
             local data = folder:FindFirstChild("Data")
-            if data and data:FindFirstChild(selectedName) then
+            if data then
                 found = true
 
                 -- ผลไม้
