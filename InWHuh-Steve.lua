@@ -413,13 +413,13 @@ page3:Toggle("Auto Bring Player( All )", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
-spawn(function() -- bring Plr
+spawn(function()
     while wait() do
         if _G.BringAllPlayer then
             pcall(function()
                 for i,v in pairs(game.Players:GetChildren()) do
                     if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-15 or getgenv().disbring)
+                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-10)
                         if v.Character.Humanoid.Health == 0 then
                         	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
                         end
@@ -453,7 +453,7 @@ page4:Button("Click to Tp" , function()
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
       elseif getgenv().tpisland == "Luffy Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
-      elseif getgenv().tpisland == " Coconut Island" then
+      elseif getgenv().tpisland == "Coconut Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
       elseif getgenv().tpisland == "BlackLeg Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
