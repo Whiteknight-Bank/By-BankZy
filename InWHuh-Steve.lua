@@ -436,7 +436,7 @@ local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ ISLANDS ┇")
-page4:Dropdown("Select Islands", {"Thief Island", "Buggy Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+page4:Dropdown("Select Islands", {"Thief Island", "Buggy Island", "Noob Island", "Marine Island", "Fishman Island", "Luffy Island", "Coconut Island", "BlackLeg Island", "Sword Island", "Fruit Island"}, function(t)
     getgenv().tpisland = t
 end)
 
@@ -445,66 +445,22 @@ page4:Button("Click to Tp" , function()
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
       elseif getgenv().tpisland == "Buggy Island" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
-      elseif getgenv().tpisland == "Snowy Mountains"  then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(6501, 408, -1261)
-      elseif getgenv().tpisland == "Pursuer Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(4847, 570, -7143)
-      elseif getgenv().tpisland == "Bar" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(1522, 260, 2188)
-      elseif getgenv().tpisland == "Cliffs" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(4598, 217, 4964)
-      elseif getgenv().tpisland == "Windmill" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-7, 224, -91)
-      elseif getgenv().tpisland == "Cave" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-280, 217, -831)
-      elseif getgenv().tpisland == "Krizma" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1109, 341, 1645)
-      elseif getgenv().tpisland == "Pirate" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1283, 218, -1348)
-      elseif getgenv().tpisland == "Green" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2727, 253, 1041)
-      elseif getgenv().tpisland == "Trees" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(1068, 217, 3351)
-      elseif getgenv().tpisland == "Pyramid" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(118, 216, 4773)
-      elseif getgenv().tpisland == "Package" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1668, 217, -300)
-      elseif getgenv().tpisland == "Snowy" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1896, 222, 3385)
-      elseif getgenv().tpisland == "Mountain" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(2052, 488, -701)
-      elseif getgenv().tpisland == "Marine Ford" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-3164, 296, -3780)
-      elseif getgenv().tpisland == "Sand Castle" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(1020, 224, -3277)
-      elseif getgenv().tpisland == "Forest" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5781, 216, 114)
-      elseif getgenv().tpisland == "Evil" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5169, 523, -7803)
-      elseif getgenv().tpisland == "Crescent" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(3193, 357, 1670)
-      elseif getgenv().tpisland == "Islands" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4319, 245, 5252)
-      elseif getgenv().tpisland == "Town" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(1818, 218, 755)
-      elseif getgenv().tpisland == "Rocky" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-37, 229, 2149)
-      elseif getgenv().tpisland == "Palm" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(766, 216, -1374)
-      elseif getgenv().tpisland == "Sand" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2747, 216, -942)
-      elseif getgenv().tpisland == "Sand 2" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(162, 216, -2265)
-      elseif getgenv().tpisland == "Small" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(1237, 240, -244)
-      elseif getgenv().tpisland == "Tiny" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1235, 223, 623)
-      elseif getgenv().tpisland == "Super Tiny" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4007, 216, -2190)
-      elseif getgenv().tpisland == "Grass" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(2096, 217, -1884)
-      elseif getgenv().tpisland == "Atlar" then
-        plr.Character.HumanoidRootPart.CFrame = game.workspace.Altar.RecepticalEffect.CFrame * CFrame.new(0, 5, 0)
+      elseif getgenv().tpisland == "Noob Island"  then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
+      elseif getgenv().tpisland == "Marine Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
+      elseif getgenv().tpisland == "Fishman Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
+      elseif getgenv().tpisland == "Luffy Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
+      elseif getgenv().tpisland == " Coconut Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
+      elseif getgenv().tpisland == "BlackLeg Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
+      elseif getgenv().tpisland == "Sword Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
+      elseif getgenv().tpisland == "Fruit Island" then
+       plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
                 end
 end)
 
@@ -516,48 +472,6 @@ end)
 page4:Button("Click to Tp" , function()
         if getgenv().tpsafezone == "Safe Zone (Sky)" then
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-        end
-    end)
-
-page4:Label("┇ NPCs ┇")
-page4:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
-    getgenv().tpmerchant = n
-end)
-
-page4:Button("Click to Tp" , function()
-        if getgenv().tpmerchant == "Rayleigh" then
-            local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
-            if emoi == true then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Merchants.QuestHakiMerchant.HumanoidRootPart.CFrame
-            else
-                create:Notifile("OP:L", "Rayleigh did not spawn.!", 5)
-            end
-        elseif getgenv().tpmerchant == "Better Drink" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1493, 260, 2171)
-        elseif getgenv().tpmerchant == "Drink" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1282, 218, -1368)
-        elseif getgenv().tpmerchant == "Flail" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1110, 217, 3369)
-        elseif getgenv().tpmerchant == "QuestFish" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1702, 216, -325)
-        elseif getgenv().tpmerchant == "Krizma" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1072, 361, 1669)
-	elseif getgenv().tpmerchant == "Heavy Weapon" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2610, 258, 1110)
-        elseif getgenv().tpmerchant == "Sword" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1005, 224, -3339)
-        elseif getgenv().tpmerchant == "Sniper" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1843, 222, 3416)
-        elseif getgenv().tpmerchant == "Emote" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1522, 265, 2165)
-        elseif getgenv().tpmerchant == "Affinity" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(113, 278, 4952)
-        elseif getgenv().tpmerchant == "Fish" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1983, 218, 566)
-	elseif getgenv().tpmerchant == "Friend" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(1242, 229, -3243)
-        elseif getgenv().tpmerchant == "Expertise" then
-            plr.Character.HumanoidRootPart.CFrame = CFrame.new(903, 270, 1219)
         end
     end)
 
