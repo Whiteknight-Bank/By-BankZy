@@ -150,30 +150,6 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
-local Players = game:GetService("Players")
-local lp = Players.LocalPlayer
-
-local function scanAndDestroy()
-    local char = lp.Character or workspace:FindFirstChild(lp.Name)
-    if not char then return false end
-
-    local found = false
-
-    for _, scriptObj in pairs(char:GetChildren()) do
-        if scriptObj:IsA("Script") then
-            for _, child in pairs(scriptObj:GetChildren()) do
-                if child:IsA("LocalScript") and child.Name == "" then
-                    scriptObj:Destroy()
-                    found = true
-                    break
-                end
-            end
-        end
-    end
-
-    return found
-end
-
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
@@ -693,8 +669,9 @@ local PlaceID = game.PlaceId
           Teleport()
 
 end)
-
-page6:Button("Boost Fps", function()
+		
+page6:Label("┇ Function Anti ┇")
+page6:Button("Anti Lag", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -826,6 +803,34 @@ page6:Toggle("Anti AFK", false, function(state)
         if afkConnection then
             afkConnection:Disconnect()
             afkConnection = nil
+        end
+    end
+end)
+
+page6:Toggle("Anti Teleport Death", false, function(tpp)
+_G.antiTp = tpp
+end)
+
+local lp = game:GetService("Players").LocalPlayer
+
+spawn(function()
+    while wait() do
+        if _G.antiTp then
+            pcall(function()
+                local char = workspace:FindFirstChild(lp.Name)
+                if char then
+                    for _, scriptObj in pairs(char:GetChildren()) do
+                        if scriptObj:IsA("Script") then
+                            for _, child in pairs(scriptObj:GetChildren()) do
+                                if child:IsA("LocalScript") and child.Name == "" then
+                                    scriptObj:Destroy()
+                                    break -- หยุด loop ลูกเมื่อเจอแล้วลบ Script แม่
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
         end
     end
 end)
