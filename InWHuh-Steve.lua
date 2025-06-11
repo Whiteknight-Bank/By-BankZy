@@ -174,29 +174,6 @@ local function scanAndDestroy()
     return found
 end
 
-local function waitForRespawn()
-    repeat wait() until lp.Character and lp.Character:FindFirstChild("Humanoid")
-    local hum = lp.Character:WaitForChild("Humanoid")
-    repeat wait() until hum.Health > 0
-end
-
-spawn(function()
-    while true do
-        repeat
-            local deleted = scanAndDestroy()
-            wait(0.5)
-        until not deleted
-
-        local hum = lp.Character and lp.Character:FindFirstChild("Humanoid")
-        if hum then
-            hum.Died:Wait()
-            waitForRespawn()
-        else
-            waitForRespawn()
-        end
-    end
-end)
-
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
