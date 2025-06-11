@@ -2632,36 +2632,37 @@ page4:Button("Check Data Players!!!", function()
     local selectedName = selectedPlayer
 
     local userData = workspace:FindFirstChild("UserData")
-    if not userData then return end
+    if not userData then
+        return
+    end
 
-    local targetFolder = nil
+    local found = false
 
     for _, folder in pairs(userData:GetChildren()) do
         if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
             local data = folder:FindFirstChild("Data")
-            if data and data:FindFirstChild(selectedName) then
-                targetFolder = folder
-                break
+            if data then
+                    found = true
+
+                    local defense = data:FindFirstChild("DefenseLevel")
+                    local melee = data:FindFirstChild("MeleeLevel")
+                    local sniper = data:FindFirstChild("SniperLevel")
+                    local sword = data:FindFirstChild("SwordLevel")
+
+                    print("------------ STATS -----------")
+                    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
+                    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
+                    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
+                    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
+                    print("-----------------------------------")
+                    break
+		end
             end
         end
+
+    if not found then
+        print("❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "' ใน UserData ทั้งหมด")
     end
-
-    if not targetFolder then return end
-
-    local data = targetFolder:FindFirstChild("Data")
-    if not data then return end
-
-    local defense = data:FindFirstChild("DefenseLevel")
-    local melee = data:FindFirstChild("MeleeLevel")
-    local sniper = data:FindFirstChild("SniperLevel")
-    local sword = data:FindFirstChild("SwordLevel")
-
-    print("------------ STATS -----------")
-    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
-    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
-    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
-    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
-    print("-----------------------------------")
 end)
 		
 page4:Toggle("View", false, function(state)
