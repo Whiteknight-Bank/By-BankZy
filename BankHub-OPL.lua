@@ -241,7 +241,7 @@ local Camera = workspace.CurrentCamera
 spawn(function() -- autofarm velocity
     while wait(0) do
         pcall(function()
-            if AutoFish or AutoPack or _G.behindfarm or _G.rumblefarm or _G.killbomb then
+            if AutoFish or AutoPack or _G.behindFarm or _G.rumblefarm or _G.killbomb then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                     local Noclip = Instance.new("BodyVelocity")
                     Noclip.Name = "BodyClip"
@@ -250,7 +250,7 @@ spawn(function() -- autofarm velocity
                     Noclip.Velocity = Vector3.new(0,0,0)
                 end
                 game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
-            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false or _G.rumblefarm == false or _G.killbomb == false then
+            elseif  AutoFish == false or AutoPack == false or _G.behindFarm == false or _G.rumblefarm == false or _G.killbomb == false then
                 --if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
                 wait(1)
@@ -1402,7 +1402,7 @@ spawn(function()
                        IsMobAllowed(mob.Name) then
                         local mobRoot = mob.HumanoidRootPart
                         local playerRoot = character.HumanoidRootPart
-                        playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 6)
+                        playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 15, 5)
                         mob.Humanoid.Health = 0
                         repeat task.wait() until mob.Humanoid.Health <= 0
                         task.wait(2)
