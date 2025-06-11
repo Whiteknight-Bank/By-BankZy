@@ -2628,9 +2628,10 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("/console | Check Data Players!!!", function()
+page1:Button("/console | Check Data Players!!!", function()
     local userData = workspace:FindFirstChild("UserData")
     if not userData then
+        print("ไม่พบ UserData ใน workspace")
         return
     end
 
@@ -2649,11 +2650,13 @@ page4:Button("/console | Check Data Players!!!", function()
     end
 
     if not targetUserFolder then
+        print("ไม่พบ User ที่มีชื่อผู้เล่น " .. selectedPlayerName)
         return
     end
 
     local data = targetUserFolder:FindFirstChild("Data")
     if not data then
+        print("ไม่พบ Data ใน " .. targetUserFolder.Name)
         return
     end
 
