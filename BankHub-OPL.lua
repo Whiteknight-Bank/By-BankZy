@@ -2628,7 +2628,7 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page1:Button("/console | Check Data Players!!!", function()
+page4:Button("/console | Check Data Players!!!", function()
     local userData = workspace:FindFirstChild("UserData")
     if not userData then
         return
