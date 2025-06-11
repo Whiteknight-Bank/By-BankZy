@@ -2627,19 +2627,37 @@ end)
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
-
+		
 page4:Button("/console | Check Data Players!!!", function()
-    local playerId = selectedPlayer -- << ตัวนี้คือ "12345678" จากที่คุณหาไว้แล้ว
+    local selectedName = selectedPlayer -- ← ชื่อผู้เล่นจาก Dropdown
 
-    local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. playerId)
-    if not userFolder then
-        print("❌ ไม่พบ User_" .. playerId)
+    local userData = workspace:FindFirstChild("UserData")
+    if not userData then
+        print("❌ ไม่พบ UserData ใน workspace")
         return
     end
 
-    local data = userFolder:FindFirstChild("Data")
+    local targetFolder = nil
+
+    -- หา User_ไอดี ที่มีข้อมูลของผู้เล่น selectedName ข้างใน
+    for _, folder in pairs(userData:GetChildren()) do
+        if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
+            local data = folder:FindFirstChild("Data")
+            if data and data:FindFirstChild(selectedName) then
+                targetFolder = folder
+                break
+            end
+        end
+    end
+
+    if not targetFolder then
+        print("❌ ไม่เจอ User_ไอดี ของผู้เล่น: " .. selectedName)
+        return
+    end
+
+    local data = targetFolder:FindFirstChild("Data")
     if not data then
-        print("❌ ไม่พบ Data ใน User_" .. playerId)
+        print("❌ ไม่มี Data ใน " .. targetFolder.Name)
         return
     end
 
