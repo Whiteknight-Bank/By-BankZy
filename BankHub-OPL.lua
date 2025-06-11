@@ -2628,49 +2628,31 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page1:Button("/console | Check Data Players!!!", function()
-    local userData = workspace:FindFirstChild("UserData")
-    if not userData then
-        print("ไม่พบ UserData ใน workspace")
+page4:Button("/console | Check Data Players!!!", function()
+    local playerId = selectedPlayer -- << ตัวนี้คือ "12345678" จากที่คุณหาไว้แล้ว
+
+    local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. playerId)
+    if not userFolder then
+        print("❌ ไม่พบ User_" .. playerId)
         return
     end
 
-    local selectedPlayerName = selectedPlayer -- ชื่อเต็มจาก Dropdown
-    local targetUserFolder = nil
-
-    -- หา User_<ID> ที่ใน Data มีลูกชื่อ selectedPlayerName
-    for _, userFolder in pairs(userData:GetChildren()) do
-        if userFolder.Name:match("^User_%d+$") then
-            local data = userFolder:FindFirstChild("Data")
-            if data and data:FindFirstChild(selectedPlayerName) then
-                targetUserFolder = userFolder
-                break
-            end
-        end
-    end
-
-    if not targetUserFolder then
-        print("ไม่พบ User ที่มีชื่อผู้เล่น " .. selectedPlayerName)
-        return
-    end
-
-    local data = targetUserFolder:FindFirstChild("Data")
+    local data = userFolder:FindFirstChild("Data")
     if not data then
-        print("ไม่พบ Data ใน " .. targetUserFolder.Name)
+        print("❌ ไม่พบ Data ใน User_" .. playerId)
         return
     end
 
-    -- สมมติค่าอยู่ตรงนี้เลย
     local defense = data:FindFirstChild("DefenseLevel")
     local melee = data:FindFirstChild("MeleeLevel")
     local sniper = data:FindFirstChild("SniperLevel")
     local sword = data:FindFirstChild("SwordLevel")
 
     print("------------ STATS -----------")
-    print("-- Defense: lv. " .. (defense and defense.Value or "N/A"))
-    print("-- Melee: lv. " .. (melee and melee.Value or "N/A"))
-    print("-- Sniper: lv. " .. (sniper and sniper.Value or "N/A"))
-    print("-- Sword: lv. " .. (sword and sword.Value or "N/A"))
+    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
+    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
+    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
+    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
     print("-----------------------------------")
 end)
 
