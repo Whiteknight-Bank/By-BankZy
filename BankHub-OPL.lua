@@ -2628,51 +2628,40 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 		
-page4:Button("/console | Check Data Players!!!", function()
+page4:Button("Check Data Players!!!", function()
     local selectedName = selectedPlayer
-    print("🔍 เริ่มค้นหา ID จากชื่อ: " .. tostring(selectedName))
 
     local userData = workspace:FindFirstChild("UserData")
-    if not userData then
-        print("❌ ไม่พบ UserData ใน workspace")
-        return
-    end
+    if not userData then return end
 
-    local found = false
+    local targetFolder = nil
 
     for _, folder in pairs(userData:GetChildren()) do
-        print("📁 ตรวจสอบ: " .. folder.Name)
         if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
             local data = folder:FindFirstChild("Data")
-            if data then
-                local playerEntry = data:FindFirstChild(selectedName)
-                print("🔎 ใน " .. folder.Name .. " >> มี Data? " .. tostring(data ~= nil) .. ", เจอชื่อ? " .. tostring(playerEntry ~= nil))
-                if playerEntry then
-                    found = true
-
-                    local defense = data:FindFirstChild("DefenseLevel")
-                    local melee = data:FindFirstChild("MeleeLevel")
-                    local sniper = data:FindFirstChild("SniperLevel")
-                    local sword = data:FindFirstChild("SwordLevel")
-
-                    print("✅ เจอที่: " .. folder.Name)
-                    print("------------ STATS -----------")
-                    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
-                    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
-                    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
-                    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
-                    print("-----------------------------------")
-                    break
-                end
-            else
-                print("⚠️ ไม่มี Data ใน " .. folder.Name)
+            if data and data:FindFirstChild(selectedName) then
+                targetFolder = folder
+                break
             end
         end
     end
 
-    if not found then
-        print("❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "' ใน UserData ทั้งหมด")
-    end
+    if not targetFolder then return end
+
+    local data = targetFolder:FindFirstChild("Data")
+    if not data then return end
+
+    local defense = data:FindFirstChild("DefenseLevel")
+    local melee = data:FindFirstChild("MeleeLevel")
+    local sniper = data:FindFirstChild("SniperLevel")
+    local sword = data:FindFirstChild("SwordLevel")
+
+    print("------------ STATS -----------")
+    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
+    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
+    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
+    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
+    print("-----------------------------------")
 end)
 		
 page4:Toggle("View", false, function(state)
