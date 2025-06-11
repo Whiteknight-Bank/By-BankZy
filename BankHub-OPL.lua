@@ -2628,25 +2628,47 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("/console | Check Data Players!!!", function()
-    local player = workspace:FindFirstChild(selectedPlayer)
-    if player and player:FindFirstChild("Data") then
-        local data = player.Data
-
-        local defense = data:FindFirstChild("DefenseLevel")
-        local melee = data:FindFirstChild("MeleeLevel")
-        local sniper = data:FindFirstChild("SniperLevel")
-        local sword = data:FindFirstChild("SwordLevel")
-
-        print("------------ STATS -----------")
-        print("-- Defense: lv. " .. (defense and defense.Value or "N/A"))
-        print("-- Melee: lv. " .. (melee and melee.Value or "N/A"))
-        print("-- Sniper: lv. " .. (sniper and sniper.Value or "N/A"))
-        print("-- Sword: lv. " .. (sword and sword.Value or "N/A"))
-        print("-----------------------------------")
-    else
-        print("ไม่พบผู้เล่นหรือ Data")
+page1:Button("/console | Check Data Players!!!", function()
+    local userData = workspace:FindFirstChild("UserData")
+    if not userData then
+        return
     end
+
+    local selectedPlayerName = selectedPlayer -- ชื่อเต็มจาก Dropdown
+    local targetUserFolder = nil
+
+    -- หา User_<ID> ที่ใน Data มีลูกชื่อ selectedPlayerName
+    for _, userFolder in pairs(userData:GetChildren()) do
+        if userFolder.Name:match("^User_%d+$") then
+            local data = userFolder:FindFirstChild("Data")
+            if data and data:FindFirstChild(selectedPlayerName) then
+                targetUserFolder = userFolder
+                break
+            end
+        end
+    end
+
+    if not targetUserFolder then
+        return
+    end
+
+    local data = targetUserFolder:FindFirstChild("Data")
+    if not data then
+        return
+    end
+
+    -- สมมติค่าอยู่ตรงนี้เลย
+    local defense = data:FindFirstChild("DefenseLevel")
+    local melee = data:FindFirstChild("MeleeLevel")
+    local sniper = data:FindFirstChild("SniperLevel")
+    local sword = data:FindFirstChild("SwordLevel")
+
+    print("------------ STATS -----------")
+    print("-- Defense: lv. " .. (defense and defense.Value or "N/A"))
+    print("-- Melee: lv. " .. (melee and melee.Value or "N/A"))
+    print("-- Sniper: lv. " .. (sniper and sniper.Value or "N/A"))
+    print("-- Sword: lv. " .. (sword and sword.Value or "N/A"))
+    print("-----------------------------------")
 end)
 
 page4:Toggle("View", false, function(state)
