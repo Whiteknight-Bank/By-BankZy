@@ -1372,7 +1372,7 @@ page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
 
-local MobList = { "Boar", "Crab", "Angry", "Thief", "Gunslinger", "Freddy" }
+local MobList = { "Boar", "Crab", "Angry", "Freddy" }
 
 local function IsMobAllowed(mobName)
     for _, allowedMob in ipairs(MobList) do
@@ -1387,21 +1387,27 @@ spawn(function()
     while task.wait(0.1) do
         pcall(function()
             if _G.behindFarm then
+                local character = game.Players.LocalPlayer.Character
+                local tool = character and character:FindFirstChildOfClass("Tool")
+
+                -- เช็คว่าอาวุธชื่อ Melee เท่านั้นถึงจะเริ่มทำงาน
+                if not tool or tool.Name ~= "Melee" then
+                    return -- ข้ามรอบนี้ ถ้ายังไม่ได้ถืออาวุธชื่อ Melee
+                end
+
                 for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") 
-                       and mob.Humanoid.Health > 0 and IsMobAllowed(mob.Name) then
-                        while mob.Humanoid.Health > 0 and _G.behindFarm do
-                            local mobRoot = mob.HumanoidRootPart
-                            local playerRoot = game.Players.LocalPlayer.Character.HumanoidRootPart
-                            playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 0, 4)
-                            local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-                            if tool then
-                                tool:Activate()
-                            else
-                                game.Players.LocalPlayer.Character.Humanoid:MoveTo(mobRoot.Position)
-                            end
-                            task.wait(0.1)
-                        end
+                    if mob:FindFirstChild("HumanoidRootPart") and 
+                       mob:FindFirstChild("Humanoid") and 
+                       mob.Humanoid.Health > 0 and 
+                       IsMobAllowed(mob.Name) then
+                        local mobRoot = mob.HumanoidRootPart
+                        local playerRoot = character.HumanoidRootPart
+                        playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 6)
+                        mob.Humanoid.Health = 0
+                        repeat task.wait() until mob.Humanoid.Health <= 0
+                        task.wait(2)
+                        playerRoot.CFrame = mobRoot.CFrame
+                        tool:Activate()
                         break
                     end
                 end
@@ -1409,7 +1415,7 @@ spawn(function()
         end)
     end
 end)
-
+		
 page2:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
