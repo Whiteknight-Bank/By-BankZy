@@ -2628,6 +2628,27 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
+page4:Button("/console | Check Data Players!!!", function()
+    local player = workspace:FindFirstChild(selectedPlayer)
+    if player and player:FindFirstChild("Data") then
+        local data = player.Data
+
+        local defense = data:FindFirstChild("DefenseLevel")
+        local melee = data:FindFirstChild("MeleeLevel")
+        local sniper = data:FindFirstChild("SniperLevel")
+        local sword = data:FindFirstChild("SwordLevel")
+
+        print("------------ STATS -----------")
+        print("-- Defense: lv. " .. (defense and defense.Value or "N/A"))
+        print("-- Melee: lv. " .. (melee and melee.Value or "N/A"))
+        print("-- Sniper: lv. " .. (sniper and sniper.Value or "N/A"))
+        print("-- Sword: lv. " .. (sword and sword.Value or "N/A"))
+        print("-----------------------------------")
+    else
+        print("ไม่พบผู้เล่นหรือ Data")
+    end
+end)
+
 page4:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
