@@ -2627,38 +2627,48 @@ end)
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
-		
+
 page4:Button("Check Data Players!!!", function()
     local selectedName = selectedPlayer
 
     local userData = workspace:FindFirstChild("UserData")
-    if not userData then
-        return
-    end
+    if not userData then return end
 
     local found = false
 
     for _, folder in pairs(userData:GetChildren()) do
         if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
             local data = folder:FindFirstChild("Data")
-            if data then
-                    found = true
+            if data and data:FindFirstChild(selectedName) then
+                found = true
 
-                    local defense = data:FindFirstChild("DefenseLevel")
-                    local melee = data:FindFirstChild("MeleeLevel")
-                    local sniper = data:FindFirstChild("SniperLevel")
-                    local sword = data:FindFirstChild("SwordLevel")
+                -- ผลไม้
+                local fruit1 = data:FindFirstChild("DevilFruit")
+                local fruit2 = data:FindFirstChild("DevilFruit2")
 
-                    print("------------ STATS -----------")
-                    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
-                    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
-                    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
-                    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
-                    print("-----------------------------------")
-                    break
-		end
+                local fruitName1 = fruit1 and fruit1.Value or "None"
+                local fruitName2 = fruit2 and fruit2.Value or "None"
+
+                print("-- Found " .. selectedName .. " Use")
+                print("-- DevilFruit: " .. fruitName1)
+                print("-- DevilFruit2: " .. fruitName2)
+
+                -- ค่าสเตตัส
+                local defense = data:FindFirstChild("DefenseLevel")
+                local melee = data:FindFirstChild("MeleeLevel")
+                local sniper = data:FindFirstChild("SniperLevel")
+                local sword = data:FindFirstChild("SwordLevel")
+
+                print("------------ STATS -----------")
+                print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
+                print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
+                print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
+                print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
+                print("-----------------------------------")
+                break
             end
         end
+    end
 
     if not found then
         print("❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "' ใน UserData ทั้งหมด")
