@@ -2684,7 +2684,55 @@ page4:Button("Check Data Players!!!", function()
 
    create:Notifile("", "Send Check /console ", 6)
 end)
-		
+
+page4:Button("Check Storage Players!!!", function()
+    local selectedName = selectedPlayer
+    local player = game.Players:FindFirstChild(selectedName)
+    if not player then return end
+
+    local userId = tostring(player.UserId)
+    local userData = workspace:FindFirstChild("UserData")
+    if not userData then return end
+
+    local userFolder = userData:FindFirstChild("User_" .. userId)
+    if not userFolder then return end
+
+    local data = userFolder:FindFirstChild("Data")
+    if not data then return end
+
+    local storage1 = data:FindFirstChild("DFT2Defense")
+    local storage2 = data:FindFirstChild("DFT2Melee")
+    local storage3 = data:FindFirstChild("DFT2Sniper")
+    local storage4 = data:FindFirstChild("DFT2Sword")
+    local storage5 = data:FindFirstChild("DFT2Sword")
+    local storage6 = data:FindFirstChild("DFT2Sword")
+    local storage7 = data:FindFirstChild("DFT2Sword")
+    local storage8 = data:FindFirstChild("DFT2Sword")
+    local storage9 = data:FindFirstChild("DFT2Sword")
+    local storage10 = data:FindFirstChild("DFT2Sword")
+    local storage11 = data:FindFirstChild("DFT2Sword")
+    local storage12 = data:FindFirstChild("DFT2Sword")
+
+    print("------------ [USER] -----------")
+    print("Check User: " .. selectedName .. " His Have")
+    print("------------ [STORAGE] ----------")
+    print(" Storage1: " .. (dft1defense and dft1defense.Value or "N/A"))
+    print(" Storage2: " .. (dft1melee and dft1melee.Value or "N/A"))
+    print(" Storage3: " .. (dft1sniper and dft1sniper.Value or "N/A"))
+    print(" Storage4: " .. (dft1sword and dft1sword.Value or "N/A"))
+    print(" Storage5: " .. (dft2defense and dft2defense.Value or "N/A"))
+    print(" Storage6: " .. (dft2melee and dft2melee.Value or "N/A"))
+    print(" Storage7: " .. (dft2sniper and dft2sniper.Value or "N/A"))
+    print(" Storage8: " .. (dft2sword and dft2sword.Value or "N/A"))
+    print(" Storage9: " .. (dft2sword and dft2sword.Value or "N/A"))
+    print(" Storage10: " .. (dft2sword and dft2sword.Value or "N/A"))
+    print(" Storage11: " .. (dft2sword and dft2sword.Value or "N/A"))
+    print(" Storage12: " .. (dft2sword and dft2sword.Value or "N/A"))
+    print("------------------------------")
+
+   create:Notifile("", " ไม่ทำงาน ณ ตอนนี้ ", 6)
+end)
+
 page4:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
