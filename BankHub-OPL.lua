@@ -2689,16 +2689,37 @@ end
 print("-- ========== [DEVIL FRUIT STORAGE] ========== --")
 
 for i, storage in ipairs(storageValues) do
-local value = storage and storage.Value or "N/A"
-if typeof(value) == "string" and value:find("Fruit") then
--- ตัดเลขด้านหลัง (เช่น Flame-Fruit1 → Flame-Fruit)
-local cleaned = value:match("^(.-Fruit)") or value
-print(" Storage " .. i .. ": " .. cleaned)
-else
-print(" Storage " .. i .. ": None")
+    local value = storage and storage.Value or "N/A"
+
+    if typeof(value) == "string" and value:find("Fruit") then
+        -- ตรวจว่ามี [..,1] อยู่ท้ายหรือไม่ (เลขท้ายคือ 1)
+        local hasAura = value:match("%[(.-)%]") -- ดึงค่าข้างใน []
+        local isAura = false
+
+        if hasAura then
+            local parts = {}
+            for number in hasAura:gmatch("%d") do
+                table.insert(parts, tonumber(number))
+            end
+            if tonumber(parts[#parts]) == 1 then
+                isAura = true
+            end
+        end
+
+        -- ดึงชื่อผลไม้ (ก่อน [ หรือ ตัวเลขข้างหลัง)
+        local cleaned = value:match("^(.-Fruit)") or value
+
+        -- พิมพ์ผลลัพธ์
+        if isAura then
+            print(" Storage " .. i .. ": " .. cleaned .. " Aura!")
+        else
+            print(" Storage " .. i .. ": " .. cleaned)
+        end
+    else
+        print(" Storage " .. i .. ": None")
+    end
 end
-end	
-print("-- ==================== --")
+print("-- ============================== --")
 
    create:Notifile("", "Send Check /console Now!!! ", 6)
 end)
