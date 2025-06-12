@@ -2630,49 +2630,36 @@ end)
 
 page4:Button("Check Data Players!!!", function()
     local selectedName = selectedPlayer
+    local player = game.Players:FindFirstChild(selectedName)
+    if not player then return end
 
+    local userId = tostring(player.UserId)
     local userData = workspace:FindFirstChild("UserData")
     if not userData then return end
 
-    local found = false
+    local userFolder = userData:FindFirstChild("User_" .. userId)
+    if not userFolder then return end
 
-    for _, folder in pairs(userData:GetChildren()) do
-        if folder:IsA("Folder") and folder.Name:match("^User_%d+$") then
-            local data = folder:FindFirstChild("Data")
-            if data then
-                found = true
+    local data = userFolder:FindFirstChild("Data")
+    if not data then return end
 
-                -- ผลไม้
-                local fruit1 = data:FindFirstChild("DevilFruit")
-                local fruit2 = data:FindFirstChild("DevilFruit2")
+    local fruit1 = data:FindFirstChild("DevilFruit")
+    local fruit2 = data:FindFirstChild("DevilFruit2")
 
-                local fruitName1 = fruit1 and fruit1.Value or "None"
-                local fruitName2 = fruit2 and fruit2.Value or "None"
+    local defense = data:FindFirstChild("DefenseLevel")
+    local melee = data:FindFirstChild("MeleeLevel")
+    local sniper = data:FindFirstChild("SniperLevel")
+    local sword = data:FindFirstChild("SwordLevel")
 
-                print("-- Found " .. selectedName .. " Use")
-                print("-- DevilFruit: " .. fruitName1)
-                print("-- DevilFruit2: " .. fruitName2)
-
-                -- ค่าสเตตัส
-                local defense = data:FindFirstChild("DefenseLevel")
-                local melee = data:FindFirstChild("MeleeLevel")
-                local sniper = data:FindFirstChild("SniperLevel")
-                local sword = data:FindFirstChild("SwordLevel")
-
-                print("------------ STATS -----------")
-                print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
-                print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
-                print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
-                print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
-                print("-----------------------------------")
-                break
-            end
-        end
-    end
-
-    if not found then
-        print("❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "' ใน UserData ทั้งหมด")
-    end
+    print("-- Found " .. selectedName .. " Use")
+    print("-- ผลไม้ช่อง1: " .. (fruit1 and fruit1.Value or "None"))
+    print("-- ผลไม้ช่อง2: " .. (fruit2 and fruit2.Value or "None"))
+    print("------------ STATS -----------")
+    print("-- Defense lv. " .. (defense and defense.Value or "N/A"))
+    print("-- Melee lv. " .. (melee and melee.Value or "N/A"))
+    print("-- Sniper lv. " .. (sniper and sniper.Value or "N/A"))
+    print("-- Sword lv. " .. (sword and sword.Value or "N/A"))
+    print("-----------------------------------")
 end)
 		
 page4:Toggle("View", false, function(state)
