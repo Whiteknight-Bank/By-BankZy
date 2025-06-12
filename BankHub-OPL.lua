@@ -2628,7 +2628,7 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("Check Data Players!!!", function()
+page4:Button("Check Data & Storage Player!!!", function()
     local selectedName = selectedPlayer
     local player = game.Players:FindFirstChild(selectedName)
     if not player then return end
@@ -2662,7 +2662,7 @@ page4:Button("Check Data Players!!!", function()
     local dft2sword = data:FindFirstChild("DFT2Sword")
 
     print("------------ [USER] -----------")
-    print("User: " .. selectedName .. " ")
+    print("Check User: " .. selectedName .. " His Data All")
     print(" DevilFruit: " .. (fruit1 and fruit1.Value or "None"))
     print(" DevilFruit2: " .. (fruit2 and fruit2.Value or "None"))
     print("------------ [STATS] ----------")
@@ -2680,35 +2680,12 @@ page4:Button("Check Data Players!!!", function()
     print(" DFT2Melee: " .. (dft2melee and dft2melee.Value or "N/A"))
     print(" DFT2Sniper: " .. (dft2sniper and dft2sniper.Value or "N/A"))
     print(" DFT2Sword: " .. (dft2sword and dft2sword.Value or "N/A"))
-    print("------------------------------")
-
-   create:Notifile("", "Send /console ,Check ", 6)
-end)
-
-page4:Button("Check Storage Players!!!", function()
-local selectedName = selectedPlayer
-    local player = game.Players:FindFirstChild(selectedName)
-    if not player then return end
-
-    local userId = tostring(player.UserId)
-    local userData = workspace:FindFirstChild("UserData")
-    if not userData then return end
-
-    local userFolder = userData:FindFirstChild("User_" .. userId)
-    if not userFolder then return end
-
-    local data = userFolder:FindFirstChild("Data")
-    if not data then return end
-
-local storageValues = {}
+    local storageValues = {}
 for i = 1, 12 do
     local found = data:FindFirstChild("StoredDF" .. i)
     table.insert(storageValues, found)
 end
-
-print("------------ [USER] -----------")
-print("Check User: " .. selectedName .. " His Have")
-print("------------ [STORAGE] ----------")
+print("------------ [HIS STORAGE] ----------")
 
 for i, storage in ipairs(storageValues) do
     local value = storage and storage.Value or "N/A"
@@ -2717,14 +2694,14 @@ for i, storage in ipairs(storageValues) do
         local cleaned = value:match("^(.-Fruit)") or value
         print(" Storage " .. i .. ": " .. cleaned)
     else
-        print(" Storage " .. i .. ": N/A")
+        print(" Storage " .. i .. ": None")
     end
-end
+				end	
+    print("------------------------------")
 
-print("------------------------------")
-
-   create:Notifile("", " Send /console ,Check ", 6)
+   create:Notifile("", "Send /console , Check Now!!! ", 6)
 end)
+
 
 page4:Toggle("View", false, function(state)
 	if selectedPlayer then
