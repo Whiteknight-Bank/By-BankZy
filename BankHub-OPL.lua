@@ -2682,11 +2682,11 @@ page4:Button("Check Data Players!!!", function()
     print(" DFT2Sword: " .. (dft2sword and dft2sword.Value or "N/A"))
     print("------------------------------")
 
-   create:Notifile("", "Send Check /console ", 6)
+   create:Notifile("", "Send /console ,Check ", 6)
 end)
 
 page4:Button("Check Storage Players!!!", function()
-    local selectedName = selectedPlayer
+local selectedName = selectedPlayer
     local player = game.Players:FindFirstChild(selectedName)
     if not player then return end
 
@@ -2700,37 +2700,30 @@ page4:Button("Check Storage Players!!!", function()
     local data = userFolder:FindFirstChild("Data")
     if not data then return end
 
-    local storage1 = data:FindFirstChild("StoredDF1")
-    local storage2 = data:FindFirstChild("StoredDF2")
-    local storage3 = data:FindFirstChild("StoredDF3")
-    local storage4 = data:FindFirstChild("StoredDF4")
-    local storage5 = data:FindFirstChild("StoredDF5")
-    local storage6 = data:FindFirstChild("StoredDF6")
-    local storage7 = data:FindFirstChild("StoredDF7")
-    local storage8 = data:FindFirstChild("StoredDF8")
-    local storage9 = data:FindFirstChild("StoredDF9")
-    local storage10 = data:FindFirstChild("StoredDF10")
-    local storage11 = data:FindFirstChild("StoredDF11")
-    local storage12 = data:FindFirstChild("StoredDF12")
+local storageValues = {}
+for i = 1, 12 do
+    local found = data:FindFirstChild("StoredDF" .. i)
+    table.insert(storageValues, found)
+end
 
-    print("------------ [USER] -----------")
-    print("Check User: " .. selectedName .. " His Have")
-    print("------------ [STORAGE] ----------")
-    print(" Storage 1: " .. (storage1 and storage1.Value or "N/A"))
-    print(" Storage 2: " .. (storage2 and storage2.Value or "N/A"))
-    print(" Storage 3: " .. (storage3 and storage3.Value or "N/A"))
-    print(" Storage 4: " .. (storage4 and storage4.Value or "N/A"))
-    print(" Storage 5: " .. (storage5 and storage5.Value or "N/A"))
-    print(" Storage 6: " .. (storage6 and storage6.Value or "N/A"))
-    print(" Storage 7: " .. (storage7 and storage7.Value or "N/A"))
-    print(" Storage 8: " .. (storage8 and storage8.Value or "N/A"))
-    print(" Storage 9: " .. (storage9 and storage9.Value or "N/A"))
-    print(" Storage 10: " .. (storage10 and storage10.Value or "N/A"))
-    print(" Storage 11: " .. (storage11 and storage11.Value or "N/A"))
-    print(" Storage 12: " .. (storage12 and storage12.Value or "N/A"))
-    print("------------------------------")
+print("------------ [USER] -----------")
+print("Check User: " .. selectedName .. " His Have")
+print("------------ [STORAGE] ----------")
 
-   create:Notifile("", " ไม่ทำงาน ณ ตอนนี้ ", 6)
+for i, storage in ipairs(storageValues) do
+    local value = storage and storage.Value or "N/A"
+    if typeof(value) == "string" and value:find("Fruit") then
+        -- ตัดเลขด้านหลัง (เช่น Flame-Fruit1 → Flame-Fruit)
+        local cleaned = value:match("^(.-Fruit)") or value
+        print(" Storage " .. i .. ": " .. cleaned)
+    else
+        print(" Storage " .. i .. ": N/A")
+    end
+end
+
+print("------------------------------")
+
+   create:Notifile("", " Send /console ,Check ", 6)
 end)
 
 page4:Toggle("View", false, function(state)
