@@ -2628,78 +2628,144 @@ page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("Check Data & Storage Player!!!", function()
-    local selectedName = selectedPlayer
-    local player = game.Players:FindFirstChild(selectedName)
-    if not player then return end
+page4:Button("Check Data & Storage Player", function()
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "DataStatsUI"
+gui.ResetOnSpawn = false
 
-    local userId = tostring(player.UserId)
-    local userData = workspace:FindFirstChild("UserData")
-    if not userData then return end
+-- สร้าง Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 600, 0, 500)
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(1.5, 0, 0.5, 0) -- เริ่มนอกจอขวา
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.BackgroundTransparency = 0.3
+mainFrame.BorderSizePixel = 0
+mainFrame.Parent = gui
 
-    local userFolder = userData:FindFirstChild("User_" .. userId)
-    if not userFolder then return end
+-- UI Scale รองรับทุกขนาดหน้าจอ
+local uiScale = Instance.new("UIScale", mainFrame)
+uiScale.Scale = 1
 
-    local data = userFolder:FindFirstChild("Data")
-    if not data then return end
+-- ปุ่มปิด
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+closeBtn.BorderSizePixel = 0
+closeBtn.Parent = mainFrame
 
-    local fruit1 = data:FindFirstChild("DevilFruit")
-    local fruit2 = data:FindFirstChild("DevilFruit2")
+closeBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
 
-    local defense = data:FindFirstChild("DefenseLevel")
-    local melee = data:FindFirstChild("MeleeLevel")
-    local sniper = data:FindFirstChild("SniperLevel")
-    local sword = data:FindFirstChild("SwordLevel")
+-- Scrollable Text Frame
+local scroll = Instance.new("ScrollingFrame")
+scroll.Size = UDim2.new(1, -20, 1, -20)
+scroll.Position = UDim2.new(0, 10, 0, 10)
+scroll.BackgroundTransparency = 1
+scroll.BorderSizePixel = 0
+scroll.CanvasSize = UDim2.new(0, 0, 0, 1000)
+scroll.ScrollBarThickness = 8
+scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scroll.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+scroll.Parent = mainFrame
 
-    local dft1defense = data:FindFirstChild("DFT1Defense")
-    local dft1melee = data:FindFirstChild("DFT1Melee")
-    local dft1sniper = data:FindFirstChild("DFT1Sniper")
-    local dft1sword = data:FindFirstChild("DFT1Sword")
+-- Text Label
+local text = Instance.new("TextLabel")
+text.Size = UDim2.new(1, 0, 0, 0)
+text.Position = UDim2.new(0, 0, 0, 0)
+text.BackgroundTransparency = 1
+text.TextColor3 = Color3.new(1, 1, 1)
+text.Font = Enum.Font.Code
+text.TextSize = 18
+text.TextWrapped = true
+text.TextXAlignment = Enum.TextXAlignment.Left
+text.TextYAlignment = Enum.TextYAlignment.Top
+text.AutomaticSize = Enum.AutomaticSize.Y
+text.Text = "กำลังโหลดข้อมูล..."
+text.Parent = scroll
 
-    local dft2defense = data:FindFirstChild("DFT2Defense")
-    local dft2melee = data:FindFirstChild("DFT2Melee")
-    local dft2sniper = data:FindFirstChild("DFT2Sniper")
-    local dft2sword = data:FindFirstChild("DFT2Sword")
+-- Tween เข้าจอ
+mainFrame:TweenPosition(
+    UDim2.new(0.5, 0, 0.5, 0),
+    Enum.EasingDirection.Out,
+    Enum.EasingStyle.Quad,
+    0.4,
+    true
+)
 
-    print("------------ [USER] -----------")
-    print("Check User: " .. selectedName .. " His Data All")
-    print(" DevilFruit: " .. (fruit1 and fruit1.Value or "None"))
-    print(" DevilFruit2: " .. (fruit2 and fruit2.Value or "None"))
-    print("------------ [STATS] ----------")
-    print(" DefenseLevel: " .. (defense and defense.Value or "N/A"))
-    print(" MeleeLevel: " .. (melee and melee.Value or "N/A"))
-    print(" SniperLevel: " .. (sniper and sniper.Value or "N/A"))
-    print(" SwordLevel: " .. (sword and sword.Value or "N/A"))
-    print("------------ [AFFINITY FRUIT 1] ----------")
-    print(" DFT1Defense: " .. (dft1defense and dft1defense.Value or "N/A"))
-    print(" DFT1Melee: " .. (dft1melee and dft1melee.Value or "N/A"))
-    print(" DFT1Sniper: " .. (dft1sniper and dft1sniper.Value or "N/A"))
-    print(" DFT1Sword: " .. (dft1sword and dft1sword.Value or "N/A"))
-    print("------------ [AFFINITY FRUIT 2] ----------")
-    print(" DFT2Defense: " .. (dft2defense and dft2defense.Value or "N/A"))
-    print(" DFT2Melee: " .. (dft2melee and dft2melee.Value or "N/A"))
-    print(" DFT2Sniper: " .. (dft2sniper and dft2sniper.Value or "N/A"))
-    print(" DFT2Sword: " .. (dft2sword and dft2sword.Value or "N/A"))
-    local storageValues = {}
-for i = 1, 12 do
-    local found = data:FindFirstChild("StoredDF" .. i)
-    table.insert(storageValues, found)
+-- โหลดข้อมูลผู้เล่นที่เลือก
+local selectedName = _G.selectedPlayer or "ใส่ชื่อไว้ตรงนี้"
+local playerFound = game.Players:FindFirstChild(selectedName)
+if not playerFound then
+    text.Text = "❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "'"
+    return
 end
-print("------------ [HIS STORAGE] ----------")
 
-for i, storage in ipairs(storageValues) do
-    local value = storage and storage.Value or "N/A"
-    if typeof(value) == "string" and value:find("Fruit") then
-        -- ตัดเลขด้านหลัง (เช่น Flame-Fruit1 → Flame-Fruit)
-        local cleaned = value:match("^(.-Fruit)") or value
-        print(" Storage " .. i .. ": " .. cleaned)
-    else
-        print(" Storage " .. i .. ": None")
-    end
-				end	
-    print("------------------------------")
+local userId = tostring(playerFound.UserId)
+local userData = workspace:FindFirstChild("UserData")
+if not userData then return end
 
-   create:Notifile("", "Send /console , Check Now!!! ", 6)
+local folder = userData:FindFirstChild("User_" .. userId)
+if not folder then
+    text.Text = "❌ ไม่พบ User_" .. userId
+    return
+end
+
+local data = folder:FindFirstChild("Data")
+if not data then return end
+
+local function safeVal(obj) return obj and obj.Value or "N/A" end
+local function cleanFruit(val)
+    return (typeof(val) == "string" and val:find("Fruit") and (val:match("^(.-Fruit)") or val)) or "None"
+end
+
+-- เก็บข้อมูลใส่ข้อความ
+local out = {}
+table.insert(out, "------------ [USER] -----------")
+table.insert(out, "Check User: " .. selectedName .. " His Data All")
+table.insert(out, " DevilFruit: " .. cleanFruit(safeVal(data:FindFirstChild("DevilFruit"))))
+table.insert(out, " DevilFruit2: " .. cleanFruit(safeVal(data:FindFirstChild("DevilFruit2"))))
+
+table.insert(out, "------------ [STATS] ----------")
+table.insert(out, " DefenseLevel: " .. safeVal(data:FindFirstChild("DefenseLevel")))
+table.insert(out, " MeleeLevel: " .. safeVal(data:FindFirstChild("MeleeLevel")))
+table.insert(out, " SniperLevel: " .. safeVal(data:FindFirstChild("SniperLevel")))
+table.insert(out, " SwordLevel: " .. safeVal(data:FindFirstChild("SwordLevel")))
+
+table.insert(out, "------------ [AFFINITY FRUIT 1] ----------")
+table.insert(out, " DFT1Defense: " .. safeVal(data:FindFirstChild("DFT1Defense")))
+table.insert(out, " DFT1Melee: " .. safeVal(data:FindFirstChild("DFT1Melee")))
+table.insert(out, " DFT1Sniper: " .. safeVal(data:FindFirstChild("DFT1Sniper")))
+table.insert(out, " DFT1Sword: " .. safeVal(data:FindFirstChild("DFT1Sword")))
+
+table.insert(out, "------------ [AFFINITY FRUIT 2] ----------")
+table.insert(out, " DFT2Defense: " .. safeVal(data:FindFirstChild("DFT2Defense")))
+table.insert(out, " DFT2Melee: " .. safeVal(data:FindFirstChild("DFT2Melee")))
+table.insert(out, " DFT2Sniper: " .. safeVal(data:FindFirstChild("DFT2Sniper")))
+table.insert(out, " DFT2Sword: " .. safeVal(data:FindFirstChild("DFT2Sword")))
+
+table.insert(out, "------------ [HIS STORAGE] ----------")
+for i = 1, 12 do
+	local s = data:FindFirstChild("StoredDF" .. i)
+	local val = s and s.Value or nil
+	if typeof(val) == "string" and val:find("Fruit") then
+		local clean = val:match("^(.-Fruit)") or val
+		table.insert(out, " Storage " .. i .. ": " .. clean)
+	else
+		table.insert(out, " Storage " .. i .. ": None")
+	end
+end
+table.insert(out, "------------------------------")
+
+-- ใส่ข้อความใน UI
+text.Text = table.concat(out, "\n")
+
+   create:Notifile("", "Check Now!!! ", 6)
 end)
 
 
