@@ -2699,7 +2699,7 @@ mainFrame:TweenPosition(
 )
 
 -- โหลดข้อมูลผู้เล่นที่เลือก
-local selectedName = _G.selectedPlayer or "ใส่ชื่อไว้ตรงนี้"
+local selectedName = selectedPlayer
 local playerFound = game.Players:FindFirstChild(selectedName)
 if not playerFound then
     text.Text = "❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "'"
