@@ -2764,15 +2764,16 @@ table.insert(out, " DFT2Sword: " .. safeVal(data:FindFirstChild("DFT2Sword")))
 
 table.insert(out, "------------ [HIS STORAGE] ----------")
 for i = 1, 12 do
-	local s = data:FindFirstChild("StoredDF" .. i)
-	local val = s and s.Value or nil
-	if typeof(val) == "string" and val:find("Fruit") then
-		local clean = val:match("^(.-Fruit)") or val
-		table.insert(out, " Storage " .. i .. ": " .. clean)
-	else
-		table.insert(out, " Storage " .. i .. ": None")
-	end
-end
+    local storage = data:FindFirstChild("StoredDF" .. i)
+    local value = storage and storage.Value or "None"
+
+    -- ถ้าเป็นชื่อผลไม้ ให้ตัดเลขข้างหลังออก เช่น "Flame-Fruit1" → "Flame-Fruit"
+    if typeof(value) == "string" and value:find("Fruit") then
+        value = value:match("^(.-Fruit)") or value
+    end
+
+    print(" Storage " .. i .. ": " .. value)
+				end
 table.insert(out, "------------------------------")
 
 text.Text = table.concat(out, "\n")
