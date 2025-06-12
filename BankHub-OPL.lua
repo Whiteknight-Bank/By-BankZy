@@ -2636,58 +2636,15 @@ gui.ResetOnSpawn = false
 
 -- สร้าง Main Frame
 local mainFrame = Instance.new("Frame")
-mainFrame.Size = UDim2.new(0, 600, 0, 500)
+mainFrame.Size = UDim2.new(0, 600, 0, 450)
 mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Position = UDim2.new(1.5, 0, 0.5, 0) -- เริ่มนอกจอขวา
+mainFrame.Position = UDim2.new(1.5, 0, 0.5, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 mainFrame.BackgroundTransparency = 0.3
 mainFrame.BorderSizePixel = 0
+mainFrame.ClipsDescendants = true
+mainFrame.ZIndex = 1
 mainFrame.Parent = gui
-
--- UI Scale รองรับทุกขนาดหน้าจอ
-local uiScale = Instance.new("UIScale", mainFrame)
-uiScale.Scale = 1
-
--- ปุ่มปิด
-local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 30, 0, 30)
-closeBtn.Position = UDim2.new(1, -35, 0, 5)
-closeBtn.Text = "X"
-closeBtn.TextColor3 = Color3.new(1, 1, 1)
-closeBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-closeBtn.BorderSizePixel = 0
-closeBtn.Parent = mainFrame
-
-closeBtn.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
-
--- Scrollable Text Frame
-local scroll = Instance.new("ScrollingFrame")
-scroll.Size = UDim2.new(1, -20, 1, -20)
-scroll.Position = UDim2.new(0, 10, 0, 10)
-scroll.BackgroundTransparency = 1
-scroll.BorderSizePixel = 0
-scroll.CanvasSize = UDim2.new(0, 0, 0, 1000)
-scroll.ScrollBarThickness = 8
-scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
-scroll.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
-scroll.Parent = mainFrame
-
--- Text Label
-local text = Instance.new("TextLabel")
-text.Size = UDim2.new(1, 0, 0, 0)
-text.Position = UDim2.new(0, 0, 0, 0)
-text.BackgroundTransparency = 1
-text.TextColor3 = Color3.new(1, 1, 1)
-text.Font = Enum.Font.Code
-text.TextSize = 18
-text.TextWrapped = true
-text.TextXAlignment = Enum.TextXAlignment.Left
-text.TextYAlignment = Enum.TextYAlignment.Top
-text.AutomaticSize = Enum.AutomaticSize.Y
-text.Text = "กำลังโหลดข้อมูล..."
-text.Parent = scroll
 
 -- Tween เข้าจอ
 mainFrame:TweenPosition(
@@ -2698,11 +2655,67 @@ mainFrame:TweenPosition(
     true
 )
 
--- โหลดข้อมูลผู้เล่นที่เลือก
-local selectedName = selectedPlayer
-local playerFound = game.Players:FindFirstChild(selectedName)
+-- ปุ่มปิด
+local closeBtn = Instance.new("TextButton")
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.Text = "X"
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+closeBtn.BorderSizePixel = 0
+closeBtn.Font = Enum.Font.SourceSansBold
+closeBtn.TextSize = 20
+closeBtn.ZIndex = 5
+closeBtn.Parent = mainFrame
+
+closeBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+-- Scroll Frame
+local scroll = Instance.new("ScrollingFrame")
+scroll.Size = UDim2.new(1, -20, 1, -20)
+scroll.Position = UDim2.new(0, 10, 0, 10)
+scroll.BackgroundTransparency = 1
+scroll.BorderSizePixel = 0
+scroll.ScrollBarThickness = 8
+scroll.CanvasSize = UDim2.new(0, 0, 1, 0)
+scroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scroll.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+scroll.ZIndex = 2
+scroll.Parent = mainFrame
+
+-- UIListLayout + Padding (จัดให้สวย)
+local padding = Instance.new("UIPadding", scroll)
+padding.PaddingTop = UDim.new(0, 5)
+padding.PaddingLeft = UDim.new(0, 5)
+padding.PaddingRight = UDim.new(0, 5)
+
+-- Text Label
+local text = Instance.new("TextLabel")
+text.Size = UDim2.new(1, -10, 0, 0)
+text.Position = UDim2.new(0, 0, 0, 0)
+text.BackgroundTransparency = 1
+text.TextColor3 = Color3.new(1, 1, 1)
+text.Font = Enum.Font.Code
+text.TextSize = 18
+text.TextWrapped = true
+text.TextXAlignment = Enum.TextXAlignment.Left
+text.TextYAlignment = Enum.TextYAlignment.Top
+text.AutomaticSize = Enum.AutomaticSize.Y
+text.Text = "กำลังโหลดข้อมูล..."
+text.ZIndex = 2
+text.Parent = scroll
+
+-- ป้องกันตัวอักษรใหญ่ทะลุ
+local sizeConstraint = Instance.new("UITextSizeConstraint", text)
+sizeConstraint.MaxTextSize = 18
+sizeConstraint.MinTextSize = 10
+
+-- ===== โหลดข้อมูลผู้เล่น =====
+local playerFound = game.Players:FindFirstChild(selectedPlayer)
 if not playerFound then
-    text.Text = "❌ ไม่พบผู้เล่นชื่อ '" .. selectedName .. "'"
+    text.Text = "❌ ไม่พบผู้เล่นชื่อ '" .. selectedPlayer .. "'"
     return
 end
 
@@ -2712,22 +2725,22 @@ if not userData then return end
 
 local folder = userData:FindFirstChild("User_" .. userId)
 if not folder then
-    text.Text = "❌ ไม่พบ User_" .. userId
     return
 end
 
 local data = folder:FindFirstChild("Data")
 if not data then return end
 
+-- Helper function
 local function safeVal(obj) return obj and obj.Value or "N/A" end
 local function cleanFruit(val)
     return (typeof(val) == "string" and val:find("Fruit") and (val:match("^(.-Fruit)") or val)) or "None"
 end
 
--- เก็บข้อมูลใส่ข้อความ
+-- แสดงข้อมูล
 local out = {}
 table.insert(out, "------------ [USER] -----------")
-table.insert(out, "Check User: " .. selectedName .. " His Data All")
+table.insert(out, "Check User: " .. selectedPlayer .. " His Data All")
 table.insert(out, " DevilFruit: " .. cleanFruit(safeVal(data:FindFirstChild("DevilFruit"))))
 table.insert(out, " DevilFruit2: " .. cleanFruit(safeVal(data:FindFirstChild("DevilFruit2"))))
 
@@ -2762,7 +2775,6 @@ for i = 1, 12 do
 end
 table.insert(out, "------------------------------")
 
--- ใส่ข้อความใน UI
 text.Text = table.concat(out, "\n")
 
    create:Notifile("", "Check Now!!! ", 6)
