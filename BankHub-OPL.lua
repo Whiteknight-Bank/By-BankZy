@@ -2772,7 +2772,7 @@ for i = 1, 12 do
         value = value:match("^(.-Fruit)") or value
     end
 
-    print(" Storage " .. i .. ": " .. value)
+    table.insert(out, " Storage " .. i .. ": " .. value)
 				end
 table.insert(out, "------------------------------")
 
