@@ -2663,8 +2663,8 @@ local dft2sword = data:FindFirstChild("DFT2Sword")
 
 print("-- ========== [USER] ========== --")  
 print("Check User: " .. selectedName .. " His Data All")  
-print(" DevilFruit: " .. (fruit1 and fruit1.Value or "None"))  
-print(" DevilFruit2: " .. (fruit2 and fruit2.Value or "None"))  
+print(" DevilFruit: " .. (fruit1 and fruit1.Value))  
+print(" DevilFruit2: " .. (fruit2 and fruit2.Value))  
 print("-- ========== [STATS] ========== --")  
 print(" DefenseLevel: " .. (defense and defense.Value or "N/A"))  
 print(" MeleeLevel: " .. (melee and melee.Value or "N/A"))  
@@ -2694,7 +2694,7 @@ for i, storage in ipairs(storageValues) do
     if typeof(value) == "string" and value:find("Fruit") then
         local parts = string.split(value, ",")
         local fruitName = parts[1]
-        local aura = parts[6] == "1" and " Aura!" or ""
+        local aura = parts[6] == "1" and " [ Aura ]" or ""
 
         print(" Storage " .. i .. ": " .. fruitName .. aura)
     else
