@@ -416,7 +416,6 @@ page1:Button("Save Point", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
-        print("✅ Saved CFrame:", _G.savedCFrame)
         create:Notifile("Saved Point!", "Your position has been saved.", 3)
     end
 end)
@@ -439,14 +438,13 @@ end
 end
 end)
 		
-page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
+page1:Toggle("Auto Spawn Die With Save Point", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
 function TeleportToSavedCFrame()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp and _G.savedCFrame then
-        print("✅ Teleporting to saved CFrame:", _G.savedCFrame)
         hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
     end
 end
@@ -471,7 +469,7 @@ spawn(function()
                     repeat
                         wait(0.1)
                         hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    until hrp and hrp.Position.Y < 220
+                    until hrp and hrp.Position.Y < 300000
                     
                     TeleportToSavedCFrame()
                 end
@@ -479,7 +477,24 @@ spawn(function()
         end
     end
 end)
-		
+
+_G.autodie = true
+
+spawn(function()
+    while wait(0.5) do
+        if _G.autorespawn then
+            local player = game.Players.LocalPlayer
+            local char = workspace:FindFirstChild(player.Name)
+            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                local yPos = char.HumanoidRootPart.Position.Y
+                if yPos < 300000 and char.Humanoid.Health > 0 then
+                    char.Humanoid.Health = 0
+                end
+            end
+        end
+    end
+end)
+
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
