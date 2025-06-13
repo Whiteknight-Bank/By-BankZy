@@ -486,13 +486,17 @@ spawn(function()
             if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
                 local yPos = char.HumanoidRootPart.Position.Y
                 if yPos < 242 and char.Humanoid.Health > 0 then
-                    char.Humanoid.Health = 0
+                    wait(2)
+                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                        if char.HumanoidRootPart.Position.Y < 215 then
+                            char.Humanoid.Health = 0
+                        end
+                    end
                 end
             end
         end
     end
 end)
-
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
