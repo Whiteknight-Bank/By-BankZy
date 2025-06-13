@@ -2692,24 +2692,26 @@ for i, storage in ipairs(storageValues) do
     local value = storage and storage.Value or "N/A"
 
     if typeof(value) == "string" and value:find("Fruit") then
-        -- ตรวจว่ามี [..,1] อยู่ท้ายหรือไม่ (เลขท้ายคือ 1)
-        local hasAura = value:match("%[(.-)%]") -- ดึงค่าข้างใน []
+        -- แยกชื่อผลไม้ก่อน [ หรือ ตัวเลขข้างหลัง
+        local cleaned = value:match("^(.-Fruit)") or value
+
+        -- ตรวจดูว่ามีข้อมูลใน [] และเช็คลำดับที่ 5
+        local statString = value:match("%[(.-)%]") -- เอาค่าใน [ ... ]
         local isAura = false
 
-        if hasAura then
+        if statString then
             local parts = {}
-            for number in hasAura:gmatch("%d") do
+            for number in statString:gmatch("%d") do
                 table.insert(parts, tonumber(number))
             end
-            if tonumber(parts[#parts]) == 1 then
+
+            -- ตรวจลำดับที่ 5 (index 5 ใน table)
+            if parts[5] == 1 then
                 isAura = true
             end
         end
 
-        -- ดึงชื่อผลไม้ (ก่อน [ หรือ ตัวเลขข้างหลัง)
-        local cleaned = value:match("^(.-Fruit)") or value
-
-        -- พิมพ์ผลลัพธ์
+        -- พิมพ์ชื่อ + Aura ถ้าตรงเงื่อนไข
         if isAura then
             print(" Storage " .. i .. ": " .. cleaned .. " Aura!")
         else
@@ -2719,7 +2721,8 @@ for i, storage in ipairs(storageValues) do
         print(" Storage " .. i .. ": None")
     end
 end
-print("-- ============================== --")
+
+print("-- =================================== --")
 
    create:Notifile("", "Send Check /console Now!!! ", 6)
 end)
