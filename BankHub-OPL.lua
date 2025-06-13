@@ -469,7 +469,7 @@ spawn(function()
                     repeat
                         wait(0.1)
                         hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    until hrp and hrp.Position.Y < 300000
+                    until hrp and hrp.Position.Y < 242
                     
                     TeleportToSavedCFrame()
                 end
@@ -478,8 +478,6 @@ spawn(function()
     end
 end)
 
-_G.autodie = true
-
 spawn(function()
     while wait(0.5) do
         if _G.autorespawn then
@@ -487,7 +485,7 @@ spawn(function()
             local char = workspace:FindFirstChild(player.Name)
             if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
                 local yPos = char.HumanoidRootPart.Position.Y
-                if yPos < 300000 and char.Humanoid.Health > 0 then
+                if yPos < 242 and char.Humanoid.Health > 0 then
                     char.Humanoid.Health = 0
                 end
             end
