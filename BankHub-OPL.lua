@@ -2759,36 +2759,34 @@ spawn(function() -- bring Plr
     end
 end)
 		
-page4:Toggle("Aim Silent", false, function(value)
+page4:Toggle("Aim Silent (Select Player)", false, function(value)
     aimsilent = value
 end)
 
-spawn(function() -- aim silent 
-    pcall(function()
-        while true do wait()
-            pcall(function()
-                local plr1 = game.Players.LocalPlayer.Character
-                local plr2 = game.Players:FindFirstChild(selectedPlayer)
-                if aimsilent then
-                    cacacac = plr2.Character.HumanoidRootPart.CFrame
-                end
-            end)
-        end
-    end)
+spawn(function()--aim silent
+pcall(function()
+while true do wait()
+pcall(function()
+local plr1 = game.Players.LocalPlayer.Character
+local plr2 = game.Players:FindFirstChild(selectedPlayer)
+if aimsilent then
+cacacac = plr2.Character.HumanoidRootPart.CFrame
+end
+end)
+end
+end)
 end)
 
-local mouse = game.Players.LocalPlayer:GetMouse()
-local oldIndex = nil
-
-oldIndex = hookmetamethod(game, "__index", function(self, key)
-    if self == mouse and key == "hit" and aimsilent and selectedPlayer then
-        local targetPlr = game.Players:FindFirstChild(selectedPlayer)
-        if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
-            return targetPlr.Character.HumanoidRootPart.CFrame
-        end
-    end
-    return oldIndex(self, key)
+local index = mta.__index
+cf = CFrame.new(1, 2, 3)
+setreadonly(mta, false)
+mta.__index = newcclosure(function(a, b, c)
+if tostring(b):lower() == 'hit' and aimsilent then
+return cacacac
+end
+return index(a, b, c)
 end)
+
 
 page4:Label("┇ Function Kill Players ┇")
 page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
