@@ -420,13 +420,13 @@ page1:Button("Save Point", function()
     end
 end)
 		
-page1:Toggle("Auto Spawn", false, function(aspw)
-        _G.respawn = aspw
+page1:Toggle("Auto Spawn With Auto Death", false, function(aspw)
+        _G.respawndie = aspw
 end)
 
 spawn(function()--autorespawn
 while wait() do
-if _G.respawn then
+if _G.respawndie then
 pcall(function()
 if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
 for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
@@ -437,8 +437,28 @@ end)
 end
 end
 end)
-		
-page1:Toggle("Auto Spawn Die With Save Point", false, function(rspw)
+
+spawn(function()
+    while wait() do
+        if _G.respawndie then
+            local player = game.Players.LocalPlayer
+            local char = workspace:FindFirstChild(player.Name)
+            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                local yPos = char.HumanoidRootPart.Position.Y
+                if yPos < 242 and char.Humanoid.Health > 0 then
+                    wait(3)
+                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                        if char.HumanoidRootPart.Position.Y < 215 then
+                            char.Humanoid.Health = 0
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
@@ -465,7 +485,6 @@ spawn(function()
                     
                     local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     
-                    -- รอจน Y < 220
                     repeat
                         wait(0.1)
                         hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
@@ -478,25 +497,6 @@ spawn(function()
     end
 end)
 
-spawn(function()
-    while wait(0.5) do
-        if _G.autorespawn then
-            local player = game.Players.LocalPlayer
-            local char = workspace:FindFirstChild(player.Name)
-            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                local yPos = char.HumanoidRootPart.Position.Y
-                if yPos < 242 and char.Humanoid.Health > 0 then
-                    wait(2)
-                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                        if char.HumanoidRootPart.Position.Y < 215 then
-                            char.Humanoid.Health = 0
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
