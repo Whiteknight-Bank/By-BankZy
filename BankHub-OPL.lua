@@ -2690,33 +2690,13 @@ print("-- ========== [DEVIL FRUIT STORAGE] ========== --")
 
 for i, storage in ipairs(storageValues) do
     local value = storage and storage.Value or "N/A"
-
+    
     if typeof(value) == "string" and value:find("Fruit") then
-        -- แยกชื่อผลไม้ก่อน [ หรือ ตัวเลขข้างหลัง
-        local cleaned = value:match("^(.-Fruit)") or value
+        local parts = string.split(value, ",")
+        local fruitName = parts[1]
+        local aura = parts[6] == "1" and " Aura!" or ""
 
-        -- ตรวจดูว่ามีข้อมูลใน [] และเช็คลำดับที่ 5
-        local statString = value:match("%[(.-)%]") -- เอาค่าใน [ ... ]
-        local isAura = false
-
-        if statString then
-            local parts = {}
-            for number in statString:gmatch("%d") do
-                table.insert(parts, tonumber(number))
-            end
-
-            -- ตรวจลำดับที่ 5 (index 5 ใน table)
-            if parts[5] == 1 then
-                isAura = true
-            end
-        end
-
-        -- พิมพ์ชื่อ + Aura ถ้าตรงเงื่อนไข
-        if isAura then
-            print(" Storage " .. i .. ": " .. cleaned .. " Aura!")
-        else
-            print(" Storage " .. i .. ": " .. cleaned)
-        end
+        print(" Storage " .. i .. ": " .. fruitName .. aura)
     else
         print(" Storage " .. i .. ": None")
     end
