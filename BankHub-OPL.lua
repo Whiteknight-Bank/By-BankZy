@@ -88,107 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
--- UI
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "UpdatePopupCenter"
-screenGui.ResetOnSpawn = false
-screenGui.IgnoreGuiInset = true
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
--- Main Frame (กลางจอจริง ๆ แนวตั้ง+แนวนอน)
-local mainFrame = Instance.new("Frame")
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-mainFrame.Size = UDim2.new(0, 500, 0, 50)
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-mainFrame.BackgroundTransparency = 0.3
-mainFrame.BorderSizePixel = 0
-mainFrame.ClipsDescendants = true
-mainFrame.Parent = screenGui
-
--- ปุ่มลูกศรซ้าย
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 40, 0, 50)
-toggleButton.Position = UDim2.new(0, 0, 0, 0)
-toggleButton.BackgroundTransparency = 1
-toggleButton.Text = "▼"
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 22
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Parent = mainFrame
-
--- ปุ่มปิดขวา
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 40, 0, 50)
-closeButton.AnchorPoint = Vector2.new(1, 0)
-closeButton.Position = UDim2.new(1, 0, 0, 0)
-closeButton.BackgroundTransparency = 1
-closeButton.Text = "✖"
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 22
-closeButton.TextColor3 = Color3.fromRGB(255, 100, 100)
-closeButton.Parent = mainFrame
-
--- หัวข้อ NEW UPDATE (กลางบน)
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -100, 0, 50)
-titleLabel.Position = UDim2.new(0, 50, 0, 0)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "NEW UPDATE"
-titleLabel.TextColor3 = Color3.new(1, 1, 1)
-titleLabel.Font = Enum.Font.GothamBlack
-titleLabel.TextSize = 22
-titleLabel.TextXAlignment = Enum.TextXAlignment.Center
-titleLabel.TextYAlignment = Enum.TextYAlignment.Center
-titleLabel.Parent = mainFrame
-
--- เนื้อหา
-local contentFrame = Instance.new("Frame")
-contentFrame.Size = UDim2.new(1, 0, 0, 160)
-contentFrame.Position = UDim2.new(0, 0, 0, 50)
-contentFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-contentFrame.BackgroundTransparency = 0.4
-contentFrame.BorderSizePixel = 0
-contentFrame.Parent = mainFrame
-
-local label = Instance.new("TextLabel")
-label.Size = UDim2.new(1, -30, 1, -30)
-label.Position = UDim2.new(0, 15, 0, 15)
-label.BackgroundTransparency = 1
-label.Text = "- เพิ่ม Spam Skill ให้ทำงานได้ มีหลายตัวเลือกให้ใช้"
-label.TextColor3 = Color3.new(1, 1, 1)
-label.TextWrapped = true
-label.Font = Enum.Font.Gotham
-label.TextSize = 16
-label.TextXAlignment = Enum.TextXAlignment.Left
-label.TextYAlignment = Enum.TextYAlignment.Top
-label.Parent = contentFrame
-
--- Animation
-local expandedSize = UDim2.new(0, 500, 0, 210)
-local collapsedSize = UDim2.new(0, 500, 0, 50)
-local isOpen = false
-
--- ปุ่มลูกศร: เปิด/ปิดกล่อง
-toggleButton.MouseButton1Click:Connect(function()
-	isOpen = not isOpen
-	local newSize = isOpen and expandedSize or collapsedSize
-	toggleButton.Text = isOpen and "▲" or "▼"
-
-	TweenService:Create(mainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Size = newSize
-	}):Play()
-end)
-
--- ปุ่มปิดทั้งหมด
-closeButton.MouseButton1Click:Connect(function()
-	mainFrame.Visible = false
-end)
-
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("InW Hub : For Map One Piece: Legendary")
 
@@ -2649,7 +2548,7 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Toggle("Auto Bring Player( All )", false, function(plal)
+page4:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -2670,7 +2569,7 @@ spawn(function() -- bring Plr
     end
 end)
 		
-page4:Toggle("Aim Silent (Select Player)", false, function(value)
+page4:Toggle("Aim Silent [ Select Player ]", false, function(value)
     aimsilent = value
 end)
 
@@ -3556,7 +3455,7 @@ spawn(function()
 end)
 
 page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Quake Steal Rare Fruit (เทส)", false, function(qkst)
+page7:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
     _G.quakesteal = qkst
 end)
 
@@ -3630,7 +3529,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Bomb Steal Rare Fruit (เทส)", false, function(qkst)
+page7:Toggle("Auto Bomb Steal Rare Fruit", false, function(qkst)
     _G.bombsteal = qkst
 end)
 
@@ -4341,12 +4240,6 @@ page8:Label("┇ The Secret Weapon Progress ┇")
 page8:Dropdown("Check Progress Weapon:", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
-page8:Section("↑ Execute Again, It will Refresh ↑")
-page8:Button("Check!!!" , function()
-local A_1 = "Aqua Staff"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
-    Event:FireServer(A_1)
-end)
 
 page8:Label("┇ Fake Weapon ┇")
 page8:Button("Aqua Staff" , function()
@@ -4355,7 +4248,7 @@ local A_1 = "Aqua Staff"
     Event:FireServer(A_1)
 end)
 
-page8:Button("Seastone Cestus ( Need 500 Melee )" , function()
+page8:Button("Seastone Cestus [ Need 500 Melee ]" , function()
 local A_1 = "Seastone Cestus"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
     Event:FireServer(A_1)
@@ -4364,6 +4257,12 @@ end)
 local Tab9 = Window:Taps("Dupe Gems")
 local page9 = Tab9:newpage()
 
+page9:Button("DUPE GAMES [ NOT WORKING ]" , function()
+print("Not Working")
+end)
+page9:Button("TURN GEM INTO BERI [ NOT WORKING ]" , function()
+print("Not Working")
+end)
 page9:Section("อาจมีเข้าแน่นอน รอการเทสจากเจ้าของ")
 
 	end)
