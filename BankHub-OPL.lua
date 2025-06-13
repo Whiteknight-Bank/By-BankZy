@@ -241,7 +241,7 @@ local Camera = workspace.CurrentCamera
 spawn(function() -- autofarm velocity
     while wait(0) do
         pcall(function()
-            if AutoFish or AutoPack or _G.behindFarm or _G.rumblefarm or _G.killbomb then
+            if AutoFish or AutoPack or _G.behindFarm or _G.bombsteal or _G.killbomb then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                     local Noclip = Instance.new("BodyVelocity")
                     Noclip.Name = "BodyClip"
@@ -250,7 +250,7 @@ spawn(function() -- autofarm velocity
                     Noclip.Velocity = Vector3.new(0,0,0)
                 end
                 game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
-            elseif  AutoFish == false or AutoPack == false or _G.behindFarm == false or _G.rumblefarm == false or _G.killbomb == false then
+            elseif  AutoFish == false or AutoPack == false or _G.behindFarm == false or _G.bombsteal == false or _G.killbomb == false then
                 --if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                 game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
                 wait(1)
@@ -1806,95 +1806,6 @@ spawn(function() -- Light farm npcs
                     end
                 end
             end
-        end)
-    end
-end)
-
-page2:Toggle("Auto Farm Rumble (Slow)", false, function(rlb)
-    _G.rumblefarm = rlb
-end)
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-spawn(function()
-    while task.wait() do
-        if _G.rumblefarm then
-            pcall(function()
-                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                local hrp = character:WaitForChild("HumanoidRootPart")
-
-                local positions = {
-                    Vector3.new(-1277, 400, -1696),
-                    Vector3.new(-76, 215, -892),
-                    Vector3.new(1237, 340, -244),
-                    Vector3.new(1237, 340, -244),
-                    Vector3.new(-1668, 317, -300),
-                    Vector3.new(-1109, 341, 1645),
-                    Vector3.new(1079, 445, -3334),
-                    Vector3.new(4646, 316, 5191),
-                    Vector3.new(2222, 300, -631)
-                }
-
-                for _, pos in ipairs(positions) do
-                    hrp.CFrame = CFrame.new(pos)
-                    task.wait(10)
-                end
-            end)
-        end
-    end
-end)
-
-
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.rumblefarm then
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local rumble = char:FindFirstChild("Powers") and char.Powers:FindFirstChild("Rumble")
-                if not rumble then return end
-
-                -- ลิสต์คำที่ต้องการกรอง
-                local targetKeywords = { "Angry", "Boar", "Crab", "Bandit", "Cave", "Gunslingers", "Thug" ,"Thief", "Freddy" }
-
-                for _, v in pairs(workspace.Enemies:GetChildren()) do  
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health > 0 and v.Name ~= "SetInstances" then  
-                        -- ตรวจสอบว่าชื่อตรงกับคีย์เวิร์ดใดในลิสต์ไหม
-                        local match = false
-                        for _, keyword in ipairs(targetKeywords) do
-                            if string.find(v.Name, keyword) then
-                                match = true
-                                break
-                            end
-                        end
-
-                        if match then
-                            local dist = (char.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude  
-                            if dist < 10000000000000000000000 then  
-                                -- รีเฟรช VTQ  
-                                local VTR = rumble.RemoteEvent.RemoteFunction:InvokeServer()  
-
-                                v.HumanoidRootPart.CanCollide = false  
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)  
-
-                                local args = {
-                                    [1] = VTR,
-                                    [2] = "RumblePower2",
-                                    [3] = "StopCharging",
-                                    [4] = v.HumanoidRootPart.Position,
-                                    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("Base"):WaitForChild("Rocks"):WaitForChild("Rock"),
-                                    [6] = 200,
-                                    [7] = char.HumanoidRootPart.Position
-                                }
-
-                                rumble.RemoteEvent:FireServer(unpack(args))
-                                task.wait(0.5)
-                            end
-                        end
-                    end  
-                end  
-            end  
         end)
     end
 end)
@@ -3496,12 +3407,12 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
-page7:Button("Add Rare Fruitlist To Storage", function()
-table.insert(Cache.Player.Inputfruitlist, Cache.Player.Inputfruitname)
+page7:Toggle("Auto Storage", false, function(value)
+    Cache.Boolean.StorageAll = value
 end)
 
-page7:Toggle("Auto Storage All", false, function(value)
-    Cache.Boolean.StorageAll = value
+page7:Toggle("Auto Storage Aura", false, function(shy)
+    Cache.Boolean.StorageKeepShiny = shy
 end)
 
 local function HandleFruits()
@@ -3510,12 +3421,22 @@ local function HandleFruits()
             if CheckStorage(Index) then
                 for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                     if Fruit:IsA("Tool") then
-                        for _, FruitName in pairs(Cache.Player.Inputfruitlist) do
-                            if string.match(string.lower(Fruit.Name), string.lower(FruitName)) or 
-                               (Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment")) then
-                                StoreFruit(Index, Fruit)
+                        local isRare = false
+                        for _, FruitName in pairs(rareFruits) do
+                            if string.lower(Fruit.Name) == string.lower(FruitName) then
+                                isRare = true
                                 break
                             end
+                        end
+
+                        local hasAura = false
+                        if Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment") then
+                            hasAura = true
+                        end
+
+                        if isRare or hasAura then
+                            StoreFruit(Index, Fruit)
+                            break
                         end
                     end
                 end
@@ -3741,85 +3662,54 @@ end
 return index(a, b, c)
 end)
 		
--- ค้นหาผู้เล่นที่มีผลไม้หายาก
-spawn(function()
-    while wait(0.1) do
-        if _G.bombsteal then
-            pcall(function()
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    if player ~= game.Players.LocalPlayer and player.Character then
-                        local backpack = player:FindFirstChild("Backpack")
-                        local character = player.Character
-                        local found = false
-
-                        if backpack then
-                            for _, item in pairs(backpack:GetChildren()) do
-                                if table.find(rareFruits, item.Name) then
-                                    found = true
-                                    break
-                                end
-                            end
-                        end
-
-                        for _, tool in pairs(character:GetChildren()) do
-                            if tool:IsA("Tool") and table.find(rareFruits, tool.Name) then
-                                found = true
-                                break
-                            end
-                        end
-
-                        if found then
-                            selectedPlayer = player.Name
-                            break
-                        end
-                    end
-                end
-            end)
-        else
-            selectedPlayer = nil
-	    cacacac = nil
-        end
-    end
-end)
-
--- ยิง bomb + วาร์ป + reset เป้า (X)
 spawn(function()
     while wait(0.1) do
         pcall(function()
             if _G.bombsteal and selectedPlayer then
-                local pla = game.Players.LocalPlayer
-                local Mouse = pla:GetMouse()
-                local targetPlr = game.Players:FindFirstChild(selectedPlayer)
+                local plr = game.Players.LocalPlayer
+                local char = plr.Character
+                local target = game.Players:FindFirstChild(selectedPlayer)
+                if target and target.Character then
+                    local humanoid = target.Character:FindFirstChildOfClass("Humanoid")
+                    local hrp = target.Character:FindFirstChild("HumanoidRootPart")
+                    if humanoid and humanoid.Health > 0 and hrp then
+                        -- วาปทุกลูปเลย
+                        char.HumanoidRootPart.CFrame = hrp.CFrame + Vector3.new(0, 20, 0)
 
-                if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
-                    local targetPos = targetPlr.Character.HumanoidRootPart.Position + Vector3.new(0, 20, 0)
-                    pla.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+                        local vim = game:GetService("VirtualInputManager")
+                        vim:SendKeyEvent(true, Enum.KeyCode.X, false, game)
+                        task.wait(0.05)
+                        vim:SendKeyEvent(false, Enum.KeyCode.X, false, game)
 
-                    local vim = game:GetService("VirtualInputManager")
-                    vim:SendKeyEvent(true, Enum.KeyCode.X, false, game)
-                    task.wait(0.05)
-                    vim:SendKeyEvent(false, Enum.KeyCode.X, false, game)
-                    task.wait(0.1)
+                        local Mouse = plr:GetMouse()
 
-                    local args1 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower5",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Hit,
-                        [5] = Mouse.Target,
-                        [6] = 100
-                    }
-                    pla.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args1))
+                        local args1 = {
+                            [1] = tonumber(serializeTable(remotes)),
+                            [2] = "BombPower5",
+                            [3] = "StopCharging",
+                            [4] = Mouse.Hit,
+                            [5] = Mouse.Target,
+                            [6] = 100
+                        }
+                        char.Powers.Bomb.RemoteEvent:FireServer(unpack(args1))
 
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower5",
-                        [3] = "StartCharging",
-                        [4] = pla.Character.HumanoidRootPart.CFrame,
-                        [5] = workspace.CurrentCamera,
-                        [6] = "Right"
-                    }
-                    pla.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+                        local args2 = {
+                            [1] = tonumber(serializeTable(remotes)),
+                            [2] = "BombPower5",
+                            [3] = "StartCharging",
+                            [4] = char.HumanoidRootPart.CFrame,
+                            [5] = workspace.CurrentCamera,
+                            [6] = "Right"
+                        }
+                        char.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+                    else
+                        -- หยุดลูปเมื่อเลือด = 0
+                        selectedPlayer = nil
+		        cacacac = nil
+                    end
+                else
+                    selectedPlayer = nil
+		    cacacac = nil
                 end
             end
         end)
