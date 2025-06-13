@@ -3709,6 +3709,123 @@ spawn(function()
     end
 end)
 
+page7:Toggle("Auto Bomb Steal Rare Fruit (เทส)", false, function(qkst)
+    _G.bombsteal = qkst
+end)
+
+local cacacac = nil
+local selectedPlayer = nil
+
+spawn(function()--aim silent
+pcall(function()
+while true do wait()
+pcall(function()
+if _G.bombsteal then
+    local plr2 = game.Players:FindFirstChild(selectedPlayer)
+    if plr2 and plr2.Character and plr2.Character:FindFirstChild("HumanoidRootPart") then
+        cacacac = plr2.Character.HumanoidRootPart.CFrame
+    end
+end
+end)
+end
+end)
+end)
+
+local index = mta.__index
+cf = CFrame.new(1, 2, 3)
+setreadonly(mta, false)
+mta.__index = newcclosure(function(a, b, c)
+if tostring(b):lower() == 'hit' and _G.bombsteal then
+return cacacac
+end
+return index(a, b, c)
+end)
+		
+-- ค้นหาผู้เล่นที่มีผลไม้หายาก
+spawn(function()
+    while wait(0.1) do
+        if _G.bombsteal then
+            pcall(function()
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    if player ~= game.Players.LocalPlayer and player.Character then
+                        local backpack = player:FindFirstChild("Backpack")
+                        local character = player.Character
+                        local found = false
+
+                        if backpack then
+                            for _, item in pairs(backpack:GetChildren()) do
+                                if table.find(rareFruits, item.Name) then
+                                    found = true
+                                    break
+                                end
+                            end
+                        end
+
+                        for _, tool in pairs(character:GetChildren()) do
+                            if tool:IsA("Tool") and table.find(rareFruits, tool.Name) then
+                                found = true
+                                break
+                            end
+                        end
+
+                        if found then
+                            selectedPlayer = player.Name
+                            break
+                        end
+                    end
+                end
+            end)
+        else
+            selectedPlayer = nil
+	    cacacac = nil
+        end
+    end
+end)
+
+-- ยิง bomb + วาร์ป + reset เป้า (X)
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if _G.bombsteal and selectedPlayer then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+                local targetPlr = game.Players:FindFirstChild(selectedPlayer)
+
+                if targetPlr and targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetPos = targetPlr.Character.HumanoidRootPart.Position + Vector3.new(0, 20, 0)
+                    pla.Character.HumanoidRootPart.CFrame = CFrame.new(targetPos)
+
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendKeyEvent(true, Enum.KeyCode.X, false, game)
+                    task.wait(0.05)
+                    vim:SendKeyEvent(false, Enum.KeyCode.X, false, game)
+                    task.wait(0.1)
+
+                    local args1 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower5",
+                        [3] = "StopCharging",
+                        [4] = Mouse.Hit,
+                        [5] = Mouse.Target,
+                        [6] = 100
+                    }
+                    pla.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args1))
+
+                    local args2 = {
+                        [1] = tonumber(serializeTable(remotes)),
+                        [2] = "BombPower5",
+                        [3] = "StartCharging",
+                        [4] = pla.Character.HumanoidRootPart.CFrame,
+                        [5] = workspace.CurrentCamera,
+                        [6] = "Right"
+                    }
+                    pla.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+                end
+            end
+        end)
+    end
+end)
+
 page7:Label("↑ Use Quake to Steal Fruit ↑")
 
 local Tab8 = Window:Taps("Misc")
