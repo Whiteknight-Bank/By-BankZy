@@ -397,7 +397,8 @@ page2:Toggle("Auto Sword Farm", false, function(frms)
                 end)  
             end)  
         end
-
+     end
+				
     spawn(function()
         while task.wait() do
             pcall(function()
