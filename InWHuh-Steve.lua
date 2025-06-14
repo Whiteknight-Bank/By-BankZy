@@ -327,7 +327,7 @@ spawn(function()
     while task.wait() do
         pcall(function()
             if _G.behindFarm and SelectedMob ~= "" then
-                for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
                     if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
                         local root = mob.HumanoidRootPart
                         root.CanCollide = false
