@@ -358,11 +358,45 @@ spawn(function()
 end)
 		
 page1:Toggle("Auto Buso Haki", false, function(hki)
-    AutoHaki = hki
+    _G.autohakibuso = hki
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.autobuso then
+                local player = game.Players.LocalPlayer
+                local char = workspace:FindFirstChild(player.Name)
+                if char and not char:FindFirstChild("Buso") then
+                    -- ถ้ายังไม่มี Buso ให้กดปุ่ม T ครั้งเดียว
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.T, false, game)
+                    task.wait(0.1)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.T, false, game)
+                end
+            end
+        end)
+    end
 end)
 
 page1:Toggle("Auto Ken Haki", false, function(gthi)
-    _G.genhaki = gthi
+    _G.autokenhaki = gthi
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.autokenhaki then
+                local player = game.Players.LocalPlayer
+                local char = workspace:FindFirstChild(player.Name)
+                if char and not char:FindFirstChild("Buso") then
+                    -- ถ้ายังไม่มี Buso ให้กดปุ่ม T ครั้งเดียว
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                    task.wait(0.1)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                end
+            end
+        end)
+    end
 end)
 
 page1:Toggle("Auto Gun Farm [ Not Working ]", false, function(hki)
