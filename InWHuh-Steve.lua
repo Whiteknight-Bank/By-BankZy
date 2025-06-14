@@ -269,7 +269,6 @@ page2:Label("┇ Function Farm ┇")
 local SelectedMob = ""
 
 page2:Dropdown("Select Mobs:", {
-"All",
 "Thief(Lvl:5)",
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
@@ -280,7 +279,6 @@ SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อม
 end)
 
 page2:Dropdown("Select NPC", {
-"All",
 "Big head boy [ Thief ]",
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
