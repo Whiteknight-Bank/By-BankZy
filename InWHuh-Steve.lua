@@ -342,14 +342,21 @@ page2:Dropdown("Select NPC", {
     "That noob [ Luffy ]"
 }, function(mbon)
     getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
+    print("Selected NPC:", getgenv().selectedNPC)
 end)
+
+local autoClaimLoop = nil
 
 page2:Toggle("Auto Claim Quest", false, function(state)
     _G.claim = state
 
-    local foundNPC = nil
+    if autoClaimLoop then
+        autoClaimLoop:Disconnect()
+        autoClaimLoop = nil
+    end
+
     if _G.claim and getgenv().selectedNPC then
-        -- ค้นหาแค่ครั้งเดียว
+        local foundNPC = nil
         for _, obj in ipairs(workspace:GetDescendants()) do
             if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then
                 local head = obj:FindFirstChild("Head")
@@ -359,17 +366,17 @@ page2:Toggle("Auto Claim Quest", false, function(state)
                 end
             end
         end
-    end
 
-    spawn(function()
-        while task.wait() do
-            pcall(function()
-                if _G.claim and foundNPC then
-                    fireclickdetector(foundNPC)
-                end
+        if foundNPC then
+            autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                pcall(function()
+                    if _G.claim then
+                        fireclickdetector(foundNPC)
+                    end
+                end)
             end)
         end
-    end)
+    end
 end)
 
 page2:Toggle("Auto Farm", false, function(befrm)
@@ -430,12 +437,15 @@ spawn(function()
 
             local tool = getQualifiedTool()
 
+            -- เช็คและ Equip
             if tool and not character:FindFirstChild(tool.Name) then
-                tool.Parent = character
+                humanoid:EquipTool(tool)
                 task.wait(0.05)
-                if character:FindFirstChild(tool.Name) then
-                    tool:Activate()
-                end
+            end
+
+            -- เช็คว่า AutoClick ยังเปิด และอาวุธอยู่ในมือจริงๆ
+            if tool and _G.autoclick and character:FindFirstChild(tool.Name) then
+                tool:Activate() -- ยิงได้
             end
 
             if humanoid.Health <= 0 or not _G.farmNpc then
@@ -444,7 +454,7 @@ spawn(function()
         end)
     end
 end)
-		
+
 page2:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
 end)
