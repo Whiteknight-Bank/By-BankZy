@@ -163,67 +163,32 @@ function SaveCFrame()
         _G.savedCFrame = hrp.CFrame
     end
 end
-
-page1:Button("Save Point", function()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        _G.savedCFrame = hrp.CFrame
-        print("✅ Saved CFrame:", _G.savedCFrame)
-        create:Notifile("Saved Point!", "Your position has been saved.", 3)
-    end
-end)
 		
-page1:Toggle("Auto Spawn", false, function(aspw)
-        _G.respawn = aspw
-end)
-
-spawn(function()--autorespawn
-while wait() do
-if _G.respawn then
-pcall(function()
-if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
-for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
-v.Function()
-end
-end
-end)
-end
-end
-end)
-		
-page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
-        _G.autorespawn = rspw
+page1:Toggle("Auto Teleport [ At Safe Zone ]", false, function(rspw)
+        _G.autoatsafe = rspw
 end)
 
 function TeleportToSavedCFrame()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp and _G.savedCFrame then
-        print("✅ Teleporting to saved CFrame:", _G.savedCFrame)
-        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
+    if hrp then
+        hrp.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end
 end
 
 spawn(function()
     while wait() do
-        if _G.autorespawn then
+        if _G.autoatsafe then
             pcall(function()
-                local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
-                if playerGui.Load and playerGui.Load.Frame.Visible == true then
-                    for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
-                        v.Function()
-                    end
-                    -- รอ Character + Health > 0
                     repeat wait() until game.Players.LocalPlayer.Character 
                         and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
                         and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
                     
                     local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                     
-                    -- รอจน Y < 220
                     repeat
                         wait(0.1)
                         hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    until hrp and hrp.Position.Y < 220
+                    until hrp and hrp.Position.Y < 1.5
                     
                     TeleportToSavedCFrame()
                 end
@@ -231,7 +196,7 @@ spawn(function()
         end
     end
 end)
-		
+
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Tp Chest", false, function(chst)
         AutoMission = chst
@@ -240,27 +205,7 @@ end)
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
 
---[[ -- Auto Death page --
-page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
-    _G.autodie = dthh
-end)
-
-spawn(function()
-   while wait(2) do
-        if _G.autodie then 
-	pcall(function()
-            for _,v in pairs(workspace.Enemies:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-]]
+page1:Label(" ")
 page2:Button("Safe Zone Part" , function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end)
@@ -336,8 +281,9 @@ end)
 page2:Dropdown("Select NPC", {
     "Big head boy [ Thief ]",
     "Bob [ Buggy Pirate ]",
-    "Sad noob",
-    "Sword noob",
+    "Sad noob [ Attacking noob ]",
+    "Sword noob [ Attacking noob ]",
+    "Gun noob [ Attacking noob ]"
     "Injured pirate [ Marine ]",
     "That noob [ Luffy ]"
 }, function(mbon)
@@ -418,7 +364,6 @@ spawn(function()
 
             if not character or not backpack or not humanoid then return end
 
-            -- หา Tool ที่ตรงตามชื่อและ Kills
             local function getQualifiedTool()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
@@ -431,6 +376,8 @@ spawn(function()
                         elseif tool.Name == "Annoying noobs...." and kills >= 10 then
                             return tool
                         elseif tool.Name == "Sword Master" and kills >= 50 then
+                            return tool
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then
                             return tool
                         end
                     end
