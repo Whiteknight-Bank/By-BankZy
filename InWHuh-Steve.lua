@@ -303,8 +303,20 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ Function Farm ┇")
-page2:Dropdown("Select Mobs:", {"Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", ""}, function(pcns)
-    Npcs = pcns
+local SelectedMob = ""
+
+page2:Dropdown("Select Mobs:", {
+    "Thief(Lvl:5)", 
+    "Buggy pirate(Lvl:30)", 
+    "Attacking Noob(Lvl:100)", 
+    "Marine(Lvl:200)", 
+    "Luffy(Lvl:1000)"
+}, function(pcns)
+    SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
+end)
+
+page2:Toggle("Auto Claim Quest", false, function(clmq)
+    _G.claim = clmq
 end)
 
 page2:Toggle("Auto Farm", false, function(befrm)
@@ -312,62 +324,20 @@ page2:Toggle("Auto Farm", false, function(befrm)
 end)
 
 spawn(function()
-    while wait(0) do
+    while task.wait() do
         pcall(function()
-            if _G.autocannon or _G.autocannonslow then
-                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if string.find(v.Name, " Boar")
-                    and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CanCollide = false
-                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        v:FindFirstChild("HumanoidRootPart").Anchored = true
-                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                            v:Destroy()
-                        end
-                     end
-                end
-                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if string.find(v.Name, "Crab")
-                    and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CanCollide = false
-                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        --v.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
-                        v.HumanoidRootPart.Transparency = 0.9
-                        v:FindFirstChild("HumanoidRootPart").Anchored = true
-                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                            v:Destroy()
-                        end
-                     end
-                end
-                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if string.find(v.Name, "Angry ") 
-                    or string.find(v.Name, "Bandit") 
-                    or string.find(v.Name, "Thief")
-                    or string.find(v.Name, "Crab") 
-                    or string.find(v.Name, "Gunner") 
-                    or string.find(v.Name, "Bruno") 
-                    or string.find(v.Name, "Freddy")  
-                    or string.find(v.Name, "Buster") 
-                    or string.find(v.Name, "Thug") 
-                    or string.find(v.Name, "Gunslinger")
-                    or string.find(v.Name, "Cave") 
-                    or string.find(v.Name, "Vokun") 
-                    and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CanCollide = false
-                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        v:FindFirstChild("HumanoidRootPart").Anchored = true
-                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                            v:Destroy()
-                        end
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                            v:Destroy()
+            if _G.behindFarm and SelectedMob ~= "" then
+                for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
+                        
+                        if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
                         end
                     end
                 end
