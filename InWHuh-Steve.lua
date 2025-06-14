@@ -238,6 +238,8 @@ page2:Dropdown("Select NPC", {
 "Big head boy [ Thief ]",
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
+"Sword noob [ Attacking noob ]",
+"Gun noob [ Attacking noob ]",
 "Injured pirate [ Marine ]",
 "That noob [ Luffy ]"
 }, function(mbon)
@@ -362,107 +364,6 @@ end)
 
 page2:Toggle("Auto Ken Haki", false, function(gthi)
     _G.genhaki = gthi
-end)
-
-page2:Label("┇ Function Another Farm ┇")
-
-local autoClaimLoop = nil
-
-page2:Toggle("Auto Sword Farm", false, function(frms)
-    _G.farmsword = frms
-
-    if autoClaimLoop then  
-        autoClaimLoop:Disconnect()  
-        autoClaimLoop = nil  
-    end  
-
-    if _G.farmsword then  
-        local foundNPC = nil  
-        for _, obj in ipairs(workspace:GetDescendants()) do  
-            if obj:IsA("Model") and obj.Name == "Sword noob" then  
-                local head = obj:FindFirstChild("Head")  
-                if head and head:FindFirstChild("ClickDetector") then  
-                    foundNPC = head.ClickDetector  
-                    break  
-                end  
-            end  
-        end  
-
-        if foundNPC then  
-            autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()  
-                pcall(function()  
-                    if _G.farmsword and foundNPC and foundNPC.Parent then  
-                        fireclickdetector(foundNPC)  
-                    end  
-                end)  
-            end)  
-        end
-     end
-				
-    spawn(function()
-        while task.wait() do
-            pcall(function()
-                if _G.farmsword then
-                    for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                        if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, "Attacking Noob") then
-                            local root = mob.HumanoidRootPart
-                            root.CanCollide = false
-                            root.Size = Vector3.new(10, 10, 10)
-                            root.Anchored = true
-                            root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -6)
-
-                            if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then  
-                                root.Size = Vector3.new(0, 0, 0)  
-                                mob:Destroy()  
-                            end  
-                        end  
-                    end  
-                end  
-            end)
-        end
-    end)
-    
-    spawn(function()
-        while wait(0.1) do
-            pcall(function()
-                if not _G.farmsword then return end
-
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local backpack = player:FindFirstChild("Backpack")
-                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-                if not character or not backpack or not humanoid then return end
-
-                local function getQualifieTool()
-                    for _, tool in ipairs(backpack:GetChildren()) do
-                        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                            local kills = tool.Kills.Value
-
-                            if tool.Name == "Sword Master" and kills >= 50 then
-                                return tool
-                            end
-                        end
-                    end
-                    return nil
-                end
-
-                local tool = getQualifieTool()
-
-                if tool and not character:FindFirstChild(tool.Name) then
-                    humanoid:EquipTool(tool)
-                    task.wait(0.05)
-                    if character:FindFirstChild(tool.Name) then
-                        tool:Activate()
-                    end
-                end
-
-                if humanoid.Health <= 0 or not _G.farmsword then
-                    humanoid:UnequipTools()
-                end
-            end)
-        end
-    end)
 end)
 
 page2:Toggle("Auto Gun Farm [ Not Working ]", false, function(hki)
