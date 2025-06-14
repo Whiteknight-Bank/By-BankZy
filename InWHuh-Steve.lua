@@ -457,69 +457,57 @@ page3:Button("Fruit Seller Island" , function()
 local Tab4 = Window:Taps("Shop")
 local page4 = Tab4:newpage()
 
-local selectedSword, selectedMelee, selectedGun
-
-page4:Label("┇ Shop [ Weapon ] ┇")
-page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(selection)
-    selectedSword = selection:split("|")[1]
+page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(knrd)
+    selectedSword = knrd
 end)
 
 page4:Button("Buy Sword", function()
     _G.buy = true
-    if selectedSword then
-        TryBuyNPC(selectedSword)
-    else
-create:Notifile("", "Please Selecet a Sword", 3)
-    end
 end)
 
-page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(selection)
-    selectedMelee = selection:split("|")[1]
+page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
+    selectedMelee = knrd
 end)
 
 page4:Button("Buy Melee", function()
     _G.buy = true
-    if selectedMelee then
-        TryBuyNPC(selectedMelee)
-    else
-create:Notifile("", "Please Select a Melee", 3)
-    end
 end)
 
-page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(selection)
-    selectedGun = selection:split("|")[1]
+page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
+    selectedGun = knrd
 end)
 
 page4:Button("Buy Gun", function()
     _G.buy = true
-    if selectedGun then
-        TryBuyNPC(selectedGun)
-    else
-      create:Notifile("", "Please Select a Gun", 3)
-    end
 end)
 
-function TryBuyNPC(npcName)
-    if _G.buy and npcName then
-        local foundShop = nil
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("Model") and obj.Name == npcName then
-                local head = obj:FindFirstChild("Head")
-                if head and head:FindFirstChild("ClickDetector") then
-                    foundShop = head.ClickDetector
-                    break
+spawn(function()
+    while wait(0.1) do
+        if _G.buy then
+            local function TryBuy(npcName)
+                if not npcName then return false end
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj.Name == npcName then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                            print("✅ ซื้อ NPC: " .. npcName)
+                            return true
+                        end
+                    end
                 end
+                warn("❌ ไม่พบ NPC หรือ ClickDetector สำหรับ: " .. tostring(npcName))
+                return false
             end
-        end
 
-        if foundShop then
-            fireclickdetector(foundNPC)
-            create:Notifile("", "You Bought From Npc:", npcName, " ", 5)
-        else
-	    create:Notifile("", "Npc Not Found:", npcName " ", 5)
+            if selectedSword then TryBuy(selectedSword) end
+            if selectedMelee then TryBuy(selectedMelee) end
+            if selectedGun then TryBuy(selectedGun) end
+
+            _G.buy = false
         end
     end
-end
+end)
 
 page4:Label("┇ Shop [ Random Fruit ] ┇")
 page4:Button("Reset Devil Fruit [ Not Working ]", function()
