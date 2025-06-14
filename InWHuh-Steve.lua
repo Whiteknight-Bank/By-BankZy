@@ -316,14 +316,14 @@ page2:Dropdown("Select Mobs:", {
 end)
 
 page2:Dropdown("Select NPC", {
-    "Big head boy",
-    "Bob",
+    "Big head boy [ Thief ]",
+    "Bob [ Buggy Pirate ]",
     "Sad noob",
     "Sword noob",
-    "Injured pirate",
-    "That noob"
-}, function(selected)
-    getgenv().selectedNPC = selected
+    "Injured pirate [ Marine ]",
+    "That noob [ Luffy ]"
+}, function(mbon)
+    getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
 end)
 
 page2:Toggle("Auto Claim Quest", false, function(state)
@@ -353,7 +353,7 @@ page2:Toggle("Auto Claim Quest", false, function(state)
         end
     end)
 end)
-		
+
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
