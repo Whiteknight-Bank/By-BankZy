@@ -317,8 +317,11 @@ end)
 
 page2:Dropdown("Select NPC", {
     "Big head boy",
-    "Quest Guy",
-    "Fruit Seller"
+    "Bob",
+    "Sad noob",
+    "Sword noob",
+    "Injured pirate",
+    "That noob"
 }, function(selected)
     getgenv().selectedNPC = selected
 end)
