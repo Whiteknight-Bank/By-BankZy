@@ -297,38 +297,37 @@ end)
 local autoClaimLoop = nil
 
 page2:Toggle("Auto Claim Quest", false, function(state)
-_G.claim = state
+    _G.claim = state
 
-if autoClaimLoop then  
-    autoClaimLoop:Disconnect()  
-    autoClaimLoop = nil  
-end  
+    if autoClaimLoop then
+        autoClaimLoop:Disconnect()
+        autoClaimLoop = nil
+    end
 
-if _G.claim and getgenv().selectedNPC then  
-    local foundNPC = nil  
-    for _, obj in ipairs(workspace:GetDescendants()) do  
-        if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then  
-            local head = obj:FindFirstChild("Head")  
-            if head and head:FindFirstChild("ClickDetector") then  
-                foundNPC = head.ClickDetector  
-                break  
-            end  
-        end  
-    end  
+    if _G.claim and getgenv().selectedNPC then
+        local foundNPC = nil
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then
+                local head = obj:FindFirstChild("Head")
+                if head and head:FindFirstChild("ClickDetector") then
+                    foundNPC = head.ClickDetector
+                    break
+                end
+            end
+        end
 
-    if foundNPC then  
-        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()  
-            pcall(function()  
-                if _G.claim then  
-                    fireclickdetector(foundNPC)  
-                end  
-            end)  
-        end)  
-    end  
-end
-
+        if foundNPC then
+            autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                pcall(function()
+                    if _G.claim then
+                        fireclickdetector(foundNPC)
+                    end
+                end)
+            end)
+        end
+    end
 end)
-
+	
 page2:Toggle("Auto Farm", false, function(befrm)
 _G.farmNpc = befrm
 end)
