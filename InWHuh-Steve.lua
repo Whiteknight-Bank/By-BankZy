@@ -315,10 +315,26 @@ page2:Dropdown("Select Mobs:", {
     SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
 end)
 
-page2:Toggle("Auto Claim Quest", false, function(clmq)
-    _G.claim = clmq
+page2:Dropdown("Select NPC:", {"Big head boy"}, function(selected)
+    getgenv().selectedNPC = selected
 end)
 
+page2:Toggle("Auto Claim NPC", false, function(state)
+    _G.claim = state
+    spawn(function()
+        while task.wait() do
+            pcall(function()
+                if _G.claim and getgenv().selectedNPC then
+                    local npc = workspace:FindFirstChild(getgenv().selectedNPC)
+                    if npc and npc:FindFirstChild("Head") and npc.Head:FindFirstChild("ClickDetector") then
+                        fireclickdetector(npc.Head.ClickDetector)
+                    end
+                end
+            end)
+        end
+    end)
+end)
+		
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
