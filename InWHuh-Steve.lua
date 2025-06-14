@@ -216,7 +216,7 @@ page1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page2:Dropdown("Select Mobs:", {
+page1:Dropdown("Select Mobs:", {
 "Thief(Lvl:5)",
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
