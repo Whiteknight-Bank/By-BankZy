@@ -149,28 +149,20 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
         table.insert(Wapon ,v.Name)
     end
 end
-
-local Tab1 = Window:Taps("Autos")
+		
+local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Autos ┇")
-page1:Toggle("Auto Tp Chest", false, function(chst)
-        AutoMission = chst
-end)
-		
-local Tab2 = Window:Taps("Farm")
-local page2 = Tab2:newpage()
-
-page2:Button("Safe Zone Part" , function()
+page1:Button("Safe Zone Part" , function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end)
 
-page2:Label("┇ Function Farm ┇")
-page2:Dropdown("Select Weapon:", Wapon, function(wapn)
+page1:Label("┇ Function Farm ┇")
+page1:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
-page2:Toggle("Auto Click", false, function(state)
+page1:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
 
@@ -185,7 +177,7 @@ end)
 end) 
 end)
 
-page2:Toggle("Auto Equip", false, function(aeq)
+page1:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
 
@@ -220,7 +212,7 @@ spawn(function()
     end
 end)
 
-page2:Label("┇ Function Farm ┇")
+page1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
@@ -234,7 +226,7 @@ page2:Dropdown("Select Mobs:", {
 SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
 end)
 
-page2:Dropdown("Select NPC", {
+page1:Dropdown("Select NPC", {
 "Big head boy [ Thief ]",
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
@@ -249,7 +241,7 @@ end)
 
 local autoClaimLoop = nil
 
-page2:Toggle("Auto Claim Quest", false, function(state)
+page1:Toggle("Auto Claim Quest", false, function(state)
 _G.claim = state
 
 if autoClaimLoop then  
@@ -281,7 +273,7 @@ if _G.claim and getgenv().selectedNPC then
 end
 end)
 
-page2:Toggle("Auto Farm", false, function(befrm)
+page1:Toggle("Auto Farm", false, function(befrm)
 _G.farmNpc = befrm
 end)
 
@@ -358,31 +350,31 @@ spawn(function()
     end
 end)
 		
-page2:Toggle("Auto Buso Haki", false, function(hki)
+page1:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
 end)
 
-page2:Toggle("Auto Ken Haki", false, function(gthi)
+page1:Toggle("Auto Ken Haki", false, function(gthi)
     _G.genhaki = gthi
 end)
 
-page2:Toggle("Auto Gun Farm [ Not Working ]", false, function(hki)
+page1:Toggle("Auto Gun Farm [ Not Working ]", false, function(hki)
     AutoHaki = hki
 end)
 
-local Tab3 = Window:Taps("Players")
-local page3 = Tab3:newpage()
+local Tab2 = Window:Taps("Players")
+local page2 = Tab2:newpage()
 
-page3:Label("┇ Player ┇")
-page3:Dropdown("Select Player:", getPlayerNames(), function(name)
+page2:Label("┇ Player ┇")
+page2:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
 end)
 
-page3:Button("Click to Tp", function()
+page2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page3:Toggle("View", false, function(state)
+page2:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -395,7 +387,7 @@ page3:Toggle("View", false, function(state)
 	end
 end)
 
-page3:Toggle("Auto Bring Player( All )", false, function(plal)
+page2:Toggle("Auto Bring Player( All )", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -418,93 +410,138 @@ end)
 
 plr = game.Players.LocalPlayer
 
-local Tab4 = Window:Taps("Island")
-local page4 = Tab4:newpage()
+local Tab3 = Window:Taps("Island")
+local page3 = Tab3:newpage()
 
-page4:Label("┇ ISLANDS ┇")
-page4:Button("Thief Island" , function()
+page3:Label("┇ ISLANDS ┇")
+page3:Button("Thief Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
     end)
 
-page4:Button("Buggy Island" , function()
+page3:Button("Buggy Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
     end)
 
-page4:Button("Noob Island" , function()
+page3:Button("Noob Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
     end)
 
-page4:Button("Marine Island" , function()
+page3:Button("Marine Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
     end)
 
-page4:Button("Fishmen Island" , function()
+page3:Button("Fishmen Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
     end)
 
-page4:Button("Luffy Island" , function()
+page3:Button("Luffy Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
     end)
 
-page4:Button("Coconut Island" , function()
+page3:Button("Coconut Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
     end)
 
-page4:Button("BlackLeg Island" , function()
+page3:Button("BlackLeg Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
     end)
 
-page4:Button("Ussop Island" , function()
+page3:Button("Ussop Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
     end)
 
-page4:Button("Fruit Seller Island" , function()
+page3:Button("Fruit Seller Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
     end)
 
-local Tab5 = Window:Taps("Shop")
+local Tab4 = Window:Taps("Shop")
+local page4 = Tab4:newpage()
+
+local selectedSword, selectedMelee, selectedGun
+
+page4:Label("┇ Shop [ Weapon ] ┇")
+page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(selection)
+    selectedSword = selection:split("|")[1]
+end)
+
+page4:Button("Buy Sword", function()
+    _G.buy = true
+    if selectedSword then
+        TryBuyNPC(selectedSword)
+    else
+create:Notifile("", "Please Selecet a Sword", 3)
+    end
+end)
+
+page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(selection)
+    selectedMelee = selection:split("|")[1]
+end)
+
+page4:Button("Buy Melee", function()
+    _G.buy = true
+    if selectedMelee then
+        TryBuyNPC(selectedMelee)
+    else
+create:Notifile("", "Please Select a Melee", 3)
+    end
+end)
+
+page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(selection)
+    selectedGun = selection:split("|")[1]
+end)
+
+page4:Button("Buy Gun", function()
+    _G.buy = true
+    if selectedGun then
+        TryBuyNPC(selectedGun)
+    else
+      create:Notifile("", "Please Select a Gun", 3)
+    end
+end)
+
+function TryBuyNPC(npcName)
+    if _G.buy and npcName then
+        local foundShop = nil
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj.Name == npcName then
+                local head = obj:FindFirstChild("Head")
+                if head and head:FindFirstChild("ClickDetector") then
+                    foundShop = head.ClickDetector
+                    break
+                end
+            end
+        end
+
+        if foundShop then
+            fireclickdetector(foundNPC)
+            create:Notifile("", "You Bought From Npc:", npcName, " ", 5)
+        else
+	    create:Notifile("", "Npc Not Found:", npcName " ", 5)
+        end
+    end
+end
+
+page4:Label("┇ Shop [ Random Fruit ] ┇")
+page4:Button("Reset Devil Fruit [ Not Working ]", function()
+create:Notifile("", "Your Devil Fruit is Reset Now", 3)
+end)
+
+page4:Toggle("Auto Random Devil Fruit [ Not Working ]", false, function(rdom)
+_G.fruitRanfom = rdom
+end)
+
+local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
-page5:Label("┇ Shop Item ┇")
-page5:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(knrd)
-    selectedSwords = knrd
-end)
-
-page5:Button("Click to Buy" , function()
-        print("Buy")
-    end)
-
-page5:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
-    selectedMekees = knrd
-end)
-
-page5:Button("Click to Buy" , function()
-        print("Buy")
-    end)
-
-page5:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
-    selectedSinpers = knrd
-end)
-
-page5:Button("Click to Buy" , function()
-        print("Buy")
-			end)
-
-page5:Label("┇ Shop Random Fruit ┇")
-
-
-local Tab6 = Window:Taps("Misc")
-local page6 = Tab6:newpage()
-
-page6:Label("┇ Function Sever ┇")
-page6:Button("Rejoin Server", function()
+page5:Label("┇ Function Sever ┇")
+page5:Button("Rejoin Server", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page6:Button("Hop Server", function()
+page5:Button("Hop Server", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -583,8 +620,8 @@ local PlaceID = game.PlaceId
 
 end)
 		
-page6:Label("┇ Function Anti ┇")
-page6:Button("Anti Lag", function()
+page5:Label("┇ Function Anti ┇")
+page5:Button("Anti Lag", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -702,7 +739,7 @@ end)
 
 local afkConnection
 
-page6:Toggle("Anti AFK", false, function(state)
+page5:Toggle("Anti AFK", false, function(state)
 
     if state then
 	create:Notifile("", "Protect Kick AFK You Can AFK Now :)", 3)
@@ -720,7 +757,7 @@ page6:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page6:Toggle("Anti Teleport Death", false, function(tpp)
+page5:Toggle("Anti Teleport Death", true, function(tpp)
 _G.antiTp = tpp
 end)
 
