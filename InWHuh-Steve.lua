@@ -330,7 +330,7 @@ spawn(function()
                             return tool
                         elseif tool.Name == "Sword Master" and kills >= 50 then
                             return tool
-			elseif tool.Name == "Marine!" and kills >= 30 then
+			elseif tool.Name == "Marines!" and kills >= 30 then
                             return tool
                         elseif tool.Name == "The Strongest..." and kills >= 1 then
                             return tool
