@@ -89,7 +89,7 @@ task.spawn(function()
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("InW Hub : For Map One Piece: Legendary")
+local Window = create:Win("InW Hub : For Map [ One Piece: Legendary ]")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
 
@@ -337,26 +337,6 @@ end
 end
 end)
 
-spawn(function()
-    while wait() do
-        if _G.respawndie then
-            local player = game.Players.LocalPlayer
-            local char = workspace:FindFirstChild(player.Name)
-            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                local yPos = char.HumanoidRootPart.Position.Y
-                if yPos < 242 and char.Humanoid.Health > 0 then
-                    wait(3)
-                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                        if char.HumanoidRootPart.Position.Y < 215 then
-                            char.Humanoid.Health = 0
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
-
 page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
         _G.autorespawn = rspw
 end)
@@ -396,6 +376,26 @@ spawn(function()
     end
 end)
 
+spawn(function()
+    while wait() do
+        if _G.respawndie then
+            local player = game.Players.LocalPlayer
+            local char = workspace:FindFirstChild(player.Name)
+            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                local yPos = char.HumanoidRootPart.Position.Y
+                if yPos < 242 and char.Humanoid.Health > 0 then
+                    wait(3)
+                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                        if char.HumanoidRootPart.Position.Y < 242 then
+                            char.Humanoid.Health = 0
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Claim Mission", false, function(dmmsv)
         AutoMission = dmmsv
@@ -411,7 +411,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("Auto Complete Mission (ไม่ทำงาน)", false, function(miss)
+page1:Toggle("Auto Complete Mission [ ไม่ทำงาน ]", false, function(miss)
         _G.automission = miss
 end)
 
@@ -930,7 +930,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("Auto Claim Gift (Beri)", false, function(bri)
+page1:Toggle("Auto Claim Gift [ Beri ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -946,7 +946,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Toggle("Auto Claim Gift (Gems)", false, function(gxm)
+page1:Toggle("Auto Claim Gift  [ Gems ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -1043,7 +1043,7 @@ local Tab2 = Window:Taps("Farming")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob (100%)", false, function(dthh)
+page2:Toggle("Auto Death Mob [ 100% ]", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -1062,7 +1062,7 @@ spawn(function()
     end
 end)
 
-page2:Toggle("Auto Death Kaizu' Boss (100%)", false, function(zki)
+page2:Toggle("Auto Death Kaizu' Boss [ 100% ]", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -1368,12 +1368,8 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ Function Farm with Cannon Ball ┇")
-page2:Toggle("Auto Farm Cannon Ball ( Slow )", false, function(bll)
+page2:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
     _G.autocannonslow = bll
-end)
-
-page2:Toggle("Auto Farm Cannon Ball ( Fast )", false, function(bll)
-    _G.autocannon = bll
 end)
 
 spawn(function() -- autofarm teleport cannon
@@ -1614,7 +1610,7 @@ spawn(function() -- autofarm cannon
 end)
 
 page2:Label("┇ Other Farming With Skill DF ┇")
-page2:Toggle("Auto Farm Quake (Very Lag)", false, function(qke)
+page2:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
     _G.quakefarm = qke
 end)
 
@@ -1710,7 +1706,7 @@ spawn(function() -- Light farm npcs
 end)
 
 page2:Label("┇ Function Haki ┇")
-page2:Toggle("Auto Farm Haki (Very Ping)", false, function(hki)
+page2:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -1861,7 +1857,7 @@ page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V",
     selectedSpamSkill = sps
 end)
 
-page3:Toggle("Auto Spam (100%)", false, function(spam)
+page3:Toggle("Auto Spam [ 100% ]", false, function(spam)
     _G.skillspam = spam
 end)
 
@@ -2121,7 +2117,7 @@ spawn(function()
 end)
 
 page3:Label("┇ Max Charge Skill ┇")
-page3:Toggle("Max Charge Skill (100%)", false, function(smx)
+page3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
 	_G.skillmax = smx
 end)
 
@@ -2129,7 +2125,7 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode (36%)", false, function(gxd)
+page4:Toggle("Gode Mode [ 36% ]", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2870,7 +2866,7 @@ wait(.8)
     end
 end)
 
-page6:Label("┇ Function Auto Affinities 2.0 ( Beri ) ┇")
+page6:Label("┇ Function Auto Affinities [ 2.0 ] ┇")
 
 -- Prepare dropdownDF
 local player = game.Players.LocalPlayer
@@ -3232,8 +3228,69 @@ end)
 local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
 
-page7:Label("┇ Function Quest Sam ┇")
+page7:Label("┇ Function Storage ┇")
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
 
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
+
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
+
+page7:Toggle("Auto Storage", false, function(value)
+    Cache.Boolean.StorageAll = value
+end)
+
+page7:Toggle("Auto Storage [ Aura ]", false, function(shy)
+    Cache.Boolean.StorageKeepShiny = shy
+end)
+
+local function HandleFruits()
+    if Cache.Boolean.StorageAll then
+        for Index = 1, 12 do
+            if CheckStorage(Index) then
+                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if Fruit:IsA("Tool") then
+                        local isRare = false
+                        for _, FruitName in pairs(rareFruits) do
+                            if string.lower(Fruit.Name) == string.lower(FruitName) then
+                                isRare = true
+                                break
+                            end
+                        end
+
+                        local hasAura = false
+                        if Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment") then
+                            hasAura = true
+                        end
+
+                        if isRare or hasAura then
+                            StoreFruit(Index, Fruit)
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+spawn(function()
+    while wait(1) do
+        pcall(HandleFruits)
+    end
+end)
+
+page7:Label("┇ Function Quest Sam ┇")
 page7:Toggle("Auto Find", false, function(comp)
     AutoComp = comp
 end)
@@ -3287,69 +3344,6 @@ spawn(function()
 end)
 
 page7:Label("Check Rare and Function Storage")
-
-page7:Label("┇ Function Storage ┇")
-local Cache = {
-    Player = { Inputfruitlist = {}, Inputfruitname = "" },
-    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
-}
-
-local function CheckStorage(Number)
-    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
-    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
-end
-
-local function StoreFruit(Index, Fruit)
-    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
-    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-    Fruit.Parent = game.Players.LocalPlayer.Character
-    storagePath:FireServer("StoredDF" .. Index)
-end
-
-page7:Toggle("Auto Storage", false, function(value)
-    Cache.Boolean.StorageAll = value
-end)
-
-page7:Toggle("Auto Storage Aura", false, function(shy)
-    Cache.Boolean.StorageKeepShiny = shy
-end)
-
-local function HandleFruits()
-    if Cache.Boolean.StorageAll then
-        for Index = 1, 12 do
-            if CheckStorage(Index) then
-                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                    if Fruit:IsA("Tool") then
-                        local isRare = false
-                        for _, FruitName in pairs(rareFruits) do
-                            if string.lower(Fruit.Name) == string.lower(FruitName) then
-                                isRare = true
-                                break
-                            end
-                        end
-
-                        local hasAura = false
-                        if Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment") then
-                            hasAura = true
-                        end
-
-                        if isRare or hasAura then
-                            StoreFruit(Index, Fruit)
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-spawn(function()
-    while wait(1) do
-        pcall(HandleFruits)
-    end
-end)
-
 page7:Toggle("Check Rare Fruity", false, function(chre)
     _G.checkrare = chre
 end)
@@ -4164,6 +4158,23 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                local plr = game:GetService("Players").LocalPlayer
+                local char = workspace:FindFirstChild(plr.Name)
+                if not char then return end
+
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum and hum.PlatformStand then
+                    hum.PlatformStand = false
+                end
+            end)
+        end
+    end
+end)
+		
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
