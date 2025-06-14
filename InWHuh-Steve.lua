@@ -282,20 +282,43 @@ end)
 end) 
 end)
 
-page2:Toggle("Auto Equip", false, function(state)
-    _G.autoequip = state
+page2:Toggle("Auto Equip", false, function(aeq)
+    _G.autoequip = aeq
 end)
 
-spawn(function() -- auto equip
-    while wait(0) do
+spawn(function()
+    while task.wait(0.05) do
         pcall(function()
             if _G.autoequip then
-                repeat
-                    wait(0.05)
-                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
-                until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
-                if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-                    game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
+                local player = game.Players.LocalPlayer
+                local character = player.Character
+                local backpack = player:FindFirstChild("Backpack")
+                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+                if not character or not backpack or not humanoid then return end
+
+                local tool = backpack:FindFirstChild(Wapon)
+
+                -- ถ้ายังไม่มีอาวุธในมือ และใน backpack มี -> ย้าย
+                if tool and not character:FindFirstChild(Wapon) then
+                    tool.Parent = character
+                    task.wait(0.05)
+
+                    -- รอสักครู่ให้ระบบ Roblox จับ Tool แล้วค่อยสั่ง Activate
+                    local equipped = character:FindFirstChild(Wapon)
+                    if equipped and equipped:IsA("Tool") then
+                        equipped:Activate()
+                    end
+                end
+
+                -- ถ้าตาย -> เก็บของ
+                if humanoid.Health <= 0 then
+                    humanoid:UnequipTools()
+                end
+
+                -- ถ้าปิด autoequip
+                if not _G.autoequip then
+                    humanoid:UnequipTools()
                 end
             end
         end)
