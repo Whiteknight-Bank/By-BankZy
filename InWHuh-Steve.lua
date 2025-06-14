@@ -153,9 +153,14 @@ end
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
+page1:Label("┇ Safe Zone ┇")
 page1:Button("Safe Zone Part" , function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end)
+
+page1:Toggle("Auto Teleport At Safe Zone [ Not Working ]", false, function(atre)
+    _G.autorespasn = atre
+end)
 
 page1:Label("┇ Function Farm ┇")
 page1:Dropdown("Select Weapon:", Wapon, function(wapn)
@@ -230,8 +235,8 @@ page1:Dropdown("Select NPC", {
 "Big head boy [ Thief ]",
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
-"Sword noob [ Attacking noob ]",
-"Gun noob [ Attacking noob ]",
+"Sword noob [ Farm Sword ]",
+"Gun noob [ Farm Gun ]",
 "Injured pirate [ Marine ]",
 "That noob [ Luffy ]"
 }, function(mbon)
@@ -324,6 +329,8 @@ spawn(function()
                         elseif tool.Name == "Annoying noobs...." and kills >= 10 then
                             return tool
                         elseif tool.Name == "Sword Master" and kills >= 50 then
+                            return tool
+			elseif tool.Name == "Marine!" and kills >= 30 then
                             return tool
                         elseif tool.Name == "The Strongest..." and kills >= 1 then
                             return tool
