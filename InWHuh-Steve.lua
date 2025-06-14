@@ -270,89 +270,90 @@ page2:Label("┇ Function Farm ┇")
 local SelectedMob = ""
 
 page2:Dropdown("Select Mobs:", {
-    "All",
-    "Thief(Lvl:5)", 
-    "Buggy pirate(Lvl:30)", 
-    "Attacking Noob(Lvl:100)", 
-    "Marine(Lvl:200)", 
-    "Luffy(Lvl:1000)"
+"All",
+"Thief(Lvl:5)",
+"Buggy pirate(Lvl:30)",
+"Attacking Noob(Lvl:100)",
+"Marine(Lvl:200)",
+"Luffy(Lvl:1000)"
 }, function(pcns)
-    if pcns == "All" then
-        SelectedMob = "All"
-    else
-        SelectedMob = pcns:match("^(.-)%(") or pcns
-    end
+SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
 end)
 
 page2:Dropdown("Select NPC", {
-    "All",
-    "Big head boy [ Thief ]",
-    "Bob [ Buggy Pirate ]",
-    "Sad noob [ Attacking noob ]",
-    "Sword noob [ Attacking noob ]",
-    "Gun noob [ Attacking noob ]",
-    "Injured pirate [ Marine ]",
-    "That noob [ Luffy ]"
+"All",
+"Big head boy [ Thief ]",
+"Bob [ Buggy Pirate ]",
+"Sad noob [ Attacking noob ]",
+"Sword noob [ Attacking noob ]",
+"Gun noob [ Attacking noob ]"
+"Injured pirate [ Marine ]",
+"That noob [ Luffy ]"
 }, function(mbon)
-    if mbon == "All" then
-        getgenv().selectedNPC = "All"
-    else
-        getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
-    end
-    print("Selected NPC:", getgenv().selectedNPC)
+getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
+print("Selected NPC:", getgenv().selectedNPC)
 end)
 
 local autoClaimLoop = nil
 
 page2:Toggle("Auto Claim Quest", false, function(state)
-    _G.claim = state
+_G.claim = state
 
-    if autoClaimLoop then
-        autoClaimLoop:Disconnect()
-        autoClaimLoop = nil
-    end
+if autoClaimLoop then  
+    autoClaimLoop:Disconnect()  
+    autoClaimLoop = nil  
+end  
 
-    if _G.claim then
-        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and (getgenv().selectedNPC == "All" or obj.Name == getgenv().selectedNPC) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
-                    end
-                end
-            end)
-        end)
-    end
+if _G.claim and getgenv().selectedNPC then  
+    local foundNPC = nil  
+    for _, obj in ipairs(workspace:GetDescendants()) do  
+        if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then  
+            local head = obj:FindFirstChild("Head")  
+            if head and head:FindFirstChild("ClickDetector") then  
+                foundNPC = head.ClickDetector  
+                break  
+            end  
+        end  
+    end  
+
+    if foundNPC then  
+        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()  
+            pcall(function()  
+                if _G.claim then  
+                    fireclickdetector(foundNPC)  
+                end  
+            end)  
+        end)  
+    end  
+end
+
 end)
 
-page2:Toggle("Auto Farm", false, function(state)
-    _G.farmNpc = state
+page2:Toggle("Auto Farm", false, function(befrm)
+_G.farmNpc = befrm
 end)
 
 spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmNpc and SelectedMob ~= "" then
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and (SelectedMob == "All" or string.find(mob.Name, SelectedMob)) then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -6)
+while task.wait() do
+pcall(function()
+if _G.farmNpc and SelectedMob ~= "" then
+for _, mob in pairs(workspace.Npcs:GetChildren()) do
+if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
+local root = mob.HumanoidRootPart
+root.CanCollide = false
+root.Size = Vector3.new(10, 10, 10)
+root.Anchored = true
+root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -6)
 
-                        if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                            mob:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
+if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then  
+                        root.Size = Vector3.new(0, 0, 0)  
+                        mob:Destroy()  
+                    end  
+                end  
+            end  
+        end  
+    end)  
+end
 end)
 	
 spawn(function()
