@@ -333,7 +333,7 @@ spawn(function()
                         root.CanCollide = false
                         root.Size = Vector3.new(10, 10, 10)
                         root.Anchored = true
-                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
+                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -6)
                         
                         if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then
                             root.Size = Vector3.new(0, 0, 0)
