@@ -153,50 +153,6 @@ end
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Spawn ┇")
-
-_G.savedCFrame = nil
-
-function SaveCFrame()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        _G.savedCFrame = hrp.CFrame
-    end
-end
-		
-page1:Toggle("Auto Teleport [ At Safe Zone ]", false, function(rspw)
-        _G.autoatsafe = rspw
-end)
-
-function TeleportToSavedCFrame()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        hrp.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-    end
-end
-
-spawn(function()
-    while wait() do
-        if _G.autoatsafe then
-            pcall(function()
-                    repeat wait() until game.Players.LocalPlayer.Character 
-                        and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
-                        and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
-                    
-                    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    
-                    repeat
-                        wait(0.1)
-                        hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    until hrp and hrp.Position.Y < 1.5
-                    
-                    TeleportToSavedCFrame()
-                end
-            end)
-        end
-    end
-end)
-
 page1:Label("┇ Function Autos ┇")
 page1:Toggle("Auto Tp Chest", false, function(chst)
         AutoMission = chst
