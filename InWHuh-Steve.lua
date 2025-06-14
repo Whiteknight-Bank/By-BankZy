@@ -287,39 +287,31 @@ page2:Toggle("Auto Equip", false, function(aeq)
 end)
 
 spawn(function()
-    while task.wait(0.05) do
+    while wait(0.1) do
         pcall(function()
-            if _G.autoequip then
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local backpack = player:FindFirstChild("Backpack")
-                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            if not _G.autoequip then return end
 
-                if not character or not backpack or not humanoid then return end
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
-                local tool = backpack:FindFirstChild(Wapon)
+            if not character or not backpack or not humanoid then return end
 
-                -- ถ้ายังไม่มีอาวุธในมือ และใน backpack มี -> ย้าย
-                if tool and not character:FindFirstChild(Wapon) then
-                    tool.Parent = character
-                    task.wait(0.05)
+            local tool = backpack:FindFirstChild(Wapon)
+            if tool and not character:FindFirstChild(tool.Name) then
+                humanoid:EquipTool(tool)
+                task.wait(0.05)
 
-                    -- รอสักครู่ให้ระบบ Roblox จับ Tool แล้วค่อยสั่ง Activate
-                    local equipped = character:FindFirstChild(Wapon)
-                    if equipped and equipped:IsA("Tool") then
-                        equipped:Activate()
-                    end
+                -- ตรวจสอบว่า Equip สำเร็จ
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
                 end
+            end
 
-                -- ถ้าตาย -> เก็บของ
-                if humanoid.Health <= 0 then
-                    humanoid:UnequipTools()
-                end
-
-                -- ถ้าปิด autoequip
-                if not _G.autoequip then
-                    humanoid:UnequipTools()
-                end
+            -- ถ้าตายหรือปิด
+            if humanoid.Health <= 0 or not _G.autoequip then
+                humanoid:UnequipTools()
             end
         end)
     end
