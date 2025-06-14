@@ -261,7 +261,10 @@ spawn(function()
     end
 end)
 ]]
-		
+page2:Button("Safe Zone Part" , function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+    end)
+
 page2:Label("┇ Function Farm ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
@@ -502,43 +505,44 @@ local Tab4 = Window:Taps("Island")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ ISLANDS ┇")
-page4:Dropdown("Select Islands", {"Thief Island", "Buggy Island", "Noob Island", "Marine Island", "Fishman Island", "Luffy Island", "Coconut Island", "BlackLeg Island", "Sword Island", "Fruit Island"}, function(t)
-    getgenv().tpisland = t
-end)
+page4:Button("Thief Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+    end)
 
-page4:Button("Click to Tp" , function()
-    if getgenv().tpisland == "Thief Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
-      elseif getgenv().tpisland == "Buggy Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
-      elseif getgenv().tpisland == "Noob Island"  then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
-      elseif getgenv().tpisland == "Marine Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
-      elseif getgenv().tpisland == "Fishman Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
-      elseif getgenv().tpisland == "Luffy Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
-      elseif getgenv().tpisland == "Coconut Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
-      elseif getgenv().tpisland == "BlackLeg Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
-      elseif getgenv().tpisland == "Sword Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
-      elseif getgenv().tpisland == "Fruit Island" then
-       plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
-                end
-end)
+page4:Button("Buggy Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
+    end)
 
-page4:Label("┇ SAFE ZONE ┇")
-page4:Dropdown("Select SafeZone", {"Safe Zone (Sky)"}, function(s)
-    getgenv().tpsafezone = s
-end)
+page4:Button("Noob Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
+    end)
 
-page4:Button("Click to Tp" , function()
-        if getgenv().tpsafezone == "Safe Zone (Sky)" then
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-        end
+page4:Button("Marine Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
+    end)
+
+page4:Button("Fishmen Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
+    end)
+
+page4:Button("Luffy Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
+    end)
+
+page4:Button("Coconut Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
+    end)
+
+page4:Button("BlackLeg Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
+    end)
+
+page4:Button("Ussop Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
+    end)
+
+page4:Button("Fruit Seller Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
     end)
 
 local Tab5 = Window:Taps("Shop")
