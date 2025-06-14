@@ -286,7 +286,7 @@ page2:Dropdown("Select NPC", {
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
 "Sword noob [ Attacking noob ]",
-"Gun noob [ Attacking noob ]"
+"Gun noob [ Attacking noob ]",
 "Injured pirate [ Marine ]",
 "That noob [ Luffy ]"
 }, function(mbon)
