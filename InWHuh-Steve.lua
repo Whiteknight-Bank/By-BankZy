@@ -387,14 +387,15 @@ spawn(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
                 local backpack = player:FindFirstChild("Backpack")
+                local character = player.Character
 
-                if not backpack then return end
+                if not backpack or not character or not character:FindFirstChild("Humanoid") then return end
 
                 local function getThiefTool()
                     for _, tool in ipairs(backpack:GetChildren()) do
                         if tool:IsA("Tool") and tool.Name == "Thief!" then
                             local tooltip = tool:FindFirstChild("Tooltip")
-                            if tooltip and tooltip.Value:sub(1, 8) == "Finished" then
+                            if tooltip and tooltip:IsA("StringValue") and tooltip.Value:sub(1, 8) == "Finished" then
                                 return tool
                             end
                         end
@@ -404,18 +405,19 @@ spawn(function()
 
                 local tool = getThiefTool()
                 while tool do
-                    tool.Parent = player.Character
-                    tool:Activate()
+                    tool.Parent = character
                     wait(0.1)
+                    tool:Activate()
+                    wait(0.2) -- เพิ่มเวลารอให้สั่งทำงาน
                     tool = getThiefTool()
                 end
 
+                -- รอจนกว่าจะเจอใหม่แบบ Finished
                 repeat wait(1) until getThiefTool()
             end)
         end
     end
 end)
-
 
 page2:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
