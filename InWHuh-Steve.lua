@@ -277,7 +277,11 @@ page2:Dropdown("Select Mobs:", {
     "Marine(Lvl:200)", 
     "Luffy(Lvl:1000)"
 }, function(pcns)
-    SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว เช่น "Thief"
+    if pcns == "All" then
+        SelectedMob = "All"
+    else
+        SelectedMob = pcns:match("^(.-)%(") or pcns
+    end
 end)
 
 page2:Dropdown("Select NPC", {
@@ -290,7 +294,11 @@ page2:Dropdown("Select NPC", {
     "Injured pirate [ Marine ]",
     "That noob [ Luffy ]"
 }, function(mbon)
-    getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
+    if mbon == "All" then
+        getgenv().selectedNPC = "All"
+    else
+        getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
+    end
     print("Selected NPC:", getgenv().selectedNPC)
 end)
 
@@ -304,7 +312,7 @@ page2:Toggle("Auto Claim Quest", false, function(state)
         autoClaimLoop = nil
     end
 
-    if _G.claim and getgenv().selectedNPC then
+    if _G.claim then
         autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
@@ -320,8 +328,8 @@ page2:Toggle("Auto Claim Quest", false, function(state)
     end
 end)
 
-page2:Toggle("Auto Farm", false, function(befrm)
-    _G.farmNpc = befrm
+page2:Toggle("Auto Farm", false, function(state)
+    _G.farmNpc = state
 end)
 
 spawn(function()
@@ -346,7 +354,7 @@ spawn(function()
         end)
     end
 end)
-
+	
 spawn(function()
     while wait(0.1) do
         pcall(function()
