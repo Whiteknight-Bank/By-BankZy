@@ -394,8 +394,8 @@ spawn(function()
                 local function getThiefTool()
                     for _, tool in ipairs(backpack:GetChildren()) do
                         if tool:IsA("Tool") and tool.Name == "Thief!" then
-                            local tooltip = tool:FindFirstChild("Tooltip")
-                            if tooltip and tooltip:IsA("StringValue") and tooltip.Value:sub(1, 8) == "Finished" then
+                            local kills = tool:FindFirstChild("Kills")
+                            if kills and kills:IsA("IntValue") and kills.Value >= 20 then
                                 return tool
                             end
                         end
@@ -408,17 +408,17 @@ spawn(function()
                     tool.Parent = character
                     wait(0.1)
                     tool:Activate()
-                    wait(0.2) -- เพิ่มเวลารอให้สั่งทำงาน
+                    wait(0.2)
                     tool = getThiefTool()
                 end
 
-                -- รอจนกว่าจะเจอใหม่แบบ Finished
+                -- รอจนกว่าจะมี Kills >= 20 ใหม่อีกครั้ง
                 repeat wait(1) until getThiefTool()
             end)
         end
     end
 end)
-
+		
 page2:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
 end)
@@ -462,7 +462,7 @@ spawn(function()
             pcall(function()
                 for i,v in pairs(game.Players:GetChildren()) do
                     if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-10)
+                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-6)
                         if v.Character.Humanoid.Health == 0 then
                         	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
                         end
