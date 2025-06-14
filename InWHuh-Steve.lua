@@ -352,13 +352,13 @@ page2:Toggle("Auto Claim Quest", false, function(state)
 end)
 		
 page2:Toggle("Auto Farm", false, function(befrm)
-    _G.behindFarm = befrm
+    _G.farmNpc = befrm
 end)
 
 spawn(function()
     while task.wait() do
         pcall(function()
-            if _G.behindFarm and SelectedMob ~= "" then
+            if _G.farmNpc and SelectedMob ~= "" then
                 for _, mob in pairs(workspace.Npcs:GetChildren()) do
                     if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
                         local root = mob.HumanoidRootPart
@@ -377,6 +377,42 @@ spawn(function()
         end)
     end
 end)
+
+spawn(function()
+    while wait() do
+        if _G.farmNpc then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local backpack = player:FindFirstChild("Backpack")
+
+                if not backpack then return end
+
+                local function getThiefTool()
+                    for _, tool in ipairs(backpack:GetChildren()) do
+                        if tool:IsA("Tool") and tool.Name == "Thief!" then
+                            local tooltip = tool:FindFirstChild("Tooltip")
+                            if tooltip and tooltip.Value:sub(1, 8) == "Finished" then
+                                return tool
+                            end
+                        end
+                    end
+                    return nil
+                end
+
+                local tool = getThiefTool()
+                while tool do
+                    tool.Parent = player.Character
+                    tool:Activate()
+                    wait(0.1)
+                    tool = getThiefTool()
+                end
+
+                repeat wait(1) until getThiefTool()
+            end)
+        end
+    end
+end)
+
 
 page2:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
