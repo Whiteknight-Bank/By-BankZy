@@ -418,35 +418,34 @@ spawn(function()
 
             if not character or not backpack or not humanoid then return end
 
-            local tool = nil
+            -- หา Tool ที่ตรงตามชื่อและ Kills
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
 
-            local tool1 = backpack:FindFirstChild("Thief!")
-            if tool1 and tool1:FindFirstChild("Kills") and tool1.Kills.Value >= 20 then
-                tool = tool1
+                        if tool.Name == "Thief!" and kills >= 20 then
+                            return tool
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then
+                            return tool
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then
+                            return tool
+                        elseif tool.Name == "Sword Master" and kills >= 50 then
+                            return tool
+                        end
+                    end
+                end
+                return nil
             end
 
-            local tool2 = backpack:FindFirstChild("Let them pay back!")
-            if tool2 and tool2:FindFirstChild("Kills") and tool2.Kills.Value >= 30 then
-                tool = tool2
-            end
-
-            local tool3 = backpack:FindFirstChild("Annoying noobs...")
-            if tool3 and tool3:FindFirstChild("Kills") and tool3.Kills.Value >= 10 then
-                tool = tool3
-            end
-
-            local tool4 = backpack:FindFirstChild("Sword Master")
-            if tool4 and tool4:FindFirstChild("Kills") and tool4.Kills.Value >= 50 then
-                tool = tool4
-            end
+            local tool = getQualifiedTool()
 
             if tool and not character:FindFirstChild(tool.Name) then
                 humanoid:EquipTool(tool)
                 task.wait(0.05)
-            end
-
-            if tool and _G.autoclick and character:FindFirstChild(tool.Name) then
-                tool:Activate()
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
             end
 
             if humanoid.Health <= 0 or not _G.farmNpc then
@@ -455,7 +454,7 @@ spawn(function()
         end)
     end
 end)
-
+		
 page2:Toggle("Auto Buso Haki", false, function(hki)
     AutoHaki = hki
 end)
