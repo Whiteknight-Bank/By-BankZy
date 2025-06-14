@@ -286,7 +286,7 @@ page2:Dropdown("Select Mobs:", {
     if pcns == "All" then
         SelectedMob = "All"
     else
-        SelectedMob = pcns:match("^(.-)%(") or pcns -- ดึงเฉพาะชื่อมอน
+        SelectedMob = pcns:match("^(.-)%(") or pcns
     end
 end)
 
@@ -384,7 +384,7 @@ spawn(function()
         end)
     end
 end)
-	
+
 spawn(function()
     while wait(0.1) do
         pcall(function()
