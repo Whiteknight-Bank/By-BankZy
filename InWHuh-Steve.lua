@@ -405,40 +405,48 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do
-        if _G.farmNpc then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local backpack = player:FindFirstChild("Backpack")
-                local character = player.Character
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmNpc then return end
 
-                if not backpack or not character or not character:FindFirstChild("Humanoid") then return end
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
-                local function getThiefTool()
-                    for _, tool in ipairs(backpack:GetChildren()) do
-                        if tool:IsA("Tool") and tool.Name == "Thief!" then
-                            local kills = tool:FindFirstChild("Kills")
-                            if kills and kills:IsA("IntValue") and kills.Value >= 20 then
+            if not character or not backpack or not humanoid then return end
+
+            -- หา Tool ที่ตรงตามชื่อและ Kills
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") then
+                        local kills = tool:FindFirstChild("Kills")
+                        if kills and kills:IsA("IntValue") then
+                            if tool.Name == "Thief!" and kills.Value >= 20 then
+                                return tool
+                            elseif tool.Name == "Let them pay back!" and kills.Value >= 30 then
                                 return tool
                             end
                         end
                     end
-                    return nil
                 end
+                return nil
+            end
 
-                local tool = getThiefTool()
-                while tool do
-                    tool.Parent = character
-                    wait(0.1)
+            local tool = getQualifiedTool()
+
+            if tool and not character:FindFirstChild(tool.Name) then
+                tool.Parent = character
+                task.wait(0.05)
+                if character:FindFirstChild(tool.Name) then
                     tool:Activate()
-                    wait(0.2)
-                    tool = getThiefTool()
                 end
+            end
 
-                -- รอจนกว่าจะมี Kills >= 20 ใหม่อีกครั้ง
-                repeat wait(1) until getThiefTool()
-            end)
-        end
+            if humanoid.Health <= 0 or not _G.farmNpc then
+                humanoid:UnequipTools()
+            end
+        end)
     end
 end)
 		
