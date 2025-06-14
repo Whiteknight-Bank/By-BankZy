@@ -323,22 +323,28 @@ page2:Dropdown("Select NPC", {
     getgenv().selectedNPC = selected
 end)
 
-page2:Toggle("Auto Claim NPC", false, function(state)
+page2:Toggle("Auto Claim Quest", false, function(state)
     _G.claim = state
+
+    local foundNPC = nil
+    if _G.claim and getgenv().selectedNPC then
+        -- ค้นหาแค่ครั้งเดียว
+        for _, obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then
+                local head = obj:FindFirstChild("Head")
+                if head and head:FindFirstChild("ClickDetector") then
+                    foundNPC = head.ClickDetector
+                    break
+                end
+            end
+        end
+    end
+
     spawn(function()
         while task.wait() do
             pcall(function()
-                if _G.claim and getgenv().selectedNPC then
-                    -- ค้นหา NPC จากทุก descendants ของ workspace
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then
-                            local head = obj:FindFirstChild("Head")
-                            if head and head:FindFirstChild("ClickDetector") then
-                                fireclickdetector(head.ClickDetector)
-                                break
-                            end
-                        end
-                    end
+                if _G.claim and foundNPC then
+                    fireclickdetector(foundNPC)
                 end
             end)
         end
