@@ -772,7 +772,7 @@ spawn(function()
                 local hrp = char:WaitForChild("HumanoidRootPart")
 
                 for _, fruit in ipairs(workspace:GetDescendants()) do
-                    if (fruit:IsA("MeshPart") or fruit:IsA("Part")) and fruit:FindFirstChild("TouchInterest") then
+                    if (fruit:IsA("MeshPart") and fruit:FindFirstChild("TouchInterest") then
                         firetouchinterest(hrp, fruit, 0)
                         task.wait()
                         firetouchinterest(hrp, fruit, 1)
