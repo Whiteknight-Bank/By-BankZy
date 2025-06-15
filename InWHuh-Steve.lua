@@ -164,8 +164,51 @@ local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Chest ┇")
-page1:Button("Teleport All Location Chest", function()
-    print("Not Working")
+page1:Toggle("Teleport All Chest", false, function(cpst)
+    _G.tpchest = cpst
+end)
+
+spawn(function()
+    while wait() do
+        if _G.tpchest then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                if not character.PrimaryPart then return end
+
+                local banned = Vector3.new(10000, -200.000427, 10000)
+                local positions = {}
+
+                -- ชั้นที่ 1
+                for _, a in ipairs(workspace:GetChildren()) do
+                    if a.Name == "" then
+                        -- ชั้นที่ 2
+                        for _, b in ipairs(a:GetChildren()) do
+                            if b.Name == "" then
+                                -- ชั้นที่ 3
+                                for _, c in ipairs(b:GetChildren()) do
+                                    if c.Name == "" and c:IsA("BasePart") then
+                                        if (c.Position - banned).Magnitude > 1 then
+                                            table.insert(positions, c.Position)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                -- วาร์ปทุกตำแหน่ง
+                for _, pos in ipairs(positions) do
+                    character:SetPrimaryPartCFrame(CFrame.new(pos + Vector3.new(0, 5, 0)))
+                    wait(1)
+                end
+
+                create:Notifile("", "Teleport all chest", 3)
+                _G.tpchest = false
+            end)
+        end
+    end
 end)
 
 local lp = game:GetService("Players").LocalPlayer
