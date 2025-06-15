@@ -780,10 +780,6 @@ page4:Button("Buy Melee", function()
         create:Notifile("", "Please select a melee weapon before buying.", 3)
     end
 end)
-		
-page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
-    selectedGun = knrd
-end)
 
 page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
     selectedGun = knrd
