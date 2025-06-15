@@ -360,7 +360,7 @@ end)
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
 
-    if state then
+    if hki then
         spawn(function()
             while _G.autobuso do
                 pcall(function()
@@ -395,6 +395,20 @@ page1:Toggle("Auto Ken Haki", false, function(gthi)
     _G.autokenhaki = gthi
 end)
 
+spawn(function()
+    while task.wait(100) do
+        pcall(function()
+            if _G.autokenhaki then
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, true, game)
+                        task.wait(0.1)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                    end
+                end
+            end
+        end)
+    end
+end)
+		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
