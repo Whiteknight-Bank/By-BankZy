@@ -364,7 +364,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if _G.autobuso then
+            if _G.autohakibuso then
                 local player = game.Players.LocalPlayer
                 local char = workspace:FindFirstChild(player.Name)
                 
