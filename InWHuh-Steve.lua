@@ -356,9 +356,39 @@ spawn(function()
         end)
     end
 end)
-		
-page1:Toggle("Auto Buso Haki", false, function(hki)
+
+page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
+
+    if state then
+        spawn(function()
+            while _G.autobuso do
+                pcall(function()
+                    local player = game.Players.LocalPlayer
+                    local char = player.Character or workspace:FindFirstChild(player.Name)
+
+                    if char then
+                        local found = false
+
+                        for _, obj in ipairs(char:GetDescendants()) do
+                            if obj.Name == "Buso" then
+                                found = true
+                                break
+                            end
+                        end
+
+                        if not found then
+                            local vim = game:GetService("VirtualInputManager")
+                            vim:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+                            task.wait(0.1)
+                            vim:SendKeyEvent(false, Enum.KeyCode.T, false, game)
+                        end
+                    end
+                end)
+                task.wait(1)
+            end
+        end)
+    end
 end)
 
 page1:Toggle("Auto Ken Haki", false, function(gthi)
