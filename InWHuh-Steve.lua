@@ -698,7 +698,33 @@ spawn(function()
 end)
 
 page4:Label("┇ Shop [ Random Fruit ] ┇")
-page4:Button("Reset Devil Fruit [ Not Working ]", function()
+page4:Button("Reset Devil Fruit", function()
+local removerClick = nil  
+local beliClick = nil  
+
+for _, obj in ipairs(workspace:GetDescendants()) do  
+    if obj:IsA("Model") then  
+        local head = obj:FindFirstChild("Head")  
+        if head and head:FindFirstChild("ClickDetector") then  
+            if obj.Name == "Fruit Remover" then
+                removerClick = head.ClickDetector  
+            elseif obj.Name == "Beli|Price:150000" then
+                beliClick = head.ClickDetector  
+            end
+        end  
+    end  
+end  
+
+if removerClick then
+    fireclickdetector(removerClick)
+end
+
+if beliClick then
+    fireclickdetector(beliClick)
+    wait(0.5)
+    fireclickdetector(beliClick)
+end
+
 create:Notifile("", "Your Devil Fruit is Reset Now", 3)
 end)
 
