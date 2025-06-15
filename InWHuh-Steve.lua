@@ -462,29 +462,6 @@ spawn(function()
     while task.wait() do
         pcall(function()
             if _G.farmAll then
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
-
-                if tool then
-                    local toolName = tool.Name
-
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
-                    end
-                end
-                
 		for _, mob in pairs(workspace.Npcs:GetChildren()) do
                     if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                         local root = mob.HumanoidRootPart
@@ -677,30 +654,7 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if _G.BringAllPlayer then
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
-
-                if tool then
-                    local toolName = tool.Name
-
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
-                    end
-                end
-								
+            if _G.BringAllPlayer then					
                 for i,v in pairs(game.Players:GetChildren()) do
                     if v.Name ~= game.Players.LocalPlayer.Name then
                         v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-6)
