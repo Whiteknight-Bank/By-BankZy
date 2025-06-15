@@ -365,17 +365,6 @@ page1:Toggle("Auto Ken Haki", false, function(gthi)
     _G.autokenhaki = gthi
 end)
 
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.autokenhaki then
-                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, true, game)
-                end
-            end
-        end)
-    end
-end)
-
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
