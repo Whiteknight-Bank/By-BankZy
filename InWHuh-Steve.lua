@@ -459,52 +459,98 @@ page1:Toggle("Auto Farm [ All ]", false, function(fall)
 end)
 
 spawn(function()
-    while wait(0.1) do
+    while task.wait() do
         pcall(function()
-            if not _G.farmAll then return end
+            if _G.farmAll then
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10 -- default
 
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+                if tool then
+                    local toolName = tool.Name
 
-            if not character or not backpack or not humanoid then return end
+                    -- ตรวจสอบดาบ
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -8
+                            break
+                        end
+                    end
 
-            local function getQualifiedTool()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                        local kills = tool.Kills.Value
-
-                        if tool.Name == "Thief!" and kills >= 20 then
-                            return tool
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then
-                            return tool
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then
-                            return tool
-                        elseif tool.Name == "Sword Master" and kills >= 50 then
-                            return tool
-			elseif tool.Name == "Marines!" and kills >= 30 then
-                            return tool
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then
-                            return tool
+                    -- ตรวจสอบ melee
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
                         end
                     end
                 end
-                return nil
-            end
 
-            local tool = getQualifiedTool()
+                -- ลากมอนทุกตัว
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-            if tool and not character:FindFirstChild(tool.Name) then
-                humanoid:EquipTool(tool)
-                task.wait(0.05)
-                if character:FindFirstChild(tool.Name) then
-                    tool:Activate()
+                        if mob.Humanoid.Health <= 0 then  
+                            root.Size = Vector3.new(0, 0, 0)  
+                            mob:Destroy()  
+                        end  
+                    end
                 end
             end
+        end)
+    end
+end)
 
-            if humanoid.Health <= 0 or not _G.farmAll then
-                humanoid:UnequipTools()
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.farmAll then
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10 -- default
+
+                if tool then
+                    local toolName = tool.Name
+
+                    -- ตรวจสอบดาบ
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -8
+                            break
+                        end
+                    end
+
+                    -- ตรวจสอบ melee
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
+                        end
+                    end
+                end
+
+                -- ลากมอนทุกตัว
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                        if mob.Humanoid.Health <= 0 then  
+                            root.Size = Vector3.new(0, 0, 0)  
+                            mob:Destroy()  
+                        end  
+                    end
+                end
             end
         end)
     end
@@ -626,6 +672,51 @@ end)
 		
 page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.BringAllPlayer then
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
+
+                if tool then
+                    local toolName = tool.Name
+
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset1 = -8
+                            break
+                        end
+                    end
+
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset1 = -6
+                            break
+                        end
+                    end
+                end
+
+                for i, v in pairs(game.Players:GetPlayers()) do
+                    if v ~= player and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        local root = v.Character.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset1)
+
+                        if v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 plr = game.Players.LocalPlayer
