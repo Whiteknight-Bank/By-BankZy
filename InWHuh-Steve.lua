@@ -153,29 +153,60 @@ end
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Teleport Chest ┇")
-page1:Button("Teleport To Location All Chest" , function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-    end)
+page1:Label("┇ Function Chest ┇")
+page1:Button("Teleport All Location Chest", function()
+    print("Not Working")
+end)
+
+local lp = game:GetService("Players").LocalPlayer
+_G.safezonewarp = false
+
+-- ฟังก์ชันเช็คว่ามี LocalScript ชื่อ "" อยู่ในตัวละครไหม (AntiTP)
+local function isAntiTpStillActive()
+    local char = workspace:FindFirstChild(lp.Name)
+    if char then
+        for _, scriptObj in pairs(char:GetChildren()) do
+            if scriptObj:IsA("Script") then
+                for _, child in pairs(scriptObj:GetChildren()) do
+                    if child:IsA("LocalScript") and child.Name == "" then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+    return false
+end
 
 page1:Label("┇ Safe Zone ┇")
-page1:Button("Safe Zone Part" , function()
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-    end)
-
-page1:Toggle("Auto Teleport At Safe Zone", false, function(atre)
-    _G.atgosafe = atre
+page1:Button("Safe Zone Part", function()
+    if isAntiTpStillActive() then
+        create:Notifile("", "Anti Death Tp Not Enable", 3)
+        return
+    end
+    local char = lp.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+    end
+end)
+		
+page1:Toggle("Safe Zone Warp", false, function(val)
+    _G.safezonewarp = val
 end)
 
 spawn(function()
-while wait(5) do
-pcall(function()
-if _G.atgosafe then
-	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-        end  
-    end)  
-end
+    while task.wait(4) do
+        pcall(function()
+            if _G.safezonewarp and not isAntiTpStillActive() then
+                local char = lp.Character
+                if char and char:FindFirstChild("HumanoidRootPart") then
+                    char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+                end
+            end
+        end)
+    end
 end)
+		
 
 page1:Label("┇ Function Item ┇")
 page1:Dropdown("Select Weapon:", Wapon, function(wapn)
