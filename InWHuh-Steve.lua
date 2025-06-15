@@ -354,7 +354,7 @@ spawn(function()
 
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
                         if string.find(v, toolName) then
-                            offset = -6.5
+                            offset = -6
                             break
                         end
                     end
@@ -479,7 +479,7 @@ spawn(function()
 
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
                         if string.find(v, toolName) then
-                            offset = -6.5
+                            offset = -6
                             break
                         end
                     end
@@ -647,7 +647,7 @@ spawn(function()
 
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
                         if string.find(v, toolName) then
-                            offset = -6.5
+                            offset = -6
                             break
                         end
                     end
@@ -695,7 +695,7 @@ spawn(function()
 
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
                         if string.find(v, toolName) then
-                            offset = -6.5
+                            offset = -6
                             break
                         end
                     end
