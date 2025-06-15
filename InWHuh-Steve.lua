@@ -101,6 +101,16 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword| Prices:100", "Katana|Price:5000
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {""};
 
+local npcList = {
+    "Big head boy",
+    "Bob",
+    "Sad noob",
+    "Sword noob",
+    "Gun noob",
+    "Injured pirate",
+    "That noob"
+		}
+
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -404,7 +414,29 @@ spawn(function()
 end)
 
 page1:Toggle("Auto Farm [ All ]", false, function(fall)
-_G.farmAll = fall
+    _G.farmAll = fall
+
+    if autoClaimLoop then  
+        autoClaimLoop:Disconnect()  
+        autoClaimLoop = nil  
+    end  
+
+    if _G.farmAll then
+        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                for _, npcName in pairs(npcList) do
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("Model") and obj.Name == npcName then
+                            local head = obj:FindFirstChild("Head")
+                            if head and head:FindFirstChild("ClickDetector") then
+                                fireclickdetector(head.ClickDetector)
+                            end
+                        end
+                    end
+                end
+            end)
+        end)
+    end
 end)
 
 spawn(function()
