@@ -404,10 +404,6 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Gun Farm [ Not Working ]", false, function(hki)
-    AutoHaki = hki
-end)
-
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
