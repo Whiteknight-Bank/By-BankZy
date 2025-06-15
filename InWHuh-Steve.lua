@@ -681,7 +681,7 @@ spawn(function()
                 local player = game.Players.LocalPlayer
                 local char = player.Character or player.CharacterAdded:Wait()
                 local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
+                local offset1 = -10
 
                 if tool then
                     local toolName = tool.Name
