@@ -510,7 +510,8 @@ function newPage:Dropdown(title, items, callback)
                 local option = Instance.new("TextButton", optionContainer)
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)BackgroundTransparency = 0.4
+                option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                option.BackgroundTransparency = 0.4
                 option.TextColor3 = Color3.fromRGB(255, 255, 255)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
@@ -543,17 +544,30 @@ end
     return tabs
 end
 
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+
+local activeNotifs = {}
+
 function library:Notifile(title, msg, duration)
     local gui = CoreGui:FindFirstChild("redui")
     if not gui then return end
 
-    local notif = Instance.new("Frame", gui)
+    -- Limit to 3 notifications
+    if #activeNotifs >= 3 then
+        local oldest = table.remove(activeNotifs, 1)
+        oldest:Destroy()
+    end
+
+    -- Create Notification
+    local notif = Instance.new("Frame")
     notif.Size = UDim2.new(0, 300, 0, 60)
-    notif.Position = UDim2.new(1, 310, 1, -80)
+    notif.Position = UDim2.new(1, 310, 1, -80) -- Start offscreen
     notif.AnchorPoint = Vector2.new(1, 1)
     notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)BackgroundTransparency = 0.4
+    notif.BackgroundTransparency = 0.4
     notif.BorderSizePixel = 0
+    notif.Parent = gui
 
     local label = Instance.new("TextLabel", notif)
     label.Size = UDim2.new(1, -10, 1, 0)
@@ -565,18 +579,112 @@ function library:Notifile(title, msg, duration)
     label.BackgroundTransparency = 1
     label.TextXAlignment = Enum.TextXAlignment.Left
 
-    local tweenIn = TweenService:Create(notif, TweenInfo.new(0.3), {
+    -- Shift up all current notifications
+    for i, n in ipairs(activeNotifs) do
+        local goalPos = UDim2.new(1, -10, 1, -10 - (70 * (i)))
+        TweenService:Create(n, TweenInfo.new(0.2), { Position = goalPos }):Play()
+    end
+
+    table.insert(activeNotifs, notif)
+
+    -- Tween In (Slide in from right)
+    TweenService:Create(notif, TweenInfo.new(0.3), {
         Position = UDim2.new(1, -10, 1, -10)
-    })
+    }):Play()
 
-    local tweenOut = TweenService:Create(notif, TweenInfo.new(0.3), {
-        Position = UDim2.new(1, 310, 1, -80)
-    })
-
-    tweenIn:Play()
+    -- Delay and Tween Out (Slide out to right then destroy)
     task.delay(duration or 3, function()
+        local tweenOut = TweenService:Create(notif, TweenInfo.new(0.3), {
+            Position = UDim2.new(1, 310, 1, -10)
+        })
         tweenOut:Play()
         tweenOut.Completed:Wait()
+
+        -- Remove from active list
+        for i, n in ipairs(activeNotifs) do
+            if n == notif then
+                table.remove(activeNotifs, i)
+                break
+            end
+        end
+
+        -- Shift remaining notifs down
+        for i, n in ipairs(activeNotifs) do
+            local goalPos = UDim2.new(1, -10, 1, -10 - (70 * (i - 1)))
+            TweenService:Create(n, TweenInfo.new(0.2), { Position = goalPos }):Play()
+        end
+
+        notif:Destroy()
+    end)
+end
+
+local activeNotifs = {}
+
+function library:Notifile(title, msg, duration)
+    local gui = CoreGui:FindFirstChild("redui")
+    if not gui then return end
+
+    -- Limit to 3 notifications
+    if #activeNotifs >= 3 then
+        local oldest = table.remove(activeNotifs, 1)
+        oldest:Destroy()
+    end
+
+    -- Create Notification
+    local notif = Instance.new("Frame")
+    notif.Size = UDim2.new(0, 300, 0, 60)
+    notif.Position = UDim2.new(1, 310, 1, -80) -- Start offscreen
+    notif.AnchorPoint = Vector2.new(1, 1)
+    notif.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    notif.BackgroundTransparency = 0.4
+    notif.BorderSizePixel = 0
+    notif.Parent = gui
+
+    local label = Instance.new("TextLabel", notif)
+    label.Size = UDim2.new(1, -10, 1, 0)
+    label.Position = UDim2.new(0, 5, 0, 0)
+    label.Text = msg
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.SourceSans
+    label.TextSize = 18
+    label.BackgroundTransparency = 1
+    label.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- Shift up all current notifications
+    for i, n in ipairs(activeNotifs) do
+        local goalPos = UDim2.new(1, -10, 1, -10 - (70 * (i)))
+        TweenService:Create(n, TweenInfo.new(0.2), { Position = goalPos }):Play()
+    end
+
+    table.insert(activeNotifs, notif)
+
+    -- Tween In (Slide in from right)
+    TweenService:Create(notif, TweenInfo.new(0.3), {
+        Position = UDim2.new(1, -10, 1, -10)
+    }):Play()
+
+    -- Delay and Tween Out (Slide out to right then destroy)
+    task.delay(duration or 3, function()
+        local tweenOut = TweenService:Create(notif, TweenInfo.new(0.3), {
+            Position = UDim2.new(1, 310, 1, -10)
+        })
+        tweenOut:Play()
+        tweenOut.Completed:Wait()
+
+        -- Remove from active list
+        for i, n in ipairs(activeNotifs) do
+            if n == notif then
+                table.remove(activeNotifs, i)
+                break
+            end
+        end
+
+        -- Shift remaining notifs down
+        for i, n in ipairs(activeNotifs) do
+            local goalPos = UDim2.new(1, -10, 1, -10 - (70 * (i - 1)))
+            TweenService:Create(n, TweenInfo.new(0.2), { Position = goalPos }):Play()
+        end
+
         notif:Destroy()
     end)
 end
