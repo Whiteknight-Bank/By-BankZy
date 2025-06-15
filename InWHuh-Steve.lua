@@ -367,11 +367,22 @@ spawn(function()
             if _G.autobuso then
                 local player = game.Players.LocalPlayer
                 local char = workspace:FindFirstChild(player.Name)
-                if char and not char:FindFirstChild("Buso") then
-                    -- ถ้ายังไม่มี Buso ให้กดปุ่ม T ครั้งเดียว
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.T, false, game)
-                    task.wait(0.1)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.T, false, game)
+                
+                if char then
+                    local found = false
+                    for _, v in ipairs(char:GetDescendants()) do
+                        if v.Name == "Buso" then
+                            found = true
+                            break
+                        end
+                    end
+
+                    if not found then
+                        -- กด T เพื่อเปิดบูโซฮาคิ
+                        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.T, false, game)
+                        task.wait(0.1)
+                        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.T, false, game)
+                    end
                 end
             end
         end)
@@ -386,13 +397,7 @@ spawn(function()
     while task.wait() do
         pcall(function()
             if _G.autokenhaki then
-                local player = game.Players.LocalPlayer
-                local char = workspace:FindFirstChild(player.Name)
-                if char and not char:FindFirstChild("Buso") then
-                    -- ถ้ายังไม่มี Buso ให้กดปุ่ม T ครั้งเดียว
-                    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.R, false, game)
-                    task.wait(0.1)
-                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, true, game)
                 end
             end
         end)
