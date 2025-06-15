@@ -416,20 +416,21 @@ end)
 page1:Toggle("Auto Farm [ All ]", false, function(fall)
     _G.farmAll = fall
 
-    if autoClaimLoop then  
-        autoClaimLoop:Disconnect()  
-        autoClaimLoop = nil  
-    end  
+    if autoClaimLoop then
+        autoClaimLoop:Disconnect()
+        autoClaimLoop = nil
+    end
 
     if _G.farmAll then
         autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
-                for _, npcName in pairs(npcList) do
+                for _, npcName in ipairs(npcList) do
                     for _, obj in ipairs(workspace:GetDescendants()) do
                         if obj:IsA("Model") and obj.Name == npcName then
                             local head = obj:FindFirstChild("Head")
                             if head and head:FindFirstChild("ClickDetector") then
                                 fireclickdetector(head.ClickDetector)
+                                return -- รับเควสจากแค่อันเดียวต่อรอบ
                             end
                         end
                     end
