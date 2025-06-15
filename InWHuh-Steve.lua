@@ -661,22 +661,25 @@ end)
 
 page4:Button("Buy Sword", function()
     if selectedSword then  
-        local foundNPC = nil  
-        for _, obj in ipairs(workspace:GetDescendants()) do  
-            if obj:IsA("Model") and obj.Name == selectedSword then  
-                local head = obj:FindFirstChild("Head")  
-                if head and head:FindFirstChild("ClickDetector") then  
-                    foundNPC = head.ClickDetector  
-                    break  
+        for i = 1, 2 do
+            local foundNPC = nil  
+            for _, obj in ipairs(workspace:GetDescendants()) do  
+                if obj:IsA("Model") and obj.Name == selectedSword then  
+                    local head = obj:FindFirstChild("Head")  
+                    if head and head:FindFirstChild("ClickDetector") then  
+                        foundNPC = head.ClickDetector  
+                        break  
+                    end  
                 end  
             end  
-        end  
 
-        if foundNPC then  
-            fireclickdetector(foundNPC)
-        else
-            create:Notifile("", "Cannot find the NPC for " .. selectedSword, 3)
-            create:Notifile("", "Please check your selection or try again.", 3)
+            if foundNPC then  
+                fireclickdetector(foundNPC)
+            else
+                create:Notifile("", "Cannot find the NPC for " .. selectedSword, 3)
+                create:Notifile("", "Please check your selection or try again.", 3)
+                break  -- เจอว่าไม่มี NPC เลยออกลูปก่อนครบ 2 รอบ
+            end
         end
     else
         create:Notifile("", "No sword selected!", 3)
@@ -689,7 +692,35 @@ page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
 end)
 
 page4:Button("Buy Melee", function()
-    _G.buy = true
+    if selectedMelee then  
+        for i = 1, 2 do  -- ซื้อ 2 ครั้ง
+            local foundNPC = nil  
+            for _, obj in ipairs(workspace:GetDescendants()) do  
+                if obj:IsA("Model") and obj.Name == selectedMelee then  
+                    local head = obj:FindFirstChild("Head")  
+                    if head and head:FindFirstChild("ClickDetector") then  
+                        foundNPC = head.ClickDetector  
+                        break  
+                    end  
+                end  
+            end  
+
+            if foundNPC then  
+                fireclickdetector(foundNPC)
+            else
+                create:Notifile("", "Cannot find the NPC for " .. selectedMelee, 3)
+                create:Notifile("", "Please check your selection or try again.", 3)
+                break
+            end
+        end
+    else
+        create:Notifile("", "No melee selected!", 3)
+        create:Notifile("", "Please select a melee weapon before buying.", 3)
+    end
+end)
+		
+page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
+    selectedGun = knrd
 end)
 
 page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
@@ -697,7 +728,31 @@ page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
 end)
 
 page4:Button("Buy Gun", function()
-    _G.buy = true
+    if selectedGun then  
+        for i = 1, 2 do  -- ซื้อ 2 ครั้ง
+            local foundNPC = nil  
+            for _, obj in ipairs(workspace:GetDescendants()) do  
+                if obj:IsA("Model") and obj.Name == selectedGun then  
+                    local head = obj:FindFirstChild("Head")  
+                    if head and head:FindFirstChild("ClickDetector") then  
+                        foundNPC = head.ClickDetector  
+                        break  
+                    end  
+                end  
+            end  
+
+            if foundNPC then  
+                fireclickdetector(foundNPC)
+            else
+                create:Notifile("", "Cannot find the NPC for " .. selectedGun, 3)
+                create:Notifile("", "Please check your selection or try again.", 3)
+                break
+            end
+        end
+    else
+        create:Notifile("", "No gun selected!", 3)
+        create:Notifile("", "Please select a gun before buying.", 3)
+    end
 end)
 
 local Tab0 = Window:Taps("Fruit")
@@ -878,7 +933,7 @@ end)
 		
 page5:Label("┇ Other ┇")
 page5:Button("Boost FPS", function()
-create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
+create:Notifile("", "Pls wait start boost fps & show fps", 3)
 wait(2)
 
 local ToDisable = {
@@ -998,7 +1053,7 @@ local afkConnection
 page5:Toggle("Anti AFK", false, function(state)
 
     if state then
-	create:Notifile("", "Protect Kick AFK You Can AFK Now :)", 3)
+	create:Notifile("", "Protect kick from the server when you afk :)", 3)
         local vu = game:GetService("VirtualUser")
         afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
             vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
