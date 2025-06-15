@@ -38,28 +38,26 @@ function library:Win(title)
     border.Thickness = 2
     border.Color = Color3.fromRGB(255, 255, 255)
 
-    -- ปุ่ม "Bank Hub" ลอยอยู่ซ้ายบนเมนูตลอด และมีขนาดพอดีกับข้อความ
+-- toggle close
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
 toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Position = UDim2.new(0, 10, 0, 10) -- ซ้ายบนมีระยะห่างนิดหน่อย
-toggleButton.Size = UDim2.new(0, 100, 0, 30) -- กำหนดค่าเริ่มต้นก่อนจะขยายตามข้อความ
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.Size = UDim2.new(0, 28, 0, 28) -- สี่เหลี่ยมเกือบจัตุรัส ใหญ่กว่า X นิดเดียว
 toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 toggleButton.BackgroundTransparency = 0.2
-toggleButton.Text = "InW Hub"
+toggleButton.Text = " X " -- มีเว้นวรรคเพื่อไม่แน่นเกิน
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Font = Enum.Font.GothamBold
 toggleButton.TextSize = 16
+toggleButton.TextXAlignment = Enum.TextXAlignment.Center
+toggleButton.TextYAlignment = Enum.TextYAlignment.Center
 toggleButton.ZIndex = 10
-toggleButton.AutomaticSize = Enum.AutomaticSize.X -- ขยายแนวนอนตามข้อความ
-toggleButton.TextWrapped = false
 toggleButton.Parent = gui
 
--- ให้ปุ่มปรับขนาดตามข้อความ
-local textSizeConstraint = Instance.new("UITextSizeConstraint")
-textSizeConstraint.MaxTextSize = 16
-textSizeConstraint.MinTextSize = 10
-textSizeConstraint.Parent = toggleButton
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 6)
+corner.Parent = toggleButton
 
 -- Optional: ใส่ UICorner เพื่อให้ปุ่มมีมุมโค้ง
 local corner = Instance.new("UICorner")
