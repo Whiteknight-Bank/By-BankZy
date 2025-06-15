@@ -111,24 +111,24 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
-spawn(function() -- autofarm velocity
-    while wait(0) do
+local lp = game:GetService("Players").LocalPlayer
+
+spawn(function()
+    while true do
+        task.wait(4) -- ดีเลย์ 4 วินาที
         pcall(function()
-            if AutoFish or AutoPack or _G.behindfarm or _G.rumblefarm or _G.killbomb then
-                if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-                    local Noclip = Instance.new("BodyVelocity")
-                    Noclip.Name = "BodyClip"
-                    Noclip.Parent = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-                    Noclip.MaxForce = Vector3.new(100000,100000,100000)
-                    Noclip.Velocity = Vector3.new(0,0,0)
+            local char = workspace:FindFirstChild(lp.Name)
+            if char then
+                for _, scriptObj in pairs(char:GetChildren()) do
+                    if scriptObj:IsA("Script") then
+                        for _, child in pairs(scriptObj:GetChildren()) do
+                            if child:IsA("LocalScript") and child.Name == "" then
+                                scriptObj:Destroy()
+                                break -- หยุด loop ลูกเมื่อเจอแล้วลบ Script แม่
+                            end
+                        end
+                    end
                 end
-                game.Players.LocalPlayer.Character.Humanoid.JumpPower = 0
-            elseif  AutoFish == false or AutoPack == false or _G.behindfarm == false or _G.rumblefarm == false or _G.killbomb == false then
-                if game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
-                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip"):Destroy()
-                wait(1)
-                end
-                game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50
             end
         end)
     end
@@ -153,13 +153,28 @@ end
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
+page1:Label("┇ Teleport Chest ┇")
+page1:Button("Teleport To Location All Chest" , function()
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+    end)
+
 page1:Label("┇ Safe Zone ┇")
 page1:Button("Safe Zone Part" , function()
         game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end)
 
-page1:Toggle("Auto Teleport At Safe Zone [ Not Working ]", false, function(atre)
-    _G.autorespasn = atre
+page1:Toggle("Auto Teleport At Safe Zone", false, function(atre)
+    _G.atgosafe = atre
+end)
+
+spawn(function()
+while wait(5) do
+pcall(function()
+if _G.atgosafe then
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+        end  
+    end)  
+end
 end)
 
 page1:Label("┇ Function Item ┇")
@@ -359,6 +374,81 @@ end)
 
 page1:Toggle("Auto Farm [ All ]", false, function(fall)
 _G.farmAll = fall
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.farmAll then
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
+
+                        if mob.Humanoid.Health <= 0 then  
+                            root.Size = Vector3.new(0, 0, 0)  
+                            mob:Destroy()  
+                        end  
+                    end  
+                end  
+            end  
+        end)
+    end
+end)
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmAll then return end
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if not character or not backpack or not humanoid then return end
+
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
+
+                        if tool.Name == "Thief!" and kills >= 20 then
+                            return tool
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then
+                            return tool
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then
+                            return tool
+                        elseif tool.Name == "Sword Master" and kills >= 50 then
+                            return tool
+			elseif tool.Name == "Marines!" and kills >= 30 then
+                            return tool
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then
+                            return tool
+                        end
+                    end
+                end
+                return nil
+            end
+
+            local tool = getQualifiedTool()
+
+            if tool and not character:FindFirstChild(tool.Name) then
+                humanoid:EquipTool(tool)
+                task.wait(0.05)
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+            end
+
+            if humanoid.Health <= 0 or not _G.farmAll then
+                humanoid:UnequipTools()
+            end
+        end)
+    end
 end)
 
 page1:Label("┇ Function Haki ┇")
@@ -642,8 +732,8 @@ local PlaceID = game.PlaceId
 
 end)
 		
-page5:Label("┇ Function Anti ┇")
-page5:Button("Anti Lag", function()
+page5:Label("┇ Other ┇")
+page5:Button("Boost FPS", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -779,33 +869,6 @@ page5:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page5:Toggle("Anti Teleport Death", true, function(tpp)
-_G.antiTp = tpp
-end)
-
-local lp = game:GetService("Players").LocalPlayer
-
-spawn(function()
-    while wait() do
-        if _G.antiTp then
-            pcall(function()
-                local char = workspace:FindFirstChild(lp.Name)
-                if char then
-                    for _, scriptObj in pairs(char:GetChildren()) do
-                        if scriptObj:IsA("Script") then
-                            for _, child in pairs(scriptObj:GetChildren()) do
-                                if child:IsA("LocalScript") and child.Name == "" then
-                                    scriptObj:Destroy()
-                                    break -- หยุด loop ลูกเมื่อเจอแล้วลบ Script แม่
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
 
 	end)
 
