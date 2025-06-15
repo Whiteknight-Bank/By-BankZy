@@ -162,7 +162,7 @@ page1:Toggle("Auto Teleport At Safe Zone [ Not Working ]", false, function(atre)
     _G.autorespasn = atre
 end)
 
-page1:Label("┇ Function Farm ┇")
+page1:Label("┇ Function Item ┇")
 page1:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
@@ -357,6 +357,11 @@ spawn(function()
     end
 end)
 
+page1:Toggle("Auto Farm [ All ]", false, function(fall)
+_G.farmAll = fall
+end)
+
+page1:Label("┇ Function Haki ┇")
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
 
@@ -386,24 +391,6 @@ page1:Toggle("Auto Buso", false, function(hki)
                     end
                 end)
                 task.wait(1)
-            end
-        end)
-    end
-end)
-
-page1:Toggle("Auto Ken Haki", false, function(gthi)
-    _G.autokenhaki = gthi
-end)
-
-spawn(function()
-    while task.wait(100) do
-        pcall(function()
-            if _G.autokenhaki then
-                        game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.R, true, game)
-                        task.wait(0.1)
-                        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.R, false, game)
-                    end
-                end
             end
         end)
     end
