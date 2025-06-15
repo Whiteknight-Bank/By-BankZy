@@ -552,6 +552,12 @@ end)
 		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
+		
+page2:Label("┇ Local Player ┇")
+page2:Toggle("Anti Fruit [ God ]", false, function(frut)
+	_G.antifruit = frut
+end)
+
 
 page2:Label("┇ Player ┇")
 page2:Dropdown("Select Player:", getPlayerNames(), function(name)
@@ -575,7 +581,11 @@ page2:Toggle("View", false, function(state)
 	end
 end)
 
-page2:Toggle("Auto Bring Player( All )", false, function(plal)
+page2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
+	_G.BringPlayer = pla
+end)
+
+page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -645,12 +655,33 @@ page3:Button("Fruit Seller Island" , function()
 local Tab4 = Window:Taps("Shop")
 local page4 = Tab4:newpage()
 
-page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(knrd)
-    selectedSword = knrd
+page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
+    selectedSword = sword
 end)
 
 page4:Button("Buy Sword", function()
-    _G.buy = true
+    if selectedSword then  
+        local foundNPC = nil  
+        for _, obj in ipairs(workspace:GetDescendants()) do  
+            if obj:IsA("Model") and obj.Name == selectedSword then  
+                local head = obj:FindFirstChild("Head")  
+                if head and head:FindFirstChild("ClickDetector") then  
+                    foundNPC = head.ClickDetector  
+                    break  
+                end  
+            end  
+        end  
+
+        if foundNPC then  
+            fireclickdetector(foundNPC)
+        else
+            create:Notifile("", "Cannot find the NPC for " .. selectedSword, 3)
+            create:Notifile("", "Please check your selection or try again.", 3)
+        end
+    else
+        create:Notifile("", "No sword selected!", 3)
+        create:Notifile("", "Please select a sword before buying.", 3)
+    end
 end)
 
 page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
@@ -669,38 +700,10 @@ page4:Button("Buy Gun", function()
     _G.buy = true
 end)
 
-spawn(function()
-    while wait(0.1) do
-        if _G.buy then
-            local function TryBuy(npcName)
-                if not npcName then return false end
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and obj.Name == npcName then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                            print("✅ ซื้อ NPC: " .. npcName)
-                            return true
-                        end
-                    end
-                end
-                warn("❌ ไม่พบ NPC หรือ ClickDetector สำหรับ: " .. tostring(npcName))
-                return false
-            end
-
-            if selectedSword then TryBuy(selectedSword) end
-            if selectedMelee then TryBuy(selectedMelee) end
-            if selectedGun then TryBuy(selectedGun) end
-
-            _G.buy = false
-        end
-    end
-end)
-
-local Tab0 = Window:Taps("Misc")
+local Tab0 = Window:Taps("Fruit")
 local page0 = Tab0:newpage()
 
-page0:Label("┇ Shop [ Random Fruit ] ┇")
+page0:Label("┇ Random Fruit ┇")
 page0:Button("Reset Devil Fruit", function()
 local removerClick = nil  
 local beliClick = nil  
@@ -731,7 +734,7 @@ end
 create:Notifile("", "Your Devil Fruit is Reset Now", 3)
 end)
 
-page0:Button("Reset Random Fruit", function()
+page0:Button("Random Fruit", function()
 local removerClick = nil  
 local beli1Click = nil  
 
