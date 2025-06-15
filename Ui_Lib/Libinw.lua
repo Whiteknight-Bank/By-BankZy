@@ -42,29 +42,24 @@ function library:Win(title)
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
 toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Position = UDim2.new(0, 10, 0, 10)
-toggleButton.Size = UDim2.new(0, 28, 0, 28) -- สี่เหลี่ยมเกือบจัตุรัส ใหญ่กว่า X นิดเดียว
+toggleButton.Position = UDim2.new(0.5, 422, 0.5, -250) -- ตรงมุมขวาบนของเมนู
+toggleButton.Size = UDim2.new(0, 28, 0, 28)
 toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 toggleButton.BackgroundTransparency = 0.2
-toggleButton.Text = " X " -- มีเว้นวรรคเพื่อไม่แน่นเกิน
+toggleButton.Text = " X "
 toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Font = Enum.Font.GothamBold
 toggleButton.TextSize = 16
 toggleButton.TextXAlignment = Enum.TextXAlignment.Center
 toggleButton.TextYAlignment = Enum.TextYAlignment.Center
 toggleButton.ZIndex = 10
-toggleButton.Parent = gui
+toggleButton.Parent = gui -- อยู่ใน ScreenGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
 corner.Parent = toggleButton
-
--- Optional: ใส่ UICorner เพื่อให้ปุ่มมีมุมโค้ง
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = toggleButton
-
-    -- Title bar (ใช้ลาก)
+    
+-- Title bar (ใช้ลาก)
     local titleBar = Instance.new("TextLabel")
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
