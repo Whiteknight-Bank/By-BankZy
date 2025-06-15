@@ -163,54 +163,6 @@ end
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Chest ┇")
-page1:Toggle("Teleport All Chest", false, function(cpst)
-    _G.tpchest = cpst
-end)
-
-spawn(function()
-    while wait() do
-        if _G.tpchest then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local character = player.Character or player.CharacterAdded:Wait()
-                if not character.PrimaryPart then return end
-
-                local banned = Vector3.new(10000, -200.000427, 10000)
-                local positions = {}
-
-                -- ชั้นที่ 1
-                for _, a in ipairs(workspace:GetChildren()) do
-                    if a.Name == "" then
-                        -- ชั้นที่ 2
-                        for _, b in ipairs(a:GetChildren()) do
-                            if b.Name == "" then
-                                -- ชั้นที่ 3
-                                for _, c in ipairs(b:GetChildren()) do
-                                    if c.Name == "" and c:IsA("BasePart") then
-                                        if (c.Position - banned).Magnitude > 1 then
-                                            table.insert(positions, c.Position)
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-
-                -- วาร์ปทุกตำแหน่ง
-                for _, pos in ipairs(positions) do
-                    character:SetPrimaryPartCFrame(CFrame.new(pos + Vector3.new(0, 5, 0)))
-                    wait(1)
-                end
-
-                create:Notifile("", "Teleport all chest", 3)
-                _G.tpchest = false
-            end)
-        end
-    end
-end)
-
 local lp = game:GetService("Players").LocalPlayer
 _G.safezonewarp = false
 
@@ -648,9 +600,53 @@ page2:Toggle("View", false, function(state)
 end)
 
 page2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
-	_G.BringPlayer = pla
+	_G.bringPlayer = pla
 end)
 
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.bringPlayer and selectedPlayer ~= "" then
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
+
+                if tool then
+                    local toolName = tool.Name
+
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -8
+                            break
+                        end
+                    end
+
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
+                        end
+                    end
+                end
+
+                local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
+                if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetRoot = targetPlayer.Character.HumanoidRootPart
+                    targetRoot.CanCollide = false
+                    targetRoot.Anchored = true
+                    targetRoot.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                    if targetPlayer.Character:FindFirstChild("Humanoid") and targetPlayer.Character.Humanoid.Health <= 0 then
+                        targetRoot.Anchored = false
+                        targetRoot.Size = Vector3.new(2, 2, 1)
+                    end
+                end
+            end
+        end)
+    end
+end)
+		
 page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
@@ -997,7 +993,7 @@ local PlaceID = game.PlaceId
 
 end)
 		
-page5:Label("┇ Other ┇")
+page5:Label("┇ Another ┇")
 page5:Button("Boost FPS", function()
 create:Notifile("", "Pls wait start boost fps & show fps", 3)
 wait(2)
@@ -1134,6 +1130,52 @@ page5:Toggle("Anti AFK", false, function(state)
     end
 end)
 
+page5:Toggle("Teleport All Chest", false, function(cpst)
+    _G.tpchest = cpst
+end)
+
+spawn(function()
+    while wait() do
+        if _G.tpchest then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local character = player.Character or player.CharacterAdded:Wait()
+                if not character.PrimaryPart then return end
+
+                local banned = Vector3.new(10000, -200.000427, 10000)
+                local positions = {}
+
+                -- ชั้นที่ 1
+                for _, a in ipairs(workspace:GetChildren()) do
+                    if a.Name == "" then
+                        -- ชั้นที่ 2
+                        for _, b in ipairs(a:GetChildren()) do
+                            if b.Name == "" then
+                                -- ชั้นที่ 3
+                                for _, c in ipairs(b:GetChildren()) do
+                                    if c.Name == "" and c:IsA("BasePart") then
+                                        if (c.Position - banned).Magnitude > 1 then
+                                            table.insert(positions, c.Position)
+                                        end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+
+                -- วาร์ปทุกตำแหน่ง
+                for _, pos in ipairs(positions) do
+                    character:SetPrimaryPartCFrame(CFrame.new(pos + Vector3.new(0, 5, 0)))
+                    wait(1)
+                end
+
+                create:Notifile("", "Teleport all chest", 3)
+                _G.tpchest = false
+            end)
+        end
+    end
+end)
 
 	end)
 
