@@ -459,29 +459,6 @@ page1:Toggle("Auto Farm [ All ]", false, function(fall)
 end)
 
 spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmAll then
-		for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
-
-                        if mob.Humanoid.Health <= 0 then  
-                            root.Size = Vector3.new(0, 0, 0)  
-                            mob:Destroy()  
-                        end  
-                    end  
-                end  
-            end  
-        end)
-    end
-end)
-
-spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmAll then return end
@@ -649,23 +626,6 @@ end)
 		
 page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
-end)
-
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.BringAllPlayer then					
-                for i,v in pairs(game.Players:GetChildren()) do
-                    if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-6)
-                        if v.Character.Humanoid.Health == 0 then
-                        	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                        end
-                    end
-                end
-            end)
-        end
-    end
 end)
 
 plr = game.Players.LocalPlayer
