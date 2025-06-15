@@ -382,28 +382,51 @@ _G.farmNpc = befrm
 end)
 
 spawn(function()
-while task.wait() do
-pcall(function()
-if _G.farmNpc and SelectedMob ~= "" then
-for _, mob in pairs(workspace.Npcs:GetChildren()) do
-if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
-local root = mob.HumanoidRootPart
-root.CanCollide = false
-root.Size = Vector3.new(10, 10, 10)
-root.Anchored = true
-root.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -10)
+    while task.wait() do
+        pcall(function()
+            if _G.farmNpc and SelectedMob ~= "" then
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
 
-if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then  
-                        root.Size = Vector3.new(0, 0, 0)  
-                        mob:Destroy()  
-                    end  
-                end  
-            end  
-        end  
-    end)  
-end
-end)
-	
+                if tool then
+                    local toolName = tool.Name
+
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -8
+                            break
+                        end
+                    end
+
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
+                        end
+                    end
+                end
+
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                        if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)	
+		
 spawn(function()
     while wait(0.1) do
         pcall(function()
