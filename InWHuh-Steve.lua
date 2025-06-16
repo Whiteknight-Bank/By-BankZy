@@ -514,19 +514,20 @@ if _G.farmAll then
 end	
 end)
 
-local player = game.Players.LocalPlayer
-local function startFarmLoop()
-    spawn(function()
-        while task.wait() do
-            if not _G.farmAll then break end
-
-            pcall(function()
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.farmAll then
+                local player = game.Players.LocalPlayer
                 local char = player.Character
-                if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+                local hum = char and char:FindFirstChild("Humanoid")
+                if not char or not hum then return end
 
-                local humanoid = char:FindFirstChild("Humanoid")
-                if humanoid and humanoid.Health <= 0 then
-                    break
+                -- ถ้าตายให้รอเกิดใหม่แล้วรอ 2 วิ
+                if hum.Health <= 0 then
+                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    wait(2)
+                    return -- ออกจาก loop นี้ ให้ spawn ใหม่รอรอบหน้า
                 end
 
                 local tool = char:FindFirstChildOfClass("Tool")
@@ -536,7 +537,7 @@ local function startFarmLoop()
                     local toolName = tool.Name  
                     for _, v in pairs(Cache.DevConfig["ListOfSword"]) do  
                         if string.find(v, toolName) then  
-                            offset = -7 
+                            offset = -8  
                             break  
                         end  
                     end  
@@ -561,12 +562,12 @@ local function startFarmLoop()
                             mob:Destroy()    
                         end    
                     end  
-                end  
-            end)
-        end
-    end)
-end
-
+                end
+            end
+        end)
+    end
+end)
+		
 spawn(function()
     while task.wait() do
         if _G.farmAll then
