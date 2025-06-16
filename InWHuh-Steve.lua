@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "InW Hub Loading" .. dots[dotIndex]
+			title.Text = "BNK Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -89,9 +89,9 @@ task.spawn(function()
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("InW Hub : For Map: [ Steve's One Piece ]")
+local Window = create:Win("BNK Hub : For Map: [ Steve's One Piece ]")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to InW Hub", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to BNK Hub", 5)
 
 local Cache = { DevConfig = {} };
 
