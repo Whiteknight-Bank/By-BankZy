@@ -445,55 +445,53 @@ if _G.farmAll then
     end)
 end
 				
-    if _G.farmAll then
-        local lastClaimTime = 0
-        farmAllLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+spawn(function()
+while task.wait() do
+pcall(function()
+if _G.farmAll then
+local player = game.Players.LocalPlayer
+local char = player.Character or player.CharacterAdded:Wait()
+local tool = char:FindFirstChildOfClass("Tool")
+local offset = -10 -- default
 
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
+if tool then  
+                local toolName = tool.Name  
 
-                if tool then
-                    local toolName = tool.Name
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -5
-                            break
-                        end
-                    end
-                end
+                -- ตรวจสอบดาบ  
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do  
+                    if string.find(v, toolName) then  
+                        offset = -8  
+                        break  
+                    end  
+                end  
 
-                for _, npcName in ipairs(npcList) do
-                    for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                        if mob.Name == npcName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                            local root = mob.HumanoidRootPart
-                            local dist = (char.HumanoidRootPart.Position - root.Position).Magnitude
-                            if dist <= farmDistance then
-                                root.CanCollide = false
-                                root.Size = Vector3.new(10,10,10)
-                                root.Anchored = true
-                                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
+                -- ตรวจสอบ melee  
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do  
+                    if string.find(v, toolName) then  
+                        offset = -5  
+                        break  
+                    end  
+                end  
+            end  
 
-                                if mob.Humanoid.Health <= 0 then
-                                    root.Size = Vector3.new(0,0,0)
-                                    mob:Destroy()
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end)
-    end
+            -- ลากมอนทุกตัว  
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do  
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then  
+                    local root = mob.HumanoidRootPart  
+                    root.CanCollide = false  
+                    root.Size = Vector3.new(10, 10, 10)  
+                    root.Anchored = true  
+                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)  
+
+                    if mob.Humanoid.Health <= 0 then    
+                        root.Size = Vector3.new(0, 0, 0)    
+                        mob:Destroy()    
+                    end    
+                end  
+            end  
+        end  
+    end)  
+end
 end)
 
 page1:Label("┇ Function Haki ┇")
