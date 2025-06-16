@@ -1305,7 +1305,7 @@ page5:Toggle("Teleport All Chest", false, function(cpst)
 end)
 
 spawn(function()
-    while wait(4) do
+    while wait(1.5) do
         if _G.tpchest then
             pcall(function()
                 if not canTeleport() then
@@ -1315,6 +1315,9 @@ spawn(function()
 
                 local character = plr.Character or plr.CharacterAdded:Wait()
                 if not character.PrimaryPart then return end
+
+                local hrp = character.PrimaryPart
+                local originalPos = hrp.CFrame -- 🔁 เก็บตำแหน่งเดิม
 
                 local banned = Vector3.new(10000, -200.000427, 10000)
                 local positions = {}
@@ -1336,9 +1339,11 @@ spawn(function()
                 end
 
                 for _, pos in ipairs(positions) do
-                    character:SetPrimaryPartCFrame(CFrame.new(pos + Vector3.new(0, 5, 0)))
+                    hrp.CFrame = CFrame.new(pos + Vector3.new(0, 5, 0))
                     wait(1)
                 end
+
+                hrp.CFrame = originalPos
 
                 create:Notifile("", "Teleport all chest", 3)
                 _G.tpchest = false
