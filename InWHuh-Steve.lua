@@ -538,7 +538,6 @@ page1:Toggle("Auto Farm Sword", false, function(swrd)
                 local humanoid = char and char:FindFirstChildOfClass("Humanoid")
                 if not char or not humanoid or humanoid.Health <= 0 then return end
 
-                -- ✅ Equip เฉพาะ Sword Master ถ้ามี และ Kills >= 50
                 local tool = backpack:FindFirstChild("Sword Master")
                 if tool and tool:FindFirstChild("Kills") and tool.Kills.Value >= 50 then
                     if not char:FindFirstChild(tool.Name) or equippedToolName ~= tool.Name then
@@ -563,7 +562,7 @@ page1:Toggle("Auto Farm Sword", false, function(swrd)
 
                 -- ✅ ฟาร์ม Attacking Noob
                 for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob.Name == "Attacking Noob" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                         local root = mob.HumanoidRootPart
                         root.CanCollide = false
                         root.Size = Vector3.new(10,10,10)
