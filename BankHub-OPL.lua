@@ -4174,7 +4174,47 @@ task.spawn(function()
         end
     end
 end)
-		
+
+local RunService = game:GetService("RunService")
+local followConnection
+local seaPart
+
+page8:Toggle("Walk On Water", false, function(walk)
+    if walk then
+        create:Notifile("", "You can walk on water now! :)", 3)
+
+        seaPart = Instance.new("Part")
+        seaPart.Name = "InvisibleSea"
+        seaPart.Anchored = true
+        seaPart.CanCollide = true
+        seaPart.Transparency = 1
+        seaPart.Size = Vector3.new(50, 1, 50)
+        seaPart.Parent = workspace
+
+        followConnection = RunService.RenderStepped:Connect(function()
+            local char = plr.Character or plr.CharacterAdded:Wait()
+            local root = char:FindFirstChild("HumanoidRootPart")
+            if root and seaPart then
+                local goalPos = Vector3.new(root.Position.X, -5.5, root.Position.Z)
+                seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
+            end
+        end)
+
+    else
+        create:Notifile("", "Off walk on water now! :(", 3)
+
+        if followConnection then
+            followConnection:Disconnect()
+            followConnection = nil
+        end
+        if seaPart then
+            seaPart:Destroy()
+            seaPart = nil
+        end
+    end
+end)
+
+
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
