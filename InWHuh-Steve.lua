@@ -443,8 +443,8 @@ if _G.farmAll then
             end
         end)
     end)
-end
-				
+end	
+
 page1:Label("┇ Function Haki ┇")
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
