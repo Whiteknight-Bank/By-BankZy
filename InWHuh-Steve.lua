@@ -549,18 +549,6 @@ page1:Toggle("Auto Farm Sword", false, function(swrd)
                 local humanoid = char and char:FindFirstChildOfClass("Humanoid")
                 if not char or not humanoid or humanoid.Health <= 0 then return end
 
-                local tool = backpack:FindFirstChild("Sword Master")
-                if tool and tool:FindFirstChild("Kills") and tool.Kills.Value >= 50 then
-                    if not char:FindFirstChild(tool.Name) or equippedToolName ~= tool.Name then
-                        humanoid:EquipTool(tool)
-                        equippedToolName = tool.Name
-                        wait(0.5)
-                        if char:FindFirstChild(tool.Name) then
-                            tool:Activate()
-                        end
-                    end
-                end
-
                 -- ✅ ฟาร์ม Sword noob (ClickDetector)
                 for _, obj in ipairs(workspace:GetDescendants()) do  
                     if obj:IsA("Model") and obj.Name == "Sword noob" then  
@@ -605,10 +593,181 @@ page1:Toggle("Auto Farm Sword", false, function(swrd)
     end
 end)
 
-page1:Toggle("Auto Farm Gun [ Not Working ]", false, function(fgn)
-	_G.farmGun = fgn
+local equippedToolName = nil
+local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmSword then return end
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if not character or not backpack or not humanoid then return end
+
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
+                        if tool.Name == "Sword Master" and kills >= 20 then return tool, kills
+                        end
+                    end
+                end
+                return nil, nil
+            end
+
+            local tool, kills = getQualifiedTool()
+
+            -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
+            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                _G.forceHold = true  -- บล็อก autoequip
+
+                humanoid:EquipTool(tool)
+                equippedToolName = tool.Name
+                equippedKills = kills
+
+                wait(0.3)
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+
+                wait(0.3)
+                _G.forceHold = false  -- ปลดบล็อก
+            end
+
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+                equippedToolName = nil
+                equippedKills = -1
+                _G.forceHold = false
+            end
+        end)
+    end
 end)
 		
+local farmGunLoop = nil
+local equippedToolName = nil
+
+page1:Toggle("Auto Farm Gun", false, function(fgn)
+    _G.farmGun = fgn
+
+    -- ตัด loop เดิมออกก่อน
+    if farmGunLoop then
+        farmGunLoop:Disconnect()
+        farmGunLoop = nil
+    end
+
+    if _G.farmGun then
+        farmGunLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local backpack = player:FindFirstChild("Backpack")
+                local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+                if not char or not humanoid or humanoid.Health <= 0 then return end
+
+                -- ✅ ฟาร์ม Sword noob (ClickDetector)
+                for _, obj in ipairs(workspace:GetDescendants()) do  
+                    if obj:IsA("Model") and obj.Name == "Gun noob" then  
+                        local head = obj:FindFirstChild("Head")  
+                        if head and head:FindFirstChild("ClickDetector") then  
+                            fireclickdetector(head.ClickDetector)  
+                        end  
+                    end  
+                end
+
+                -- ✅ ฟาร์ม Attacking Noob
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10,10,10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -7)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0,0,0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end)
+        end)
+
+        -- ตรวจจับการตาย
+        spawn(function()
+            local player = game.Players.LocalPlayer
+            while _G.farmGun do
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if hum and hum.Health <= 0 then
+                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    wait(2)
+                end
+                task.wait(1)
+            end
+        end)
+    end
+end)
+
+local equippedToolName = nil
+local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmGun then return end
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if not character or not backpack or not humanoid then return end
+
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
+                        if tool.Name == "The gunner!" and kills >= 15 then return tool, kills
+                        end
+                    end
+                end
+                return nil, nil
+            end
+
+            local tool, kills = getQualifiedTool()
+
+            -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
+            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                _G.forceHold = true  -- บล็อก autoequip
+
+                humanoid:EquipTool(tool)
+                equippedToolName = tool.Name
+                equippedKills = kills
+
+                wait(0.3)
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+
+                wait(0.3)
+                _G.forceHold = false  -- ปลดบล็อก
+            end
+
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+                equippedToolName = nil
+                equippedKills = -1
+                _G.forceHold = false
+            end
+        end)
+    end
+end)
+
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 		
