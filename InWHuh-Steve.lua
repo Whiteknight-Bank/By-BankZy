@@ -95,11 +95,9 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to BNK Hub"
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:5000", "Rifle|Price:5000"};
+Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:2500", "Rifle|Price:10000"};
 Cache.DevConfig["ListOfMelee"] = {"BlackLeg|Price:10000", "Ryusoken|Price:75000"};
-Cache.DevConfig["ListOfSword"] = {"Wooden Sword| Prices:100", "Katana|Price:5000", "Cutlass|Price:7500", "Pipe|Price:30000", "Jitte|Price:65000", "Nonosama Bo|Price:150000", "Bisento|Price:3000000", "Gryphon|Price:7500000"};
-Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
-Cache.DevConfig["ListOfBox3"] = {""};
+Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000", "Cutlass|Price:7500", "Pipe|Price:30000", "Jitte|Price:65000", "Nonosama Bo|Price:150000", "Bisento|Price:3000000", "Gryphon|Price:7500000"};
 
 local npcList = {
     ["Thief"] = "Big head boy",
