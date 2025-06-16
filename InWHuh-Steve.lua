@@ -516,8 +516,83 @@ page1:Toggle("Auto Buso", false, function(hki)
 end)
 
 page1:Label("┇ Another Farm ┇")
+
+local farmSwordLoop = nil
+local equippedToolName = nil
+
 page1:Toggle("Auto Farm Sword", false, function(swrd)
-	_G.farmSword = swrd
+    _G.farmSword = swrd
+
+    -- ตัด loop เดิมออกก่อน
+    if farmSwordLoop then
+        farmSwordLoop:Disconnect()
+        farmSwordLoop = nil
+    end
+
+    if _G.farmSword then
+        farmSwordLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local backpack = player:FindFirstChild("Backpack")
+                local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+                if not char or not humanoid or humanoid.Health <= 0 then return end
+
+                -- ✅ Equip เฉพาะ Sword Master ถ้ามี และ Kills >= 50
+                local tool = backpack:FindFirstChild("Sword Master")
+                if tool and tool:FindFirstChild("Kills") and tool.Kills.Value >= 50 then
+                    if not char:FindFirstChild(tool.Name) or equippedToolName ~= tool.Name then
+                        humanoid:EquipTool(tool)
+                        equippedToolName = tool.Name
+                        wait(0.5)
+                        if char:FindFirstChild(tool.Name) then
+                            tool:Activate()
+                        end
+                    end
+                end
+
+                -- ✅ ฟาร์ม Sword noob (ClickDetector)
+                for _, obj in ipairs(workspace:GetDescendants()) do  
+                    if obj:IsA("Model") and obj.Name == "Sword noob" then  
+                        local head = obj:FindFirstChild("Head")  
+                        if head and head:FindFirstChild("ClickDetector") then  
+                            fireclickdetector(head.ClickDetector)  
+                        end  
+                    end  
+                end
+
+                -- ✅ ฟาร์ม Attacking Noob
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10,10,10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -7)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0,0,0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end)
+        end)
+
+        -- ตรวจจับการตาย
+        spawn(function()
+            local player = game.Players.LocalPlayer
+            while _G.farmSword do
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if hum and hum.Health <= 0 then
+                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    wait(2)
+                end
+                task.wait(1)
+            end
+        end)
+    end
 end)
 
 page1:Toggle("Auto Farm Gun [ Not Working ]", false, function(fgn)
