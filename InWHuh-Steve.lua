@@ -770,12 +770,6 @@ end)
 
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
-		
-page2:Label("┇ Local Player ┇")
-page2:Toggle("Anti Fruit [ God ]", false, function(frut)
-	_G.antifruit = frut
-end)
-
 
 page2:Label("┇ Player ┇")
 page2:Dropdown("Select Player:", getPlayerNames(), function(name)
