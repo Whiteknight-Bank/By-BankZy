@@ -417,11 +417,34 @@ end)
 page1:Toggle("Auto Farm [ All ]", false, function(fall)
     _G.farmAll = fall
 
-    if farmAllLoop then
-        farmAllLoop:Disconnect()
-        farmAllLoop = nil
+if farmAllLoop then
+    farmAllLoop:Disconnect()
+    farmAllLoop = nil
+end
+
+if _G.farmAll then
+    local allClickDetectors = {}
+
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if obj:IsA("Model") and table.find(npcList, obj.Name) then
+            local head = obj:FindFirstChild("Head")
+            if head and head:FindFirstChild("ClickDetector") then
+                table.insert(allClickDetectors, head.ClickDetector)
+            end
+        end
     end
 
+    farmAllLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if _G.farmAll then
+                for _, detector in ipairs(allClickDetectors) do
+                    fireclickdetector(detector)
+                end
+            end
+        end)
+    end)
+end
+				
     if _G.farmAll then
         local lastClaimTime = 0
         farmAllLoop = game:GetService("RunService").Heartbeat:Connect(function()
@@ -445,25 +468,6 @@ page1:Toggle("Auto Farm [ All ]", false, function(fall)
                         if string.find(v, toolName) then
                             offset = -5
                             break
-                        end
-                    end
-                end
-
-                local now = os.clock()
-                if now - lastClaimTime >= claimCooldown then
-                    for _, npcName in ipairs(npcList) do
-                        for _, obj in ipairs(workspace:GetDescendants()) do
-                            if obj:IsA("Model") and obj.Name == npcName then
-                                local head = obj:FindFirstChild("Head")
-                                if head and head:FindFirstChild("ClickDetector") then
-                                    local dist = (char.HumanoidRootPart.Position - head.Position).Magnitude
-                                    if dist <= claimDistance then
-                                        fireclickdetector(head.ClickDetector)
-                                        lastClaimTime = now
-                                        break
-                                    end
-                                end
-                            end
                         end
                     end
                 end
