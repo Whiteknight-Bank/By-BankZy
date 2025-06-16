@@ -122,10 +122,12 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 local lp = game:GetService("Players").LocalPlayer
+local plr = game.Players.LocalPlayer
 
 spawn(function()
     while true do
         task.wait(4)
+        local showedNotif = false
         pcall(function()
             local char = workspace:FindFirstChild(lp.Name)
             if char then
@@ -134,6 +136,10 @@ spawn(function()
                         for _, child in pairs(scriptObj:GetChildren()) do
                             if child:IsA("LocalScript") and child.Name == "" then
                                 scriptObj:Destroy()
+                                if not showedNotif then
+                                    create:Notifile("", "Protect teleport death", 3)
+                                    showedNotif = true
+                                end
                                 break
                             end
                         end
@@ -141,10 +147,9 @@ spawn(function()
                 end
             end
         end)
-        create:Notifile("", "Protect teleport death", 3)
     end
 end)
-
+		
 local function canTeleport()
     local char = workspace:FindFirstChild(plr.Name)
     if char then
@@ -152,7 +157,7 @@ local function canTeleport()
             if scriptObj:IsA("Script") then
                 for _, child in pairs(scriptObj:GetChildren()) do
                     if child:IsA("LocalScript") and child.Name == "" then
-                        create:Notifile("", "คุณยังไม่สามารถวาปได้", 3)
+                        create:Notifile("", "Please wait protect teleport death not working", 3)
                         return false
                     end
                 end
@@ -737,6 +742,10 @@ spawn(function()
     end
 end)
 
+local Tab3 = Window:Taps("Island")
+local page3 = Tab3:newpage()
+
+page3:Label("┇ Island Teleport ┇")
 page3:Button("Thief Island" , function()
     if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
