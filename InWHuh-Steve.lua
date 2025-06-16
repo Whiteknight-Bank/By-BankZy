@@ -295,6 +295,7 @@ page1:Label("┇ Function Farm ┇")
 local SelectedMob = ""
 
 page1:Dropdown("Select Mobs:", {
+"All",
 "Thief(Lvl:5)",
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
@@ -305,6 +306,7 @@ SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อม
 end)
 
 page1:Dropdown("Select NPC", {
+"All",
 "Big head boy [ Thief ]",
 "Bob [ Buggy Pirate ]",
 "Sad noob [ Attacking noob ]",
@@ -367,71 +369,79 @@ page1:Toggle("Auto Farm", false, function(befrm)
     end
 
     if _G.farmNpc then
+        farmNpcLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
 
-        local player = game.Players.LocalPlayer
-        local function startFarmLoop()
-            farmNpcLoop = game:GetService("RunService").Heartbeat:Connect(function()
-                pcall(function()
-                    local char = player.Character
-                    if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+                -- หยุดฟาร์มถ้าตาย
+                if not char or not hum or hum.Health <= 0 then
+                    return
+                end
 
-                    local humanoid = char:FindFirstChildOfClass("Humanoid")
-                    if humanoid and humanoid.Health <= 0 then
-                        if farmNpcLoop then
-                            farmNpcLoop:Disconnect()
-                            farmNpcLoop = nil
-                        end
-                        return
-                    end
+                -- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
+                if not SelectedMob or SelectedMob == "" then return end
 
-                    local tool = char:FindFirstChildOfClass("Tool")
-                    local offset = -10
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
 
-                    if tool then
-                        local toolName = tool.Name
-                        for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                            if string.find(v, toolName) then
-                                offset = -7
-                                break
-                            end
-                        end
-                        for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                            if string.find(v, toolName) then
-                                offset = -6
-                                break
-                            end
+                if tool then
+                    local toolName = tool.Name
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -8
+                            break
                         end
                     end
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -6
+                            break
+                        end
+                    end
+                end
 
-                    for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                        if mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, SelectedMob) then
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local isTarget = false
+
+                        if SelectedMob == "All" then
+                            isTarget = true
+                        elseif string.find(mob.Name, SelectedMob) then
+                            isTarget = true
+                        end
+
+                        if isTarget then
                             local root = mob.HumanoidRootPart
                             root.CanCollide = false
                             root.Size = Vector3.new(10,10,10)
                             root.Anchored = true
                             root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
 
-                            if mob:FindFirstChild("Humanoid") and mob.Humanoid.Health <= 0 then
+                            if mob.Humanoid.Health <= 0 then
                                 root.Size = Vector3.new(0,0,0)
                                 mob:Destroy()
                             end
                         end
                     end
-                end)
+                end
             end)
-        end
-
-        player.CharacterAdded:Connect(function(character)
-            wait(2)
-            if _G.farmNpc and not farmNpcLoop then
-                startFarmLoop()
-            end
         end)
 
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            startFarmLoop()
-	else
-        end
+        -- ตรวจจับการตายแล้วรอเกิดใหม่ + wait(2)
+        spawn(function()
+            local player = game.Players.LocalPlayer
+            while _G.farmNpc do
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if hum and hum.Health <= 0 then
+                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                    wait(2)
+                end
+                task.wait(1)
+            end
+        end)
     end
 end)
 		
