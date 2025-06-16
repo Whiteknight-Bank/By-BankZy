@@ -4195,7 +4195,7 @@ page8:Toggle("Walk On Water", false, function(walk)
             local char = plr.Character or plr.CharacterAdded:Wait()
             local root = char:FindFirstChild("HumanoidRootPart")
             if root and seaPart then
-                local goalPos = Vector3.new(root.Position.X, -5.5, root.Position.Z)
+                local goalPos = Vector3.new(root.Position.X, 213, root.Position.Z)
                 seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
             end
         end)
@@ -4308,10 +4308,11 @@ end)
 local Tab9 = Window:Taps("Dupe Gems")
 local page9 = Tab9:newpage()
 
-page9:Button("DUPE GAMES [ NOT WORKING ]" , function()
+page9:Button("DUPE GAMES [ WARN: RESET STATS YOU ]" , function()
 print("Not Working")
 end)
-page9:Button("TURN GEM INTO BERI [ NOT WORKING ]" , function()
+		
+page9:Button("TURN GEM INTO BERI [ COMING SOON . . . ]" , function()
 print("Not Working")
 end)
 page9:Section("อาจมีเข้าแน่นอน รอการเทสจากเจ้าของ")
