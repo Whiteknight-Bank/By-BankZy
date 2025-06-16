@@ -299,65 +299,18 @@ page1:Dropdown("Select Mobs:", {
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
 "Marine(Lvl:200)",
+"Fishmen(Lvl:450)",
 "Luffy(Lvl:1000)"
 }, function(pcns)
 SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
 end)
 
-page1:Dropdown("Select NPC", {
-"All",
-"Big head boy [ Thief ]",
-"Bob [ Buggy Pirate ]",
-"Sad noob [ Attacking noob ]",
-"Sword noob [ Farm Sword ]",
-"Gun noob [ Farm Gun ]",
-"Injured pirate [ Marine ]",
-"That noob [ Luffy ]"
-}, function(mbon)
-getgenv().selectedNPC = mbon:match("^(.-)%s*[%[%(%{]") or mbon
-print("Selected NPC:", getgenv().selectedNPC)
-end)
-
 local autoClaimLoop = nil
-local farmNpcLoop = nil
-local farmAllLoop = nil
+local farmLoop = nil
 
 local claimDistance = 15
 local farmDistance = 20
 local claimCooldown = 3
-
--- Auto Claim Quest (ตาม NPC ที่เลือก)
-page1:Toggle("Auto Claim Quest", false, function(state)
-    _G.claim = state
-
-    if autoClaimLoop then
-        autoClaimLoop:Disconnect()
-        autoClaimLoop = nil
-    end
-
-    if _G.claim and getgenv().selectedNPC then
-        local foundNPC = nil
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then
-                local head = obj:FindFirstChild("Head")
-                if head and head:FindFirstChild("ClickDetector") then
-                    foundNPC = head.ClickDetector
-                    break
-                end
-            end
-        end
-
-        if foundNPC then
-            autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
-                pcall(function()
-                    if _G.claim then
-                        fireclickdetector(foundNPC)
-                    end
-                end)
-            end)
-        end
-    end
-end)
 
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
@@ -526,187 +479,6 @@ spawn(function()
                 equippedToolName = nil  
             end  
         end)  
-    end
-end)
-
--- Auto Farm All NPC ใน npcList พร้อม Auto Claim Quest ทุกตัว
-page1:Toggle("Auto Farm [ All ]", false, function(fall)
-    _G.farmAll = fall
-
-if farmAllLoop then
-    farmAllLoop:Disconnect()
-    farmAllLoop = nil
-end
-
-if _G.farmAll then
-    local allClickDetectors = {}
-
-    for _, obj in ipairs(workspace:GetDescendants()) do
-        if obj:IsA("Model") and table.find(npcList, obj.Name) then
-            local head = obj:FindFirstChild("Head")
-            if head and head:FindFirstChild("ClickDetector") then
-                table.insert(allClickDetectors, head.ClickDetector)
-            end
-        end
-    end
-
-    farmAllLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if _G.farmAll then
-                for _, detector in ipairs(allClickDetectors) do
-                    fireclickdetector(detector)
-                end
-            end
-        end)
-    end)
-end	
-end)
-
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmAll then
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local hum = char and char:FindFirstChild("Humanoid")
-                if not char or not hum then return end
-
-                -- ถ้าตายให้รอเกิดใหม่แล้วรอ 2 วิ
-                if hum.Health <= 0 then
-                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                    wait(2)
-                    return -- ออกจาก loop นี้ ให้ spawn ใหม่รอรอบหน้า
-                end
-
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
-
-                if tool then  
-                    local toolName = tool.Name  
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do  
-                        if string.find(v, toolName) then  
-                            offset = -8  
-                            break  
-                        end  
-                    end  
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do  
-                        if string.find(v, toolName) then  
-                            offset = -5  
-                            break  
-                        end  
-                    end  
-                end  
-
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do  
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then  
-                        local root = mob.HumanoidRootPart  
-                        root.CanCollide = false  
-                        root.Size = Vector3.new(10, 10, 10)  
-                        root.Anchored = true  
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)  
-
-                        if mob.Humanoid.Health <= 0 then    
-                            root.Size = Vector3.new(0, 0, 0)    
-                            mob:Destroy()    
-                        end    
-                    end  
-                end
-            end
-        end)
-    end
-end)
-		
-spawn(function()
-    while task.wait() do
-        if _G.farmAll then
-            if player.Character and player.Character:FindFirstChild("Humanoid") then
-                startFarmLoop()
-            end
-
-            player.CharacterAdded:Wait()
-            wait(2)
-        end
-    end
-end)
-
-local equippedToolNameAll = nil
-
-spawn(function()
-    while wait(0.5) do
-        pcall(function()
-            if not _G.farmAll then return end
-            local player = game.Players.LocalPlayer  
-            local character = player.Character  
-            local backpack = player:FindFirstChild("Backpack")  
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
-            if not character or not backpack or not humanoid then return end  
-
-            local function getQualifiedTool()  
-                for _, tool in ipairs(backpack:GetChildren()) do  
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                        local kills = tool.Kills.Value  
-                        if tool.Name == "Thief!" and kills >= 20 then return tool  
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool  
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool  
-                        elseif tool.Name == "Sword Master" and kills >= 50 then return tool  
-                        elseif tool.Name == "Marines!" and kills >= 30 then return tool  
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool  
-                        end  
-                    end  
-                end  
-                return nil  
-            end  
-
-            local tool = getQualifiedTool()  
-            if tool and not character:FindFirstChild(tool.Name) and equippedToolNameAll ~= tool.Name then  
-                humanoid:EquipTool(tool)  
-                equippedToolNameAll = tool.Name
-                wait(0.8) -- ✅ หน่วงเวลาก่อน Activate
-                if character:FindFirstChild(tool.Name) then  
-                    tool:Activate()  
-                end  
-            end  
-
-            if humanoid.Health <= 0 then  
-                humanoid:UnequipTools()  
-                equippedToolNameAll = nil  
-            end  
-        end)  
-    end
-end)
-
-page1:Label("┇ Function Haki ┇")
-page1:Toggle("Auto Buso", false, function(hki)
-    _G.autobuso = hki
-
-    if hki then
-        spawn(function()
-            while _G.autobuso do
-                pcall(function()
-                    local player = game.Players.LocalPlayer
-                    local char = player.Character or workspace:FindFirstChild(player.Name)
-
-                    if char then
-                        local found = false
-
-                        for _, obj in ipairs(char:GetDescendants()) do
-                            if obj.Name == "Buso" then
-                                found = true
-                                break
-                            end
-                        end
-
-                        if not found then
-                            local vim = game:GetService("VirtualInputManager")
-                            vim:SendKeyEvent(true, Enum.KeyCode.T, false, game)
-                            task.wait(0.1)
-                            vim:SendKeyEvent(false, Enum.KeyCode.T, false, game)
-                        end
-                    end
-                end)
-                task.wait(1)
-            end
-        end)
     end
 end)
 		
