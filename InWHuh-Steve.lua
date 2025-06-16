@@ -102,14 +102,13 @@ Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {""};
 
 local npcList = {
-    "Big head boy",
-    "Bob",
-    "Sad noob",
-    "Sword noob",
-    "Injured pirate",
-    "That noob"
-		}
-
+    ["Thief"] = "Big head boy",
+    ["Buggy pirate"] = "Bob",
+    ["Attacking Noob"] = {"Sad noob", "Sword noob"},
+    ["Marine"] = "Injured pirate",
+    ["Luffy"] = "That noob"
+}
+		
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -363,13 +362,52 @@ end)
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
-    if farmNpcLoop then
-        farmNpcLoop:Disconnect()
-        farmNpcLoop = nil
-    end
+if farmLoop then
+    farmLoop:Disconnect()
+    farmLoop = nil
+end
+
+if _G.farmNpc then
+    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if not SelectedMob then return end
+
+            local targetNames = {}
+
+            if SelectedMob == "All" then
+                -- รวมทั้งหมด
+                for _, v in pairs(npcList) do
+                    if typeof(v) == "table" then
+                        for _, name in pairs(v) do
+                            table.insert(targetNames, name)
+                        end
+                    else
+                        table.insert(targetNames, v)
+                    end
+                end
+            else
+                local mapped = npcList[SelectedMob]
+                if typeof(mapped) == "table" then
+                    targetNames = mapped
+                elseif typeof(mapped) == "string" then
+                    table.insert(targetNames, mapped)
+                end
+            end
+
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    if head and head:FindFirstChild("ClickDetector") then
+                        fireclickdetector(head.ClickDetector)
+                    end
+                end
+            end
+        end)
+    end)
+end
 
     if _G.farmNpc then
-        farmNpcLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
                 local char = player.Character
