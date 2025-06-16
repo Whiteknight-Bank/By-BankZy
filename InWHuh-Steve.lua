@@ -316,80 +316,46 @@ page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
 if farmLoop then
-    farmLoop:Disconnect()
-    farmLoop = nil
+farmLoop:Disconnect()
+farmLoop = nil
 end
 
-local clickedAlready = {}
-local missionNames = {
-    ["Thief!"] = true,
-    ["Let them pay back!"] = true,
-    ["Annoying noobs...."] = true,
-    ["Sword Master"] = true,
-    ["Marines!"] = true,
-    ["The Strongest..."] = true,
-}
-
 if _G.farmNpc then
-    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if not SelectedMob then return end
+farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+pcall(function()
+if not SelectedMob then return end
 
-            local targetNames = {}
+local targetNames = {}  
 
-            if SelectedMob == "All" then
-                for _, v in pairs(npcList) do
-                    if typeof(v) == "table" then
-                        for _, name in pairs(v) do
-                            table.insert(targetNames, name)
-                        end
-                    else
-                        table.insert(targetNames, v)
-                    end
-                end
-            else
-                local mapped = npcList[SelectedMob]
-                if typeof(mapped) == "table" then
-                    targetNames = mapped
-                elseif typeof(mapped) == "string" then
-                    table.insert(targetNames, mapped)
-                end
-            end
+        if SelectedMob == "All" then  
+            for _, v in pairs(npcList) do  
+                if typeof(v) == "table" then  
+                    for _, name in pairs(v) do  
+                        table.insert(targetNames, name)  
+                    end  
+                else  
+                    table.insert(targetNames, v)  
+                end  
+            end  
+        else  
+            local mapped = npcList[SelectedMob]  
+            if typeof(mapped) == "table" then  
+                targetNames = mapped  
+            elseif typeof(mapped) == "string" then  
+                table.insert(targetNames, mapped)  
+            end  
+        end  
 
-            local backpack = game.Players.LocalPlayer:FindFirstChild("Backpack")
-            local hasMission = false
-
-            -- เช็กว่าภารกิจอยู่ใน Backpack หรือไม่
-            if backpack then
-                for _, item in pairs(backpack:GetChildren()) do
-                    if missionNames[item.Name] then
-                        hasMission = true
-                        break
-                    end
-                end
-            end
-
-            -- วนหา NPC เพื่อ fireclickdetector ถ้ายังไม่มีภารกิจ
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                    if not clickedAlready[obj] and not hasMission then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                            clickedAlready[obj] = true
-                        end
-                    end
-                end
-            end
-
-            -- ล้าง NPC ที่หายไปจาก clickedAlready
-            for npc in pairs(clickedAlready) do
-                if not npc:IsDescendantOf(workspace) then
-                    clickedAlready[npc] = nil
-                end
-            end
-        end)
-    end)
+        for _, obj in ipairs(workspace:GetDescendants()) do  
+            if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
+                local head = obj:FindFirstChild("Head")  
+                if head and head:FindFirstChild("ClickDetector") then  
+                    fireclickdetector(head.ClickDetector)  
+                end  
+            end  
+        end  
+    end)  
+end)
 end
     
      if _G.farmNpc then
