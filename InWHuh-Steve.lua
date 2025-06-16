@@ -125,7 +125,7 @@ local lp = game:GetService("Players").LocalPlayer
 
 spawn(function()
     while true do
-        task.wait(4) -- ดีเลย์ 4 วินาที
+        task.wait(4)
         pcall(function()
             local char = workspace:FindFirstChild(lp.Name)
             if char then
@@ -134,15 +134,33 @@ spawn(function()
                         for _, child in pairs(scriptObj:GetChildren()) do
                             if child:IsA("LocalScript") and child.Name == "" then
                                 scriptObj:Destroy()
-                                break -- หยุด loop ลูกเมื่อเจอแล้วลบ Script แม่
+                                break
                             end
                         end
                     end
                 end
             end
         end)
+        create:Notifile("", "Protect teleport death", 3)
     end
 end)
+
+local function canTeleport()
+    local char = workspace:FindFirstChild(plr.Name)
+    if char then
+        for _, scriptObj in pairs(char:GetChildren()) do
+            if scriptObj:IsA("Script") then
+                for _, child in pairs(scriptObj:GetChildren()) do
+                    if child:IsA("LocalScript") and child.Name == "" then
+                        create:Notifile("", "คุณยังไม่สามารถวาปได้", 3)
+                        return false
+                    end
+                end
+            end
+        end
+    end
+    return true
+		end
 
 -- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
 local function getPlayerNames()
@@ -719,51 +737,65 @@ spawn(function()
     end
 end)
 
-plr = game.Players.LocalPlayer
-
-local Tab3 = Window:Taps("Island")
-local page3 = Tab3:newpage()
-
-page3:Label("┇ ISLANDS ┇")
 page3:Button("Thief Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
-    end)
+    end
+end)
 
 page3:Button("Buggy Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
-    end)
+    end
+end)
 
 page3:Button("Noob Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
-    end)
+    end
+end)
 
 page3:Button("Marine Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
-    end)
+    end
+end)
 
 page3:Button("Fishmen Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
-    end)
+    end
+end)
 
 page3:Button("Luffy Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
-    end)
+    end
+end)
 
 page3:Button("Coconut Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
-    end)
+    end
+end)
 
 page3:Button("BlackLeg Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
-    end)
+    end
+end)
 
 page3:Button("Ussop Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
-    end)
+    end
+end)
 
 page3:Button("Fruit Seller Island" , function()
+    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
-    end)
+    end
+end)
 
 local Tab4 = Window:Taps("Shop")
 local page4 = Tab4:newpage()
@@ -1264,23 +1296,24 @@ page5:Toggle("Teleport All Chest", false, function(cpst)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(4) do
         if _G.tpchest then
             pcall(function()
-                local player = game.Players.LocalPlayer
-                local character = player.Character or player.CharacterAdded:Wait()
+                if not canTeleport() then
+                    _G.tpchest = false
+                    return
+                end
+
+                local character = plr.Character or plr.CharacterAdded:Wait()
                 if not character.PrimaryPart then return end
 
                 local banned = Vector3.new(10000, -200.000427, 10000)
                 local positions = {}
 
-                -- ชั้นที่ 1
                 for _, a in ipairs(workspace:GetChildren()) do
                     if a.Name == "" then
-                        -- ชั้นที่ 2
                         for _, b in ipairs(a:GetChildren()) do
                             if b.Name == "" then
-                                -- ชั้นที่ 3
                                 for _, c in ipairs(b:GetChildren()) do
                                     if c.Name == "" and c:IsA("BasePart") then
                                         if (c.Position - banned).Magnitude > 1 then
@@ -1293,7 +1326,6 @@ spawn(function()
                     end
                 end
 
-                -- วาร์ปทุกตำแหน่ง
                 for _, pos in ipairs(positions) do
                     character:SetPrimaryPartCFrame(CFrame.new(pos + Vector3.new(0, 5, 0)))
                     wait(1)
