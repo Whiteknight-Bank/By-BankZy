@@ -415,7 +415,7 @@ end)
 local equippedToolName = nil
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.5) do
         pcall(function()
             if not _G.farmNpc then return end
             local player = game.Players.LocalPlayer  
@@ -428,19 +428,12 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do  
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                         local kills = tool.Kills.Value  
-
-                        if tool.Name == "Thief!" and kills >= 20 then  
-                            return tool  
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then  
-                            return tool  
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
-                            return tool  
-                        elseif tool.Name == "Sword Master" and kills >= 50 then  
-                            return tool  
-                        elseif tool.Name == "Marines!" and kills >= 30 then  
-                            return tool  
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then  
-                            return tool  
+                        if tool.Name == "Thief!" and kills >= 20 then return tool  
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool  
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool  
+                        elseif tool.Name == "Sword Master" and kills >= 50 then return tool  
+                        elseif tool.Name == "Marines!" and kills >= 30 then return tool  
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool  
                         end  
                     end  
                 end  
@@ -448,11 +441,10 @@ spawn(function()
             end  
 
             local tool = getQualifiedTool()  
-
             if tool and not character:FindFirstChild(tool.Name) and equippedToolName ~= tool.Name then  
                 humanoid:EquipTool(tool)  
                 equippedToolName = tool.Name
-                task.wait(0.05)  
+                wait(0.8) -- ✅ หน่วงเวลาก่อน Activate
                 if character:FindFirstChild(tool.Name) then  
                     tool:Activate()  
                 end  
@@ -497,7 +489,7 @@ if _G.farmAll then
         end)
     end)
 end	
-			end)
+end)
 
 spawn(function()
 while task.wait() do
@@ -551,7 +543,7 @@ end)
 local equippedToolNameAll = nil
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.5) do
         pcall(function()
             if not _G.farmAll then return end
             local player = game.Players.LocalPlayer  
@@ -564,19 +556,12 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do  
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                         local kills = tool.Kills.Value  
-
-                        if tool.Name == "Thief!" and kills >= 20 then  
-                            return tool  
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then  
-                            return tool  
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
-                            return tool  
-                        elseif tool.Name == "Sword Master" and kills >= 50 then  
-                            return tool  
-                        elseif tool.Name == "Marines!" and kills >= 30 then  
-                            return tool  
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then  
-                            return tool  
+                        if tool.Name == "Thief!" and kills >= 20 then return tool  
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool  
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool  
+                        elseif tool.Name == "Sword Master" and kills >= 50 then return tool  
+                        elseif tool.Name == "Marines!" and kills >= 30 then return tool  
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool  
                         end  
                     end  
                 end  
@@ -584,11 +569,10 @@ spawn(function()
             end  
 
             local tool = getQualifiedTool()  
-
             if tool and not character:FindFirstChild(tool.Name) and equippedToolNameAll ~= tool.Name then  
                 humanoid:EquipTool(tool)  
                 equippedToolNameAll = tool.Name
-                task.wait(0.05)  
+                wait(0.8) -- ✅ หน่วงเวลาก่อน Activate
                 if character:FindFirstChild(tool.Name) then  
                     tool:Activate()  
                 end  
@@ -601,7 +585,7 @@ spawn(function()
         end)  
     end
 end)
-		
+
 page1:Label("┇ Function Haki ┇")
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
