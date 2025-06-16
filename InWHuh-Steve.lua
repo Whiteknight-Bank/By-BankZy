@@ -768,6 +768,90 @@ page3:Button("Fruit Seller Island" , function()
 local Tab4 = Window:Taps("Shop")
 local page4 = Tab4:newpage()
 
+page4:Label("┇ Shop [ Random Fruit ] ┇")
+page4:Button("Reset Devil Fruit", function()
+local removerClick = nil  
+local beliClick = nil  
+
+for _, obj in ipairs(workspace:GetDescendants()) do  
+    if obj:IsA("Model") then  
+        local head = obj:FindFirstChild("Head")  
+        if head and head:FindFirstChild("ClickDetector") then  
+            if obj.Name == "Fruit Remover" then
+                removerClick = head.ClickDetector  
+            elseif obj.Name == "Beli|Price:150000" then
+                beliClick = head.ClickDetector  
+            end
+        end  
+    end  
+end  
+
+if removerClick then
+    fireclickdetector(removerClick)
+end
+
+if beliClick then
+    fireclickdetector(beliClick)
+    wait(0.5)
+    fireclickdetector(beliClick)
+end
+
+create:Notifile("", "Your Devil Fruit is Reset Now", 3)
+end)
+
+page4:Button("Random Fruit", function()
+local removerClick = nil  
+local beli1Click = nil  
+
+for _, obj in ipairs(workspace:GetDescendants()) do  
+    if obj:IsA("Model") then  
+        local head = obj:FindFirstChild("Head")  
+        if head and head:FindFirstChild("ClickDetector") then  
+            if obj.Name == "Fruit Seller" then
+                removerClick = head.ClickDetector  
+            elseif obj.Name == "Beli|Price:1500000" then
+                beliClick = head.ClickDetector  
+            end
+        end  
+    end  
+end  
+
+if removerClick then
+    fireclickdetector(removerClick)
+end
+
+if beli1Click then
+    fireclickdetector(beliClick)
+    wait(0.5)
+    fireclickdetector(beliClick)
+end
+end)
+
+page4:Toggle("Auto Bring Fruit", false, function(brdf)
+_G.bring = brdf
+end)
+
+spawn(function()
+    while wait() do
+        if _G.bring then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+
+                for _, fruit in ipairs(workspace:GetDescendants()) do
+                    if fruit:IsA("MeshPart") and fruit.Name == "Handle" and fruit:FindFirstChild("TouchInterest") then
+                        firetouchinterest(hrp, fruit, 0)
+                        task.wait()
+                        firetouchinterest(hrp, fruit, 1)
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+
 page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
 end)
@@ -864,92 +948,34 @@ page4:Button("Buy Gun", function()
     end
 end)
 
-local Tab0 = Window:Taps("Fruit")
+
+local Tab0 = Window:Taps("Bug Weapon")
 local page0 = Tab0:newpage()
 
-page0:Label("┇ Random Fruit ┇")
-page0:Button("Reset Devil Fruit", function()
-local removerClick = nil  
-local beliClick = nil  
-
-for _, obj in ipairs(workspace:GetDescendants()) do  
-    if obj:IsA("Model") then  
-        local head = obj:FindFirstChild("Head")  
-        if head and head:FindFirstChild("ClickDetector") then  
-            if obj.Name == "Fruit Remover" then
-                removerClick = head.ClickDetector  
-            elseif obj.Name == "Beli|Price:150000" then
-                beliClick = head.ClickDetector  
-            end
-        end  
-    end  
-end  
-
-if removerClick then
-    fireclickdetector(removerClick)
-end
-
-if beliClick then
-    fireclickdetector(beliClick)
-    wait(0.5)
-    fireclickdetector(beliClick)
-end
-
-create:Notifile("", "Your Devil Fruit is Reset Now", 3)
+page0:Button("Step 1", function()
+    
 end)
 
-page0:Button("Random Fruit", function()
-local removerClick = nil  
-local beli1Click = nil  
-
-for _, obj in ipairs(workspace:GetDescendants()) do  
-    if obj:IsA("Model") then  
-        local head = obj:FindFirstChild("Head")  
-        if head and head:FindFirstChild("ClickDetector") then  
-            if obj.Name == "Fruit Seller" then
-                removerClick = head.ClickDetector  
-            elseif obj.Name == "Beli|Price:1500000" then
-                beliClick = head.ClickDetector  
-            end
-        end  
-    end  
-end  
-
-if removerClick then
-    fireclickdetector(removerClick)
-end
-
-if beli1Click then
-    fireclickdetector(beliClick)
-    wait(0.5)
-    fireclickdetector(beliClick)
-end
+page0:Button("Step 2", function()
+    
 end)
 
-page0:Toggle("Auto Bring Fruit", false, function(brdf)
-_G.bring = brdf
+page0:Button("Step 3", function()
+    
 end)
 
-spawn(function()
-    while wait() do
-        if _G.bring then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local hrp = char:WaitForChild("HumanoidRootPart")
-
-                for _, fruit in ipairs(workspace:GetDescendants()) do
-                    if fruit:IsA("MeshPart") and fruit.Name == "Handle" and fruit:FindFirstChild("TouchInterest") then
-                        firetouchinterest(hrp, fruit, 0)
-                        task.wait()
-                        firetouchinterest(hrp, fruit, 1)
-                    end
-                end
-            end)
-        end
-    end
+page0:Button("Step 4", function()
+    
 end)
 
+page0:Button("Step 5", function()
+    
+end)
+
+page0:Button("Step 6", function()
+    
+end)
+		
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
