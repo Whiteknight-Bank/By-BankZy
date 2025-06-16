@@ -412,55 +412,58 @@ page1:Toggle("Auto Farm", false, function(befrm)
     end
 end)
 
+local equippedToolName = nil
+
 spawn(function()
-while wait(0.1) do
-pcall(function()
-if not _G.farmNpc then return end
-local player = game.Players.LocalPlayer  
-        local character = player.Character  
-        local backpack = player:FindFirstChild("Backpack")  
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmNpc then return end
+            local player = game.Players.LocalPlayer  
+            local character = player.Character  
+            local backpack = player:FindFirstChild("Backpack")  
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+            if not character or not backpack or not humanoid then return end  
 
-        if not character or not backpack or not humanoid then return end  
+            local function getQualifiedTool()  
+                for _, tool in ipairs(backpack:GetChildren()) do  
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                        local kills = tool.Kills.Value  
 
-        local function getQualifiedTool()  
-            for _, tool in ipairs(backpack:GetChildren()) do  
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                    local kills = tool.Kills.Value  
-
-                    if tool.Name == "Thief!" and kills >= 20 then  
-                        return tool  
-                    elseif tool.Name == "Let them pay back!" and kills >= 30 then  
-                        return tool  
-                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
-                        return tool  
-                    elseif tool.Name == "Sword Master" and kills >= 50 then  
-                        return tool  
-		elseif tool.Name == "Marines!" and kills >= 30 then  
-                        return tool  
-                    elseif tool.Name == "The Strongest..." and kills >= 1 then  
-                        return tool  
+                        if tool.Name == "Thief!" and kills >= 20 then  
+                            return tool  
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then  
+                            return tool  
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
+                            return tool  
+                        elseif tool.Name == "Sword Master" and kills >= 50 then  
+                            return tool  
+                        elseif tool.Name == "Marines!" and kills >= 30 then  
+                            return tool  
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then  
+                            return tool  
+                        end  
                     end  
                 end  
+                return nil  
             end  
-            return nil  
-        end  
 
-        local tool = getQualifiedTool()  
+            local tool = getQualifiedTool()  
 
-        if tool and not character:FindFirstChild(tool.Name) then  
-            humanoid:EquipTool(tool)  
-            task.wait(0.05)  
-            if character:FindFirstChild(tool.Name) then  
-                tool:Activate()  
+            if tool and not character:FindFirstChild(tool.Name) and equippedToolName ~= tool.Name then  
+                humanoid:EquipTool(tool)  
+                equippedToolName = tool.Name
+                task.wait(0.05)  
+                if character:FindFirstChild(tool.Name) then  
+                    tool:Activate()  
+                end  
             end  
-        end  
 
-        if humanoid.Health <= 0 or not _G.farmNpc then  
-            humanoid:UnequipTools()  
-        end  
-    end)  
-end
+            if humanoid.Health <= 0 then  
+                humanoid:UnequipTools()  
+                equippedToolName = nil  
+            end  
+        end)  
+    end
 end)
 
 -- Auto Farm All NPC ใน npcList พร้อม Auto Claim Quest ทุกตัว
@@ -545,55 +548,58 @@ if tool then
 end
 end)
 
+local equippedToolNameAll = nil
+
 spawn(function()
-while wait(0.1) do
-pcall(function()
-if not _G.farmAll then return end
-local player = game.Players.LocalPlayer  
-        local character = player.Character  
-        local backpack = player:FindFirstChild("Backpack")  
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmAll then return end
+            local player = game.Players.LocalPlayer  
+            local character = player.Character  
+            local backpack = player:FindFirstChild("Backpack")  
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+            if not character or not backpack or not humanoid then return end  
 
-        if not character or not backpack or not humanoid then return end  
+            local function getQualifiedTool()  
+                for _, tool in ipairs(backpack:GetChildren()) do  
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                        local kills = tool.Kills.Value  
 
-        local function getQualifiedTool()  
-            for _, tool in ipairs(backpack:GetChildren()) do  
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                    local kills = tool.Kills.Value  
-
-                    if tool.Name == "Thief!" and kills >= 20 then  
-                        return tool  
-                    elseif tool.Name == "Let them pay back!" and kills >= 30 then  
-                        return tool  
-                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
-                        return tool  
-                    elseif tool.Name == "Sword Master" and kills >= 50 then  
-                        return tool  
-		elseif tool.Name == "Marines!" and kills >= 30 then  
-                        return tool  
-                    elseif tool.Name == "The Strongest..." and kills >= 1 then  
-                        return tool  
+                        if tool.Name == "Thief!" and kills >= 20 then  
+                            return tool  
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then  
+                            return tool  
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then  
+                            return tool  
+                        elseif tool.Name == "Sword Master" and kills >= 50 then  
+                            return tool  
+                        elseif tool.Name == "Marines!" and kills >= 30 then  
+                            return tool  
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then  
+                            return tool  
+                        end  
                     end  
                 end  
+                return nil  
             end  
-            return nil  
-        end  
 
-        local tool = getQualifiedTool()  
+            local tool = getQualifiedTool()  
 
-        if tool and not character:FindFirstChild(tool.Name) then  
-            humanoid:EquipTool(tool)  
-            task.wait(0.05)  
-            if character:FindFirstChild(tool.Name) then  
-                tool:Activate()  
+            if tool and not character:FindFirstChild(tool.Name) and equippedToolNameAll ~= tool.Name then  
+                humanoid:EquipTool(tool)  
+                equippedToolNameAll = tool.Name
+                task.wait(0.05)  
+                if character:FindFirstChild(tool.Name) then  
+                    tool:Activate()  
+                end  
             end  
-        end  
 
-        if humanoid.Health <= 0 or not _G.farmNpc then  
-            humanoid:UnequipTools()  
-        end  
-    end)  
-end
+            if humanoid.Health <= 0 then  
+                humanoid:UnequipTools()  
+                equippedToolNameAll = nil  
+            end  
+        end)  
+    end
 end)
 		
 page1:Label("┇ Function Haki ┇")
