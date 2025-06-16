@@ -434,6 +434,7 @@ end
 end)
 		
 local equippedToolName = nil
+local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
 
 spawn(function()
     while wait(0.1) do
@@ -451,23 +452,26 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
                         local kills = tool.Kills.Value
-                        if tool.Name == "Thief!" and kills >= 20 then return tool
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool
-                        elseif tool.Name == "Marines!" and kills >= 30 then return tool
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool
+                        if tool.Name == "Thief!" and kills >= 20 then return tool, kills
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills
+                        elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills
                         end
                     end
                 end
-                return nil
+                return nil, nil
             end
 
-            local tool = getQualifiedTool()
-            if tool and not character:FindFirstChild(tool.Name) and equippedToolName ~= tool.Name then
-                _G.forceHold = true -- 🛑 สั่ง block autoequip
+            local tool, kills = getQualifiedTool()
+
+            -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
+            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                _G.forceHold = true  -- บล็อก autoequip
 
                 humanoid:EquipTool(tool)
                 equippedToolName = tool.Name
+                equippedKills = kills
 
                 wait(0.3)
                 if character:FindFirstChild(tool.Name) then
@@ -475,12 +479,13 @@ spawn(function()
                 end
 
                 wait(0.3)
-                _G.forceHold = false -- ✅ ปลด block autoequip
+                _G.forceHold = false  -- ปลดบล็อก
             end
 
             if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
                 equippedToolName = nil
+                equippedKills = -1
                 _G.forceHold = false
             end
         end)
