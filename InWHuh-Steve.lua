@@ -481,6 +481,40 @@ spawn(function()
         end)  
     end
 end)
+
+page1:Toggle("Auto Buso", false, function(hki)
+    _G.autobuso = hki
+
+    if hki then
+        spawn(function()
+            while _G.autobuso do
+                pcall(function()
+                    local player = game.Players.LocalPlayer
+                    local char = player.Character or workspace:FindFirstChild(player.Name)
+
+                    if char then
+                        local found = false
+
+                        for _, obj in ipairs(char:GetDescendants()) do
+                            if obj.Name == "Buso" then
+                                found = true
+                                break
+                            end
+                        end
+
+                        if not found then
+                            local vim = game:GetService("VirtualInputManager")
+                            vim:SendKeyEvent(true, Enum.KeyCode.T, false, game)
+                            task.wait(0.1)
+                            vim:SendKeyEvent(false, Enum.KeyCode.T, false, game)
+                        end
+                    end
+                end)
+                task.wait(1)
+            end
+        end)
+    end
+end)
 		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
@@ -856,91 +890,7 @@ page4:Button("Buy Gun", function()
         create:Notifile("", "Please select a gun before buying.", 3)
     end
 end)
-
-
-local Tab0 = Window:Taps("Bug Weapon")
-local page0 = Tab0:newpage()
-
-page0:Button("Step 1", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if v.Name == "Gryphon" then 
-            v.Parent = game.Players.LocalPlayer 
-        end
-    end
-end)
-
-page0:Button("Step 2", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer 
-            end
-        end
-    end
-end)
-
-page0:Button("Step 3", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = false
-    while _G.weapon do wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer 
-            end
-        end
-    end
-end)
-
-page0:Button("Step 4", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do wait()
-        for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Backpack
-            end
-        end
-    end
-end)
-
-page0:Button("Step 5", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = false
-    while _G.weapon do wait()
-        for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Backpack
-            end
-        end
-    end
-end)
-
-page0:Button("Step 6", function()
-    _G.weapon = true
-    while _G.weapon do wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Character
-            end
-        end
-    end
-end)
-
-page0:Button("Step 7", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do wait(0.1)
-        for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v:Activate()
-            end
-        end
-    end
-end)
-		
+	
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
