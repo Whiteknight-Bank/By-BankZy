@@ -261,7 +261,7 @@ end)
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.autoequip then return end
+            if not _G.autoequip or _G.forceHold then return end  -- ❗️บล็อกตอนมีการใช้จาก farm
 
             local player = game.Players.LocalPlayer
             local character = player.Character
@@ -275,14 +275,12 @@ spawn(function()
                 humanoid:EquipTool(tool)
                 task.wait(0.05)
 
-                -- ตรวจสอบว่า Equip สำเร็จ
                 if character:FindFirstChild(tool.Name) then
                     tool:Activate()
                 end
             end
 
-            -- ถ้าตายหรือปิด
-            if humanoid.Health <= 0 or not _G.autoequip then
+            if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
             end
         end)
@@ -441,43 +439,51 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmNpc then return end
-            local player = game.Players.LocalPlayer  
-            local character = player.Character  
-            local backpack = player:FindFirstChild("Backpack")  
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
-            if not character or not backpack or not humanoid then return end  
 
-            local function getQualifiedTool()  
-                for _, tool in ipairs(backpack:GetChildren()) do  
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                        local kills = tool.Kills.Value  
-                        if tool.Name == "Thief!" and kills >= 20 then return tool  
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool  
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool  
-                        elseif tool.Name == "Sword Master" and kills >= 50 then return tool  
-                        elseif tool.Name == "Marines!" and kills >= 30 then return tool  
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool  
-                        end  
-                    end  
-                end  
-                return nil  
-            end  
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
-            local tool = getQualifiedTool()  
-            if tool and not character:FindFirstChild(tool.Name) and equippedToolName ~= tool.Name then  
-                humanoid:EquipTool(tool)  
+            if not character or not backpack or not humanoid then return end
+
+            local function getQualifiedTool()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
+                        if tool.Name == "Thief!" and kills >= 20 then return tool
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool
+                        elseif tool.Name == "Marines!" and kills >= 30 then return tool
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool
+                        end
+                    end
+                end
+                return nil
+            end
+
+            local tool = getQualifiedTool()
+            if tool and not character:FindFirstChild(tool.Name) and equippedToolName ~= tool.Name then
+                _G.forceHold = true -- 🛑 สั่ง block autoequip
+
+                humanoid:EquipTool(tool)
                 equippedToolName = tool.Name
-                wait(0.5) -- ✅ หน่วงเวลาก่อน Activate
-                if character:FindFirstChild(tool.Name) then  
-                    tool:Activate()  
-                end  
-            end  
 
-            if humanoid.Health <= 0 then  
-                humanoid:UnequipTools()  
-                equippedToolName = nil  
-            end  
-        end)  
+                wait(0.3)
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+
+                wait(0.3)
+                _G.forceHold = false -- ✅ ปลด block autoequip
+            end
+
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+                equippedToolName = nil
+                _G.forceHold = false
+            end
+        end)
     end
 end)
 
