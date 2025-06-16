@@ -319,41 +319,42 @@ print("Selected NPC:", getgenv().selectedNPC)
 end)
 
 local autoClaimLoop = nil
+local autoClaimAllLoop = nil
 
 page1:Toggle("Auto Claim Quest", false, function(state)
-_G.claim = state
+    _G.claim = state
 
-if autoClaimLoop then  
-    autoClaimLoop:Disconnect()  
-    autoClaimLoop = nil  
-end  
+    if autoClaimLoop then  
+        autoClaimLoop:Disconnect()  
+        autoClaimLoop = nil  
+    end  
 
-if _G.claim and getgenv().selectedNPC then  
-    local foundNPC = nil  
-    for _, obj in ipairs(workspace:GetDescendants()) do  
-        if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then  
-            local head = obj:FindFirstChild("Head")  
-            if head and head:FindFirstChild("ClickDetector") then  
-                foundNPC = head.ClickDetector  
-                break  
+    if _G.claim and getgenv().selectedNPC then  
+        local foundNPC = nil  
+        for _, obj in ipairs(workspace:GetDescendants()) do  
+            if obj:IsA("Model") and obj.Name == getgenv().selectedNPC then  
+                local head = obj:FindFirstChild("Head")  
+                if head and head:FindFirstChild("ClickDetector") then  
+                    foundNPC = head.ClickDetector  
+                    break  
+                end  
             end  
         end  
-    end  
 
-    if foundNPC then  
-        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()  
-            pcall(function()  
-                if _G.claim then  
-                    fireclickdetector(foundNPC)  
-                end  
+        if foundNPC then  
+            autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()  
+                pcall(function()  
+                    if _G.claim then
+                        fireclickdetector(foundNPC)  
+                    end  
+                end)  
             end)  
-        end)  
-    end  
-end
+        end  
+    end
 end)
 
-page1:Toggle("Auto Farm", false, function(befrm)
-_G.farmNpc = befrm
+page1:Toggle("Auto Farm", false, function(fsig)
+    _G.farmNpc = fsig
 end)
 
 spawn(function()
@@ -367,19 +368,11 @@ spawn(function()
 
                 if tool then
                     local toolName = tool.Name
-
                     for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
+                        if string.find(toolName, v) then offset = -8 break end
                     end
-
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
+                        if string.find(toolName, v) then offset = -6 break end
                     end
                 end
 
@@ -400,36 +393,31 @@ spawn(function()
             end
         end)
     end
-end)	
-		
+end)
+
+-- Auto Equip Weapon For Farm (ใช้ได้ทั้งเดี่ยวและ All)
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.farmNpc then return end
+            if not (_G.farmNpc or _G.farmAll) then return end
 
             local player = game.Players.LocalPlayer
             local character = player.Character
             local backpack = player:FindFirstChild("Backpack")
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
             if not character or not backpack or not humanoid then return end
 
             local function getQualifiedTool()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
                         local kills = tool.Kills.Value
-
-                        if tool.Name == "Thief!" and kills >= 20 then
-                            return tool
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then
-                            return tool
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then
-                            return tool
-                        elseif tool.Name == "Sword Master" and kills >= 50 then
-                            return tool
-			elseif tool.Name == "Marines!" and kills >= 30 then
-                            return tool
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then
+                        local name = tool.Name
+                        if (name == "Thief!" and kills >= 20) or
+                           (name == "Let them pay back!" and kills >= 30) or
+                           (name == "Annoying noobs...." and kills >= 10) or
+                           (name == "Sword Master" and kills >= 50) or
+                           (name == "Marines!" and kills >= 30) or
+                           (name == "The Strongest..." and kills >= 1) then
                             return tool
                         end
                     end
@@ -438,7 +426,6 @@ spawn(function()
             end
 
             local tool = getQualifiedTool()
-
             if tool and not character:FindFirstChild(tool.Name) then
                 humanoid:EquipTool(tool)
                 task.wait(0.05)
@@ -447,23 +434,33 @@ spawn(function()
                 end
             end
 
-            if humanoid.Health <= 0 or not _G.farmNpc then
+            if humanoid.Health <= 0 or not (_G.farmNpc or _G.farmAll) then
                 humanoid:UnequipTools()
             end
         end)
     end
 end)
 
+local function getWeaponOffset(toolName)
+    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+        if string.find(toolName, v) then return -8 end
+    end
+    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+        if string.find(toolName, v) then return -5 end
+    end
+    return -10
+end
+
 page1:Toggle("Auto Farm [ All ]", false, function(fall)
     _G.farmAll = fall
 
-    if autoClaimLoop then
-        autoClaimLoop:Disconnect()
-        autoClaimLoop = nil
+    if autoClaimAllLoop then
+        autoClaimAllLoop:Disconnect()
+        autoClaimAllLoop = nil
     end
 
     if _G.farmAll then
-        autoClaimLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        autoClaimAllLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 for _, npcName in ipairs(npcList) do
                     for _, obj in ipairs(workspace:GetDescendants()) do
@@ -471,7 +468,7 @@ page1:Toggle("Auto Farm [ All ]", false, function(fall)
                             local head = obj:FindFirstChild("Head")
                             if head and head:FindFirstChild("ClickDetector") then
                                 fireclickdetector(head.ClickDetector)
-                                return -- รับเควสจากแค่อันเดียวต่อรอบ
+                                return
                             end
                         end
                     end
@@ -484,94 +481,28 @@ end)
 spawn(function()
     while task.wait() do
         pcall(function()
-            if _G.farmAll then
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10 -- default
+            if not _G.farmAll then return end
 
-                if tool then
-                    local toolName = tool.Name
+            local player = game.Players.LocalPlayer
+            local char = player.Character or player.CharacterAdded:Wait()
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
 
-                    -- ตรวจสอบดาบ
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-
-                    -- ตรวจสอบ melee
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -5
-                            break
-                        end
-                    end
-                end
-
-                -- ลากมอนทุกตัว
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                        if mob.Humanoid.Health <= 0 then  
-                            root.Size = Vector3.new(0, 0, 0)  
-                            mob:Destroy()  
-                        end  
-                    end
-                end
+            if tool then
+                offset = getWeaponOffset(tool.Name)
             end
-        end)
-    end
-end)
 
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmAll then
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10 -- default
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local root = mob.HumanoidRootPart
+                    root.CanCollide = false
+                    root.Size = Vector3.new(10, 10, 10)
+                    root.Anchored = true
+                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                if tool then
-                    local toolName = tool.Name
-
-                    -- ตรวจสอบดาบ
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-
-                    -- ตรวจสอบ melee
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -5
-                            break
-                        end
-                    end
-                end
-
-                -- ลากมอนทุกตัว
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                        if mob.Humanoid.Health <= 0 then  
-                            root.Size = Vector3.new(0, 0, 0)  
-                            mob:Destroy()  
-                        end  
+                    if mob.Humanoid.Health <= 0 then
+                        root.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
                     end
                 end
             end
@@ -892,7 +823,7 @@ spawn(function()
     end
 end)
 
-
+page4:Label("┇ Shop [ Weapon ] ┇")
 page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
 end)
