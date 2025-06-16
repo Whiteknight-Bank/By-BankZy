@@ -612,7 +612,7 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
                         local kills = tool.Kills.Value
-                        if tool.Name == "Sword Master" and kills >= 20 then return tool, kills
+                        if tool.Name == "Sword Master" and kills >= 50 then return tool, kills
                         end
                     end
                 end
