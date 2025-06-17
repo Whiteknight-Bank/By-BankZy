@@ -4309,12 +4309,62 @@ local Tab9 = Window:Taps("Dupe Gems")
 local page9 = Tab9:newpage()
 
 page9:Button("DUPE GAMES [ WARN: RESET STATS YOU ]" , function()
-print("Not Working")
+create:Notifile("", "Start Dupe Gems: " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3) -- แจ้งเตือนเริ่มรีจอย
+wait(4)
+workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
+wait(20.5)
+game.Players.LocalPlayer:Kick()
+game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId) -- รีจอยกลับเซิร์ฟเวอร์เดิม
+end)
+
+page9:Button("Turn gems into beri", function()
+    local player = game.Players.LocalPlayer
+    local playerId = player.UserId
+    local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+    if not userDataName then return end
+
+    -- ดึงค่า affinity ปัจจุบัน
+    local AffMelee1 = userDataName.Data.DFT1Melee.Value
+    local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+    local AffDefense1 = userDataName.Data.DFT1Defense.Value
+    local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+    -- ถ้าค่าใดอยู่ในช่วง 1.1 ถึง 2 จะถูกล็อค ไม่ให้สุ่ม
+    local function isLocked(value)
+        return value >= 1.1 and value <= 2
+    end
+
+    local d = isLocked(AffDefense1) and nil or false
+    local m = isLocked(AffMelee1) and nil or false
+    local s = isLocked(AffSniper1) and nil or false
+    local sw = isLocked(AffSword1) and nil or false
+
+    -- หาตำแหน่งปุ่ม Retum
+    local merchant = workspace:FindFirstChild("Merchants")
+    if not merchant then return end
+
+    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+    if not affinityMerchant then return end
+
+    local clickable = affinityMerchant:FindFirstChild("Clickable")
+    if not clickable then return end
+
+    local retum = clickable:FindFirstChild("Retum")
+    if not retum then return end
+
+    for i = 1, 50 do
+        local args = {
+            [1] = "DFT1",
+            [2] = d,
+            [3] = m,
+            [4] = s,
+            [5] = sw,
+            [6] = "Gems"
+        }
+        retum:FireServer(unpack(args))
+    end
 end)
 		
-page9:Button("TURN GEM INTO BERI [ COMING SOON . . . ]" , function()
-print("Not Working")
-end)
-page9:Section("อาจมีเข้าแน่นอน รอการเทสจากเจ้าของ")
+page9:Section("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
 
 	end)
