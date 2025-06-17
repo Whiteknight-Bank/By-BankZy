@@ -485,7 +485,7 @@ local player = game.Players.LocalPlayer
             equippedToolName = tool.Name  
             equippedKills = kills  
 
-            wait(1)  
+            wait(0.5)  
             if character:FindFirstChild(tool.Name) then  
                 tool:Activate()  
             end  
@@ -539,14 +539,124 @@ page1:Toggle("Auto Buso", false, function(hki)
 end)
 
 page1:Label("┇ Another Farm ┇")
-page1:Toggle("Auto Farm Sword", false, function(swrd)
-    _G.farmSword = swrd
+page1:Toggle("Auto Farm Sword", false, function(sword)
+    _G.farmSword = sword
 end)
 
-page1:Toggle("Auto Farm Gun", false, function(fgn)
-    _G.farmGun = fgn
+local equippedSwordName = nil
+local equippedSwordKills = -1
+		
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmSword then return end
+
+            local player = game.Players.LocalPlayer  
+            local character = player.Character  
+            local backpack = player:FindFirstChild("Backpack")  
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+
+            if not character or not backpack or not humanoid then return end  
+
+            local function getQualifiedSword()
+                for _, tool in ipairs(backpack:GetChildren()) do  
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                        local kills = tool.Kills.Value  
+                        if tool.Name == "Thief!" and kills >= 20 then 
+			    return tool, kills 
+                        end  
+                    end  
+                end  
+                return nil, nil  
+            end  
+
+            local sword, swordKills = getQualifiedSword()
+
+            if sword and (equippedSwordName ~= sword.Name or equippedSwordKills ~= swordKills) then  
+                _G.forceHold = true
+
+                humanoid:EquipTool(sword)  
+                equippedSwordName = sword.Name  
+                equippedSwordKills = swordKills  
+
+                wait(0.5)
+                if character:FindFirstChild(sword.Name) then  
+                    sword:Activate()  
+                end  
+
+                wait(0.5)  
+                _G.forceHold = false
+            end  
+
+            if humanoid.Health <= 0 then  
+                humanoid:UnequipTools()  
+                equippedSwordName = nil  
+                equippedSwordKills = -1  
+                _G.forceHold = false  
+            end  
+        end)
+    end
+end)
+		
+page1:Toggle("Auto Farm Gun", false, function(fgun)
+    _G.farmGun = fgun
 end)
 
+local equippedGunName = nil
+local equippedGunKills = -1
+		
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.farmGun then return end
+
+            local player = game.Players.LocalPlayer  
+            local character = player.Character  
+            local backpack = player:FindFirstChild("Backpack")  
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+
+            if not character or not backpack or not humanoid then return end  
+
+            local function getQualifiedGun()
+                for _, tool in ipairs(backpack:GetChildren()) do  
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                        local kills = tool.Kills.Value  
+                        if tool.Name == "The gunner!" and kills >= 15 then 
+			   return tool, kills 
+                        end  
+                    end  
+                end  
+                return nil, nil  
+            end  
+
+            local gun, gunKills = getQualifiedGun()
+
+            if gun and (equippedGunName ~= gun.Name or equippedGunKills ~= gunKills) then  
+                _G.forceHold = true
+
+                humanoid:EquipTool(gun)  
+                equippedGunName = gun.Name  
+                equippedGunKills = gunKills  
+
+                wait(0.5)
+                if character:FindFirstChild(gun.Name) then  
+                    gun:Activate()  
+                end  
+
+                wait(0.5)  
+                _G.forceHold = false
+            end  
+
+            if humanoid.Health <= 0 then  
+                humanoid:UnequipTools()  
+                equippedGunName = nil  
+                equippedGunKills = -1  
+                _G.forceHold = false  
+            end  
+        end)
+    end
+end)
+		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
