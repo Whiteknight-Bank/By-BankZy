@@ -444,79 +444,62 @@ end
         end)
     end
 end)
-
+		
 local equippedToolName = nil
 local equippedKills = -1
-
+		
 spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if not _G.farmNpc then return end
+while wait(0.1) do
+pcall(function()
+if not _G.farmNpc then return end
+local player = game.Players.LocalPlayer  
+        local character = player.Character  
+        local backpack = player:FindFirstChild("Backpack")  
+        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
 
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+        if not character or not backpack or not humanoid then return end  
 
-            if not character or not backpack or not humanoid then return end
+        local function getQualifiedTool()  
+            for _, tool in ipairs(backpack:GetChildren()) do  
+                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                    local kills = tool.Kills.Value  
+                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
+                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
+                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                    end  
+                end  
+            end  
+            return nil, nil  
+        end  
 
-            local function getQualifiedTool()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") and tool:FindFirstChild("ToolTip") then
-                        local kills = tool.Kills.Value
-                        local tooltip = tool.ToolTip.Value
+        local tool, kills = getQualifiedTool()  
 
-                        local requiredKills = nil
-                        if tool.Name == "Thief!" then requiredKills = 20
-                        elseif tool.Name == "Let them pay back!" then requiredKills = 30
-                        elseif tool.Name == "Annoying noobs...." then requiredKills = 10
-                        elseif tool.Name == "Marines!" then requiredKills = 30
-                        elseif tool.Name == "The Strongest..." then requiredKills = 1
-                        end
+        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+            _G.forceHold = true  -- บล็อก autoequip  
 
-                        if requiredKills and kills >= requiredKills and tooltip == "Finished!,Click to get reward!" then
-                            print("ผ่านเงื่อนไข: " .. tool.Name .. " | Kills = " .. kills .. " | ToolTip = " .. tooltip)
-                            return tool, kills
-                        end
-                    end
-                end
-                return nil, nil
-            end
+            humanoid:EquipTool(tool)  
+            equippedToolName = tool.Name  
+            equippedKills = kills  
 
-            local tool, kills = getQualifiedTool()
+            wait(1)  
+            if character:FindFirstChild(tool.Name) then  
+                tool:Activate()  
+            end  
 
-            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
-                _G.forceHold = true
+            wait(0.5)  
+            _G.forceHold = false  -- ปลดบล็อก  
+        end  
 
-                humanoid:UnequipTools()
-                humanoid:EquipTool(tool)
-                print("ถืออาวุธ: " .. tool.Name)
-
-                wait(1)
-
-                if character:FindFirstChild(tool.Name) then
-                    tool:Activate()
-                    print("Activate สำเร็จ: " .. tool.Name)
-                else
-                    print("⚠️ Activate ไม่เจออาวุธในตัว")
-                end
-
-                wait(0.5)
-
-                equippedToolName = tool.Name
-                equippedKills = kills
-                _G.forceHold = false
-            end
-
-            if humanoid.Health <= 0 then
-                humanoid:UnequipTools()
-                equippedToolName = nil
-                equippedKills = -1
-                _G.forceHold = false
-                print("Reset หลังตาย")
-            end
-        end)
-    end
+        if humanoid.Health <= 0 then  
+            humanoid:UnequipTools()  
+            equippedToolName = nil  
+            equippedKills = -1  
+            _G.forceHold = false  
+        end  
+    end)  
+end
 end)
 
 page1:Toggle("Auto Buso", false, function(hki)
