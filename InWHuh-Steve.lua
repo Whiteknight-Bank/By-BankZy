@@ -93,6 +93,20 @@ local Window = create:Win("BNK Hub : For Map: [ Steve's One Piece ]")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to BNK Hub", 5)
 
+local Players = game:GetService("Players")
+
+local BlacklistedPlayers = {
+    "ZoR_017A"
+}
+
+Players.PlayerAdded:Connect(function(v)
+    for _, player in pairs(Players:GetPlayers()) do
+        if table.find(BlacklistedPlayers, player.Name) then
+            create:Notifile("", "คนไม่มีพ่อแม่เข้าเซิฟ: " .. player.Name, 5)
+        end
+    end
+end)
+		
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:2500", "Rifle|Price:10000"};
