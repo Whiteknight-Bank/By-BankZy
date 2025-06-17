@@ -475,6 +475,7 @@ spawn(function()
                         end
 
                         if requiredKills and kills >= requiredKills and tooltip == "Finished!,Click to get reward!" then
+                            print("ผ่านเงื่อนไข: " .. tool.Name .. " | Kills = " .. kills .. " | ToolTip = " .. tooltip)
                             return tool, kills
                         end
                     end
@@ -486,13 +487,22 @@ spawn(function()
 
             if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
                 _G.forceHold = true
+
                 humanoid:UnequipTools()
                 humanoid:EquipTool(tool)
+                print("ถืออาวุธ: " .. tool.Name)
+
                 wait(1)
+
                 if character:FindFirstChild(tool.Name) then
                     tool:Activate()
+                    print("Activate สำเร็จ: " .. tool.Name)
+                else
+                    print("⚠️ Activate ไม่เจออาวุธในตัว")
                 end
+
                 wait(0.5)
+
                 equippedToolName = tool.Name
                 equippedKills = kills
                 _G.forceHold = false
@@ -503,6 +513,7 @@ spawn(function()
                 equippedToolName = nil
                 equippedKills = -1
                 _G.forceHold = false
+                print("Reset หลังตาย")
             end
         end)
     end
