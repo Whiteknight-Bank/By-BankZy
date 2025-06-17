@@ -435,7 +435,7 @@ local equippedToolName = nil
 local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.5) do
         pcall(function()
             if not _G.farmNpc then return end
 
@@ -471,12 +471,12 @@ spawn(function()
                 equippedToolName = tool.Name
                 equippedKills = kills
 
-                wait(0.3)
+                wait(1.5)
                 if character:FindFirstChild(tool.Name) then
                     tool:Activate()
                 end
 
-                wait(0.3)
+                wait(1)
                 _G.forceHold = false  -- ปลดบล็อก
             end
 
