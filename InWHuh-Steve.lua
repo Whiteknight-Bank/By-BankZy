@@ -539,10 +539,6 @@ page1:Toggle("Auto Buso", false, function(hki)
 end)
 
 page1:Label("┇ Another Farm ┇")
-		
-local equippedToolName_Sword = nil
-local equippedToolName_Gun = nil
-
 page1:Toggle("Auto Farm Sword", false, function(swrd)
     _G.farmSword = swrd
 
@@ -550,7 +546,6 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmSword then return end
-
             for _, obj in ipairs(workspace:GetDescendants()) do  
                 if obj:IsA("Model") and obj.Name == "Sword noob" then  
                     local head = obj:FindFirstChild("Head")  
@@ -567,7 +562,6 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmSword then return end
-
             local player = game.Players.LocalPlayer
             local char = player.Character or player.CharacterAdded:Wait()
             local humanoid = char and char:FindFirstChildOfClass("Humanoid")
@@ -591,7 +585,6 @@ spawn(function()
     end
 end)
 
-        -- ตรวจจับการตาย
         spawn(function()
             local player = game.Players.LocalPlayer
             while _G.farmSword do
@@ -607,63 +600,6 @@ end)
     end
 end)
 
-local equippedToolName_Sword = nil
-local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
-
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if not _G.farmSword then return end
-
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-            if not character or not backpack or not humanoid then return end
-
-            local function getQualifiedTool()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                        local kills = tool.Kills.Value
-                        if tool.Name == "Sword Master" and kills >= 50 then return tool, kills
-                        end
-                    end
-                end
-                return nil, nil
-            end
-
-            local tool, kills = getQualifiedTool()
-
-            -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
-            if tool and (equippedToolName_Sword ~= tool.Name or equippedKills ~= kills) then
-                _G.forceHold = true  -- บล็อก autoequip
-
-                humanoid:EquipTool(tool)
-                equippedToolName_Sword = tool.Name
-                equippedKills = kills
-
-                wait(1)
-                if character:FindFirstChild(tool.Name) then
-                    tool:Activate()
-                end
-
-                wait(0.5)
-                _G.forceHold = false  -- ปลดบล็อก
-            end
-
-            if humanoid.Health <= 0 then
-                humanoid:UnequipTools()
-                equippedToolName_Sword = nil
-                equippedKills = -1
-                _G.forceHold = false
-            end
-        end)
-    end
-end)
-		
-local equippedToolName_Gun = nil
-
 page1:Toggle("Auto Farm Gun", false, function(fgn)
     _G.farmGun = fgn
 
@@ -671,7 +607,6 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmGun then return end
-
             for _, obj in ipairs(workspace:GetDescendants()) do  
                 if obj:IsA("Model") and obj.Name == "Gun noob" then  
                     local head = obj:FindFirstChild("Head")  
@@ -688,7 +623,6 @@ spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmGun then return end
-
             local player = game.Players.LocalPlayer
             local char = player.Character or player.CharacterAdded:Wait()
             local humanoid = char and char:FindFirstChildOfClass("Humanoid")
@@ -712,7 +646,6 @@ spawn(function()
     end
 end)
 
-        -- ตรวจจับการตาย
         spawn(function()
             local player = game.Players.LocalPlayer
             while _G.farmGun do
@@ -723,61 +656,6 @@ end)
                     wait(2)
                 end
                 task.wait(1)
-            end
-        end)
-    end
-end)
-
-local equippedToolName_Gun = nil
-local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
-
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if not _G.farmGun then return end
-
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-            if not character or not backpack or not humanoid then return end
-
-            local function getQualifiedTool()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                        local kills = tool.Kills.Value
-                        if tool.Name == "The gunner!" and kills >= 15 then return tool, kills
-                        end
-                    end
-                end
-                return nil, nil
-            end
-
-            local tool, kills = getQualifiedTool()
-
-            -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
-            if tool and (equippedToolName_Gun ~= tool.Name or equippedKills ~= kills) then
-                _G.forceHold = true  -- บล็อก autoequip
-
-                humanoid:EquipTool(tool)
-                equippedToolName_Gun = tool.Name
-                equippedKills = kills
-
-                wait(0.3)
-                if character:FindFirstChild(tool.Name) then
-                    tool:Activate()
-                end
-
-                wait(0.3)
-                _G.forceHold = false  -- ปลดบล็อก
-            end
-
-            if humanoid.Health <= 0 then
-                humanoid:UnequipTools()
-                equippedToolName_Gun = nil
-                equippedKills = -1
-                _G.forceHold = false
             end
         end)
     end
