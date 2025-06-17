@@ -486,31 +486,18 @@ spawn(function()
 
             if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
                 _G.forceHold = true
-
                 humanoid:UnequipTools()
-                wait(0.2)
-
                 humanoid:EquipTool(tool)
-
-                -- รอจนกว่าจะถือจริง
-                local timeout = 0
-                while not character:FindFirstChild(tool.Name) and timeout < 2 do
-                    wait(0.1)
-                    timeout += 0.1
-                end
-
+                wait(1)
                 if character:FindFirstChild(tool.Name) then
                     tool:Activate()
                 end
-
+                wait(0.5)
                 equippedToolName = tool.Name
                 equippedKills = kills
-
-                wait(0.5)
                 _G.forceHold = false
             end
 
-            -- reset ถ้าตาย
             if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
                 equippedToolName = nil
