@@ -540,7 +540,8 @@ end)
 
 page1:Label("┇ Another Farm ┇")
 		
-local equippedToolName = nil
+local equippedToolName_Sword = nil
+local equippedToolName_Gun = nil
 
 page1:Toggle("Auto Farm Sword", false, function(swrd)
     _G.farmSword = swrd
@@ -606,7 +607,7 @@ end)
     end
 end)
 
-local equippedToolName = nil
+local equippedToolName_Sword = nil
 local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
 
 spawn(function()
@@ -635,11 +636,11 @@ spawn(function()
             local tool, kills = getQualifiedTool()
 
             -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
-            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+            if tool and (equippedToolName_Sword ~= tool.Name or equippedKills ~= kills) then
                 _G.forceHold = true  -- บล็อก autoequip
 
                 humanoid:EquipTool(tool)
-                equippedToolName = tool.Name
+                equippedToolName_Sword = tool.Name
                 equippedKills = kills
 
                 wait(1)
@@ -653,7 +654,7 @@ spawn(function()
 
             if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
-                equippedToolName = nil
+                equippedToolName_Sword = nil
                 equippedKills = -1
                 _G.forceHold = false
             end
@@ -661,7 +662,7 @@ spawn(function()
     end
 end)
 		
-local equippedToolName = nil
+local equippedToolName_Gun = nil
 
 page1:Toggle("Auto Farm Gun", false, function(fgn)
     _G.farmGun = fgn
@@ -727,7 +728,7 @@ end)
     end
 end)
 
-local equippedToolName = nil
+local equippedToolName_Gun = nil
 local equippedKills = -1  -- เพิ่มตัวแปรเพื่อจำ kills ของอาวุธที่เคยถือ
 
 spawn(function()
@@ -756,11 +757,11 @@ spawn(function()
             local tool, kills = getQualifiedTool()
 
             -- ✅ เงื่อนไขใหม่: ต้องถือใหม่ถ้าเป็นอาวุธใหม่ หรือ kills เปลี่ยน
-            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+            if tool and (equippedToolName_Gun ~= tool.Name or equippedKills ~= kills) then
                 _G.forceHold = true  -- บล็อก autoequip
 
                 humanoid:EquipTool(tool)
-                equippedToolName = tool.Name
+                equippedToolName_Gun = tool.Name
                 equippedKills = kills
 
                 wait(0.3)
@@ -774,7 +775,7 @@ spawn(function()
 
             if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
-                equippedToolName = nil
+                equippedToolName_Gun = nil
                 equippedKills = -1
                 _G.forceHold = false
             end
