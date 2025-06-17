@@ -838,12 +838,20 @@ spawn(function()
 
                 local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
                 if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local targetRoot = targetPlayer.Character.HumanoidRootPart
+                    local targetChar = targetPlayer.Character
+                    local targetRoot = targetChar.HumanoidRootPart
+
                     targetRoot.CanCollide = false
                     targetRoot.Anchored = true
                     targetRoot.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                    if targetPlayer.Character:FindFirstChild("Humanoid") and targetPlayer.Character.Humanoid.Health <= 0 then
+                    -- ✅ ขยายขนาด Hitbox (ร่างจริง)
+                    if targetRoot.Size.Magnitude < 10 then -- ป้องกันไม่ให้ขยายซ้ำ
+                        targetRoot.Size = Vector3.new(25, 25, 25)
+                    end
+
+                    -- ❌ คืนค่าขนาดเดิมเมื่อตาย
+                    if targetChar:FindFirstChild("Humanoid") and targetChar.Humanoid.Health <= 0 then
                         targetRoot.Anchored = false
                         targetRoot.Size = Vector3.new(2, 2, 1)
                     end
