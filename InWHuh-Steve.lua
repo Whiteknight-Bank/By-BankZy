@@ -326,46 +326,48 @@ page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
 if farmLoop then
-farmLoop:Disconnect()
-farmLoop = nil
+    farmLoop:Disconnect()
+    farmLoop = nil
 end
 
 if _G.farmNpc then
-farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-pcall(function()
-if not SelectedMob then return end
+    spawn(function()
+        while farmLoop and wait(0.1) do -- ปรับความถี่ตรงนี้ได้
+            pcall(function()
+                if not SelectedMob then return end
 
-local targetNames = {}  
+                local targetNames = {}
 
-        if SelectedMob == "All" then  
-            for _, v in pairs(npcList) do  
-                if typeof(v) == "table" then  
-                    for _, name in pairs(v) do  
-                        table.insert(targetNames, name)  
-                    end  
-                else  
-                    table.insert(targetNames, v)  
-                end  
-            end  
-        else  
-            local mapped = npcList[SelectedMob]  
-            if typeof(mapped) == "table" then  
-                targetNames = mapped  
-            elseif typeof(mapped) == "string" then  
-                table.insert(targetNames, mapped)  
-            end  
-        end  
+                if SelectedMob == "All" then
+                    for _, v in pairs(npcList) do
+                        if typeof(v) == "table" then
+                            for _, name in pairs(v) do
+                                table.insert(targetNames, name)
+                            end
+                        else
+                            table.insert(targetNames, v)
+                        end
+                    end
+                else
+                    local mapped = npcList[SelectedMob]
+                    if typeof(mapped) == "table" then
+                        targetNames = mapped
+                    elseif typeof(mapped) == "string" then
+                        table.insert(targetNames, mapped)
+                    end
+                end
 
-        for _, obj in ipairs(workspace:GetDescendants()) do  
-            if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
-                local head = obj:FindFirstChild("Head")  
-                if head and head:FindFirstChild("ClickDetector") then  
-                    fireclickdetector(head.ClickDetector)  
-                end  
-            end  
-        end  
-    end)  
-end)
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end
+    end)
 end
     
      if _G.farmNpc then
