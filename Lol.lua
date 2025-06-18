@@ -543,6 +543,26 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
+if _G.farmSword then
+    spawn(function()
+        while _G.farmSword and wait(0.5) do
+            pcall(function()
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj.Name == "Sword noob" then
+                        local head = obj:FindFirstChild("Head")
+                        if head then
+                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
+                            if clickDetector then
+                                fireclickdetector(clickDetector)
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end
+		
 spawn(function()
     while wait() do
         pcall(function()
@@ -664,6 +684,26 @@ page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
 
+if _G.farmGun then
+    spawn(function()
+        while _G.farmGun and wait(0.5) do
+            pcall(function()
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj.Name == "Gun noob" then
+                        local head = obj:FindFirstChild("Head")
+                        if head then
+                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
+                            if clickDetector then
+                                fireclickdetector(clickDetector)
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end
+		
 spawn(function()
     while wait() do
         pcall(function()
