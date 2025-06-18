@@ -503,12 +503,12 @@ if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
     equippedToolName = tool.Name      
     equippedKills = kills      
 
-    wait(1)      
+    wait(0.75)      
     if character:FindFirstChild(tool.Name) then      
         tool:Activate()      
     end      
 
-    wait(0.5)      
+    wait(0.75)      
     _G.forceHold = false  -- ปลดบล็อก      
 end      
 
