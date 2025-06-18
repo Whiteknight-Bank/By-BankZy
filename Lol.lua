@@ -841,22 +841,20 @@ local page2 = Tab2:newpage()
 
 page2:Label("┇ Player ┇")
 
-local function getPlayerNames()
-    local names = {}
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        table.insert(names, player.Name)
-    end
-    return names
+local playerNames = {}
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+    table.insert(playerNames, player.Name)
 end
 
-page2:Dropdown("Select Player:", getPlayerNames(), function(name)
+page2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
 page2:Button("Refresh Player", function()
-    table.clear(getPlayerNames())
-    for _, name in ipairs(getPlayerNames()) do
-        table.insert(getPlayerNames(), name)
+    table.clear(playerNames)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
     end
 end)
 
