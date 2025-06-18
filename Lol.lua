@@ -89,9 +89,9 @@ task.spawn(function()
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("BNK Hub : For Map: [ Steve's One Piece ]")
+local Window = create:Win("ReaperX Hub [BETA] | [Alpha]Steve's One Piece ")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to BNK Hub", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
 local Players = game:GetService("Players")
 
@@ -261,6 +261,9 @@ page1:Button("Refresh Weapon", function()
             table.insert(Wapon, v.Name)
         end
     end
+				
+wait(0.3)
+create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
 page1:Toggle("Auto Click", false, function(state)
@@ -500,7 +503,7 @@ if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
     equippedToolName = tool.Name      
     equippedKills = kills      
 
-    wait(0.5)      
+    wait(1)      
     if character:FindFirstChild(tool.Name) then      
         tool:Activate()      
     end      
@@ -856,6 +859,9 @@ page2:Button("Refresh Player", function()
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
     end
+
+wait(0.3)
+create:Notifile("", "Dropdown Refresh!", 2)
 end)
 
 page2:Button("Click to Tp", function()
@@ -1578,30 +1584,32 @@ end)
 local lastFound = true
 
 spawn(function()
-    while wait(1.5) do
+    while task.wait(1.5) do
         if _G.tpchest then
             pcall(function()
-                if not canTeleport() then
-                    _G.tpchest = false
-                    return
-                end
+                if not canTeleport() then return end
 
                 local character = plr.Character or plr.CharacterAdded:Wait()
                 if not character.PrimaryPart then return end
 
                 local hrp = character.PrimaryPart
-                local originalPos = hrp.CFrame
                 local banned = Vector3.new(10000, -200.000427, 10000)
-                local positions = {}
 
+                local foundAny = false
+
+                -- วนหาแบบเรื่อยๆ
                 for _, a in ipairs(workspace:GetChildren()) do
+                    if not _G.tpchest then break end
                     if a.Name == "" then
                         for _, b in ipairs(a:GetChildren()) do
                             if b.Name == "" then
                                 for _, c in ipairs(b:GetChildren()) do
+                                    if not _G.tpchest then break end
                                     if c.Name == "" and c:IsA("BasePart") then
                                         if (c.Position - banned).Magnitude > 1 then
-                                            table.insert(positions, c.Position)
+                                            foundAny = true
+                                            hrp.CFrame = CFrame.new(c.Position + Vector3.new(0, 5, 0))
+                                            task.wait(0.25)
                                         end
                                     end
                                 end
@@ -1610,19 +1618,14 @@ spawn(function()
                     end
                 end
 
-                if #positions == 0 then
+                if not foundAny then
                     if lastFound then
                         create:Notifile("", "Not found chest", 3)
                         lastFound = false
                     end
                 else
                     lastFound = true
-                    for _, pos in ipairs(positions) do
-                        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 5, 0))
-                        wait(0.2)
-                    end
-                    hrp.CFrame = originalPos
-                    create:Notifile("", "Teleport all chest", 3)
+                    create:Notifile("", "Teleport chest done", 2)
                 end
             end)
         end
