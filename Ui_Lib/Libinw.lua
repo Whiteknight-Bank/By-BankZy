@@ -233,7 +233,7 @@ dropdownButton.BackgroundTransparency = 0.4
 dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
 dropdownButton.Font = Enum.Font.SourceSans  
 dropdownButton.TextSize = 16  
-dropdownButton.Text = "Select"  
+dropdownButton.Text = " . . . "  
 
 local opened = false  
 local optionContainer = Instance.new("Frame", page)  
@@ -291,24 +291,7 @@ end)
 
 end
 
-local dropdownObject = {}
-
-function dropdownObject:SetOptions(newItems)
-items = newItems
-if opened then
-opened = false
-arrow.Text = "←"
-optionContainer:TweenSize(
-UDim2.new(1, -10, 0, 0),
-Enum.EasingDirection.Out,
-Enum.EasingStyle.Quad,
-0.2,
-true
-)
-end
-end
-
-return dropdownObject
+return newPage
 
     end
 
@@ -462,7 +445,7 @@ end
 function newPage:Dropdown(title, items, callback)
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
-    container.BackgroundTransparency = 1
+    container.BackgroundTransparency = 0.4
     container.LayoutOrder = 0
 
     local titleLabel = Instance.new("TextLabel", container)
@@ -492,7 +475,7 @@ function newPage:Dropdown(title, items, callback)
     dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
-    dropdownButton.Text = "Select"
+    dropdownButton.Text = " . . . "
 
     local opened = false
     local optionContainer = Instance.new("Frame", page)
@@ -549,25 +532,7 @@ function newPage:Dropdown(title, items, callback)
     end)
 end
 
-local dropdownObject = {}
-
-function dropdownObject:SetOptions(newItems)
-    items = newItems
-    if opened then
-        opened = false
-        arrow.Text = "←"
-        optionContainer:TweenSize(
-            UDim2.new(1, -10, 0, 0),
-            Enum.EasingDirection.Out,
-            Enum.EasingStyle.Quad,
-            0.2,
-            true
-        )
-    end
-end
-
-return dropdownObject
-
+return newPage
     end
 
     return tabs
