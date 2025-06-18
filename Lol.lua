@@ -465,6 +465,8 @@ end)
 end
 end)
 
+local forceHold = false
+
 spawn(function()
     while task.wait(0.1) do
         pcall(function()
@@ -477,6 +479,13 @@ spawn(function()
 
             if not character or not backpack or not humanoid then return end
 
+            -- หยุดทุกอย่างเมื่อผู้เล่นตาย
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+                forceHold = false
+                return -- ⛔ หยุดรอบนี้ทันที
+            end
+
             local function getQualifiedTool()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") then
@@ -486,11 +495,11 @@ spawn(function()
                                 return tool
                             elseif tool.Name == "Let them pay back!" and kills.Value > 29 then
                                 return tool
-			    elseif tool.Name == "Annoying noobs...." and kills.Value > 9 then
+                            elseif tool.Name == "Annoying noobs...." and kills.Value > 9 then
                                 return tool
-			    elseif tool.Name == "Marine!" and kills.Value > 29 then
+                            elseif tool.Name == "Marine!" and kills.Value > 29 then
                                 return tool
-			    elseif tool.Name == "The Strongest..." and kills.Value > 0 then
+                            elseif tool.Name == "The Strongest..." and kills.Value > 0 then
                                 return tool
                             end
                         end
@@ -501,17 +510,14 @@ spawn(function()
 
             local tool = getQualifiedTool()
 
-            if tool and not character:FindFirstChild(tool.Name) then
+            if tool and not character:FindFirstChild(tool.Name) and not forceHold then
+                forceHold = true
                 tool.Parent = character
-                task.wait(0.35)
+                task.wait(0.55)
                 if character:FindFirstChild(tool.Name) then
-		task.wait(0.35)
+                    task.wait(0.55)
                     tool:Activate()
                 end
-            end
-
-            if humanoid.Health <= 0 or not _G.farmNpc then
-                humanoid:UnequipTools()
             end
         end)
     end
