@@ -543,23 +543,6 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
-    spawn(function()
-        while wait(0.01) do 
-		if _G.farmSword then
-		pcall(function()
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find("Sword noob", obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
-                    end
-                end
-            end)
-        end
-    end)
-		end
-
 spawn(function()
     while wait() do
         pcall(function()
@@ -680,23 +663,6 @@ end)
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
-
-    spawn(function()
-        while wait(0.01) do 
-	if _G.farmGun then
-		pcall(function()
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find("Gun noob", obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
-                    end
-                end
-            end)
-        end
-    end)
-end
 
 spawn(function()
     while wait() do
