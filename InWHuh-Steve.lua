@@ -498,7 +498,7 @@ spawn(function()
         task.wait(1)
     end
 end)
-
+end)
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
 
