@@ -1050,7 +1050,8 @@ end)
 page0:Button("Step 2", function()
     local weapon = game.Players.LocalPlayer.Backpack
     _G.weapon = true
-    while _G.weapon do wait()
+    while _G.weapon do 
+	wait()
         for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v.Parent = game.Players.LocalPlayer 
@@ -1062,7 +1063,8 @@ end)
 page0:Button("Step 3", function()
     local weapon = game.Players.LocalPlayer.Backpack
     _G.weapon = false
-    while _G.weapon do wait()
+    while _G.weapon do 
+	wait()
         for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v.Parent = game.Players.LocalPlayer 
@@ -1074,7 +1076,8 @@ end)
 page0:Button("Step 4", function()
     local weapon = game.Players.LocalPlayer.Backpack
     _G.weapon = true
-    while _G.weapon do wait()
+    while _G.weapon do 
+	wait()
         for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v.Parent = game.Players.LocalPlayer.Backpack
@@ -1086,7 +1089,8 @@ end)
 page0:Button("Step 5", function()
     local weapon = game.Players.LocalPlayer.Backpack
     _G.weapon = false
-    while _G.weapon do wait()
+    while _G.weapon do 
+	wait()
         for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v.Parent = game.Players.LocalPlayer.Backpack
@@ -1097,7 +1101,8 @@ end)
 
 page0:Button("Step 6", function()
     _G.weapon = true
-    while _G.weapon do wait()
+    while _G.weapon do 
+	wait()
         for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v.Parent = game.Players.LocalPlayer.Character
@@ -1109,7 +1114,8 @@ end)
 page0:Button("Step 7", function()
     local weapon = game.Players.LocalPlayer.Backpack
     _G.weapon = true
-    while _G.weapon do wait(0.1)
+    while _G.weapon do 
+	wait(0.1)
         for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
             if v.Name == "Gryphon" then 
                 v:Activate()
