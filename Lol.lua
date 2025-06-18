@@ -106,7 +106,15 @@ Players.PlayerAdded:Connect(function(v)
         end
     end
 end)
-		
+
+local Wapon = {}
+
+for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+    if v:IsA("Tool") then
+        table.insert(Wapon, v.Name)
+    end
+		end
+
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:2500", "Rifle|Price:10000"};
@@ -239,13 +247,26 @@ spawn(function()
 end)
 
 page1:Label("┇ Function Item ┇")
-page1:Dropdown("Select Weapon:", Wapon, function(wapn)
-    Wapon = wapn
-end)
 
-page1:Button("Refresh Weapon List", function()
-    local newItems = getWeaponList()
-    dropdown:SetOptions(newItems)
+local Wapon = {} -- ตารางอาวุธ (จะอัปเดตทีหลัง)
+local selectedWeapon = nil
+local function createDropdown()
+    page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+        selectedWeapon = wapn
+    end)
+end
+
+createDropdown()
+
+page1:Button("Refresh Weapon", function()
+    Wapon = {}
+    for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            table.insert(Wapon, v.Name)
+        end
+    end
+
+    createDropdown()
 end)
 		
 page1:Toggle("Auto Click", false, function(state)
