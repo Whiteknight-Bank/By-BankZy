@@ -407,13 +407,13 @@ end
             local toolName = tool.Name    
             for _, v in pairs(Cache.DevConfig["ListOfSword"]) do    
                 if string.find(v, toolName) then    
-                    offset = -8    
+                    offset = -6    
                     break    
                 end    
             end    
             for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do    
                 if string.find(v, toolName) then    
-                    offset = -6    
+                    offset = -5    
                     break    
                 end    
             end    
@@ -560,7 +560,8 @@ end)
 
 if _G.farmSword then
     spawn(function()
-        while _G.farmSword and wait(0.5) do
+        while wait(0.5) do
+	   if _G.farmSword then
             pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("Model") and obj.Name == "Sword noob" then
@@ -699,9 +700,9 @@ page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
 
-if _G.farmGun then
     spawn(function()
-        while _G.farmGun and wait(0.5) do
+        while wait(0.5) do
+	   if _G.farmGun then
             pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("Model") and obj.Name == "Gun noob" then
@@ -839,7 +840,6 @@ local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Player ┇")
-local playerDropdown
 
 local function getPlayerNames()
     local names = {}
@@ -849,12 +849,17 @@ local function getPlayerNames()
     return names
 end
 
-playerDropdown = page2:Dropdown("Select Player:", getPlayerNames(), function(name)
+local PlayerList = {}
+
+page2:Dropdown("Select Player:", PlayerList, function(name)
     selectedPlayer = name
 end)
 
-page2:Button("Refresh Player List", function()
-    playerDropdown:Refresh(getPlayerNames(), true)
+page2:Button("Refresh Player", function()
+    table.clear(PlayerList)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        table.insert(PlayerList, player.Name)
+    end
 end)
 
 page2:Button("Click to Tp", function()
