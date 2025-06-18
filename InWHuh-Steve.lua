@@ -370,138 +370,133 @@ if _G.farmNpc then
     end)
 end
     
-     if _G.farmNpc then
-        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local hum = char and char:FindFirstChild("Humanoid")
+    local questWeaponData = {
+    {Name = "The Strongest...", Kills = 1},
+    {Name = "Annoying noobs....", Kills = 10},
+    {Name = "Thief!", Kills = 20},
+    {Name = "Let them pay back!", Kills = 30},
+    {Name = "Marines!", Kills = 30},
+}
 
-                -- หยุดฟาร์มถ้าตาย
-                if not char or not hum or hum.Health <= 0 then
+local currentQuestIndex = 1
+local killedCount = 0
+local processing = false
+
+local function getOffsetByToolName(toolName)
+    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+        if string.find(toolName, v) then return -8 end
+    end
+    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+        if string.find(toolName, v) then return -6 end
+    end
+    return -10
+end
+
+farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+    pcall(function()
+        if not _G.farmNpc then return end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        local hum = char and char:FindFirstChild("Humanoid")
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        local backpack = player:FindFirstChild("Backpack")
+
+        if not (char and hum and hrp and backpack) or hum.Health <= 0 then
+            return
+        end
+
+        -- เช็ค quest ที่จะใช้
+        local tool = nil
+        local offset = -10
+        local currentKills = 0
+        local quest = nil
+
+        if SelectedMob == "All" then
+            quest = questWeaponData[currentQuestIndex]
+            if quest then
+                tool = backpack:FindFirstChild(quest.Name)
+                if tool and tool:FindFirstChild("Kills") then
+                    offset = getOffsetByToolName(tool.Name)
+                    currentKills = tool.Kills.Value
+                else
                     return
                 end
+            else
+                return -- หมดเควสแล้ว
+            end
+        else
+            tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                offset = getOffsetByToolName(tool.Name)
+            end
+        end
 
-                -- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
-                if not SelectedMob or SelectedMob == "" then return end
+        for _, mob in pairs(workspace.Npcs:GetChildren()) do
+            if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                local isTarget = false
 
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
-
-                if tool then
-                    local toolName = tool.Name
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -8
-                            break
-                        end
-                    end
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
-                    end
+                if SelectedMob == "All" then
+                    isTarget = true
+                elseif string.find(mob.Name, SelectedMob) then
+                    isTarget = true
                 end
 
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local isTarget = false
+                if isTarget then
+                    local root = mob.HumanoidRootPart
+                    local mh = mob.Humanoid
+
+                    root.CanCollide = false
+                    root.Anchored = true
+                    root.Size = Vector3.new(10, 10, 10)
+                    root.CFrame = hrp.CFrame * CFrame.new(0, 0, offset)
+
+                    if mh.Health <= 0 then
+                        root.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
 
                         if SelectedMob == "All" then
-                            isTarget = true
-                        elseif string.find(mob.Name, SelectedMob) then
-                            isTarget = true
-                        end
-
-                        if isTarget then
-                            local root = mob.HumanoidRootPart
-                            root.CanCollide = false
-                            root.Size = Vector3.new(10,10,10)
-                            root.Anchored = true
-                            root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
-
-                            if mob.Humanoid.Health <= 0 then
-                                root.Size = Vector3.new(0,0,0)
-                                mob:Destroy()
-                            end
+                            killedCount += 1
                         end
                     end
                 end
-            end)
-        end)
-
-        -- ตรวจจับการตายแล้วรอเกิดใหม่ + wait(2)
-        spawn(function()
-            local player = game.Players.LocalPlayer
-            while _G.farmNpc do
-                local char = player.Character
-                local hum = char and char:FindFirstChild("Humanoid")
-                if hum and hum.Health <= 0 then
-                    repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                    wait(2)
-                end
-                task.wait(1)
             end
-        end)
-    end
+        end
+
+        -- เงื่อนไขใช้เควสถ้า All
+        if SelectedMob == "All" and quest and tool and not processing then
+            if killedCount >= quest.Kills then
+                processing = true
+
+                hum:EquipTool(tool)
+                wait(0.5)
+                if char:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+                wait(0.5)
+
+                currentQuestIndex += 1
+                killedCount = 0
+                processing = false
+            end
+        end
+    end)
 end)
-		
-local equippedToolName = nil
-local equippedKills = -1
-		
+
+-- ตรวจจับการตาย รีเซ็ต
 spawn(function()
-while wait(0.1) do
-pcall(function()
-if not _G.farmNpc then return end
-local player = game.Players.LocalPlayer  
-        local character = player.Character  
-        local backpack = player:FindFirstChild("Backpack")  
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
-
-        if not character or not backpack or not humanoid then return end  
-
-        local function getQualifiedTool()  
-            for _, tool in ipairs(backpack:GetChildren()) do  
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                    local kills = tool.Kills.Value  
-                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
-                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
-                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
-                    end  
-                end  
-            end  
-            return nil, nil  
-        end  
-
-        local tool, kills = getQualifiedTool()  
-
-        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
-            _G.forceHold = true  -- บล็อก autoequip  
-
-            humanoid:EquipTool(tool)  
-            equippedToolName = tool.Name  
-            equippedKills = kills  
-
-            wait(0.5)  
-            if character:FindFirstChild(tool.Name) then  
-                tool:Activate()  
-            end  
-
-            wait(0.5)  
-            _G.forceHold = false  -- ปลดบล็อก  
-        end  
-
-        if humanoid.Health <= 0 then  
-            humanoid:UnequipTools()  
-            equippedToolName = nil  
-            equippedKills = -1  
-            _G.forceHold = false  
-        end  
-    end)  
-end
+    local player = game.Players.LocalPlayer
+    while _G.farmNpc do
+        local char = player.Character
+        local hum = char and char:FindFirstChild("Humanoid")
+        if hum and hum.Health <= 0 then
+            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            currentQuestIndex = 1
+            killedCount = 0
+            wait(2)
+        end
+        task.wait(1)
+    end
 end)
 
 page1:Toggle("Auto Buso", false, function(hki)
