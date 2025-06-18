@@ -465,11 +465,11 @@ local function getQualifiedTool()
     for _, tool in ipairs(backpack:GetChildren()) do    
         if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
             local kills = tool.Kills.Value    
-            if tool.Name == "Thief!" and kills > 20 then return tool, kills    
-            elseif tool.Name == "Let them pay back!" and kills > 30 then return tool, kills    
-            elseif tool.Name == "Annoying noobs...." and kills > 10 then return tool, kills    
-            elseif tool.Name == "Marines!" and kills > 30 then return tool, kills    
-            elseif tool.Name == "The Strongest..." and kills > 1 then return tool, kills    
+            if tool.Name == "Thief!" and kills > 19 then return tool, kills    
+            elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills    
+            elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills    
+            elseif tool.Name == "Marines!" and kills > 29 then return tool, kills    
+            elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills    
             end    
         end    
     end    
@@ -556,19 +556,20 @@ spawn(function()
             local backpack = player:FindFirstChild("Backpack")  
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
 
-            if not character or not backpack or not humanoid then return end  
-
-            local function getQualifiedSword()
-                for _, tool in ipairs(backpack:GetChildren()) do  
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                        local kills = tool.Kills.Value  
-                        if tool.Name == "Thief!" and kills >= 20 then 
-			    return tool, kills 
-                        end  
-                    end  
-                end  
-                return nil, nil  
-            end  
+	if not char or not backpack or not hum or hum.Health <= 0 then
+return
+	end
+							
+local function getQualifiedSword()    
+    for _, tool in ipairs(backpack:GetChildren()) do    
+        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
+            local kills = tool.Kills.Value    
+            if tool.Name == "Master Sword" and kills > 49 then return tool, kills      
+            end    
+        end    
+    end    
+    return nil, nil    
+end
 
             local sword, swordKills = getQualifiedSword()
 
@@ -597,6 +598,20 @@ spawn(function()
         end)
     end
 end)
+
+
+spawn(function()    
+    local player = game.Players.LocalPlayer    
+    while _G.farmSword do    
+        local char = player.Character    
+        local hum = char and char:FindFirstChild("Humanoid")    
+        if hum and hum.Health <= 0 then    
+            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
+            wait(2)    
+        end    
+        task.wait(1)    
+    end    
+end)
 		
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
@@ -615,19 +630,19 @@ spawn(function()
             local backpack = player:FindFirstChild("Backpack")  
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
 
-            if not character or not backpack or not humanoid then return end  
-
-            local function getQualifiedGun()
-                for _, tool in ipairs(backpack:GetChildren()) do  
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                        local kills = tool.Kills.Value  
-                        if tool.Name == "The gunner!" and kills >= 15 then 
-			   return tool, kills 
-                        end  
-                    end  
-                end  
-                return nil, nil  
-            end  
+            if not char or not backpack or not hum or hum.Health <= 0 then
+return
+end
+            local function getQualifiedGun()    
+    for _, tool in ipairs(backpack:GetChildren()) do    
+        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
+            local kills = tool.Kills.Value    
+            if tool.Name == "The gunner!" and kills > 14 then return tool, kills    
+            end    
+        end    
+    end    
+    return nil, nil    
+end
 
             local gun, gunKills = getQualifiedGun()
 
@@ -656,7 +671,21 @@ spawn(function()
         end)
     end
 end)
-		
+
+
+spawn(function()    
+    local player = game.Players.LocalPlayer    
+    while _G.farmGun do    
+        local char = player.Character    
+        local hum = char and char:FindFirstChild("Humanoid")    
+        if hum and hum.Health <= 0 then    
+            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
+            wait(2)    
+        end    
+        task.wait(1)    
+    end    
+end)
+
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
