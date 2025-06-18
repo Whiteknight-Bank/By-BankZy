@@ -387,8 +387,10 @@ if _G.farmNpc then
         end
     end)
 end
-    
-    spawn(function()
+
+_G.forceHold = false
+
+spawn(function()
     while wait(0.2) do
         pcall(function()
             if not _G.farmNpc then return end
@@ -419,6 +421,8 @@ end
                 end
             end
 
+            local foundLuffy = false
+
             for _, mob in pairs(workspace.Npcs:GetChildren()) do
                 if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                     local isTarget = false
@@ -440,7 +444,6 @@ end
                             root.Size = Vector3.new(0, 0, 0)
                             mob:Destroy()
 
-                            -- เงื่อนไขพิเศษสำหรับ Luffy
                             if SelectedMob == "Luffy" and not _G.forceHold then
                                 _G.forceHold = true
 
@@ -451,18 +454,27 @@ end
                                         strongest.Parent = char
                                         task.wait(0.5)
                                         strongest:Activate()
+                                        task.wait(0.5)
+                                        strongest.Parent = backpack
                                     end
                                 end
+                            end
+			else
+                            if mob.Name == "Luffy" then
+                                foundLuffy = true
                             end
                         end
                     end
                 end
             end
+
+            if SelectedMob == "Luffy" and foundLuffy then
+                _G.forceHold = false
+            end
         end)
     end
 end)    
-
--- ตรวจจับการตายแล้วรอเกิดใหม่ + wait(2)    
+  
 spawn(function()    
     local player = game.Players.LocalPlayer    
     while _G.farmNpc do    
