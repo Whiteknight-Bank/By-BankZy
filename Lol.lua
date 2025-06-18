@@ -1553,6 +1553,8 @@ page5:Toggle("Teleport All Chest", false, function(cpst)
     _G.tpchest = cpst
 end)
 
+local lastFound = true
+
 spawn(function()
     while wait(1.5) do
         if _G.tpchest then
@@ -1567,11 +1569,9 @@ spawn(function()
 
                 local hrp = character.PrimaryPart
                 local originalPos = hrp.CFrame
-
                 local banned = Vector3.new(10000, -200.000427, 10000)
                 local positions = {}
 
-                -- หา chest ทั้งหมดใน workspace ตามเงื่อนไขเดิม
                 for _, a in ipairs(workspace:GetChildren()) do
                     if a.Name == "" then
                         for _, b in ipairs(a:GetChildren()) do
@@ -1589,17 +1589,17 @@ spawn(function()
                 end
 
                 if #positions == 0 then
-                    create:Notifile("", "Not found chest", 3)
+                    if lastFound then
+                        create:Notifile("", "Not found chest", 3)
+                        lastFound = false
+                    end
                 else
-                    -- วาปทีละตำแหน่งใน positions เรียงกัน
+                    lastFound = true
                     for _, pos in ipairs(positions) do
                         hrp.CFrame = CFrame.new(pos + Vector3.new(0, 5, 0))
-                        wait(0.2) -- รอให้วาปแล้ววางของ / เก็บ หรืออะไรก็ว่ากัน
+                        wait(0.2)
                     end
-
-                    -- กลับตำแหน่งเดิม
                     hrp.CFrame = originalPos
-
                     create:Notifile("", "Teleport all chest", 3)
                 end
             end)
