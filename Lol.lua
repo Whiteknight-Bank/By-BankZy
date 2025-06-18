@@ -270,20 +270,17 @@ page1:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
 
-spawn(function()
-    while wait(0.1) do
-        if _G.autoclick then
-            pcall(function()
-                for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                    if v:IsA("Tool") and v.Name == selectedWeapon then
-                        v:Activate()
-                    end
-                end
-            end)
-        end
-    end
+spawn(function() 
+game:GetService("RunService").RenderStepped:Connect(function() 
+pcall(function() 
+if _G.autoclick then 
+game:GetService'VirtualUser':CaptureController() 
+game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
+end 
+end) 
+end) 
 end)
-
+		
 page1:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
