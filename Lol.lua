@@ -449,22 +449,6 @@ local tool = char:FindFirstChildOfClass("Tool")
 end)
 end)
 
-  
-spawn(function()    
-    local player = game.Players.LocalPlayer    
-    while _G.farmNpc do    
-        local char = player.Character    
-        local hum = char and char:FindFirstChild("Humanoid")    
-        if hum and hum.Health <= 0 then    
-            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
-            wait(3)    
-        end    
-        task.wait(1)    
-    end    
-end)
-end
-end)
-
 local forceHold = false
 
 spawn(function()
@@ -521,6 +505,21 @@ spawn(function()
             end
         end)
     end
+end)
+
+spawn(function()    
+    local player = game.Players.LocalPlayer    
+    while _G.farmNpc do    
+        local char = player.Character    
+        local hum = char and char:FindFirstChild("Humanoid")    
+        if hum and hum.Health <= 0 then    
+            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
+            wait(3)    
+        end    
+        task.wait(1)    
+    end    
+end)
+end
 end)
 
 page1:Toggle("Auto Buso", false, function(hki)
