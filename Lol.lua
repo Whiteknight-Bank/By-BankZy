@@ -388,65 +388,78 @@ if _G.farmNpc then
     end)
 end
     
-    if _G.farmNpc then
-farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-pcall(function()
-local player = game.Players.LocalPlayer
-local char = player.Character
-local hum = char and char:FindFirstChild("Humanoid")
+    spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if not _G.farmNpc then return end
 
--- หยุดฟาร์มถ้าตาย
-if not char or not hum or hum.Health <= 0 then
-return
-end
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not hum or hum.Health <= 0 then return end
 
--- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร    
-        if not SelectedMob or SelectedMob == "" then return end    
+            if not SelectedMob or SelectedMob == "" then return end
 
-        local tool = char:FindFirstChildOfClass("Tool")    
-        local offset = -10    
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
 
-        if tool then    
-            local toolName = tool.Name    
-            for _, v in pairs(Cache.DevConfig["ListOfSword"]) do    
-                if string.find(v, toolName) then    
-                    offset = -6    
-                    break    
-                end    
-            end    
-            for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do    
-                if string.find(v, toolName) then    
-                    offset = -5    
-                    break    
-                end    
-            end    
-        end    
+            if tool then
+                local toolName = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(toolName, v) then
+                        offset = -6
+                        break
+                    end
+                end
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                    if string.find(toolName, v) then
+                        offset = -5
+                        break
+                    end
+                end
+            end
 
-        for _, mob in pairs(workspace.Npcs:GetChildren()) do    
-            if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then    
-                local isTarget = false    
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local isTarget = false
 
-                if SelectedMob == "All" then    
-                    isTarget = true    
-                elseif string.find(mob.Name, SelectedMob) then    
-                    isTarget = true    
-                end    
+                    if SelectedMob == "All" then
+                        isTarget = true
+                    elseif string.find(mob.Name, SelectedMob) then
+                        isTarget = true
+                    end
 
-                if isTarget then    
-                    local root = mob.HumanoidRootPart    
-                    root.CanCollide = false    
-                    root.Size = Vector3.new(10,10,10)    
-                    root.Anchored = true    
-                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)    
+                    if isTarget then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                    if mob.Humanoid.Health <= 0 then    
-                        root.Size = Vector3.new(0,0,0)    
-                        mob:Destroy()    
-                    end    
-                end    
-            end    
-        end    
-    end)    
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
+
+                            -- เงื่อนไขพิเศษสำหรับ Luffy
+                            if SelectedMob == "Luffy" and not _G.forceHold then
+                                _G.forceHold = true
+
+                                local backpack = player:FindFirstChild("Backpack")
+                                if backpack then
+                                    local strongest = backpack:FindFirstChild("The Strongest...")
+                                    if strongest and strongest:IsA("Tool") then
+                                        strongest.Parent = char
+                                        task.wait(0.5)
+                                        strongest:Activate()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
 end)    
 
 -- ตรวจจับการตายแล้วรอเกิดใหม่ + wait(2)    
@@ -465,62 +478,7 @@ end)
 end
 end)
 
-local equippedToolName = nil
-local equippedKills = -1
 
-spawn(function()
-while wait(0.1) do
-pcall(function()
-if not _G.farmNpc then return end
-local player = game.Players.LocalPlayer
-local character = player.Character
-local backpack = player:FindFirstChild("Backpack")
-local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-if not character or not backpack or not humanoid then return end
-
-local function getQualifiedTool()    
-    for _, tool in ipairs(backpack:GetChildren()) do    
-        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
-            local kills = tool.Kills.Value    
-            if tool.Name == "Thief!" and kills > 19 then return tool, kills    
-            elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills    
-            elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills    
-            elseif tool.Name == "Marines!" and kills > 29 then return tool, kills    
-            elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills    
-            end    
-        end    
-    end    
-    return nil, nil    
-end
-							
-local tool, kills = getQualifiedTool()      
-
-if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then      
-    _G.forceHold = true  -- บล็อก autoequip      
-
-    humanoid:EquipTool(tool)      
-    equippedToolName = tool.Name      
-    equippedKills = kills      
-
-    wait(0.75)      
-    if character:FindFirstChild(tool.Name) then      
-        tool:Activate()      
-    end      
-
-    wait(0.75)      
-    _G.forceHold = false  -- ปลดบล็อก      
-end      
-
-if humanoid.Health <= 0 then      
-    humanoid:UnequipTools()      
-    equippedToolName = nil      
-    equippedKills = -1      
-    _G.forceHold = false      
-end
-end)
-end
-end)
 		
 page1:Toggle("Auto Buso", false, function(hki)
     _G.autobuso = hki
