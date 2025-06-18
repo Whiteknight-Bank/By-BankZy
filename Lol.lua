@@ -388,92 +388,67 @@ if _G.farmNpc then
     end)
 end
 
-_G.forceHold = false
+if _G.farmNpc then
+farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+pcall(function()
+local player = game.Players.LocalPlayer
+local char = player.Character
+local hum = char and char:FindFirstChild("Humanoid")
 
-spawn(function()
-    while wait(0.2) do
-        pcall(function()
-            if not _G.farmNpc then return end
+-- หยุดฟาร์มถ้าตาย
+if not char or not hum or hum.Health <= 0 then
+return
+end
 
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-            if not char or not hum or hum.Health <= 0 then return end
+-- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
+if not SelectedMob or SelectedMob == "" then return end
 
-            if not SelectedMob or SelectedMob == "" then return end
+local tool = char:FindFirstChildOfClass("Tool")      
+    local offset = -10      
 
-            local tool = char:FindFirstChildOfClass("Tool")
-            local offset = -10
+    if tool then      
+        local toolName = tool.Name      
+        for _, v in pairs(Cache.DevConfig["ListOfSword"]) do      
+            if string.find(v, toolName) then      
+                offset = -6      
+                break      
+            end      
+        end      
+        for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do      
+            if string.find(v, toolName) then      
+                offset = -5      
+                break      
+            end      
+        end      
+    end      
 
-            if tool then
-                local toolName = tool.Name
-                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                    if string.find(toolName, v) then
-                        offset = -6
-                        break
-                    end
-                end
-                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                    if string.find(toolName, v) then
-                        offset = -5
-                        break
-                    end
-                end
-            end
+    for _, mob in pairs(workspace.Npcs:GetChildren()) do      
+        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then      
+            local isTarget = false      
 
-            local foundLuffy = false
+            if SelectedMob == "All" then      
+                isTarget = true      
+            elseif string.find(mob.Name, SelectedMob) then      
+                isTarget = true      
+            end      
 
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    local isTarget = false
+            if isTarget then      
+                local root = mob.HumanoidRootPart      
+                root.CanCollide = false      
+                root.Size = Vector3.new(10,10,10)      
+                root.Anchored = true      
+                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)      
 
-                    if SelectedMob == "All" then
-                        isTarget = true
-                    elseif string.find(mob.Name, SelectedMob) then
-                        isTarget = true
-                    end
+                if mob.Humanoid.Health <= 0 then      
+                    root.Size = Vector3.new(0,0,0)      
+                    mob:Destroy()      
+                end      
+            end      
+        end      
+    end      
+end)
+end)
 
-                    if isTarget then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                            mob:Destroy()
-
-                            if SelectedMob == "Luffy" and not _G.forceHold then
-                                _G.forceHold = true
-
-                                local backpack = player:FindFirstChild("Backpack")
-                                if backpack then
-                                    local strongest = backpack:FindFirstChild("The Strongest...")
-                                    if strongest and strongest:IsA("Tool") then
-                                        strongest.Parent = char
-                                        task.wait(0.5)
-                                        strongest:Activate()
-                                        task.wait(0.5)
-                                        strongest.Parent = backpack
-                                    end
-                                end
-                            end
-			else
-                            if mob.Name == "Luffy" then
-                                foundLuffy = true
-                            end
-                        end
-                    end
-                end
-            end
-
-            if SelectedMob == "Luffy" and foundLuffy then
-                _G.forceHold = false
-            end
-        end)
-    end
-end)    
   
 spawn(function()    
     local player = game.Players.LocalPlayer    
