@@ -249,42 +249,27 @@ end)
 page1:Label("┇ Function Item ┇")
 local Wapon = {}
 local selectedWeapon = nil
-local dropdownFrame = nil -- เก็บ dropdown เดิมไว้
 
--- โหลดอาวุธตอนเริ่ม
+-- โหลดอาวุธจาก Backpack ทันที
 for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
         table.insert(Wapon, v.Name)
     end
 end
 
--- สร้าง dropdown
-local function createDropdown()
-    -- ถ้ามี dropdown เดิม ให้ลบก่อน
-    if dropdownFrame then
-        dropdownFrame:Destroy()
-    end
+-- สร้าง Dropdown แค่ครั้งเดียว
+page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+    selectedWeapon = wapn
+end)
 
-    -- สร้างใหม่ แล้วเก็บไว้ในตัวแปร
-    dropdownFrame = page1:Dropdown("Select Weapon:", Wapon, function(wapn)
-        selectedWeapon = wapn
-    end)
-end
-
-createDropdown() -- สร้างตอนเริ่ม
-
--- ปุ่มรีเฟรช
+-- ปุ่มรีเฟรช ล้างตาราง Wapon แล้วใส่ค่าใหม่
 page1:Button("Refresh Weapon", function()
-    -- โหลดใหม่จาก Backpack
-    Wapon = {}
+    table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
             table.insert(Wapon, v.Name)
         end
     end
-
-    -- สร้าง Dropdown ใหม่ (แทนที่ของเดิม)
-    createDropdown()
 end)
 		
 page1:Toggle("Auto Click", false, function(state)
