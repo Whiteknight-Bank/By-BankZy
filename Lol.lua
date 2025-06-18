@@ -543,6 +543,30 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
+if farmSwordLoop then
+    farmSwordLoop:Disconnect()
+    farmSwordLoop = nil
+end
+
+if _G.farmSword then
+    spawn(function()
+        while farmSwordLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
+            pcall(function()
+                local targetNames = { "Sword noob" }
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+		end
+
 spawn(function()
     while wait() do
         pcall(function()
@@ -663,6 +687,30 @@ end)
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
+
+if farmGunLoop then
+    farmGunLoop:Disconnect()
+    farmGunLoop = nil
+end
+
+if _G.farmGun then
+    spawn(function()
+        while farmGunLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
+            pcall(function()
+                local targetNames = { "Gun noob" }
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end
+    end)
+end
 
 spawn(function()
     while wait() do
@@ -1506,7 +1554,7 @@ page5:Toggle("Teleport All Chest", false, function(cpst)
 end)
 
 spawn(function()
-    while wait(1.5) do
+    while wait(0.3) do
         if _G.tpchest then
             pcall(function()
                 if not canTeleport() then
@@ -1518,7 +1566,7 @@ spawn(function()
                 if not character.PrimaryPart then return end
 
                 local hrp = character.PrimaryPart
-                local originalPos = hrp.CFrame -- 🔁 เก็บตำแหน่งเดิม
+                local originalPos = hrp.CFrame
 
                 local banned = Vector3.new(10000, -200.000427, 10000)
                 local positions = {}
@@ -1539,15 +1587,12 @@ spawn(function()
                     end
                 end
 
-                for _, pos in ipairs(positions) do
-                    hrp.CFrame = CFrame.new(pos + Vector3.new(0, 5, 0))
-                    wait(1)
+                if #positions > 0 then
+                    hrp.CFrame = CFrame.new(positions[1] + Vector3.new(0, 5, 0))
+                    wait(0.2)
+                    hrp.CFrame = originalPos
+                    create:Notifile("", "Teleport all chest", 2)
                 end
-
-                hrp.CFrame = originalPos
-
-                create:Notifile("", "Teleport all chest", 3)
-                _G.tpchest = false
             end)
         end
     end
