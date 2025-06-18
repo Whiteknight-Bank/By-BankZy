@@ -543,6 +543,53 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmSword then return end
+
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+
+            -- หยุดฟาร์มถ้าตาย
+            if not char or not hum or hum.Health <= 0 then
+                return
+            end
+
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
+
+            if tool then
+                local toolName = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(v, toolName) then
+                        offset = -7
+                        break
+                    end
+                end
+            end
+
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    if mob.Name == "Attacking Noob(Lvl:100)" then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10,10,10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0,0,0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 local equippedSwordName = nil
 local equippedSwordKills = -1
 		
@@ -617,6 +664,53 @@ page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
 
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmGun then return end
+
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+
+            -- หยุดฟาร์มถ้าตาย
+            if not char or not hum or hum.Health <= 0 then
+                return
+            end
+
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
+
+            if tool then
+                local toolName = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfGun"]) do
+                    if string.find(v, toolName) then
+                        offset = -7
+                        break
+                    end
+                end
+            end
+
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    if mob.Name == "Attacking Noob(Lvl:100)" then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10,10,10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0,0,0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+		
 local equippedGunName = nil
 local equippedGunKills = -1
 		
