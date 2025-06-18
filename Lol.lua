@@ -233,7 +233,7 @@ page1:Toggle("Safe Zone Warp", false, function(val)
 end)
 
 spawn(function()
-    while task.wait(4) do
+    while task.wait(2) do
         pcall(function()
             if _G.safezonewarp and not isAntiTpStillActive() then
                 local char = lp.Character
