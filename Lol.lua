@@ -558,7 +558,6 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
-if _G.farmSword then
     spawn(function()
         while wait(0.5) do
 	   if _G.farmSword then
