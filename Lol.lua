@@ -297,7 +297,7 @@ spawn(function()
 
             if not character or not backpack or not humanoid then return end
 
-            local tool = backpack:FindFirstChild(Wapon)
+            local tool = backpack:FindFirstChild(selectedWeapon)
             if tool and not character:FindFirstChild(tool.Name) then
                 humanoid:EquipTool(tool)
                 task.wait(0.05)
