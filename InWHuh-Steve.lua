@@ -1034,94 +1034,82 @@ page4:Button("Buy Gun", function()
     end
 end)
 
-local Tab0 = Window:Taps("Misc")
+local Tab0 = Window:Taps("Bug")
 local page0 = Tab0:newpage()
 
 page0:Label("┇ Bug Weapons┇")
 page0:Button("Step 1", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if v.Name == "Gryphon" then 
-            v.Parent = game.Players.LocalPlayer 
+    -- ดึง Gryphon จาก getnilinstances() แล้วใส่ Backpack (ได้หลายเล่ม)
+    for _,v in pairs(getnilinstances()) do
+        if v:IsA("Tool") and v.Name == "Gryphon" then
+            v.Parent = game.Players.LocalPlayer.Backpack
         end
     end
 end)
 
 page0:Button("Step 2", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do 
-	wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer 
+    -- Loop รับ Gryphon จาก getnilinstances() เข้า Backpack เรื่อยๆ
+    _G.weapon2 = true
+    spawn(function()
+        while _G.weapon2 do wait()
+            for _,v in pairs(getnilinstances()) do
+                if v:IsA("Tool") and v.Name == "Gryphon" then
+                    v.Parent = game.Players.LocalPlayer.Backpack
+                end
             end
         end
-    end
+    end)
 end)
 
 page0:Button("Step 3", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = false
-    while _G.weapon do 
-	wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer 
-            end
-        end
-    end
+    -- หยุด Loop จาก Step 2
+    _G.weapon2 = false
 end)
 
 page0:Button("Step 4", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do 
-	wait()
-        for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Backpack
+    -- เอา Gryphon ใน Backpack ไปใส่ Character ทีละรอบ (แยกไม่รวมกับ Step 2)
+    _G.weapon4 = true
+    spawn(function()
+        while _G.weapon4 do wait()
+            for _,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if v.Name == "Gryphon" then
+                    v.Parent = game.Players.LocalPlayer.Character
+                end
             end
         end
-    end
+    end)
 end)
 
 page0:Button("Step 5", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = false
-    while _G.weapon do 
-	wait()
-        for i, v in pairs(game.Players.LocalPlayer:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Backpack
-            end
-        end
-    end
+    -- หยุด Loop Step 4
+    _G.weapon4 = false
 end)
 
 page0:Button("Step 6", function()
-    _G.weapon = true
-    while _G.weapon do 
-	wait()
-        for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v.Parent = game.Players.LocalPlayer.Character
+    -- เอา Gryphon กลับไปใส่ Backpack (ซ้ำ)
+    _G.weapon6 = true
+    spawn(function()
+        while _G.weapon6 do wait()
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v.Name == "Gryphon" then
+                    v.Parent = game.Players.LocalPlayer.Backpack
+                end
             end
         end
-    end
+    end)
 end)
 
 page0:Button("Step 7", function()
-    local weapon = game.Players.LocalPlayer.Backpack
-    _G.weapon = true
-    while _G.weapon do 
-	wait(0.1)
-        for i, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-            if v.Name == "Gryphon" then 
-                v:Activate()
+    -- Activate Gryphon ทั้งหมดในตัว (ฟันพร้อมกัน)
+    spawn(function()
+        while true do wait(0.1)
+            for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
+                if v:IsA("Tool") and v.Name == "Gryphon" then
+                    v:Activate()
+                end
             end
         end
-    end
+    end)
 end)
 		
 local Tab5 = Window:Taps("Misc")
