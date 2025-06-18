@@ -185,15 +185,6 @@ local function canTeleport()
     return true
 		end
 
--- ดึงชื่อผู้เล่นทุกคน (ยกเว้นตัวเอง)
-local function getPlayerNames()
-	local names = {}
-	for _, player in ipairs(Players:GetPlayers()) do
-			table.insert(names, player.Name)
-	end
-	return names
-end
-
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
@@ -281,7 +272,7 @@ spawn(function()
         if _G.autoclick then
             pcall(function()
                 for _, v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                    if v:IsA("Tool") and v.Name == Wapon then
+                    if v:IsA("Tool") and v.Name == selectedWeapon then
                         v:Activate()
                     end
                 end
@@ -848,8 +839,22 @@ local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Player ┇")
-page2:Dropdown("Select Player:", getPlayerNames(), function(name)
+local playerDropdown
+
+local function getPlayerNames()
+    local names = {}
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        table.insert(names, player.Name)
+    end
+    return names
+end
+
+playerDropdown = page2:Dropdown("Select Player:", getPlayerNames(), function(name)
     selectedPlayer = name
+end)
+
+page2:Button("Refresh Player List", function()
+    playerDropdown:Refresh(getPlayerNames(), true)
 end)
 
 page2:Button("Click to Tp", function()
