@@ -115,12 +115,6 @@ for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
     end
 		end
 
-local playerNames = {}
-
-for _, player in ipairs(game.Players:GetPlayers()) do
-    table.insert(playerNames, player.Name)
-		end
-
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:2500", "Rifle|Price:10000"};
