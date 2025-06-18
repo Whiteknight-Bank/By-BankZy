@@ -115,6 +115,12 @@ for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
     end
 		end
 
+local playerNames = {}
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+    table.insert(playerNames, player.Name)
+		end
+
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfGun"] = {"Flintlock|Price:2500", "Rifle|Price:10000"};
@@ -840,22 +846,8 @@ local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Player ┇")
-
-local playerNames = {}
-
-for _, player in ipairs(game.Players:GetPlayers()) do
-    table.insert(playerNames, player.Name)
-end
-
 page2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
-end)
-
-page2:Button("Refresh Player", function()
-    table.clear(playerNames)
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        table.insert(playerNames, player.Name)
-    end
 end)
 
 page2:Button("Click to Tp", function()
