@@ -239,8 +239,8 @@ spawn(function()
 end)
 
 page1:Label("┇ Function Item ┇")
-local dropdown = page1:Dropdown("Select Weapon:", getWeaponList(), function(selectedWeapon)
-    Wapon = selectedWeapon
+page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+    Wapon = wapn
 end)
 
 page1:Button("Refresh Weapon List", function()
