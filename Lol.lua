@@ -840,28 +840,6 @@ local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ Player ┇")
-local plr = {}
-local selectedPlayer = nil
-
-for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-    if v:IsA("Tool") then
-        table.insert(plr, v.Name)
-    end
-end
-
-page2:Dropdown("Select Player:", plr, function(wapn)
-    selectedPlayer = wapn
-end)
-
-page2:Button("Refresh Player", function()
-    table.clear(plr)
-    for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if v:IsA("Tool") then
-            table.insert(plr, v.Name)
-        end
-    end
-end)
-			
 page2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
