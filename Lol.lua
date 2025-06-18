@@ -450,6 +450,8 @@ end)
 end)
 
 local forceHold = false
+local lockedKills = nil
+local lockedToolName = nil
 
 spawn(function()
     while task.wait(0.1) do
@@ -460,48 +462,87 @@ spawn(function()
             local character = player.Character
             local backpack = player:FindFirstChild("Backpack")
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
             if not character or not backpack or not humanoid then return end
 
-            -- หยุดทุกอย่างเมื่อผู้เล่นตาย
             if humanoid.Health <= 0 then
                 humanoid:UnequipTools()
                 forceHold = false
-                return -- ⛔ หยุดรอบนี้ทันที
+                lockedKills = nil
+                lockedToolName = nil
+                return
             end
 
-            local function getQualifiedTool()
+            -- ฟังก์ชันช่วยค้นหาไอเทมที่ผ่านเงื่อนไข และล็อคค่า
+            local function findAndLockTool()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") then
                         local kills = tool:FindFirstChild("Kills")
                         if kills and kills:IsA("IntValue") then
-                            if tool.Name == "Thief!" and kills.Value > 19 then
-                                return tool
-                            elseif tool.Name == "Let them pay back!" and kills.Value > 29 then
-                                return tool
-                            elseif tool.Name == "Annoying noobs...." and kills.Value > 9 then
-                                return tool
-                            elseif tool.Name == "Marine!" and kills.Value > 29 then
-                                return tool
-                            elseif tool.Name == "The Strongest..." and kills.Value > 0 then
-                                return tool
+                            local k = kills.Value
+                            if tool.Name == "Thief!" and k >= 20 then
+                                return tool, 20
+                            elseif tool.Name == "Let them pay back!" and k >= 30 then
+                                return tool, 30
+                            elseif tool.Name == "Annoying noobs...." and k >= 10 then
+                                return tool, 10
+                            elseif tool.Name == "Marine!" and k >= 30 then
+                                return tool, 30
+                            elseif tool.Name == "The Strongest..." and k >= 1 then
+                                return tool, 1
                             end
                         end
                     end
                 end
-                return nil
+                return nil, nil
             end
 
-            local tool = getQualifiedTool()
+            local tool, requiredKills = nil, nil
+
+            if lockedToolName and lockedKills then
+                -- เช็คว่าของที่ล็อคยังมีอยู่ในกระเป๋าและค่า Kills เท่ากับล็อคหรือยัง
+                local lockedTool = backpack:FindFirstChild(lockedToolName)
+                if lockedTool then
+                    local kills = lockedTool:FindFirstChild("Kills")
+                    if kills and kills.Value == lockedKills then
+                        tool = lockedTool
+                        requiredKills = lockedKills
+                    else
+                        -- ค่า Kills เปลี่ยนไป ล้างล็อค
+                        lockedKills = nil
+                        lockedToolName = nil
+                    end
+                else
+                    lockedKills = nil
+                    lockedToolName = nil
+                end
+            end
+
+            -- ถ้ายังไม่มีล็อค หรือถูกล้าง ให้ค้นหาและล็อคใหม่
+            if not tool then
+                tool, requiredKills = findAndLockTool()
+                if tool and requiredKills then
+                    lockedToolName = tool.Name
+                    lockedKills = requiredKills
+                end
+            end
 
             if tool and not character:FindFirstChild(tool.Name) and not forceHold then
                 forceHold = true
+                humanoid:UnequipTools()
+                task.wait(0.2)
                 tool.Parent = character
-                task.wait(0.55)
+                task.wait(0.35)
                 if character:FindFirstChild(tool.Name) then
-                    task.wait(0.55)
+                    task.wait(0.35)
                     tool:Activate()
                 end
+                forceHold = false -- ปลดล็อคให้กดซ้ำได้รอบต่อไป
+            elseif tool and character:FindFirstChild(tool.Name) and not forceHold then
+                -- กรณีถือไอเทมแล้ว กดใช้ซ้ำได้เลย
+                forceHold = true
+                task.wait(0.35)
+                tool:Activate()
+                forceHold = false
             end
         end)
     end
