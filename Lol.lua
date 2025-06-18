@@ -1554,7 +1554,7 @@ page5:Toggle("Teleport All Chest", false, function(cpst)
 end)
 
 spawn(function()
-    while wait(0.3) do
+    while wait(1.5) do
         if _G.tpchest then
             pcall(function()
                 if not canTeleport() then
@@ -1571,6 +1571,7 @@ spawn(function()
                 local banned = Vector3.new(10000, -200.000427, 10000)
                 local positions = {}
 
+                -- หา chest ทั้งหมดใน workspace ตามเงื่อนไขเดิม
                 for _, a in ipairs(workspace:GetChildren()) do
                     if a.Name == "" then
                         for _, b in ipairs(a:GetChildren()) do
@@ -1587,11 +1588,19 @@ spawn(function()
                     end
                 end
 
-                if #positions > 0 then
-                    hrp.CFrame = CFrame.new(positions[1] + Vector3.new(0, 5, 0))
-                    wait(0.2)
+                if #positions == 0 then
+                    create:Notifile("", "Not found chest", 3)
+                else
+                    -- วาปทีละตำแหน่งใน positions เรียงกัน
+                    for _, pos in ipairs(positions) do
+                        hrp.CFrame = CFrame.new(pos + Vector3.new(0, 5, 0))
+                        wait(0.2) -- รอให้วาปแล้ววางของ / เก็บ หรืออะไรก็ว่ากัน
+                    end
+
+                    -- กลับตำแหน่งเดิม
                     hrp.CFrame = originalPos
-                    create:Notifile("", "Teleport all chest", 2)
+
+                    create:Notifile("", "Teleport all chest", 3)
                 end
             end)
         end
