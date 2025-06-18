@@ -185,7 +185,7 @@ local function getPlayerNames()
 	end
 	return names
 end
-		
+
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
@@ -237,23 +237,6 @@ spawn(function()
         end)
     end
 end)
-		
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
--- ฟังก์ชันดึงชื่ออาวุธใน Backpack
-local function getWeaponList()
-    local list = {}
-    local backpack = player:FindFirstChild("Backpack")
-    if backpack then
-        for _, item in pairs(backpack:GetChildren()) do
-            if item:IsA("Tool") then
-                table.insert(list, item.Name)
-            end
-        end
-    end
-    return list
-end
 
 page1:Label("┇ Function Item ┇")
 local dropdown = page1:Dropdown("Select Weapon:", getWeaponList(), function(selectedWeapon)
