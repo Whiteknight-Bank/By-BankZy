@@ -291,7 +291,25 @@ end)
 
 end
 
-return newPage  
+local dropdownObject = {}
+
+function dropdownObject:SetOptions(newItems)
+items = newItems
+if opened then
+opened = false
+arrow.Text = "←"
+optionContainer:TweenSize(
+UDim2.new(1, -10, 0, 0),
+Enum.EasingDirection.Out,
+Enum.EasingStyle.Quad,
+0.2,
+true
+)
+end
+end
+
+return dropdownObject
+
     end
 
         
@@ -531,7 +549,25 @@ function newPage:Dropdown(title, items, callback)
     end)
 end
 
-            return newPage
+local dropdownObject = {}
+
+function dropdownObject:SetOptions(newItems)
+    items = newItems
+    if opened then
+        opened = false
+        arrow.Text = "←"
+        optionContainer:TweenSize(
+            UDim2.new(1, -10, 0, 0),
+            Enum.EasingDirection.Out,
+            Enum.EasingStyle.Quad,
+            0.2,
+            true
+        )
+    end
+end
+
+return dropdownObject
+
     end
 
     return tabs
