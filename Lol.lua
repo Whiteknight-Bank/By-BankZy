@@ -457,7 +457,7 @@ spawn(function()
         local hum = char and char:FindFirstChild("Humanoid")    
         if hum and hum.Health <= 0 then    
             repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
-            wait(2)    
+            wait(3)    
         end    
         task.wait(1)    
     end    
@@ -503,9 +503,9 @@ spawn(function()
 
             if tool and not character:FindFirstChild(tool.Name) then
                 tool.Parent = character
-                task.wait(0.25)
+                task.wait(0.35)
                 if character:FindFirstChild(tool.Name) then
-		task.wait(0.25)
+		task.wait(0.35)
                     tool:Activate()
                 end
             end
