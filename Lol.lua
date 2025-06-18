@@ -849,7 +849,7 @@ local function getPlayerNames()
     return names
 end
 
-local PlayerList = {}
+local PlayerList = getPlayerNames()
 
 page2:Dropdown("Select Player:", PlayerList, function(name)
     selectedPlayer = name
@@ -857,8 +857,8 @@ end)
 
 page2:Button("Refresh Player", function()
     table.clear(PlayerList)
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        table.insert(PlayerList, player.Name)
+    for _, player in ipairs(getPlayerNames()) do
+        table.insert(PlayerList, player)
     end
 end)
 
