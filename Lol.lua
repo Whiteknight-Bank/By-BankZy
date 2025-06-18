@@ -543,19 +543,12 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
-if farmSwordLoop then
-    farmSwordLoop:Disconnect()
-    farmSwordLoop = nil
-end
-
-if _G.farmSword then
     spawn(function()
-        while farmSwordLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
-            pcall(function()
-                local targetNames = { "Sword noob" }
-
+        while wait(0.01) do 
+		if _G.farmSword then
+		pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    if obj:IsA("Model") and table.find("Sword noob", obj.Name) then
                         local head = obj:FindFirstChild("Head")
                         if head and head:FindFirstChild("ClickDetector") then
                             fireclickdetector(head.ClickDetector)
@@ -688,19 +681,12 @@ page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
 
-if farmGunLoop then
-    farmGunLoop:Disconnect()
-    farmGunLoop = nil
-end
-
-if _G.farmGun then
     spawn(function()
-        while farmGunLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
-            pcall(function()
-                local targetNames = { "Gun noob" }
-
+        while wait(0.01) do 
+	if _G.farmGun then
+		pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    if obj:IsA("Model") and table.find("Gun noob", obj.Name) then
                         local head = obj:FindFirstChild("Head")
                         if head and head:FindFirstChild("ClickDetector") then
                             fireclickdetector(head.ClickDetector)
