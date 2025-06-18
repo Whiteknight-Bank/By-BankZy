@@ -332,7 +332,7 @@ end
 
 if _G.farmNpc then
     spawn(function()
-        while farmLoop and wait(0.1) do -- ปรับความถี่ตรงนี้ได้
+        while farmLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
             pcall(function()
                 if not SelectedMob then return end
 
