@@ -124,7 +124,7 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000"
 local npcList = {
     ["Thief"] = "Big head boy",
     ["Buggy pirate"] = "Bob",
-    ["Attacking Noob"] = {"Sword noob"},
+    ["Attacking Noob"] = "Sword noob",
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob"
 }
@@ -554,166 +554,128 @@ page1:Toggle("Auto Buso", false, function(hki)
     end
 end)
 
+local altFarmList = {
+    ["Farm Sword"] = "Sword noob",
+    ["Farm Gun"] = "Gun noob"
+}
+
 page1:Label("┇ Another Farm ┇")
-page1:Toggle("Auto Farm Sword", false, function(sword)
-    _G.farmSword = sword
+
+local chosenMob = ""
+
+page1:Dropdown("Select Farms:", {
+    "Farm Sword",
+    "Farm Gun"
+}, function(mobType)
+    chosenMob = mobType
 end)
 
-spawn(function()
-    while task.wait(0.3) do
-        if _G.farmSword then
+local altFarmLoop = nil
+
+page1:Toggle("Auto Farm", false, function(startFarm)
+    _G.altFarmEnabled = startFarm
+
+    if altFarmLoop then
+        altFarmLoop:Disconnect()
+        altFarmLoop = nil
+    end
+
+    if _G.altFarmEnabled then
+        altFarmLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local tool = char and char:FindFirstChildOfClass("Tool")
-                if not tool then return end
+                if chosenMob == "" then return end
 
-                local toolName = tool.Name
-                local npcNameToClick
-
-                local function match(toolList, npcTarget)
-                    for _, v in ipairs(toolList) do
-                        local name = v:split("|")[1]
-                        if name == toolName then
-                            npcNameToClick = npcTarget
-                            return true
-                        end
-                    end
+                local targets = {}
+                local mappedMob = altFarmList[chosenMob]
+                if typeof(mappedMob) == "table" then
+                    targets = mappedMob
+                elseif typeof(mappedMob) == "string" then
+                    table.insert(targets, mappedMob)
                 end
 
-                -- ⚔️ Sword
-                if match(Cache.DevConfig["ListOfSword"], "Sword noob") then
-                elseif match(Cache.DevConfig["ListOfGun"], "Gun noob") then
-                end
-
-                -- 🚀 Click NPC ถ้าระบุเป้าหมายแล้ว
-                if npcNameToClick then
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("Model") and obj.Name == npcNameToClick then
-                            local head = obj:FindFirstChild("Head")
-                            local cd = head and head:FindFirstChildOfClass("ClickDetector")
-                            if cd then
-                                fireclickdetector(cd)
-                                break
-                            end
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targets, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
                         end
                     end
                 end
             end)
-        end
-    end
-end)
-
--- Attack Attacking Noob
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if not _G.farmSword then return end
-
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-
-            if not char or not hum or hum.Health <= 0 then return end
-
-            local tool = char:FindFirstChildOfClass("Tool")
-            local offset = -10
-
-            if tool then
-                local toolName = tool.Name
-                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                    if string.find(v, toolName) then
-                        offset = -7
-                        break
-                    end
-                end
-            end
-
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    local root = mob.HumanoidRootPart
-                    root.CanCollide = false
-                    root.Size = Vector3.new(10,10,10)
-                    root.Anchored = true
-                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                    if mob.Humanoid.Health <= 0 then
-                        root.Size = Vector3.new(0, 0, 0)
-                        mob:Destroy()
-                    end
-                end
-            end
         end)
     end
 end)
 
--- Equip Master Sword if Kills > 49
 local equippedSwordName = nil
 local equippedSwordKills = -1
 
 spawn(function()
-    while wait(0.1) do
+    while task.wait(0.1) do
         pcall(function()
-            if not _G.farmSword then return end
+            if chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
 
             local player = game.Players.LocalPlayer
             local char = player.Character
             local backpack = player:FindFirstChild("Backpack")
-            local hum = char and char:FindFirstChildOfClass("Humanoid")
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not hum or not backpack or hum.Health <= 0 then return end
 
-            if not char or not backpack or not hum or hum.Health <= 0 then return end
+            if chosenMob == "Farm Sword" then
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
 
-            local function getQualifiedSword()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                        local kills = tool.Kills.Value
-                        if tool.Name == "Master Sword" and kills > 49 then
-                            return tool, kills
+                if tool then
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, tool.Name) then
+                            offset = -7
+                            break
                         end
                     end
                 end
-                return nil, nil
-            end
 
-            local sword, swordKills = getQualifiedSword()
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(20,20,20)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-            if sword and (equippedSwordName ~= sword.Name or equippedSwordKills ~= swordKills) then
-                _G.forceHold = true
-                hum:EquipTool(sword)
-                equippedSwordName = sword.Name
-                equippedSwordKills = swordKills
-
-                task.wait(0.5)
-                if char:FindFirstChild(sword.Name) then
-                    sword:Activate()
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
+                        end
+                    end
                 end
 
+for _, tool in ipairs(backpack:GetChildren()) do
+    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+        if (tool.Name == "Master Sword" and tool.Kills.Value > 49) or (tool.Name == "The gunner!" and tool.Kills.Value > 14) then
+            if tool.Name ~= equippedSwordName or tool.Kills.Value ~= equippedSwordKills then
+                _G.forceHold = true
+                hum:EquipTool(tool)
+                equippedSwordName = tool.Name
+                equippedSwordKills = tool.Kills.Value
+                task.wait(0.5)
+                if char:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
                 task.wait(0.5)
                 _G.forceHold = false
             end
+        end
+    end
+end
 
             if hum.Health <= 0 then
                 hum:UnequipTools()
                 equippedSwordName = nil
                 equippedSwordKills = -1
                 _G.forceHold = false
-            end
-        end)
-    end
-end)
-
--- Auto-respawn wait handler
-spawn(function()
-    while task.wait(1) do
-        if _G.farmSword then
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-            if hum and hum.Health <= 0 then
                 repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
                 task.wait(2)
             end
-        end
+        end)
     end
 end)
 		
