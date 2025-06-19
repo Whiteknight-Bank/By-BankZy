@@ -588,29 +588,28 @@ page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
 end)
 
-if farmSGLoop then
-    farmSGLoop:Disconnect()
-    farmSGLoop = nil
-end
+    if farmSGLoop then
+        farmSGLoop:Disconnect()
+        farmSGLoop = nil
+    end
 
-spawn(function()
-    while wait(0.15) do -- หน่วงเล็กน้อยให้เบามือถือ
-        pcall(function()
-            if not _G.altFarmEnabled then return end
-            if chosenMob == "" then return end
+    if fxrm then
+        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                if chosenMob == "" then return end
 
-            local targetNames = altFarmList[chosenMob]
-            if not targetNames then return end
+                local targetNames = altFarmList[chosenMob]
+                if not targetNames then return end
 
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                    local head = obj:FindFirstChild("Head")
-                    if head and head:FindFirstChild("ClickDetector") then
-                        fireclickdetector(head.ClickDetector)
-                        break -- พอแค่ตัวเดียวแล้วพัก
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
                     end
                 end
-            end
+            end)
         end)
     end
 end)
