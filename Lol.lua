@@ -553,7 +553,6 @@ page1:Toggle("Auto Buso", false, function(hki)
     end
 end)
 
---[[
 page1:Label("┇ Another Farm ┇")
 page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
@@ -695,7 +694,7 @@ spawn(function()
         task.wait(1)    
     end    
 end)
-		
+--[[		
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
@@ -836,7 +835,6 @@ spawn(function()
     end    
 end)
 ]]--
-
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
