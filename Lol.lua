@@ -588,31 +588,48 @@ page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
 end)
 
-    if farmSGLoop then
-        farmSGLoop:Disconnect()
-        farmSGLoop = nil
-    end
+local lastTarget = nil
 
-    if fxrm then
-        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                if chosenMob == "" then return end
+-- ปิด loop เก่าถ้ามี
+if farmSGLoop then
+    farmSGLoop:Disconnect()
+    farmSGLoop = nil
+end
 
-                local targetNames = altFarmList[chosenMob]
-                if not targetNames then return end
+-- ถ้าเปิด toggle ให้เริ่ม loop ใหม่
+if fxrm then
+    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if chosenMob == "" then return end
 
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
+            local targetNames = altFarmList[chosenMob]
+            if not targetNames then return end
+
+            local foundTarget = nil
+
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    if head and head:FindFirstChild("ClickDetector") then
+                        foundTarget = obj
+                        break
                     end
                 end
-            end)
+            end
+
+            -- ถ้าเจอเป้าใหม่ที่ไม่ใช่ตัวเดิม ให้กด
+            if foundTarget and foundTarget ~= lastTarget then
+                fireclickdetector(foundTarget.Head.ClickDetector)
+                lastTarget = foundTarget
+            end
+
+            -- ถ้าเป้าเก่าหายไปจากโลก ให้ลืม
+            if lastTarget and not lastTarget:IsDescendantOf(workspace) then
+                lastTarget = nil
+            end
         end)
-    end
-end)
+    end)
+end
 
 local equippedToolName = nil
 local equippedKills = -1
