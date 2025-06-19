@@ -568,6 +568,13 @@ local altFarmList = {
 
 page1:Label("┇ Another Farm ┇")
 
+local altFarmList = {
+    ["Farm Sword"] = {"Sword noob"},
+    ["Farm Gun"] = {"Gun noob"}
+}
+
+page1:Label("┇ Another Farm ┇")
+
 local chosenMob = ""
 
 page1:Dropdown("Select Farms:", {
@@ -579,31 +586,31 @@ end)
 
 page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
+end)
 
-    -- ปิด loop เก่าถ้ามี
-    if farmSGLoop then
-        farmSGLoop:Disconnect()
-        farmSGLoop = nil
-    end
+if farmSGLoop then
+    farmSGLoop:Disconnect()
+    farmSGLoop = nil
+end
 
-    -- ถ้าเปิด toggle ให้เริ่ม loop ใหม่
-    if fxrm then
-        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                if chosenMob == "" then return end
+spawn(function()
+    while wait(0.15) do -- หน่วงเล็กน้อยให้เบามือถือ
+        pcall(function()
+            if not _G.altFarmEnabled then return end
+            if chosenMob == "" then return end
 
-                local targetNames = altFarmList[chosenMob]
-                if not targetNames then return end
+            local targetNames = altFarmList[chosenMob]
+            if not targetNames then return end
 
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    if head and head:FindFirstChild("ClickDetector") then
+                        fireclickdetector(head.ClickDetector)
+                        break -- พอแค่ตัวเดียวแล้วพัก
                     end
                 end
-            end)
+            end
         end)
     end
 end)
