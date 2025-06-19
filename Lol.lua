@@ -558,17 +558,24 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
--- Click "Sword noob" using ClickDetector (no teleport)
 spawn(function()
     while task.wait(0.5) do
         if _G.farmSword then
             pcall(function()
-                for _, obj in ipairs(workspace:GetDescendants()) do
+                for _, obj in ipairs(workspace:GetChildren()) do
                     if obj:IsA("Model") and obj.Name == "Sword noob" then
                         local head = obj:FindFirstChild("Head")
-                        local clickDetector = head and head:FindFirstChildOfClass("ClickDetector")
-                        if clickDetector then
-                            fireclickdetector(clickDetector)
+                        if head then
+                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
+                            if clickDetector then
+                                print("กำลังกด Sword noob")
+                                for i = 1, 3 do  -- ยิงซ้ำเผื่อไม่ติดรอบแรก
+                                    fireclickdetector(clickDetector)
+                                    task.wait(0.1)
+                                end
+                            else
+                                warn("ไม่พบ ClickDetector")
+                            end
                         end
                     end
                 end
