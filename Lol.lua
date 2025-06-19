@@ -569,7 +569,7 @@ page1:Dropdown("Select Farms:", {
 }, function(mobType)
     chosenMob = mobType
 end)
-
+--[[
 local altFarmLoop = nil
 
 page1:Toggle("Auto Farm", false, function(startFarm)
@@ -606,8 +606,6 @@ page1:Toggle("Auto Farm", false, function(startFarm)
     end
 end)
 
-
---[[
 local equippedSwordName = nil
 local equippedSwordKills = -1
 
