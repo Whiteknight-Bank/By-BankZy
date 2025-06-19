@@ -124,7 +124,7 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000"
 local npcList = {
     ["Thief"] = "Big head boy",
     ["Buggy pirate"] = "Bob",
-    ["Attacking Noob"] = {"Sad noob"},
+    ["Attacking Noob"] = {"Sword noob"},
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob"
 }
@@ -341,52 +341,50 @@ page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
 if farmLoop then
-    farmLoop:Disconnect()
-    farmLoop = nil
+farmLoop:Disconnect()
+farmLoop = nil
 end
 
-if _G.farmNpc or _G.farmSword then
-    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            local targetNames = {}
+if _G.farmNpc then
+spawn(function()
+while farmLoop and wait(0.01) do
+pcall(function()
+if not SelectedMob then return end
 
-            if _G.farmSword then
-                targetNames = {"Sword noob"}
+local targetNames = {}  
 
-            elseif _G.farmNpc and SelectedMob then
-                if SelectedMob == "All" then
-                    for _, v in pairs(npcList) do
-                        if typeof(v) == "table" then
-                            for _, name in pairs(v) do
-                                table.insert(targetNames, name)
-                            end
-                        else
-                            table.insert(targetNames, v)
-                        end
-                    end
-                else
-                    local mapped = npcList[SelectedMob]
-                    if typeof(mapped) == "table" then
-                        targetNames = mapped
-                    elseif typeof(mapped) == "string" then
-                        table.insert(targetNames, mapped)
-                    end
-                end
-            end
+            if SelectedMob == "All" then  
+                for _, v in pairs(npcList) do  
+                    if typeof(v) == "table" then  
+                        for _, name in pairs(v) do  
+                            table.insert(targetNames, name)  
+                        end  
+                    else  
+                        table.insert(targetNames, v)  
+                    end  
+                end  
+            else  
+                local mapped = npcList[SelectedMob]  
+                if typeof(mapped) == "table" then  
+                    targetNames = mapped  
+                elseif typeof(mapped) == "string" then  
+                    table.insert(targetNames, mapped)  
+                end  
+            end  
 
-            -- 🚀 ยิง ClickDetector
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                    local head = obj:FindFirstChild("Head")
-                    local cd = head and head:FindFirstChildOfClass("ClickDetector")
-                    if cd then
-                        fireclickdetector(cd)
-                    end
-                end
-            end
-        end)
-    end)
+            for _, obj in ipairs(workspace:GetDescendants()) do  
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
+                    local head = obj:FindFirstChild("Head")  
+                    if head and head:FindFirstChild("ClickDetector") then  
+                        fireclickdetector(head.ClickDetector)  
+                    end  
+                end  
+            end  
+        end)  
+    end  
+end)
 end
+
 
 if _G.farmNpc then
 farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
