@@ -607,65 +607,6 @@ page1:Toggle("Auto Farm", false, function(fxrm)
         end)
     end
 end)
-
-if _G.altFarmEnabled then
-farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-pcall(function()
-local player = game.Players.LocalPlayer
-local char = player.Character
-local hum = char and char:FindFirstChild("Humanoid")
-
--- หยุดฟาร์มถ้าตาย
-if not char or not hum or hum.Health <= 0 then
-return
-end
-
--- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
-if not chosenMob or chosenMob == "" then return end
-
-local tool = char:FindFirstChildOfClass("Tool")      
-    local offset1 = -12      
-
-    if tool then      
-        local toolName = tool.Name      
-        for _, v in pairs(Cache.DevConfig["ListOfSword"]) do      
-            if string.find(v, toolName) then      
-                offset1 = -6      
-                break      
-            end      
-        end      
-        for _, v in pairs(Cache.DevConfig["ListOfGun"]) do      
-            if string.find(v, toolName) then      
-                offset1 = -8      
-                break      
-            end      
-        end      
-    end      
-
-    for _, mob in pairs(workspace.Npcs:GetChildren()) do      
-        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then      
-            local isTarget = false      
-
-            if string.find(mob.Name, "Attacking Noob(Lvl:100)") then      
-                isTarget = true      
-            end      
-
-            if isTarget then      
-                local root = mob.HumanoidRootPart      
-                root.CanCollide = false      
-                root.Size = Vector3.new(10,10,10)      
-                root.Anchored = true      
-                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset1)      
-
-                if mob.Humanoid.Health <= 0 then      
-                    root.Size = Vector3.new(0,0,0)      
-                    mob:Destroy()      
-                end      
-            end      
-        end      
-    end      
-end)
-end)
 			
 local equippedToolName = nil
 local equippedKills = -1
@@ -689,11 +630,8 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do  
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                         local kills = tool.Kills.Value  
-                        if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
-                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
-                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
-                        elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
-                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                        if tool.Name == "Master Sword" and kills >= 49 then return tool, kills  
+                        elseif tool.Name == "The gunner!" and kills >= 14 then return tool, kills
                         end  
                     end  
                 end  
