@@ -569,11 +569,12 @@ page1:Dropdown("Select Farms:", {
 }, function(mobType)
     chosenMob = mobType
 end)
---[[
+
 local altFarmLoop = nil
 
 page1:Toggle("Auto Farm", false, function(startFarm)
     _G.altFarmEnabled = startFarm
+			end)
 
     if altFarmLoop then
         altFarmLoop:Disconnect()
