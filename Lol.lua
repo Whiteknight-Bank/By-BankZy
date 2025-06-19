@@ -555,8 +555,15 @@ page1:Toggle("Auto Buso", false, function(hki)
 end)
 
 local altFarmList = {
-    ["Farm Sword"] = "Sword noob",
-    ["Farm Gun"] = "Gun noob"
+    "Sword noob",
+    "Gun noob"
+}
+
+page1:Label("┇ Another Farm ┇")
+
+local altFarmList = {
+    ["Farm Sword"] = {"Sword noob"},
+    ["Farm Gun"] = {"Gun noob"}
 }
 
 page1:Label("┇ Another Farm ┇")
@@ -572,40 +579,34 @@ end)
 
 page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
-end)
 
-if farmSGLoop then
-    farmSGLoop:Disconnect()
-    farmSGLoop = nil
-end
+    -- ปิด loop เก่าถ้ามี
+    if farmSGLoop then
+        farmSGLoop:Disconnect()
+        farmSGLoop = nil
+    end
 
--- ตรวจแค่เมื่อเปิด toggle
-if _G.altFarmEnabled then
-    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if chosenMob == "" then return end
+    -- ถ้าเปิด toggle ให้เริ่ม loop ใหม่
+    if fxrm then
+        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                if chosenMob == "" then return end
 
-            local targetNames = {}
+                local targetNames = altFarmList[chosenMob]
+                if not targetNames then return end
 
-            -- ตรงนี้เอา "All" ออกแล้วใช้แค่จาก altFarmList
-            local mapped = altFarmList[chosenMob]
-            if typeof(mapped) == "table" then
-                targetNames = mapped
-            elseif typeof(mapped) == "string" then
-                table.insert(targetNames, mapped)
-            end
-
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                    local head = obj:FindFirstChild("Head")
-                    if head and head:FindFirstChild("ClickDetector") then
-                        fireclickdetector(head.ClickDetector)
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
                     end
                 end
-            end
+            end)
         end)
-    end)
-end
+    end
+end)
 
 local equippedToolName = nil
 local equippedKills = -1
