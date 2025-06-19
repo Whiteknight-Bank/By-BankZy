@@ -557,7 +557,7 @@ end)
 page1:Toggle("Auto Haki Ken", true, function(hkxn)
     _G.autoKen = hkxn
 
-    if hki then
+    if hkxn then
         spawn(function()
             while _G.autoKen do
                 pcall(function()
@@ -575,10 +575,10 @@ page1:Toggle("Auto Haki Ken", true, function(hkxn)
                         end
 
                         if not found then
-                            local vim = game:GetService("VirtualInputManager")
-                            vim:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                            local miv = game:GetService("VirtualInputManager")
+                            miv:SendKeyEvent(true, Enum.KeyCode.R, false, game)
                             task.wait(0.1)
-                            vim:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                            miv:SendKeyEvent(false, Enum.KeyCode.R, false, game)
                         end
                     end
                 end)
