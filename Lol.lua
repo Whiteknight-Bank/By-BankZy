@@ -606,6 +606,8 @@ page1:Toggle("Auto Farm", false, function(startFarm)
     end
 end)
 
+
+--[[
 local equippedSwordName = nil
 local equippedSwordKills = -1
 
@@ -678,8 +680,7 @@ end
         end)
     end
 end)
-		
---[[		
+				
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
 end)
