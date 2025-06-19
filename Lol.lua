@@ -706,22 +706,7 @@ spawn(function()
         end)
     end
 end)
-
-
-
-spawn(function()    
-    local player = game.Players.LocalPlayer    
-    while _G.farmGun do    
-        local char = player.Character    
-        local hum = char and char:FindFirstChild("Humanoid")    
-        if hum and hum.Health <= 0 then    
-            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
-            wait(2)    
-        end    
-        task.wait(1)    
-    end    
-end)
-]]--
+		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
