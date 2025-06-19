@@ -469,8 +469,7 @@ spawn(function()
                 return
             end
 
-            -- ฟังก์ชันช่วยค้นหาไอเทมที่ผ่านเงื่อนไข และล็อคค่า
-            local function findAndLockTool()
+            local function getQualifiedTool()
                 for _, tool in ipairs(backpack:GetChildren()) do
                     if tool:IsA("Tool") then
                         local kills = tool:FindFirstChild("Kills")
@@ -496,7 +495,6 @@ spawn(function()
             local tool, requiredKills = nil, nil
 
             if lockedToolName and lockedKills then
-                -- เช็คว่าของที่ล็อคยังมีอยู่ในกระเป๋าและค่า Kills เท่ากับล็อคหรือยัง
                 local lockedTool = backpack:FindFirstChild(lockedToolName)
                 if lockedTool then
                     local kills = lockedTool:FindFirstChild("Kills")
@@ -504,7 +502,6 @@ spawn(function()
                         tool = lockedTool
                         requiredKills = lockedKills
                     else
-                        -- ค่า Kills เปลี่ยนไป ล้างล็อค
                         lockedKills = nil
                         lockedToolName = nil
                     end
@@ -514,7 +511,6 @@ spawn(function()
                 end
             end
 
-            -- ถ้ายังไม่มีล็อค หรือถูกล้าง ให้ค้นหาและล็อคใหม่
             if not tool then
                 tool, requiredKills = findAndLockTool()
                 if tool and requiredKills then
@@ -522,6 +518,10 @@ spawn(function()
                     lockedKills = requiredKills
                 end
             end
+
+            -- เก็บอาวุธเดิมไว้ก่อนถือ Tool เควส
+            local equippedWeapon = character:FindFirstChildOfClass("Tool")
+            local previousWeaponName = equippedWeapon and equippedWeapon.Name
 
             if tool and not character:FindFirstChild(tool.Name) and not forceHold then
                 forceHold = true
@@ -532,13 +532,35 @@ spawn(function()
                 if character:FindFirstChild(tool.Name) then
                     task.wait(0.35)
                     tool:Activate()
+                    task.wait(0.2)
+                    humanoid:UnequipTools()
                 end
-                forceHold = false -- ปลดล็อคให้กดซ้ำได้รอบต่อไป
+
+                -- สลับกลับไปถืออาวุธเดิม
+                if previousWeaponName then
+                    local original = backpack:FindFirstChild(previousWeaponName)
+                    if original then
+                        task.wait(0.2)
+                        original.Parent = character
+                    end
+                end
+
+                forceHold = false
             elseif tool and character:FindFirstChild(tool.Name) and not forceHold then
-                -- กรณีถือไอเทมแล้ว กดใช้ซ้ำได้เลย
                 forceHold = true
                 task.wait(0.35)
                 tool:Activate()
+                task.wait(0.2)
+                humanoid:UnequipTools()
+
+                if previousWeaponName then
+                    local original = backpack:FindFirstChild(previousWeaponName)
+                    if original then
+                        task.wait(0.2)
+                        original.Parent = character
+                    end
+                end
+
                 forceHold = false
             end
         end)
