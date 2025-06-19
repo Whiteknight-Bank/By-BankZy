@@ -128,7 +128,12 @@ local npcList = {
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob"
 }
-		
+
+local altFarmList = {
+    ["Farm Sword"] = "Sword noob",
+    ["Farm Gun"] = "Gun noob"
+}
+
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -553,25 +558,6 @@ page1:Toggle("Auto Buso", false, function(hki)
         end)
     end
 end)
-
-local altFarmList = {
-    "Sword noob",
-    "Gun noob"
-}
-
-page1:Label("┇ Another Farm ┇")
-
-local altFarmList = {
-    ["Farm Sword"] = {"Sword noob"},
-    ["Farm Gun"] = {"Gun noob"}
-}
-
-page1:Label("┇ Another Farm ┇")
-
-local altFarmList = {
-    ["Farm Sword"] = {"Sword noob"},
-    ["Farm Gun"] = {"Gun noob"}
-}
 
 page1:Label("┇ Another Farm ┇")
 
