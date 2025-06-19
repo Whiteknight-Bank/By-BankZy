@@ -554,7 +554,7 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
-page1:Toggle("Auto Haki Ken", false, function(hkxn)
+page1:Toggle("Auto Haki Ken", true, function(hkxn)
     _G.autoKen = hkxn
 
     if hki then
