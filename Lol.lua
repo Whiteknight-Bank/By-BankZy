@@ -773,7 +773,7 @@ spawn(function()
 
                     for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
                         if string.find(v, toolName) then
-                            offset = -6
+                            offset = -4.5
                             break
                         end
                     end
