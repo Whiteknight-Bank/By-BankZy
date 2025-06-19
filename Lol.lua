@@ -88,41 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local player = game.Players.LocalPlayer
-
--- สร้าง ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DropButtonGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
--- สร้างปุ่ม Drop
-local dropButton = Instance.new("TextButton")
-dropButton.Name = "DropButton"
-dropButton.Size = UDim2.new(0, 70, 0, 70) -- ขนาดปุ่ม
-dropButton.Position = UDim2.new(0.915, 0, 0.36, 0) -- อยู่ใต้ปุ่ม Q จากภาพ
-dropButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-dropButton.BackgroundTransparency = 0.3
-dropButton.Text = "Drop"
-dropButton.TextColor3 = Color3.fromRGB(0, 0, 0)
-dropButton.TextScaled = true
-dropButton.Font = Enum.Font.SourceSansBold
-dropButton.BorderSizePixel = 0
-dropButton.Parent = screenGui
-dropButton.ClipsDescendants = true
-dropButton.AutoButtonColor = true
-
--- ทำให้เป็นปุ่มวงกลม
-local uicorner = Instance.new("UICorner")
-uicorner.CornerRadius = UDim.new(1, 0)
-uicorner.Parent = dropButton
-
--- เมื่อกดปุ่ม
-dropButton.MouseButton1Click:Connect(function()
-    print("Dropped item!")
-    -- ใส่คำสั่งทิ้งของจริงตรงนี้
-end)
-
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub [BETA] | [Alpha]Steve's One Piece ")
 
@@ -588,8 +553,8 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
         end)
     end
 end)
---[[
-page1:Toggle("Auto Haki Ken", true, function(hkxn)
+
+page1:Toggle("Auto Haki Ken", false, function(hkxn)
     _G.autoKen = hkxn
 
     if hkxn then
@@ -632,7 +597,8 @@ page1:Toggle("Auto Haki Ken", true, function(hkxn)
         end
     end)
 end
-]]--
+end)
+		
 page1:Label("┇ Another Farm ┇")
 
 local altNpcTargets = {
