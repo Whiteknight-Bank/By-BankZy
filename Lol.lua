@@ -599,6 +599,56 @@ page1:Toggle("Auto Farm", false, function(fxrm)
     end
 end)
 
+if _G.altFarmEnabled then
+    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hrp = char and char:FindFirstChild("HumanoidRootPart")
+            if not char or not hrp then return end
+
+            -- ตรวจอาวุธที่ถือ และกำหนด offset ตามประเภท
+            local offset = -10
+            local tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                local toolName = tool.Name
+
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(v, toolName) then
+                        offset = -6
+                        break
+                    end
+                end
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                    if string.find(v, toolName) then
+                        offset = -5
+                        break
+                    end
+                end
+            end
+
+            -- ฟาร์มเฉพาะ "Attacking Noob(Lvl:100)"
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob.Name == "Attacking Noob(Lvl:100)" 
+                and mob:FindFirstChild("HumanoidRootPart") 
+                and mob:FindFirstChild("Humanoid") then
+
+                    local mobHRP = mob.HumanoidRootPart
+                    mobHRP.CanCollide = false
+                    mobHRP.Anchored = true
+                    mobHRP.Size = Vector3.new(10, 10, 10)
+                    mobHRP.CFrame = hrp.CFrame * CFrame.new(0, 0, offset)
+
+                    if mob.Humanoid.Health <= 0 then
+                        mobHRP.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
+                    end
+                end
+            end
+        end)
+    end)
+end
+		
 local equippedToolName = nil
 local equippedKills = -1
 
