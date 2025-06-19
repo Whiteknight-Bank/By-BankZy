@@ -670,7 +670,7 @@ spawn(function()
                 for _, tool in ipairs(backpack:GetChildren()) do  
                     if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                         local kills = tool.Kills.Value  
-                        if tool.Name == "Master Sword" and kills >= 49 then return tool, kills  
+                        if tool.Name == "Sword Master" and kills >= 49 then return tool, kills  
                         elseif tool.Name == "The gunner!" and kills >= 14 then return tool, kills
                         end  
                     end  
@@ -707,132 +707,6 @@ spawn(function()
     end
 end)
 
---[[				
-page1:Toggle("Auto Farm Gun", false, function(fgun)
-    _G.farmGun = fgun
-end)
-
-    spawn(function()
-        while wait(0.5) do
-	   if _G.farmGun then
-            pcall(function()
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and obj.Name == "Gun noob" then
-                        local head = obj:FindFirstChild("Head")
-                        if head then
-                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
-                            if clickDetector then
-                                fireclickdetector(clickDetector)
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end)
-end
-		
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmGun then return end
-
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-
-            -- หยุดฟาร์มถ้าตาย
-            if not char or not hum or hum.Health <= 0 then
-                return
-            end
-
-            local tool = char:FindFirstChildOfClass("Tool")
-            local offset = -10
-
-            if tool then
-                local toolName = tool.Name
-                for _, v in pairs(Cache.DevConfig["ListOfGun"]) do
-                    if string.find(v, toolName) then
-                        offset = -7
-                        break
-                    end
-                end
-            end
-
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    if mob.Name == "Attacking Noob(Lvl:100)" then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10,10,10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
-
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0,0,0)
-                            mob:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-		
-local equippedGunName = nil
-local equippedGunKills = -1
-		
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if not _G.farmGun then return end
-
-            local player = game.Players.LocalPlayer  
-            local character = player.Character  
-            local backpack = player:FindFirstChild("Backpack")  
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
-
-            if not char or not backpack or not hum or hum.Health <= 0 then
-return
-end
-            local function getQualifiedGun()    
-    for _, tool in ipairs(backpack:GetChildren()) do    
-        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
-            local kills = tool.Kills.Value    
-            if tool.Name == "The gunner!" and kills > 14 then return tool, kills    
-            end    
-        end    
-    end    
-    return nil, nil    
-end
-
-            local gun, gunKills = getQualifiedGun()
-
-            if gun and (equippedGunName ~= gun.Name or equippedGunKills ~= gunKills) then  
-                _G.forceHold = true
-
-                humanoid:EquipTool(gun)  
-                equippedGunName = gun.Name  
-                equippedGunKills = gunKills  
-
-                wait(0.5)
-                if character:FindFirstChild(gun.Name) then  
-                    gun:Activate()  
-                end  
-
-                wait(0.5)  
-                _G.forceHold = false
-            end  
-
-            if humanoid.Health <= 0 then  
-                humanoid:UnequipTools()  
-                equippedGunName = nil  
-                equippedGunKills = -1  
-                _G.forceHold = false  
-            end  
-        end)
-    end
-end)
 
 
 spawn(function()    
