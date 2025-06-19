@@ -599,28 +599,6 @@ page1:Toggle("Auto Farm", false, function(fxrm)
     end
 end)
 
-spawn(function()
-    while wait(0.01) do
-        pcall(function()
-            if _G.altFarmEnabled then
-                for _,v in pairs(game.Workspace.Npc:GetChildren()) do
-                    if string.find(v.Name, "Attacking Noob(Lvl:100)")
-                    and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CanCollide = false
-                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        v:FindFirstChild("HumanoidRootPart").Anchored = true
-                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-6)
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                            v:Destroy()
-                        end
-                     end
-		end
-            end
-        end)
-    end
-end)
-
 local equippedToolName = nil
 local equippedKills = -1
 
