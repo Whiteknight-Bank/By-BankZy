@@ -647,7 +647,7 @@ page1:Toggle("Auto Farm", false, function(state)
         end)
     end
 end)
-		
+
 local equippedToolName = nil
 local equippedKills = -1
 
