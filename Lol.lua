@@ -558,9 +558,10 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
-    spawn(function()
-        while wait(0.5) do
-	   if _G.farmSword then
+-- Click Sword noob
+spawn(function()
+    while task.wait(0.5) do
+        if _G.farmSword then
             pcall(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("Model") and obj.Name == "Sword noob" then
@@ -575,11 +576,12 @@ end)
                 end
             end)
         end
-    end)
-end
-		
+    end
+end)
+
+-- Attack Attacking Noob
 spawn(function()
-    while wait() do
+    while task.wait() do
         pcall(function()
             if not _G.farmSword then return end
 
@@ -587,10 +589,7 @@ spawn(function()
             local char = player.Character
             local hum = char and char:FindFirstChild("Humanoid")
 
-            -- หยุดฟาร์มถ้าตาย
-            if not char or not hum or hum.Health <= 0 then
-                return
-            end
+            if not char or not hum or hum.Health <= 0 then return end
 
             local tool = char:FindFirstChildOfClass("Tool")
             local offset = -10
@@ -606,18 +605,16 @@ spawn(function()
             end
 
             for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    if mob.Name == "Attacking Noob(Lvl:100)" then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10,10,10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)
+                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local root = mob.HumanoidRootPart
+                    root.CanCollide = false
+                    root.Size = Vector3.new(10,10,10)
+                    root.Anchored = true
+                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0,0,0)
-                            mob:Destroy()
-                        end
+                    if mob.Humanoid.Health <= 0 then
+                        root.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
                     end
                 end
             end
@@ -625,75 +622,76 @@ spawn(function()
     end
 end)
 
+-- Equip Master Sword if Kills > 49
 local equippedSwordName = nil
 local equippedSwordKills = -1
-		
+
 spawn(function()
     while wait(0.1) do
         pcall(function()
             if not _G.farmSword then return end
 
-            local player = game.Players.LocalPlayer  
-            local character = player.Character  
-            local backpack = player:FindFirstChild("Backpack")  
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local hum = char and char:FindFirstChildOfClass("Humanoid")
 
-	if not char or not backpack or not hum or hum.Health <= 0 then
-return
-	end
-							
-local function getQualifiedSword()    
-    for _, tool in ipairs(backpack:GetChildren()) do    
-        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then    
-            local kills = tool.Kills.Value    
-            if tool.Name == "Master Sword" and kills > 49 then return tool, kills      
-            end    
-        end    
-    end    
-    return nil, nil    
-end
+            if not char or not backpack or not hum or hum.Health <= 0 then return end
+
+            local function getQualifiedSword()
+                for _, tool in ipairs(backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                        local kills = tool.Kills.Value
+                        if tool.Name == "Master Sword" and kills > 49 then
+                            return tool, kills
+                        end
+                    end
+                end
+                return nil, nil
+            end
 
             local sword, swordKills = getQualifiedSword()
 
-            if sword and (equippedSwordName ~= sword.Name or equippedSwordKills ~= swordKills) then  
+            if sword and (equippedSwordName ~= sword.Name or equippedSwordKills ~= swordKills) then
                 _G.forceHold = true
+                hum:EquipTool(sword)
+                equippedSwordName = sword.Name
+                equippedSwordKills = swordKills
 
-                humanoid:EquipTool(sword)  
-                equippedSwordName = sword.Name  
-                equippedSwordKills = swordKills  
+                task.wait(0.5)
+                if char:FindFirstChild(sword.Name) then
+                    sword:Activate()
+                end
 
-                wait(0.5)
-                if character:FindFirstChild(sword.Name) then  
-                    sword:Activate()  
-                end  
-
-                wait(0.5)  
+                task.wait(0.5)
                 _G.forceHold = false
-            end  
+            end
 
-            if humanoid.Health <= 0 then  
-                humanoid:UnequipTools()  
-                equippedSwordName = nil  
-                equippedSwordKills = -1  
-                _G.forceHold = false  
-            end  
+            if hum.Health <= 0 then
+                hum:UnequipTools()
+                equippedSwordName = nil
+                equippedSwordKills = -1
+                _G.forceHold = false
+            end
         end)
     end
 end)
 
-
-spawn(function()    
-    local player = game.Players.LocalPlayer    
-    while _G.farmSword do    
-        local char = player.Character    
-        local hum = char and char:FindFirstChild("Humanoid")    
-        if hum and hum.Health <= 0 then    
-            repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")    
-            wait(2)    
-        end    
-        task.wait(1)    
-    end    
+-- Auto-respawn wait handler
+spawn(function()
+    while task.wait(1) do
+        if _G.farmSword then
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+            if hum and hum.Health <= 0 then
+                repeat task.wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                task.wait(2)
+            end
+        end
+    end
 end)
+		
 --[[		
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
