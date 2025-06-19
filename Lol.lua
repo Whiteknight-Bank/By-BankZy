@@ -566,57 +566,71 @@ local chosenMob = ""
 page1:Dropdown("Select Farms:", {
     "Farm Sword",
     "Farm Gun"
-}, function(mobType)
-    chosenMob = mobType
+}, function(txpe)
+    chosenMob = txpe
 end)
 
-page1:Toggle("Auto Farm", false, function(startFarm)
-    _G.altFarmEnabled = startFarm
+page1:Toggle("Auto Farm", false, function(fxrm)
+    _G.altFarmEnabled = fxrm
 			end)
 
--- ⚔️ Equip Master Sword / The gunner!
+local equippedToolName = nil
+local equippedKills = -1
+		
 spawn(function()
-    local equippedName = nil
-    local equippedKills = -1
-    while wait(0.2) do
-        pcall(function()
-            if not _G.altFarmEnabled then return end
-            if chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
+while wait(0.1) do
+pcall(function()
+if not _G.altFarmEnable then return end
+if not chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
+local player = game.Players.LocalPlayer  
+        local character = player.Character  
+        local backpack = player:FindFirstChild("Backpack")  
+        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
 
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local hum = char and char:FindFirstChild("Humanoid")
-            if not char or not backpack or not hum or hum.Health <= 0 then return end
+        if not character or not backpack or not humanoid then return end  
 
-            for _, tool in ipairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                    local kills = tool.Kills.Value
-                    if (tool.Name == "Master Sword" and kills > 49) or (tool.Name == "The gunner!" and kills > 14) then
-                        if tool.Name ~= equippedName or kills ~= equippedKills then
-                            _G.forceHold = true -- ✅ ใส่ก่อนถือ
-                            hum:EquipTool(tool)
-                            equippedName = tool.Name
-                            equippedKills = kills
-                            task.wait(0.75)
-                            if char:FindFirstChild(tool.Name) then
-                                tool:Activate()
-                            end
-                            task.wait(0.75)
-                            _G.forceHold = false -- ✅ ปล่อยหลังถือเสร็จ
-                        end
-                    end
-                end
-            end
+        local function getQualifiedTool()  
+            for _, tool in ipairs(backpack:GetChildren()) do  
+                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                    local kills = tool.Kills.Value  
+                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
+                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
+                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                    end  
+                end  
+            end  
+            return nil, nil  
+        end  
 
-            if hum.Health <= 0 then
-                hum:UnequipTools()
-                equippedName = nil
-                equippedKills = -1
-                _G.forceHold = false -- ✅ reset เมื่อเราตาย
-            end
-        end)
-    end
+        local tool, kills = getQualifiedTool()  
+
+        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+            _G.forceHold = true  -- เธเธฅเนเธญเธ autoequip  
+
+            humanoid:EquipTool(tool)  
+            equippedToolName = tool.Name  
+            equippedKills = kills  
+
+            wait(0.75)  
+            if character:FindFirstChild(tool.Name) then  
+		wait(0.75)
+                tool:Activate()  
+            end  
+
+            wait(0.5)  
+            _G.forceHold = false  -- เธเธฅเธ”เธเธฅเนเธญเธ  
+        end  
+
+        if humanoid.Health <= 0 then  
+            humanoid:UnequipTools()  
+            equippedToolName = nil  
+            equippedKills = -1  
+            _G.forceHold = false  
+        end  
+    end)  
+end
 end)
 
 --[[				
