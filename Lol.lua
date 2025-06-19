@@ -572,8 +572,33 @@ end)
 
 page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
+
+    if farmSGLoop then
+        farmSGLoop:Disconnect()
+        farmSGLoop = nil
+    end
+
+    if fxrm then
+        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                if chosenMob == "" then return end
+
+                local targetNames = altFarmList[chosenMob]
+                if not targetNames then return end
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end)
+    end
 end)
-			
+		
 local equippedToolName = nil
 local equippedKills = -1
 
