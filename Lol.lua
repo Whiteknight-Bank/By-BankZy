@@ -588,7 +588,7 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
         end)
     end
 end)
-
+--[[
 page1:Toggle("Auto Haki Ken", true, function(hkxn)
     _G.autoKen = hkxn
 
@@ -632,7 +632,7 @@ page1:Toggle("Auto Haki Ken", true, function(hkxn)
         end
     end)
 end
-
+]]--
 page1:Label("┇ Another Farm ┇")
 
 local altNpcTargets = {
