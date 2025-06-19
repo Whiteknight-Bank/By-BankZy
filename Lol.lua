@@ -572,51 +572,101 @@ end)
 
 page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
-end)
 
-local lastTarget = nil
+    if farmSGLoop then
+        farmSGLoop:Disconnect()
+        farmSGLoop = nil
+    end
 
--- ปิด loop เก่าถ้ามี
-if farmSGLoop then
-    farmSGLoop:Disconnect()
-    farmSGLoop = nil
-end
+    if fxrm then
+        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function(step)
+            pcall(function()
+                if chosenMob == "" then return end
+                local targetNames = altFarmList[chosenMob]
+                if not targetNames then return end
 
--- ถ้าเปิด toggle ให้เริ่ม loop ใหม่
-if fxrm then
-    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if chosenMob == "" then return end
+                local found = false
 
-            local targetNames = altFarmList[chosenMob]
-            if not targetNames then return end
-
-            local foundTarget = nil
-
-            for _, obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                    local head = obj:FindFirstChild("Head")
-                    if head and head:FindFirstChild("ClickDetector") then
-                        foundTarget = obj
-                        break
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                            found = true
+                            break -- คลิกตัวเดียวพอ แล้วพัก
+                        end
                     end
                 end
-            end
 
-            -- ถ้าเจอเป้าใหม่ที่ไม่ใช่ตัวเดิม ให้กด
-            if foundTarget and foundTarget ~= lastTarget then
-                fireclickdetector(foundTarget.Head.ClickDetector)
-                lastTarget = foundTarget
-            end
-
-            -- ถ้าเป้าเก่าหายไปจากโลก ให้ลืม
-            if lastTarget and not lastTarget:IsDescendantOf(workspace) then
-                lastTarget = nil
-            end
+                if found then
+                    task.wait(0.2) -- พักเบาๆ ลดการกิน CPU
+                else
+                    task.wait(0.1) -- หาช้าๆ ถ้าไม่มีเป้าหมาย
+                end
+            end)
         end)
-    end)
+    end
+end)
+
+if _G.altFarmEnabled then
+farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+pcall(function()
+local player = game.Players.LocalPlayer
+local char = player.Character
+local hum = char and char:FindFirstChild("Humanoid")
+
+-- หยุดฟาร์มถ้าตาย
+if not char or not hum or hum.Health <= 0 then
+return
 end
 
+-- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
+if not chosenMob or chosenMob == "" then return end
+
+local tool = char:FindFirstChildOfClass("Tool")      
+    local offset1 = -12      
+
+    if tool then      
+        local toolName = tool.Name      
+        for _, v in pairs(Cache.DevConfig["ListOfSword"]) do      
+            if string.find(v, toolName) then      
+                offset1 = -6      
+                break      
+            end      
+        end      
+        for _, v in pairs(Cache.DevConfig["ListOfGun"]) do      
+            if string.find(v, toolName) then      
+                offset1 = -8      
+                break      
+            end      
+        end      
+    end      
+
+    for _, mob in pairs(workspace.Npcs:GetChildren()) do      
+        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then      
+            local isTarget = false      
+
+            if string.find(mob.Name, "Attacking Noob(Lvl:100)") then      
+                isTarget = true      
+            end      
+
+            if isTarget then      
+                local root = mob.HumanoidRootPart      
+                root.CanCollide = false      
+                root.Size = Vector3.new(10,10,10)      
+                root.Anchored = true      
+                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset1)      
+
+                if mob.Humanoid.Health <= 0 then      
+                    root.Size = Vector3.new(0,0,0)      
+                    mob:Destroy()      
+                end      
+            end      
+        end      
+    end      
+end)
+end)
+			
 local equippedToolName = nil
 local equippedKills = -1
 
