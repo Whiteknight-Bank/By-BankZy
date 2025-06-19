@@ -88,6 +88,41 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
+local player = game.Players.LocalPlayer
+
+-- สร้าง ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "DropButtonGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- สร้างปุ่ม Drop
+local dropButton = Instance.new("TextButton")
+dropButton.Name = "DropButton"
+dropButton.Size = UDim2.new(0, 70, 0, 70) -- ขนาดปุ่ม
+dropButton.Position = UDim2.new(0.915, 0, 0.36, 0) -- อยู่ใต้ปุ่ม Q จากภาพ
+dropButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+dropButton.BackgroundTransparency = 0.3
+dropButton.Text = "Drop"
+dropButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+dropButton.TextScaled = true
+dropButton.Font = Enum.Font.SourceSansBold
+dropButton.BorderSizePixel = 0
+dropButton.Parent = screenGui
+dropButton.ClipsDescendants = true
+dropButton.AutoButtonColor = true
+
+-- ทำให้เป็นปุ่มวงกลม
+local uicorner = Instance.new("UICorner")
+uicorner.CornerRadius = UDim.new(1, 0)
+uicorner.Parent = dropButton
+
+-- เมื่อกดปุ่ม
+dropButton.MouseButton1Click:Connect(function()
+    print("Dropped item!")
+    -- ใส่คำสั่งทิ้งของจริงตรงนี้
+end)
+
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub [BETA] | [Alpha]Steve's One Piece ")
 
@@ -558,35 +593,45 @@ page1:Toggle("Auto Haki Ken", true, function(hkxn)
     _G.autoKen = hkxn
 
     if hkxn then
-        spawn(function()
-            while _G.autoKen do
-                pcall(function()
-                    local player = game.Players.LocalPlayer
-                    local char = player.Character or workspace:FindFirstChild(player.Name)
+    spawn(function()
+        while _G.autoKen do
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character or workspace:FindFirstChild(player.Name)
 
-                    if char then
-                        local found = false
+                if char then
+                    local hasKen = false
 
-                        for _, obj in ipairs(char:GetDescendants()) do
-                            if obj.Name == "KenDodge" then
-                                found = true
-                                break
-                            end
-                        end
-
-                        if not found then
-                            local miv = game:GetService("VirtualInputManager")
-                            miv:SendKeyEvent(true, Enum.KeyCode.R, false, game)
-                            task.wait(0.1)
-                            miv:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+                    for _, obj in ipairs(char:GetDescendants()) do
+                        if obj.Name == "KenDodge" then
+                            hasKen = true
+                            break
                         end
                     end
-                end)
-                task.wait(1)
-            end
-        end)
-    end
-end)
+
+                    if not hasKen then
+                        local miv = game:GetService("VirtualInputManager")
+                        miv:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                        task.wait(0.1)
+                        miv:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+
+                        repeat
+                            task.wait(0.2)
+                            hasKen = false
+                            for _, obj in ipairs(char:GetDescendants()) do
+                                if obj.Name == "KenDodge" then
+                                    hasKen = true
+                                    break
+                                end
+                            end
+                        until hasKen or not _G.autoKen
+                    end
+                end
+            end)
+            task.wait(0.2)
+        end
+    end)
+end
 
 page1:Label("┇ Another Farm ┇")
 
