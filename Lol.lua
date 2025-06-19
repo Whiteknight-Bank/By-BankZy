@@ -561,6 +561,51 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
+spawn(function()
+    while task.wait(0.3) do
+        if _G.farmSword then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local tool = char and char:FindFirstChildOfClass("Tool")
+                if not tool then return end
+
+                local toolName = tool.Name
+                local npcNameToClick
+
+                local function match(toolList, npcTarget)
+                    for _, v in ipairs(toolList) do
+                        local name = v:split("|")[1]
+                        if name == toolName then
+                            npcNameToClick = npcTarget
+                            return true
+                        end
+                    end
+                end
+
+                -- ⚔️ Sword
+                if match(Cache.DevConfig["ListOfSword"], "Sword noob") then
+                elseif match(Cache.DevConfig["ListOfGun"], "Gun noob") then
+                end
+
+                -- 🚀 Click NPC ถ้าระบุเป้าหมายแล้ว
+                if npcNameToClick then
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("Model") and obj.Name == npcNameToClick then
+                            local head = obj:FindFirstChild("Head")
+                            local cd = head and head:FindFirstChildOfClass("ClickDetector")
+                            if cd then
+                                fireclickdetector(cd)
+                                break
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 -- Attack Attacking Noob
 spawn(function()
     while task.wait() do
