@@ -345,14 +345,15 @@ if farmLoop then
     farmLoop = nil
 end
 
-if _G.farmNpc then
-    spawn(function()
-        while farmLoop and wait(0.01) do -- ปรับความถี่ตรงนี้ได้
-            pcall(function()
-                if not SelectedMob then return end
+if _G.farmNpc or _G.farmSword then
+    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            local targetNames = {}
 
-                local targetNames = {}
+            if _G.farmSword then
+                targetNames = {"Sword noob"}
 
+            elseif _G.farmNpc and SelectedMob then
                 if SelectedMob == "All" then
                     for _, v in pairs(npcList) do
                         if typeof(v) == "table" then
@@ -371,17 +372,19 @@ if _G.farmNpc then
                         table.insert(targetNames, mapped)
                     end
                 end
+            end
 
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
+            -- 🚀 ยิง ClickDetector
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    local cd = head and head:FindFirstChildOfClass("ClickDetector")
+                    if cd then
+                        fireclickdetector(cd)
                     end
                 end
-            end)
-        end
+            end
+        end)
     end)
 end
 
@@ -556,32 +559,6 @@ end)
 page1:Label("┇ Another Farm ┇")
 page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        if _G.farmSword then
-            pcall(function()
-                for _, obj in ipairs(workspace:GetChildren()) do
-                    if obj:IsA("Model") and obj.Name == "Sword noob" then
-                        local head = obj:FindFirstChild("Head")
-                        if head then
-                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
-                            if clickDetector then
-                                print("กำลังกด Sword noob")
-                                for i = 1, 3 do  -- ยิงซ้ำเผื่อไม่ติดรอบแรก
-                                    fireclickdetector(clickDetector)
-                                    task.wait(0.1)
-                                end
-                            else
-                                warn("ไม่พบ ClickDetector")
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
 end)
 
 -- Attack Attacking Noob
