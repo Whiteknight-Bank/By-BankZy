@@ -572,65 +572,101 @@ end)
 
 page1:Toggle("Auto Farm", false, function(fxrm)
     _G.altFarmEnabled = fxrm
-			end)
+end)
+
+if farmSGLoop then
+    farmSGLoop:Disconnect()
+    farmSGLoop = nil
+end
+
+-- ตรวจแค่เมื่อเปิด toggle
+if _G.altFarmEnabled then
+    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if chosenMob == "" then return end
+
+            local targetNames = {}
+
+            -- ตรงนี้เอา "All" ออกแล้วใช้แค่จาก altFarmList
+            local mapped = altFarmList[chosenMob]
+            if typeof(mapped) == "table" then
+                targetNames = mapped
+            elseif typeof(mapped) == "string" then
+                table.insert(targetNames, mapped)
+            end
+
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    if head and head:FindFirstChild("ClickDetector") then
+                        fireclickdetector(head.ClickDetector)
+                    end
+                end
+            end
+        end)
+    end)
+end
 
 local equippedToolName = nil
 local equippedKills = -1
-		
+
 spawn(function()
-while wait(0.1) do
-pcall(function()
-if not _G.altFarmEnable then return end
-if not chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
-local player = game.Players.LocalPlayer  
-        local character = player.Character  
-        local backpack = player:FindFirstChild("Backpack")  
-        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+    while wait(0.1) do
+        pcall(function()
+            if not _G.altFarmEnabled then return end
 
-        if not character or not backpack or not humanoid then return end  
+            -- เช็คเงื่อนไขให้ถูกต้อง
+            if chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
 
-        local function getQualifiedTool()  
-            for _, tool in ipairs(backpack:GetChildren()) do  
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                    local kills = tool.Kills.Value  
-                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
-                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
-                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+            local player = game.Players.LocalPlayer  
+            local character = player.Character  
+            local backpack = player:FindFirstChild("Backpack")  
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
+
+            if not character or not backpack or not humanoid then return end  
+
+            local function getQualifiedTool()  
+                for _, tool in ipairs(backpack:GetChildren()) do  
+                    if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                        local kills = tool.Kills.Value  
+                        if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
+                        elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
+                        elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
+                        elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
+                        elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                        end  
                     end  
                 end  
-            end  
-            return nil, nil  
-        end  
-
-        local tool, kills = getQualifiedTool()  
-
-        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
-            _G.forceHold = true  -- เธเธฅเนเธญเธ autoequip  
-
-            humanoid:EquipTool(tool)  
-            equippedToolName = tool.Name  
-            equippedKills = kills  
-
-            wait(0.75)  
-            if character:FindFirstChild(tool.Name) then  
-		wait(0.75)
-                tool:Activate()  
+                return nil, nil  
             end  
 
-            wait(0.5)  
-            _G.forceHold = false  -- เธเธฅเธ”เธเธฅเนเธญเธ  
-        end  
+            local tool, kills = getQualifiedTool()  
 
-        if humanoid.Health <= 0 then  
-            humanoid:UnequipTools()  
-            equippedToolName = nil  
-            equippedKills = -1  
-            _G.forceHold = false  
-        end  
-    end)  
-end
+            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+                _G.forceHold = true  -- เริ่มถืออาวุธ
+
+                humanoid:EquipTool(tool)  
+                equippedToolName = tool.Name  
+                equippedKills = kills  
+
+                wait(0.75)  
+                if character:FindFirstChild(tool.Name) then  
+                    wait(0.75)
+                    tool:Activate()  -- <<< ตรงนี้จะทำงานแล้ว
+                end  
+
+                wait(0.5)  
+                _G.forceHold = false  -- ปิดถือค้าง  
+            end  
+
+            if humanoid.Health <= 0 then  
+                humanoid:UnequipTools()  
+                equippedToolName = nil  
+                equippedKills = -1  
+                _G.forceHold = false  
+            end  
+        end)
+    end
 end)
 
 --[[				
