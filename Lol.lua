@@ -558,7 +558,7 @@ page1:Toggle("Auto Farm Sword", false, function(sword)
     _G.farmSword = sword
 end)
 
--- Click Sword noob
+-- Click "Sword noob" using ClickDetector (no teleport)
 spawn(function()
     while task.wait(0.5) do
         if _G.farmSword then
@@ -566,11 +566,9 @@ spawn(function()
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("Model") and obj.Name == "Sword noob" then
                         local head = obj:FindFirstChild("Head")
-                        if head then
-                            local clickDetector = head:FindFirstChildOfClass("ClickDetector")
-                            if clickDetector then
-                                fireclickdetector(clickDetector)
-                            end
+                        local clickDetector = head and head:FindFirstChildOfClass("ClickDetector")
+                        if clickDetector then
+                            fireclickdetector(clickDetector)
                         end
                     end
                 end
