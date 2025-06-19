@@ -554,43 +554,92 @@ page1:Toggle("Auto Buso", false, function(hki)
     end
 end)
 
-local altFarmList = {
-    ["Farm Sword"] = "Sword noob",
-    ["Farm Gun"] = "Gun noob"
-}
-
 page1:Label("┇ Another Farm ┇")
 
-local chosenMob = ""
+local altNpcTargets = {
+    ["Attacking Noob (Sword)"] = "Sword noob",
+    ["Attacking Noob (Gun)"] = "Gun noob"
+}
 
-page1:Dropdown("Select Farms:", {
-    "Farm Sword",
-    "Farm Gun"
-}, function(txpe)
-    chosenMob = txpe
+-- Dropdown เลือกชื่อใน UI
+page1:Dropdown("Select Mobs:", {
+    "Attacking Noob (Sword)",
+    "Attacking Noob (Gun)"
+}, function(selected)
+    _G.farmAltMob = selected
 end)
 
-page1:Toggle("Auto Farm", false, function(fxrm)
-    _G.altFarmEnabled = fxrm
+page1:Toggle("Auto Farm", false, function(state)
+    _G.farmAlt = state
 
-    if farmSGLoop then
-        farmSGLoop:Disconnect()
-        farmSGLoop = nil
+    if farmAltClickLoop then
+        farmAltClickLoop:Disconnect()
+        farmAltClickLoop = nil
     end
 
-    if fxrm then
-        farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
+    if farmAltLoop then
+        farmAltLoop:Disconnect()
+        farmAltLoop = nil
+    end
+
+    if _G.farmAlt then
+        -- ระบบกด ClickDetector (ดึง Sword noob / Gun noob)
+        spawn(function()
+            farmAltClickLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                pcall(function()
+                    local clickTargetName = altNpcTargets[_G.farmAltMob]
+                    if not clickTargetName then return end
+
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("Model") and obj.Name == clickTargetName then
+                            local head = obj:FindFirstChild("Head")
+                            if head and head:FindFirstChild("ClickDetector") then
+                                fireclickdetector(head.ClickDetector)
+                            end
+                        end
+                    end
+                end)
+            end)
+        end)
+
+        -- ระบบฟาร์มจริง ดึงแค่ Attacking Noob มาไว้ตี (ไม่สนใจ Sword noob / Gun noob)
+        farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
-                if chosenMob == "" then return end
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if not char or not hum or hum.Health <= 0 then return end
 
-                local targetNames = altFarmList[chosenMob]
-                if not targetNames then return end
+                local tool = char:FindFirstChildOfClass("Tool")
+                local offset = -10
 
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
+                if tool then
+                    local toolName = tool.Name
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -6
+                            break
+                        end
+                    end
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
+                        end
+                    end
+                end
+
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
                         end
                     end
                 end
@@ -598,56 +647,6 @@ page1:Toggle("Auto Farm", false, function(fxrm)
         end)
     end
 end)
-
-if fxrm then
-    farmSGLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-            if not char or not hrp then return end
-
-            -- ตรวจอาวุธที่ถือ และกำหนด offset ตามประเภท
-            local offset = -10
-            local tool = char:FindFirstChildOfClass("Tool")
-            if tool then
-                local toolName = tool.Name
-
-                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                    if string.find(v, toolName) then
-                        offset = -6
-                        break
-                    end
-                end
-                for _, v in pairs(Cache.DevConfig["ListOfGun"]) do
-                    if string.find(v, toolName) then
-                        offset = -8
-                        break
-                    end
-                end
-            end
-
-            -- ฟาร์มเฉพาะ "Attacking Noob(Lvl:100)"
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob.Name == "Attacking Noob(Lvl:100)" 
-                and mob:FindFirstChild("HumanoidRootPart") 
-                and mob:FindFirstChild("Humanoid") then
-
-                    local mobHRP = mob.HumanoidRootPart
-                    mobHRP.CanCollide = false
-                    mobHRP.Anchored = true
-                    mobHRP.Size = Vector3.new(10, 10, 10)
-                    mobHRP.CFrame = hrp.CFrame * CFrame.new(0, 0, offset)
-
-                    if mob.Humanoid.Health <= 0 then
-                        mobHRP.Size = Vector3.new(0, 0, 0)
-                        mob:Destroy()
-                    end
-                end
-            end
-        end)
-    end)
-end
 		
 local equippedToolName = nil
 local equippedKills = -1
