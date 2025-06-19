@@ -574,6 +574,51 @@ page1:Toggle("Auto Farm", false, function(startFarm)
     _G.altFarmEnabled = startFarm
 			end)
 
+-- ⚔️ Equip Master Sword / The gunner!
+spawn(function()
+    local equippedName = nil
+    local equippedKills = -1
+    while wait(0.2) do
+        pcall(function()
+            if not _G.altFarmEnabled then return end
+            if chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
+
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not backpack or not hum or hum.Health <= 0 then return end
+
+            for _, tool in ipairs(backpack:GetChildren()) do
+                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                    local kills = tool.Kills.Value
+                    if (tool.Name == "Master Sword" and kills > 49) or (tool.Name == "The gunner!" and kills > 14) then
+                        if tool.Name ~= equippedName or kills ~= equippedKills then
+                            _G.forceHold = true -- ✅ ใส่ก่อนถือ
+                            hum:EquipTool(tool)
+                            equippedName = tool.Name
+                            equippedKills = kills
+                            task.wait(0.75)
+                            if char:FindFirstChild(tool.Name) then
+                                tool:Activate()
+                            end
+                            task.wait(0.75)
+                            _G.forceHold = false -- ✅ ปล่อยหลังถือเสร็จ
+                        end
+                    end
+                end
+            end
+
+            if hum.Health <= 0 then
+                hum:UnequipTools()
+                equippedName = nil
+                equippedKills = -1
+                _G.forceHold = false -- ✅ reset เมื่อเราตาย
+            end
+        end)
+    end
+end)
+
 --[[				
 page1:Toggle("Auto Farm Gun", false, function(fgun)
     _G.farmGun = fgun
