@@ -446,125 +446,62 @@ local tool = char:FindFirstChildOfClass("Tool")
 end)
 end)
 
-local forceHold = false
-local lockedKills = nil
-local lockedToolName = nil
-
+local equippedToolName = nil
+local equippedKills = -1
+		
 spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            if not _G.farmNpc then return end
+while wait(0.1) do
+pcall(function()
+if not _G.farmNpc then return end
+local player = game.Players.LocalPlayer  
+        local character = player.Character  
+        local backpack = player:FindFirstChild("Backpack")  
+        local humanoid = character and character:FindFirstChildOfClass("Humanoid")  
 
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-            if not character or not backpack or not humanoid then return end
+        if not character or not backpack or not humanoid then return end  
 
-            if humanoid.Health <= 0 then
-                humanoid:UnequipTools()
-                forceHold = false
-                lockedKills = nil
-                lockedToolName = nil
-                return
-            end
+        local function getQualifiedTool()  
+            for _, tool in ipairs(backpack:GetChildren()) do  
+                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                    local kills = tool.Kills.Value  
+                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
+                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
+                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
+                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                    end  
+                end  
+            end  
+            return nil, nil  
+        end  
 
-            local function getQualifiedTool()
-                for _, tool in ipairs(backpack:GetChildren()) do
-                    if tool:IsA("Tool") then
-                        local kills = tool:FindFirstChild("Kills")
-                        if kills and kills:IsA("IntValue") then
-                            local k = kills.Value
-                            if tool.Name == "Thief!" and k >= 20 then
-                                return tool, 20
-                            elseif tool.Name == "Let them pay back!" and k >= 30 then
-                                return tool, 30
-                            elseif tool.Name == "Annoying noobs...." and k >= 10 then
-                                return tool, 10
-                            elseif tool.Name == "Marine!" and k >= 30 then
-                                return tool, 30
-                            elseif tool.Name == "The Strongest..." and k >= 1 then
-                                return tool, 1
-                            end
-                        end
-                    end
-                end
-                return nil, nil
-            end
+        local tool, kills = getQualifiedTool()  
 
-            local tool, requiredKills = nil, nil
+        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+            _G.forceHold = true  -- เธเธฅเนเธญเธ autoequip  
 
-            if lockedToolName and lockedKills then
-                local lockedTool = backpack:FindFirstChild(lockedToolName)
-                if lockedTool then
-                    local kills = lockedTool:FindFirstChild("Kills")
-                    if kills and kills.Value == lockedKills then
-                        tool = lockedTool
-                        requiredKills = lockedKills
-                    else
-                        lockedKills = nil
-                        lockedToolName = nil
-                    end
-                else
-                    lockedKills = nil
-                    lockedToolName = nil
-                end
-            end
+            humanoid:EquipTool(tool)  
+            equippedToolName = tool.Name  
+            equippedKills = kills  
 
-            if not tool then
-                tool, requiredKills = findAndLockTool()
-                if tool and requiredKills then
-                    lockedToolName = tool.Name
-                    lockedKills = requiredKills
-                end
-            end
+            wait(0.75)  
+            if character:FindFirstChild(tool.Name) then  
+		wait(0.75)
+                tool:Activate()  
+            end  
 
-            -- เก็บอาวุธเดิมไว้ก่อนถือ Tool เควส
-            local equippedWeapon = character:FindFirstChildOfClass("Tool")
-            local previousWeaponName = equippedWeapon and equippedWeapon.Name
+            wait(0.5)  
+            _G.forceHold = false  -- เธเธฅเธ”เธเธฅเนเธญเธ  
+        end  
 
-            if tool and not character:FindFirstChild(tool.Name) and not forceHold then
-                forceHold = true
-                humanoid:UnequipTools()
-                task.wait(0.2)
-                tool.Parent = character
-                task.wait(0.35)
-                if character:FindFirstChild(tool.Name) then
-                    task.wait(0.35)
-                    tool:Activate()
-                    task.wait(0.2)
-                    humanoid:UnequipTools()
-                end
-
-                -- สลับกลับไปถืออาวุธเดิม
-                if previousWeaponName then
-                    local original = backpack:FindFirstChild(previousWeaponName)
-                    if original then
-                        task.wait(0.2)
-                        original.Parent = character
-                    end
-                end
-
-                forceHold = false
-            elseif tool and character:FindFirstChild(tool.Name) and not forceHold then
-                forceHold = true
-                task.wait(0.35)
-                tool:Activate()
-                task.wait(0.2)
-                humanoid:UnequipTools()
-
-                if previousWeaponName then
-                    local original = backpack:FindFirstChild(previousWeaponName)
-                    if original then
-                        task.wait(0.2)
-                        original.Parent = character
-                    end
-                end
-
-                forceHold = false
-            end
-        end)
-    end
+        if humanoid.Health <= 0 then  
+            humanoid:UnequipTools()  
+            equippedToolName = nil  
+            equippedKills = -1  
+            _G.forceHold = false  
+        end  
+    end)  
+end
 end)
 
 spawn(function()    
