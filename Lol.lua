@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "BNK Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -89,23 +89,9 @@ task.spawn(function()
 	ScreenGui:Destroy()
 
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("ReaperX Hub [BETA] | [Alpha]Steve's One Piece ")
+local Window = create:Win("ReaperX Hub | Steve's One Piece ")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
-
-local Players = game:GetService("Players")
-
-local BlacklistedPlayers = {
-    "ZoR_017A"
-}
-
-Players.PlayerAdded:Connect(function(v)
-    for _, player in pairs(Players:GetPlayers()) do
-        if table.find(BlacklistedPlayers, player.Name) then
-            create:Notifile("", "คนไม่มีพ่อแม่เข้าเซิฟ: " .. player.Name, 5)
-        end
-    end
-end)
 
 local Wapon = {}
 
@@ -144,7 +130,7 @@ local plr = game.Players.LocalPlayer
 
 spawn(function()
     while true do
-        task.wait(4)
+        task.wait(3.5)
         local showedNotif = false
         pcall(function()
             local char = workspace:FindFirstChild(lp.Name)
@@ -602,14 +588,14 @@ end)
 page1:Label("┇ Another Farm ┇")
 
 local altNpcTargets = {
-    ["Attacking Noob (Sword)"] = "Sword noob",
-    ["Attacking Noob (Gun)"] = "Gun noob"
+    ["Farm Sword"] = "Sword noob",
+    ["Farm Gun"] = "Gun noob"
 }
 
 -- Dropdown เลือกชื่อใน UI
 page1:Dropdown("Select Mobs:", {
-    "Attacking Noob (Sword)",
-    "Attacking Noob (Gun)"
+    "Farm Sword",
+    "Farm Gun"
 }, function(selected)
     _G.farmAltMob = selected
 end)
@@ -699,7 +685,7 @@ local equippedKills = -1
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.altFarmEnabled then return end
+            if not _G.farmAlt then return end
 
             -- เช็คเงื่อนไขให้ถูกต้อง
             if chosenMob ~= "Farm Sword" and chosenMob ~= "Farm Gun" then return end
@@ -965,89 +951,6 @@ end)
 local Tab4 = Window:Taps("Shop")
 local page4 = Tab4:newpage()
 
-page4:Label("┇ Shop [ Random Fruit ] ┇")
-page4:Button("Reset Devil Fruit", function()
-local removerClick = nil  
-local beliClick = nil  
-
-for _, obj in ipairs(workspace:GetDescendants()) do  
-    if obj:IsA("Model") then  
-        local head = obj:FindFirstChild("Head")  
-        if head and head:FindFirstChild("ClickDetector") then  
-            if obj.Name == "Fruit Remover" then
-                removerClick = head.ClickDetector  
-            elseif obj.Name == "Beli|Price:150000" then
-                beliClick = head.ClickDetector  
-            end
-        end  
-    end  
-end  
-
-if removerClick then
-    fireclickdetector(removerClick)
-end
-
-if beliClick then
-    fireclickdetector(beliClick)
-    wait(0.5)
-    fireclickdetector(beliClick)
-end
-
-create:Notifile("", "Your Devil Fruit is Reset Now", 3)
-end)
-
-page4:Button("Random Fruit", function()
-local removerClick = nil  
-local beli1Click = nil  
-
-for _, obj in ipairs(workspace:GetDescendants()) do  
-    if obj:IsA("Model") then  
-        local head = obj:FindFirstChild("Head")  
-        if head and head:FindFirstChild("ClickDetector") then  
-            if obj.Name == "Fruit Seller" then
-                removerClick = head.ClickDetector  
-            elseif obj.Name == "Beli|Price:1500000" then
-                beliClick = head.ClickDetector  
-            end
-        end  
-    end  
-end  
-
-if removerClick then
-    fireclickdetector(removerClick)
-end
-
-if beli1Click then
-    fireclickdetector(beliClick)
-    wait(0.5)
-    fireclickdetector(beliClick)
-end
-end)
-
-page4:Toggle("Auto Bring Fruit", false, function(brdf)
-_G.bring = brdf
-end)
-
-spawn(function()
-    while wait() do
-        if _G.bring then
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character or player.CharacterAdded:Wait()
-                local hrp = char:WaitForChild("HumanoidRootPart")
-
-                for _, fruit in ipairs(workspace:GetDescendants()) do
-                    if fruit:IsA("MeshPart") and fruit.Name == "Handle" and fruit:FindFirstChild("TouchInterest") then
-                        firetouchinterest(hrp, fruit, 0)
-                        task.wait()
-                        firetouchinterest(hrp, fruit, 1)
-                    end
-                end
-            end)
-        end
-    end
-end)
-
 page4:Label("┇ Shop [ Weapon ] ┇")
 page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
@@ -1145,82 +1048,90 @@ page4:Button("Buy Gun", function()
     end
 end)
 
-local Tab0 = Window:Taps("Bug")
+local Tab0 = Window:Taps("Fruit")
 local page0 = Tab0:newpage()
 
-page0:Label("┇ Bug Weapons┇")
-page0:Button("Step 1", function()
-    -- ดึง Gryphon จาก getnilinstances() แล้วใส่ Backpack (ได้หลายเล่ม)
-    for _,v in pairs(getnilinstances()) do
-        if v:IsA("Tool") and v.Name == "Gryphon" then
-            v.Parent = game.Players.LocalPlayer.Backpack
+page0:Label("┇ Fruit ┇")
+page0:Button("Reset Devil Fruit", function()
+local removerClick = nil  
+local beliClick = nil  
+
+for _, obj in ipairs(workspace:GetDescendants()) do  
+    if obj:IsA("Model") then  
+        local head = obj:FindFirstChild("Head")  
+        if head and head:FindFirstChild("ClickDetector") then  
+            if obj.Name == "Fruit Remover" then
+                removerClick = head.ClickDetector  
+            elseif obj.Name == "Beli|Price:150000" then
+                beliClick = head.ClickDetector  
+            end
+        end  
+    end  
+end  
+
+if removerClick then
+    fireclickdetector(removerClick)
+end
+
+if beliClick then
+    fireclickdetector(beliClick)
+    wait(0.5)
+    fireclickdetector(beliClick)
+end
+
+create:Notifile("", "Your Devil Fruit is Reset Now", 3)
+end)
+
+page0:Button("Random Fruit", function()
+local removerClick = nil  
+local beli1Click = nil  
+
+for _, obj in ipairs(workspace:GetDescendants()) do  
+    if obj:IsA("Model") then  
+        local head = obj:FindFirstChild("Head")  
+        if head and head:FindFirstChild("ClickDetector") then  
+            if obj.Name == "Fruit Seller" then
+                removerClick = head.ClickDetector  
+            elseif obj.Name == "Beli|Price:1500000" then
+                beliClick = head.ClickDetector  
+            end
+        end  
+    end  
+end  
+
+if removerClick then
+    fireclickdetector(removerClick)
+end
+
+if beli1Click then
+    fireclickdetector(beliClick)
+    wait(0.5)
+    fireclickdetector(beliClick)
+end
+end)
+
+page0:Toggle("Auto Bring Fruit", false, function(brdf)
+_G.bring = brdf
+end)
+
+spawn(function()
+    while wait() do
+        if _G.bring then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+
+                for _, fruit in ipairs(workspace:GetDescendants()) do
+                    if fruit:IsA("MeshPart") and fruit.Name == "Handle" and fruit:FindFirstChild("TouchInterest") then
+                        firetouchinterest(hrp, fruit, 0)
+                        task.wait()
+                        firetouchinterest(hrp, fruit, 1)
+                    end
+                end
+            end)
         end
     end
-end)
-
-page0:Button("Step 2", function()
-    -- Loop รับ Gryphon จาก getnilinstances() เข้า Backpack เรื่อยๆ
-    _G.weapon2 = true
-    spawn(function()
-        while _G.weapon2 do wait()
-            for _,v in pairs(getnilinstances()) do
-                if v:IsA("Tool") and v.Name == "Gryphon" then
-                    v.Parent = game.Players.LocalPlayer.Backpack
-                end
-            end
-        end
-    end)
-end)
-
-page0:Button("Step 3", function()
-    -- หยุด Loop จาก Step 2
-    _G.weapon2 = false
-end)
-
-page0:Button("Step 4", function()
-    -- เอา Gryphon ใน Backpack ไปใส่ Character ทีละรอบ (แยกไม่รวมกับ Step 2)
-    _G.weapon4 = true
-    spawn(function()
-        while _G.weapon4 do wait()
-            for _,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if v.Name == "Gryphon" then
-                    v.Parent = game.Players.LocalPlayer.Character
-                end
-            end
-        end
-    end)
-end)
-
-page0:Button("Step 5", function()
-    -- หยุด Loop Step 4
-    _G.weapon4 = false
-end)
-
-page0:Button("Step 6", function()
-    -- เอา Gryphon กลับไปใส่ Backpack (ซ้ำ)
-    _G.weapon6 = true
-    spawn(function()
-        while _G.weapon6 do wait()
-            for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v.Name == "Gryphon" then
-                    v.Parent = game.Players.LocalPlayer.Backpack
-                end
-            end
-        end
-    end)
-end)
-
-page0:Button("Step 7", function()
-    -- Activate Gryphon ทั้งหมดในตัว (ฟันพร้อมกัน)
-    spawn(function()
-        while true do wait(0.1)
-            for _,v in pairs(game.Players.LocalPlayer.Character:GetChildren()) do
-                if v:IsA("Tool") and v.Name == "Gryphon" then
-                    v:Activate()
-                end
-            end
-        end
-    end)
 end)
 		
 local Tab5 = Window:Taps("Misc")
@@ -1313,7 +1224,7 @@ local PlaceID = game.PlaceId
 
 end)
 		
-page5:Label("┇ Another ┇")
+page5:Label("┇ Another Functions ┇")
 page5:Button("Boost FPS", function()
 create:Notifile("", "Pls wait start boost fps & show fps", 3)
 wait(2)
@@ -1489,7 +1400,7 @@ page5:Toggle("Walk On Sea", false, function(walk)
     end
 end)
 
-page5:Toggle("Teleport All Chest", false, function(cpst)
+page5:Toggle("Teleport Chest", false, function(cpst)
     _G.tpchest = cpst
 end)
 
