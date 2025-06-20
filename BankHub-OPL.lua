@@ -4217,7 +4217,7 @@ page8:Toggle("Walk On Water", false, function(walk)
             local char = plr.Character or plr.CharacterAdded:Wait()
             local root = char:FindFirstChild("HumanoidRootPart")
             if root and seaPart then
-                local goalPos = Vector3.new(root.Position.X, 213, root.Position.Z)
+                local goalPos = Vector3.new(root.Position.X, 211, root.Position.Z)
                 seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
             end
         end)
