@@ -316,6 +316,11 @@ spawn(function()
 end)
 
 page1:Label("┇ Function Farm ┇")
+local vim = game:GetService("VirtualInputManager")
+    local function leftClick()
+        vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+        vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+		end
 
 local SelectedMob = ""
 
@@ -477,34 +482,34 @@ local player = game.Players.LocalPlayer
             return nil, nil  
         end  
 
-        local tool, kills = getQualifiedTool()  
+    local tool, kills = getQualifiedTool()  
 
-        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
-            _G.forceHold = true  -- เธเธฅเนเธญเธ autoequip  
+                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+                    _G.forceHold = true
 
-            humanoid:EquipTool(tool)  
-            equippedToolName = tool.Name  
-            equippedKills = kills  
+                    humanoid:EquipTool(tool)  
+                    equippedToolName = tool.Name  
+                    equippedKills = kills  
 
-            wait(0.75)  
-            if character:FindFirstChild(tool.Name) then  
-		wait(0.75)
-                tool:Activate()  
-            end  
+                    wait(0.75)  
+                    if tool.Parent == character then  
+                        wait(0.75)
+                        leftClick()  -- จำลองคลิกซ้ายแทน tool:Activate()
+                    end  
 
-            wait(0.5)  
-            _G.forceHold = false  -- เธเธฅเธ”เธเธฅเนเธญเธ  
-        end  
+                    wait(0.5)  
+                    _G.forceHold = false  
+                end  
 
-        if humanoid.Health <= 0 then  
-            humanoid:UnequipTools()  
-            equippedToolName = nil  
-            equippedKills = -1  
-            _G.forceHold = false  
-        end  
-    end)  
-end
-end)
+                if humanoid.Health <= 0 then  
+                    humanoid:UnequipTools()  
+                    equippedToolName = nil  
+                    equippedKills = -1  
+                    _G.forceHold = false  
+                end  
+            end)
+        end
+    end)
 
 spawn(function()    
     local player = game.Players.LocalPlayer    
@@ -696,12 +701,6 @@ end)
 		
     local equippedToolName = nil
     local equippedKills = -1
-
-    local vim = game:GetService("VirtualInputManager")
-    local function leftClick()
-        vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-        vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-    end
 
     spawn(function()
         while wait(0.1) do
@@ -1426,6 +1425,7 @@ page5:Toggle("Teleport Chest", false, function(cpst)
 end)
 
 local lastFound = true
+local originalPos = nil
 
 spawn(function()
     while task.wait(1.5) do
@@ -1441,7 +1441,10 @@ spawn(function()
 
                 local foundAny = false
 
-                -- วนหาแบบเรื่อยๆ
+                if not originalPos then
+                    originalPos = hrp.Position
+                end
+
                 for _, a in ipairs(workspace:GetChildren()) do
                     if not _G.tpchest then break end
                     if a.Name == "" then
@@ -1470,11 +1473,19 @@ spawn(function()
                 else
                     lastFound = true
                     create:Notifile("", "Teleport chest done", 2)
+
+                    if originalPos then
+                        task.wait(0.5)
+                        hrp.CFrame = CFrame.new(originalPos + Vector3.new(0, 5, 0))
+                        originalPos = nil
+                    end
                 end
             end)
+        else
+            originalPos = nil
         end
     end
 end)
-
+		
 	end)
 
