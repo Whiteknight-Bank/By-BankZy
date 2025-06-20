@@ -1000,8 +1000,6 @@ spawn(function()
     end
 end)
 
-page2:Section("↑ Is Coming Soon . . . ↑")
-
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
@@ -1582,7 +1580,6 @@ page3:Toggle("Max Charge Skill (100%)", false, function(smx)
 end)
 
 page3:Label("┇ Auto Press Skill DF ┇")
-
 page3:Toggle("Auto Skill Z", false, function(zz)
 	_G.skillz = zz
 end)
