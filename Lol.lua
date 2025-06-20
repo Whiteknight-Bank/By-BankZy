@@ -110,7 +110,7 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000"
 local npcList = {
     ["Thief"] = "Big head boy",
     ["Buggy pirate"] = "Bob",
-    ["Attacking Noob"] = "Sword noob",
+    ["Attacking Noob"] = "Sad noob",
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob"
 }
@@ -121,6 +121,21 @@ local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Position = Vector3.new((math.random(-1000000, 1000000)), (math.random(10000, 50000)), (math.random(-1000000, 1000000)))
     SafeZoneOuterSpace.Anchored = true
 
+game:GetService("CoreGui"):WaitForChild("RobloxPromptGui"):WaitForChild("promptOverlay").ChildAdded:Connect(function(child)
+    if child.Name == "ErrorPrompt" then
+        local TeleportService = game:GetService("TeleportService")
+        local Players = game:GetService("Players")
+
+        if queue_on_teleport then
+            queue_on_teleport('game:GetService("TeleportService"):Teleport('..game.PlaceId..')')
+        elseif syn and syn.queue_on_teleport then
+            syn.queue_on_teleport('game:GetService("TeleportService"):Teleport('..game.PlaceId..')')
+        end
+
+        TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
+    end
+end)
+		
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
