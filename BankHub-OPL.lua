@@ -1284,6 +1284,15 @@ page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
+page2:Button("Refresh Weapon", function()
+    table.clear(Wapon)
+    for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            table.insert(Wapon, v.Name)
+        end
+				end
+			end)
+		
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
@@ -2443,10 +2452,23 @@ task.spawn(function()
 end)
 
 page4:Label("┇ Player ┇")
-page4:Dropdown("Select Player:", getPlayerNames(), function(name)
+local playerNames = {}
+
+for _, player in ipairs(game.Players:GetPlayers()) do
+    table.insert(playerNames, player.Name)
+end
+
+page4:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
+page4:Button("Refresh Player", function()
+    table.clear(playerNames)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
+				end
+			end)
+		
 page4:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
