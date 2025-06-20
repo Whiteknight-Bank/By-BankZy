@@ -620,13 +620,10 @@ page1:Dropdown("Select Mobs:", {
     _G.farmAltMob = selected
 end)
 
-page1:Toggle("Auto Farm", false, function(state)
-    _G.farmAlt = state
+local farmAltLoop = nil
 
-    if farmAltClickLoop then
-        farmAltClickLoop:Disconnect()
-        farmAltClickLoop = nil
-    end
+page1:Toggle("Auto Farm", false, function(altt)
+    _G.farmAlt = altt
 
     if farmAltLoop then
         farmAltLoop:Disconnect()
@@ -634,26 +631,26 @@ page1:Toggle("Auto Farm", false, function(state)
     end
 
     if _G.farmAlt then
-        -- ระบบกด ClickDetector (ดึง Sword noob / Gun noob)
-        spawn(function()
-            farmAltClickLoop = game:GetService("RunService").Heartbeat:Connect(function()
-                pcall(function()
-                    local clickTargetName = altNpcTargets[_G.farmAltMob]
-                    if not clickTargetName then return end
+        farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                if not _G.farmAltMob then return end
 
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("Model") and obj.Name == clickTargetName then
-                            local head = obj:FindFirstChild("Head")
-                            if head and head:FindFirstChild("ClickDetector") then
-                                fireclickdetector(head.ClickDetector)
-                            end
+                local targetName = altNpcTargets[_G.farmAltMob]
+                if not targetName then return end
+
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and obj.Name == targetName then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
                         end
                     end
-                end)
+                end
             end)
         end)
-
-        -- ระบบฟาร์มจริง ดึงแค่ Attacking Noob มาไว้ตี (ไม่สนใจ Sword noob / Gun noob)
+    end
+end)
+		
         farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
@@ -697,7 +694,6 @@ page1:Toggle("Auto Farm", false, function(state)
             end)
         end)
     end
-end)
 		
     local equippedToolName = nil
     local equippedKills = -1
