@@ -856,15 +856,6 @@ local A_1 = "RewardMark"
     end
 end)
 
-            if _G.berigift then
-local A_1 = "RewardMark"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardHourly
-    Event:FireServer(A_1)
-            end
-        end)
-    end
-end)
-
 page1:Toggle("Auto Claim Gift (Gems)", false, function(gxm)
 _G.gemsgift = gxm
 end)
