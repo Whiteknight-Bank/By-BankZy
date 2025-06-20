@@ -904,6 +904,27 @@ spawn(function()
     end
 end)
 
+page2:Toggle("Lock Aim Player [ Select Player ]", false, function(pla)
+	_G.lockPlayer = pla
+end)
+
+local RunService = game:GetService("RunService")
+local Camera = workspace.CurrentCamera
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+RunService.RenderStepped:Connect(function()
+    pcall(function()
+        if _G.lockPlayer and selectedPlayer then
+            local targetPlayer = Players:FindFirstChild(selectedPlayer)
+            if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+                local headPos = targetPlayer.Character.Head.Position
+                Camera.CFrame = CFrame.new(Camera.CFrame.Position, headPos)
+            end
+        end
+    end)
+end)
+
 local Tab3 = Window:Taps("Island")
 local page3 = Tab3:newpage()
 
