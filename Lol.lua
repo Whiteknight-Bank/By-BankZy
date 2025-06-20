@@ -1443,7 +1443,6 @@ spawn(function()
 
                 if not originalPos then
                     originalPos = hrp.Position
-                    chestVisited = {}
                 end
 
                 for _, a in ipairs(workspace:GetChildren()) do
@@ -1454,9 +1453,12 @@ spawn(function()
                                 for _, c in ipairs(b:GetChildren()) do
                                     if not _G.tpchest then break end
                                     if c.Name == "" and c:IsA("BasePart") then
-                                        local posStr = tostring(c.Position)
-                                        if not chestVisited[posStr] and (c.Position - banned).Magnitude > 1 then
-                                            chestVisited[posStr] = true
+                                        local posKey = tostring(math.floor(c.Position.X))..","..
+                                                       tostring(math.floor(c.Position.Y))..","..
+                                                       tostring(math.floor(c.Position.Z))
+
+                                        if not chestVisited[posKey] and (c.Position - banned).Magnitude > 1 then
+                                            chestVisited[posKey] = true
                                             foundAny = true
                                             hrp.CFrame = CFrame.new(c.Position + Vector3.new(0, 5, 0))
                                             task.wait(0.25)
@@ -1472,19 +1474,20 @@ spawn(function()
                     if lastFound then
                         create:Notifile("", "Not found chest", 3)
                         lastFound = false
-			end
-                    if originalPos then
-                        task.wait(0.3)
-                        hrp.CFrame = CFrame.new(originalPos + Vector3.new(0, 5, 0))
-                        originalPos = nil
-                        chestVisited = {}
+
+                        if originalPos then
+                            task.wait(0.3)
+                            hrp.CFrame = CFrame.new(originalPos + Vector3.new(0, 5, 0))
+                            originalPos = nil
+                            chestVisited = {}
+                        end
                     end
                 else
                     lastFound = true
                     create:Notifile("", "Teleport chest done", 2)
                 end
             end)
-		else
+        else
             originalPos = nil
             chestVisited = {}
         end
