@@ -697,6 +697,12 @@ end)
     local equippedToolName = nil
     local equippedKills = -1
 
+    local vim = game:GetService("VirtualInputManager")
+    local function leftClick()
+        vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+        vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+    end
+
     spawn(function()
         while wait(0.1) do
             pcall(function()
@@ -714,8 +720,10 @@ end)
                     for _, tool in ipairs(backpack:GetChildren()) do  
                         if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                             local kills = tool.Kills.Value  
-                            if tool.Name == "Sword Master" and kills >= 49 then return tool, kills  
-                            elseif tool.Name == "The gunner!" and kills >= 14 then return tool, kills
+                            if tool.Name == "Sword Master" and kills >= 49 then 
+                                return tool, kills  
+                            elseif tool.Name == "The gunner!" and kills >= 14 then 
+                                return tool, kills
                             end  
                         end  
                     end  
@@ -734,7 +742,7 @@ end)
                     wait(0.75)  
                     if tool.Parent == character then  
                         wait(0.75)
-                        tool:Activate()
+                        leftClick()  -- จำลองคลิกซ้ายแทน tool:Activate()
                     end  
 
                     wait(0.5)  
