@@ -330,7 +330,6 @@ page1:Dropdown("Select Mobs:", {
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
 "Marine(Lvl:200)",
-"Fishmen(Lvl:450)",
 "Luffy(Lvl:1000)"
 }, function(pcns)
 SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
@@ -612,7 +611,6 @@ local altNpcTargets = {
     ["Farm Gun"] = "Gun noob"
 }
 
--- Dropdown เลือกชื่อใน UI
 page1:Dropdown("Select Mobs:", {
     "Farm Sword",
     "Farm Gun"
@@ -1481,6 +1479,16 @@ spawn(function()
         end
     end
 end)
-		
+
+local Tab6 = Window:Taps("Credit")
+local page6 = Tab6:newpage()
+
+page6:Label("| Made by BankTH from Thai prople | ทำโดย BankTH จากคนไทย อิอิ|")
+page6:Button("Link Youtube", function()
+    local link = "https://www.youtube.com/@InwBank_zylv"
+
+    setclipboard(link)
+    create:Notifile("", "Copy link youtube now! Pls Subscribe :(", 3)
+end)		
 	end)
 
