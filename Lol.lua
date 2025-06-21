@@ -1148,9 +1148,9 @@ if randomClick then
 end
 
 if beli1Click then
-    fireclickdetector(beliClick)
+    fireclickdetector(beli1Click)
     wait(0.5)
-    fireclickdetector(beliClick)
+    fireclickdetector(beli1Click)
 end
 end)
 
