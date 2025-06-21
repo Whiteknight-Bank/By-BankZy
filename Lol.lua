@@ -620,9 +620,6 @@ end)
 
 local farmAltLoop = nil
 local equipToolThread = nil
-local clickedClickDetectors = {}
-local equippedToolName = nil
-local equippedKills = -1
 
 function startAutoFarm()
     if farmAltLoop then
@@ -643,23 +640,19 @@ function startAutoFarm()
             local hum = char and char:FindFirstChild("Humanoid")
             if not char or not hum or hum.Health <= 0 then return end
 
-                if _G.farmAltMob then
-                    local targetName = altNpcTargets[_G.farmAltMob]
-                    if targetName then
-                        for _, obj in ipairs(workspace:GetDescendants()) do
-                            if obj:IsA("Model") and obj.Name == targetName then
-                                local head = obj:FindFirstChild("Head")
-                                if head and head:FindFirstChild("ClickDetector") then
-                                    local cd = head.ClickDetector
-                                    if not clickedClickDetectors[cd] then
-                                        fireclickdetector(cd)
-                                        clickedClickDetectors[cd] = true
-                                    end
-                                end
+            if _G.farmAltMob then
+                local targetName = altNpcTargets[_G.farmAltMob]
+                if targetName then
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("Model") and obj.Name == targetName then
+                            local head = obj:FindFirstChild("Head")
+                            if head and head:FindFirstChild("ClickDetector") then
+                                fireclickdetector(head.ClickDetector)
                             end
                         end
                     end
                 end
+            end
 
             local tool = char:FindFirstChildOfClass("Tool")
             local offset = -10
@@ -679,20 +672,20 @@ function startAutoFarm()
                 end
             end
 
- for _, mob in pairs(workspace.Npcs:GetChildren()) do
-    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-        local root = mob.HumanoidRootPart
-        root.CanCollide = false
-        root.Size = Vector3.new(10, 10, 10)
-        root.Anchored = true
-        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local root = mob.HumanoidRootPart
+                    root.CanCollide = false
+                    root.Size = Vector3.new(10, 10, 10)
+                    root.Anchored = true
+                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-        if mob.Humanoid.Health <= 0 then
-            root.Size = Vector3.new(0, 0, 0)
-            mob:Destroy()
-        end
-    end
-end
+                    if mob.Humanoid.Health <= 0 then
+                        root.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
+                    end
+                end
+            end
         end)
     end)
 
@@ -727,6 +720,8 @@ end
                 if tool.Parent == character then
                     wait(0.75)
                     leftClick()
+		    wait(0.25)
+		    leftClick()
                 end
                 wait(0.5)
                 _G.forceHold = false
@@ -764,6 +759,7 @@ spawn(function()
             local humanoid = character and character:FindFirstChild("Humanoid")
 
             if humanoid and humanoid.Health <= 0 then
+                -- ปิด
                 _G.farmAlt = false
                 _G.forceHold = true
                 if farmAltLoop then farmAltLoop:Disconnect(); farmAltLoop = nil end
