@@ -271,15 +271,13 @@ page1:Toggle("Auto Click", false, function(lcik)
     _G.autoclick = lcik
 end)
 
-spawn(function() 
-    game:GetService("RunService").RenderStepped:Connect(function() 
-        pcall(function() 
-            if _G.autoclick and not _G.forceHold then
-                game:GetService("VirtualUser"):CaptureController() 
-                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672)) 
-            end 
-        end) 
-    end) 
+spawn(function()
+    while _G.autoclick do
+        local vu = game:GetService("VirtualUser")
+        vu:CaptureController()
+        vu:Button1Down(Vector2.new(1280, 672))
+        wait(0.12)
+    end
 end)
 		
 page1:Toggle("Auto Equip", false, function(aeq)
