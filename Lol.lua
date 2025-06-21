@@ -621,6 +621,8 @@ end)
 local farmAltLoop = nil
 local equipToolThread = nil
 
+local clickedClickDetectors = {}
+
 function startAutoFarm()
     if farmAltLoop then
         farmAltLoop:Disconnect()
@@ -640,20 +642,42 @@ function startAutoFarm()
             local hum = char and char:FindFirstChild("Humanoid")
             if not char or not hum or hum.Health <= 0 then return end
 
-            if _G.farmAltMob then
-                local targetName = altNpcTargets[_G.farmAltMob]
-                if targetName then
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("Model") and obj.Name == targetName then
-                            local head = obj:FindFirstChild("Head")
-                            if head and head:FindFirstChild("ClickDetector") then
-                                fireclickdetector(head.ClickDetector)
+            -- เช็คอาวุธในตัว
+            local function hasDesiredTool()
+                if not char then return false end
+                for _, toolName in ipairs({"Sword Master", "The gunner!"}) do
+                    if char:FindFirstChild(toolName) then
+                        return true
+                    end
+                end
+                return false
+            end
+
+            -- ถ้ามีอาวุธแล้ว ล้างสถานะกด clickdetector เพื่อพร้อมกดใหม่ถ้าของหาย
+            if hasDesiredTool() then
+                clickedClickDetectors = {}
+            else
+                -- ยังไม่มีอาวุธ ให้กด clickdetector แต่ละตัวแค่ครั้งเดียว
+                if _G.farmAltMob then
+                    local targetName = altNpcTargets[_G.farmAltMob]
+                    if targetName then
+                        for _, obj in ipairs(workspace:GetDescendants()) do
+                            if obj:IsA("Model") and obj.Name == targetName then
+                                local head = obj:FindFirstChild("Head")
+                                if head and head:FindFirstChild("ClickDetector") then
+                                    local cd = head.ClickDetector
+                                    if not clickedClickDetectors[cd] then
+                                        fireclickdetector(cd)
+                                        clickedClickDetectors[cd] = true
+                                    end
+                                end
                             end
                         end
                     end
                 end
             end
 
+            -- โค้ดดึงมอนตามเดิม
             local tool = char:FindFirstChildOfClass("Tool")
             local offset = -10
             if tool then
@@ -688,8 +712,9 @@ function startAutoFarm()
             end
         end)
     end)
-
-    equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
+end
+    
+equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             if not _G.farmAlt then return end
             if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
