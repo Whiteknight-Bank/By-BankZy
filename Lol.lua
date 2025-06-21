@@ -620,8 +620,13 @@ end)
 
 local farmAltLoop = nil
 local equipToolThread = nil
+local isFarming = false
+local equippedToolName = nil
+local equippedKills = -1
 
-function startAutoFarm()
+function stopAutoFarm()
+    if not isFarming then return end
+    isFarming = false
     if farmAltLoop then
         farmAltLoop:Disconnect()
         farmAltLoop = nil
@@ -630,6 +635,11 @@ function startAutoFarm()
         equipToolThread:Disconnect()
         equipToolThread = nil
     end
+end
+
+function startAutoFarm()
+    if isFarming then return end
+    isFarming = true
 
     farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
@@ -720,8 +730,6 @@ function startAutoFarm()
                 if tool.Parent == character then
                     wait(0.75)
                     leftClick()
-		    wait(0.25)
-		    leftClick()
                 end
                 wait(0.5)
                 _G.forceHold = false
@@ -741,8 +749,7 @@ page1:Toggle("Auto Farm", false, function(altt)
     _G.farmAlt = altt
 
     if not altt then
-        if farmAltLoop then farmAltLoop:Disconnect(); farmAltLoop = nil end
-        if equipToolThread then equipToolThread:Disconnect(); equipToolThread = nil end
+        stopAutoFarm()
         return
     end
 
@@ -759,13 +766,13 @@ spawn(function()
             local humanoid = character and character:FindFirstChild("Humanoid")
 
             if humanoid and humanoid.Health <= 0 then
-                -- ปิด
                 _G.farmAlt = false
                 _G.forceHold = true
-                if farmAltLoop then farmAltLoop:Disconnect(); farmAltLoop = nil end
-                if equipToolThread then equipToolThread:Disconnect(); equipToolThread = nil end
+                stopAutoFarm()
 
-                wait(3)
+                -- รอจนกว่าตัวละครจะรีเซ็ต
+                repeat wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                wait(1)
 
                 _G.forceHold = false
                 _G.farmAlt = true
