@@ -712,32 +712,31 @@ function startAutoFarm()
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
             if not character or not backpack or not humanoid then return end
 
-            local tool, kills
-            for _, t in ipairs(backpack:GetChildren()) do
-                if t:IsA("Tool") and t:FindFirstChild("Kills") then
-                    local k = t.Kills.Value
-                    if (t.Name == "Sword Master" and k >= 49) or (t.Name == "The gunner!" and k >= 14) then
-                        tool, kills = t, k
-                        break
-                    end
-                end
-            end
+            if not character or not backpack or not humanoid then return end  
 
+        local function getQualifiedTool()  
+            for _, tool in ipairs(backpack:GetChildren()) do  
+                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
+                    local kills = tool.Kills.Value  
+                    if tool.Name == "Sword Master" and kills >= 49 then return tool, kills  
+                    elseif tool.Name == "The gunner!" and kills >= 14 then return tool, kills
+                    end  
+                end  
+            end  
+            return nil, nil  
+        end  
+							
 local tool, kills = getQualifiedTool()  
-
                 if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
                     _G.forceHold = true
-
                     humanoid:EquipTool(tool)  
                     equippedToolName = tool.Name  
                     equippedKills = kills  
-
                     wait(0.75)  
                     if tool.Parent == character then  
                         wait(0.75)
-                        leftClick()  -- จำลองคลิกซ้ายแทน tool:Activate()
+                        leftClick()
                     end  
-
                     wait(0.5)  
                     _G.forceHold = false  
                 end  
