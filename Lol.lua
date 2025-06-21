@@ -272,7 +272,7 @@ page1:Toggle("Auto Click", false, function(lcik)
 end)
 
 spawn(function()
-    while wait(1) do
+    while wait(0.3) do
         if _G.autoclick then
             pcall(function()
                 local vu = game:GetService("VirtualUser")
@@ -717,20 +717,31 @@ function startAutoFarm()
                 end
             end
 
-if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
-    _G.forceHold = true
-    humanoid:EquipTool(tool)
-    equippedToolName = tool.Name
-    equippedKills = kills
+local tool, kills = getQualifiedTool()  
 
-    repeat wait() until tool.Parent == character and humanoid:FindFirstChildOfClass("Tool")
-    wait(0.2)
-    game:GetService("VirtualUser"):CaptureController()
-    game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0))
+                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
+                    _G.forceHold = true
 
-    wait(0.5)
-    _G.forceHold = false
-end
+                    humanoid:EquipTool(tool)  
+                    equippedToolName = tool.Name  
+                    equippedKills = kills  
+
+                    wait(0.75)  
+                    if tool.Parent == character then  
+                        wait(0.75)
+                        leftClick()  -- จำลองคลิกซ้ายแทน tool:Activate()
+                    end  
+
+                    wait(0.5)  
+                    _G.forceHold = false  
+                end  
+
+                if humanoid.Health <= 0 then  
+                    humanoid:UnequipTools()  
+                    equippedToolName = nil  
+                    equippedKills = -1  
+                    _G.forceHold = false  
+                end  
         end)
     end)
 end
