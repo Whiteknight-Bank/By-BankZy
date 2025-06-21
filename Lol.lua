@@ -186,6 +186,12 @@ local function canTeleport()
     return true
 		end
 
+local function leftClick()
+    local vim = game:GetService("VirtualUser")
+                vim:CaptureController()
+                vim:Button1Down(Vector2.new(1280, 672))
+		end
+		
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
