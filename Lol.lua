@@ -621,131 +621,130 @@ end)
 local farmAltLoop = nil
 local equipToolThread = nil
 
-page1:Toggle("Auto Farm", false, function(altt)
-    _G.farmAlt = altt
-
-    -- หยุด Loop ฟาร์ม
+function startAutoFarm()
     if farmAltLoop then
         farmAltLoop:Disconnect()
         farmAltLoop = nil
     end
-
-    -- หยุด Loop Auto Equip
     if equipToolThread then
         equipToolThread:Disconnect()
         equipToolThread = nil
     end
 
-    if _G.farmAlt then
-        -- 🔁 Loop ฟาร์ม Mob และ ClickDetector
-        farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local hum = char and char:FindFirstChild("Humanoid")
-                if not char or not hum or hum.Health <= 0 then return end
+    farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if not _G.farmAlt then return end
 
-                -- ClickDetector
-                if _G.farmAltMob then
-                    local targetName = altNpcTargets[_G.farmAltMob]
-                    if targetName then
-                        for _, obj in ipairs(workspace:GetDescendants()) do
-                            if obj:IsA("Model") and obj.Name == targetName then
-                                local head = obj:FindFirstChild("Head")
-                                if head and head:FindFirstChild("ClickDetector") then
-                                    fireclickdetector(head.ClickDetector)
-                                end
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not hum or hum.Health <= 0 then return end
+
+            if _G.farmAltMob then
+                local targetName = altNpcTargets[_G.farmAltMob]
+                if targetName then
+                    for _, obj in ipairs(workspace:GetDescendants()) do
+                        if obj:IsA("Model") and obj.Name == targetName then
+                            local head = obj:FindFirstChild("Head")
+                            if head and head:FindFirstChild("ClickDetector") then
+                                fireclickdetector(head.ClickDetector)
                             end
                         end
                     end
                 end
+            end
 
-                -- Move NPC มาใต้เท้า
-                local tool = char:FindFirstChildOfClass("Tool")
-                local offset = -10
-                if tool then
-                    local toolName = tool.Name
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
-                    end
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -5
-                            break
-                        end
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
+            if tool then
+                local toolName = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(v, toolName) then
+                        offset = -6
+                        break
                     end
                 end
-
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                            mob:Destroy()
-                        end
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                    if string.find(v, toolName) then
+                        offset = -5
+                        break
                     end
                 end
-            end)
+            end
+
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local root = mob.HumanoidRootPart
+                    root.CanCollide = false
+                    root.Size = Vector3.new(10, 10, 10)
+                    root.Anchored = true
+                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                    if mob.Humanoid.Health <= 0 then
+                        root.Size = Vector3.new(0, 0, 0)
+                        mob:Destroy()
+                    end
+                end
+            end
         end)
+    end)
 
-        -- 🔁 แยก Thread Auto Equip Tool
-        equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                if not _G.farmAlt then return end
-                if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
+    equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            if not _G.farmAlt then return end
+            if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
 
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local backpack = player:FindFirstChild("Backpack")
-                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-                if not character or not backpack or not humanoid then return end
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            if not character or not backpack or not humanoid then return end
 
-                local function getQualifiedTool()
-                    for _, tool in ipairs(backpack:GetChildren()) do
-                        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                            local kills = tool.Kills.Value
-                            if tool.Name == "Sword Master" and kills >= 49 then
-                                return tool, kills
-                            elseif tool.Name == "The gunner!" and kills >= 14 then
-                                return tool, kills
-                            end
-                        end
+            local tool, kills
+            for _, t in ipairs(backpack:GetChildren()) do
+                if t:IsA("Tool") and t:FindFirstChild("Kills") then
+                    local k = t.Kills.Value
+                    if (t.Name == "Sword Master" and k >= 49) or (t.Name == "The gunner!" and k >= 14) then
+                        tool, kills = t, k
+                        break
                     end
-                    return nil, nil
                 end
+            end
 
-                local tool, kills = getQualifiedTool()
-                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
-                    _G.forceHold = true
-                    humanoid:EquipTool(tool)
-                    equippedToolName = tool.Name
-                    equippedKills = kills
+            if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                _G.forceHold = true
+                humanoid:EquipTool(tool)
+                equippedToolName = tool.Name
+                equippedKills = kills
+                wait(0.75)
+                if tool.Parent == character then
                     wait(0.75)
-                    if tool.Parent == character then
-                        wait(0.75)
-                        leftClick()
-                    end
-                    wait(0.5)
-                    _G.forceHold = false
+                    leftClick()
                 end
+                wait(0.5)
+                _G.forceHold = false
+            end
 
-                if humanoid.Health <= 0 then
-                    humanoid:UnequipTools()
-                    equippedToolName = nil
-                    equippedKills = -1
-                    _G.forceHold = false
-                end
-            end)
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+                equippedToolName = nil
+                equippedKills = -1
+                _G.forceHold = false
+            end
         end)
+    end)
+end
+
+page1:Toggle("Auto Farm", false, function(altt)
+    _G.farmAlt = altt
+
+    if not altt then
+        if farmAltLoop then farmAltLoop:Disconnect(); farmAltLoop = nil end
+        if equipToolThread then equipToolThread:Disconnect(); equipToolThread = nil end
+        return
     end
+
+    startAutoFarm()
 end)
 
 spawn(function()
@@ -760,11 +759,14 @@ spawn(function()
             if humanoid and humanoid.Health <= 0 then
                 _G.farmAlt = false
                 _G.forceHold = true
+                if farmAltLoop then farmAltLoop:Disconnect(); farmAltLoop = nil end
+                if equipToolThread then equipToolThread:Disconnect(); equipToolThread = nil end
 
                 wait(3)
 
-                _G.farmAlt = true
                 _G.forceHold = false
+                _G.farmAlt = true
+                startAutoFarm()
             end
         end)
     end
