@@ -267,19 +267,19 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
-page1:Toggle("Auto Click", false, function(state)
-    _G.autoclick = state
+page1:Toggle("Auto Click", false, function(lcik)
+    _G.autoclick = lcik
 end)
 
 spawn(function() 
-game:GetService("RunService").RenderStepped:Connect(function() 
-pcall(function() 
-if _G.autoclick then 
-game:GetService'VirtualUser':CaptureController() 
-game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
-end 
-end) 
-end) 
+    game:GetService("RunService").RenderStepped:Connect(function() 
+        pcall(function() 
+            if _G.autoclick and not _G.forceHold then
+                game:GetService("VirtualUser"):CaptureController() 
+                game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672)) 
+            end 
+        end) 
+    end) 
 end)
 		
 page1:Toggle("Auto Equip", false, function(aeq)
