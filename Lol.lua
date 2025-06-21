@@ -1144,7 +1144,7 @@ for _, obj in ipairs(workspace:GetDescendants()) do
 end  
 
 if randomClick then
-    fireclickdetector(removerClick)
+    fireclickdetector(randomClick)
 end
 
 if beli1Click then
