@@ -620,8 +620,9 @@ end)
 
 local farmAltLoop = nil
 local equipToolThread = nil
-
 local clickedClickDetectors = {}
+local equippedToolName = nil
+local equippedKills = -1
 
 function startAutoFarm()
     if farmAltLoop then
@@ -642,7 +643,6 @@ function startAutoFarm()
             local hum = char and char:FindFirstChild("Humanoid")
             if not char or not hum or hum.Health <= 0 then return end
 
-            -- เช็คอาวุธในตัว
             local function hasDesiredTool()
                 if not char then return false end
                 for _, toolName in ipairs({"Sword Master", "The gunner!"}) do
@@ -653,11 +653,9 @@ function startAutoFarm()
                 return false
             end
 
-            -- ถ้ามีอาวุธแล้ว ล้างสถานะกด clickdetector เพื่อพร้อมกดใหม่ถ้าของหาย
             if hasDesiredTool() then
                 clickedClickDetectors = {}
             else
-                -- ยังไม่มีอาวุธ ให้กด clickdetector แต่ละตัวแค่ครั้งเดียว
                 if _G.farmAltMob then
                     local targetName = altNpcTargets[_G.farmAltMob]
                     if targetName then
@@ -677,7 +675,6 @@ function startAutoFarm()
                 end
             end
 
-            -- โค้ดดึงมอนตามเดิม
             local tool = char:FindFirstChildOfClass("Tool")
             local offset = -10
             if tool then
@@ -696,25 +693,27 @@ function startAutoFarm()
                 end
             end
 
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    local root = mob.HumanoidRootPart
-                    root.CanCollide = false
-                    root.Size = Vector3.new(10, 10, 10)
-                    root.Anchored = true
-                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+            local targetName = altNpcTargets[_G.farmAltMob]
+            if targetName then
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                    if mob.Humanoid.Health <= 0 then
-                        root.Size = Vector3.new(0, 0, 0)
-                        mob:Destroy()
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
+                        end
                     end
                 end
             end
         end)
     end)
-end
-    
-equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
+
+    equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             if not _G.farmAlt then return end
             if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
