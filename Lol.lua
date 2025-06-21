@@ -1127,7 +1127,7 @@ create:Notifile("", "Your Devil Fruit is Reset Now", 3)
 end)
 
 page0:Button("Random Fruit", function()
-local removerClick = nil  
+local randomClick = nil  
 local beli1Click = nil  
 
 for _, obj in ipairs(workspace:GetDescendants()) do  
@@ -1135,15 +1135,15 @@ for _, obj in ipairs(workspace:GetDescendants()) do
         local head = obj:FindFirstChild("Head")  
         if head and head:FindFirstChild("ClickDetector") then  
             if obj.Name == "Fruit Seller" then
-                removerClick = head.ClickDetector  
+                randomClick = head.ClickDetector  
             elseif obj.Name == "Beli|Price:1500000" then
-                beliClick = head.ClickDetector  
+                beli1Click = head.ClickDetector  
             end
         end  
     end  
 end  
 
-if removerClick then
+if randomClick then
     fireclickdetector(removerClick)
 end
 
