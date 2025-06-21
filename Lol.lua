@@ -643,19 +643,6 @@ function startAutoFarm()
             local hum = char and char:FindFirstChild("Humanoid")
             if not char or not hum or hum.Health <= 0 then return end
 
-            local function hasDesiredTool()
-                if not char then return false end
-                for _, toolName in ipairs({"Sword Master", "The gunner!"}) do
-                    if char:FindFirstChild(toolName) then
-                        return true
-                    end
-                end
-                return false
-            end
-
-            if hasDesiredTool() then
-                clickedClickDetectors = {}
-            else
                 if _G.farmAltMob then
                     local targetName = altNpcTargets[_G.farmAltMob]
                     if targetName then
@@ -673,7 +660,6 @@ function startAutoFarm()
                         end
                     end
                 end
-            end
 
             local tool = char:FindFirstChildOfClass("Tool")
             local offset = -10
