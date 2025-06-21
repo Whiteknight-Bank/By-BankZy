@@ -272,15 +272,14 @@ page1:Toggle("Auto Click", false, function(lcik)
 end)
 
 spawn(function()
-    while wait(0.38) do
-	if _G.autoclick then
-	pcall(function()
-        local vu = game:GetService("VirtualUser")
-        vu:CaptureController()
-        vu:Button1Down(Vector2.new(1280, 672))
-        wait(0.12)
-	end
-       end)
+    while wait(1) do
+        if _G.autoclick then
+            pcall(function()
+                local vu = game:GetService("VirtualUser")
+                vu:CaptureController()
+                vu:Button1Down(Vector2.new(1280, 672))
+            end)
+        end
     end
 end)
 		
