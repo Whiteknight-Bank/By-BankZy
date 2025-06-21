@@ -619,16 +619,25 @@ page1:Dropdown("Select Mobs:", {
 end)
 
 local farmAltLoop = nil
+local equipToolThread = nil
 
 page1:Toggle("Auto Farm", false, function(altt)
     _G.farmAlt = altt
 
+    -- หยุด Loop ฟาร์ม
     if farmAltLoop then
         farmAltLoop:Disconnect()
         farmAltLoop = nil
     end
 
+    -- หยุด Loop Auto Equip
+    if equipToolThread then
+        equipToolThread:Disconnect()
+        equipToolThread = nil
+    end
+
     if _G.farmAlt then
+        -- 🔁 Loop ฟาร์ม Mob และ ClickDetector
         farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
@@ -636,7 +645,7 @@ page1:Toggle("Auto Farm", false, function(altt)
                 local hum = char and char:FindFirstChild("Humanoid")
                 if not char or not hum or hum.Health <= 0 then return end
 
-                -- ฟาร์ม ClickDetector
+                -- ClickDetector
                 if _G.farmAltMob then
                     local targetName = altNpcTargets[_G.farmAltMob]
                     if targetName then
@@ -651,7 +660,7 @@ page1:Toggle("Auto Farm", false, function(altt)
                     end
                 end
 
-                -- ฟาร์ม NPC ตำแหน่ง
+                -- Move NPC มาใต้เท้า
                 local tool = char:FindFirstChildOfClass("Tool")
                 local offset = -10
                 if tool then
@@ -687,63 +696,80 @@ page1:Toggle("Auto Farm", false, function(altt)
             end)
         end)
 
-        -- ฟาร์ม Auto Equip Tool
-        spawn(function()
-            local equippedToolName = nil
-            local equippedKills = -1
+        -- 🔁 แยก Thread Auto Equip Tool
+        equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
+            pcall(function()
+                if not _G.farmAlt then return end
+                if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
 
-            while wait(0.1) do
-                pcall(function()
-                    if not _G.farmAlt then return end
-                    if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
+                local player = game.Players.LocalPlayer
+                local character = player.Character
+                local backpack = player:FindFirstChild("Backpack")
+                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+                if not character or not backpack or not humanoid then return end
 
-                    local player = game.Players.LocalPlayer
-                    local character = player.Character
-                    local backpack = player:FindFirstChild("Backpack")
-                    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-                    if not character or not backpack or not humanoid then return end
-
-                    local function getQualifiedTool()
-                        for _, tool in ipairs(backpack:GetChildren()) do
-                            if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                                local kills = tool.Kills.Value
-                                if tool.Name == "Sword Master" and kills >= 49 then
-                                    return tool, kills
-                                elseif tool.Name == "The gunner!" and kills >= 14 then
-                                    return tool, kills
-                                end
+                local function getQualifiedTool()
+                    for _, tool in ipairs(backpack:GetChildren()) do
+                        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                            local kills = tool.Kills.Value
+                            if tool.Name == "Sword Master" and kills >= 49 then
+                                return tool, kills
+                            elseif tool.Name == "The gunner!" and kills >= 14 then
+                                return tool, kills
                             end
                         end
-                        return nil, nil
                     end
+                    return nil, nil
+                end
 
-                    local tool, kills = getQualifiedTool()
-                    if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
-                        _G.forceHold = true
-                        humanoid:EquipTool(tool)
-                        equippedToolName = tool.Name
-                        equippedKills = kills
+                local tool, kills = getQualifiedTool()
+                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                    _G.forceHold = true
+                    humanoid:EquipTool(tool)
+                    equippedToolName = tool.Name
+                    equippedKills = kills
+                    wait(0.75)
+                    if tool.Parent == character then
                         wait(0.75)
-                        if tool.Parent == character then
-                            wait(0.75)
-                            leftClick()
-                        end
-                        wait(0.5)
-                        _G.forceHold = false
+                        leftClick()
                     end
+                    wait(0.5)
+                    _G.forceHold = false
+                end
 
-                    if humanoid.Health <= 0 then
-                        humanoid:UnequipTools()
-                        equippedToolName = nil
-                        equippedKills = -1
-                        _G.forceHold = false
-                    end
-                end)
+                if humanoid.Health <= 0 then
+                    humanoid:UnequipTools()
+                    equippedToolName = nil
+                    equippedKills = -1
+                    _G.forceHold = false
+                end
+            end)
+        end)
+    end
+end)
+
+spawn(function()
+    while wait(0.5) do
+        pcall(function()
+            if not _G.farmAlt then return end
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local humanoid = character and character:FindFirstChild("Humanoid")
+
+            if humanoid and humanoid.Health <= 0 then
+                _G.farmAlt = false
+                _G.forceHold = true
+
+                wait(3)
+
+                _G.farmAlt = true
+                _G.forceHold = false
             end
         end)
     end
 end)
-		
+
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
