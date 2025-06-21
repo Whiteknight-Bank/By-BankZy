@@ -316,10 +316,10 @@ spawn(function()
 end)
 
 page1:Label("┇ Function Farm ┇")
-local vim = game:GetService("VirtualInputManager")
-    local function leftClick()
-        vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-        vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+    
+local function leftClick()
+        game:GetService("VirtualUser"):CaptureController() 
+        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
 		end
 
 local SelectedMob = ""
