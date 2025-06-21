@@ -721,20 +721,13 @@ if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
     humanoid:EquipTool(tool)
     equippedToolName = tool.Name
     equippedKills = kills
-    wait(0.75)
-    if tool.Parent == character then
-        wait(0.75)
-        game:GetService("VirtualUser"):CaptureController()
-        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-    end
-    wait(0.5)
-    _G.forceHold = false
-end
 
-if humanoid.Health <= 0 then
-    humanoid:UnequipTools()
-    equippedToolName = nil
-    equippedKills = -1
+    repeat wait() until tool.Parent == character and humanoid:FindFirstChildOfClass("Tool")
+    wait(0.2)
+    game:GetService("VirtualUser"):CaptureController()
+    game:GetService("VirtualUser"):Button1Down(Vector2.new(0, 0))
+
+    wait(0.5)
     _G.forceHold = false
 end
         end)
