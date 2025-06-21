@@ -110,7 +110,7 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000"
 local npcList = {
     ["Thief"] = "Big head boy",
     ["Buggy pirate"] = "Bob",
-    ["Attacking Noob"] = "Sad noob",
+    ["Attacking Noob"] = "Sword noob",
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob"
 }
@@ -471,11 +471,11 @@ local player = game.Players.LocalPlayer
             for _, tool in ipairs(backpack:GetChildren()) do  
                 if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
                     local kills = tool.Kills.Value  
-                    if tool.Name == "Thief!" and kills >= 20 then return tool, kills  
-                    elseif tool.Name == "Let them pay back!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "Annoying noobs...." and kills >= 10 then return tool, kills  
-                    elseif tool.Name == "Marines!" and kills >= 30 then return tool, kills  
-                    elseif tool.Name == "The Strongest..." and kills >= 1 then return tool, kills  
+                    if tool.Name == "Thief!" and kills >= 19 then return tool, kills  
+                    elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills  
+                    elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills  
+                    elseif tool.Name == "Marines!" and kills > 29 then return tool, kills  
+                    elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills  
                     end  
                 end  
             end  
