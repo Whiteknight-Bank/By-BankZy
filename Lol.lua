@@ -693,23 +693,20 @@ function startAutoFarm()
                 end
             end
 
-            local targetName = altNpcTargets[_G.farmAltMob]
-            if targetName then
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+ for _, mob in pairs(workspace.Npcs:GetChildren()) do
+    if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+        local root = mob.HumanoidRootPart
+        root.CanCollide = false
+        root.Size = Vector3.new(10, 10, 10)
+        root.Anchored = true
+        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                            mob:Destroy()
-                        end
-                    end
-                end
-            end
+        if mob.Humanoid.Health <= 0 then
+            root.Size = Vector3.new(0, 0, 0)
+            mob:Destroy()
+        end
+    end
+end
         end)
     end)
 
