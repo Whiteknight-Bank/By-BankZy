@@ -427,6 +427,52 @@ if _G.farmNpc then
 end
 end)
 
+page1:Toggle("Auto Quest", false, function(qust)
+	_G.autoquest = qust
+end)
+		
+local requiredKills = {
+    ["Thief!"] = 20,
+    ["Let pay back them!"] = 30,
+    ["Annoying noobs...."] = 10,
+    ["Marines!"] = 30,
+    ["The Strongest..."] = 1,
+    ["Sword Master"] = 50,
+    ["The gunner!"] = 15
+}
+
+local lastEquipKills = {}
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.autoquest then return end
+
+            local character = game:GetService("Players").LocalPlayer.Character
+            local backpack = game:GetService("Players").LocalPlayer:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+            if not character or not backpack or not humanoid then return end
+
+            for toolName, required in pairs(requiredKills) do
+                local tool = backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
+                if tool then
+                    local kills = tool:FindFirstChild("Kills")
+                    if kills and kills:IsA("IntValue") and kills.Value >= required then
+                        local lastKills = lastEquipKills[toolName] or 0
+                        if kills.Value > lastKills then
+                            _G.forceHold = true
+                            humanoid:EquipTool(tool)
+                            wait(1)
+                            _G.forceHold = false
+                            lastEquipKills[toolName] = kills.Value
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
