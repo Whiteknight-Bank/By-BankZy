@@ -331,6 +331,8 @@ page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", 
 
 local farmLoop = nil
 
+local RunService = game:GetService("RunService")
+
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
@@ -340,7 +342,6 @@ page1:Toggle("Auto Farm", false, function(befrm)
     end
 
     if _G.farmNpc then
-        local RunService = game:GetService("RunService")
         farmLoop = RunService.Heartbeat:Connect(function()
             pcall(function()
                 local targetNames = {}
@@ -379,6 +380,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
             end)
         end)
     end
+end)
 
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
@@ -438,7 +440,6 @@ page1:Toggle("Auto Farm", false, function(befrm)
         end)
     end)
 end
-end)
 
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
