@@ -444,7 +444,7 @@ local requiredKills = {
 local lastEquipKills = {}
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.03) do
         pcall(function()
             if not _G.autoquest then return end
 
@@ -457,14 +457,17 @@ spawn(function()
                 local tool = backpack:FindFirstChild(toolName) or character:FindFirstChild(toolName)
                 if tool then
                     local kills = tool:FindFirstChild("Kills")
-                    if kills and kills:IsA("IntValue") and kills.Value >= required then
-                        local lastKills = lastEquipKills[toolName] or 0
-                        if kills.Value > lastKills then
+                    if kills and kills:IsA("IntValue") then
+                        local currentKills = kills.Value
+                        local lastKills = lastEquipKills[toolName] or -1
+
+                        if (currentKills == required and lastKills ~= currentKills)
+                        or (currentKills > required and currentKills > lastKills) then
                             _G.forceHold = true
                             humanoid:EquipTool(tool)
                             wait(1)
                             _G.forceHold = false
-                            lastEquipKills[toolName] = kills.Value
+                            lastEquipKills[toolName] = currentKills
                         end
                     end
                 end
@@ -472,7 +475,7 @@ spawn(function()
         end)
     end
 end)
-
+		
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
