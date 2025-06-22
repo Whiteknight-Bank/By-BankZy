@@ -346,6 +346,7 @@ local farmLoop = nil
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
+--[[
     if farmLoop then
         farmLoop:Disconnect()
         farmLoop = nil
@@ -439,7 +440,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
         end)
     end
 end)
-		
+]]--		
 local equippedToolName = nil
 local equippedKills = -1
 		
@@ -513,7 +514,8 @@ spawn(function()
     end    
 end)
 end
-
+end)
+	
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
