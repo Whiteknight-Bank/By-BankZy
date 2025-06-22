@@ -351,114 +351,102 @@ page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
 if farmLoop then
-farmLoop:Disconnect()
-farmLoop = nil
+    farmLoop:Disconnect()
+    farmLoop = nil
 end
 
 if _G.farmNpc then
-spawn(function()
-while farmLoop and wait(0.01) do
-pcall(function()
-if not SelectedMob then return end
+    -- 🔁 Fire ClickDetector
+    spawn(function()
+        while _G.farmNpc and wait(0.1) do
+            pcall(function()
+                local targetNames = {}
 
-local targetNames = {}  
+                -- ✅ ดึงชื่อจริงของมอนจาก npcList
+                local mapped = npcList[SelectedMob]
+                if typeof(mapped) == "string" then
+                    table.insert(targetNames, mapped)
+                elseif typeof(mapped) == "table" then
+                    for _, name in pairs(mapped) do
+                        table.insert(targetNames, name)
+                    end
+                end
 
-            if SelectedMob == "All" then  
-    for _, v in pairs(npcList) do  
-        if typeof(v) == "table" then  
-            for _, name in pairs(v) do  
-                table.insert(targetNames, name)  
-            end  
-        else  
-            table.insert(targetNames, v)  
-        end  
-    end  
-else  
-    local mapped = npcList[SelectedMob]  
-    if typeof(mapped) == "table" then  
-        targetNames = mapped  
-    elseif typeof(mapped) == "string" then  
-        table.insert(targetNames, mapped)  
-    end  
+                -- 🧠 ไม่เพิ่ม Sad noob (Attacking Noob) เข้าไปที่ ClickDetector เด็ดขาด!
 
-    if SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then  
-        table.insert(targetNames, npcList["Attacking Noob"])
-    end  
-end  
+                -- 🔁 Loop หาของใน workspace
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end
+    end)
 
-            for _, obj in ipairs(workspace:GetDescendants()) do  
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
-                    local head = obj:FindFirstChild("Head")  
-                    if head and head:FindFirstChild("ClickDetector") then  
-                        fireclickdetector(head.ClickDetector)  
-                    end  
-                end  
-            end  
-        end)  
-    end  
-end)
+    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not hum or hum.Health <= 0 then return end
+            if not SelectedMob or SelectedMob == "" then return end
+
+            local tool = char:FindFirstChildOfClass("Tool")
+            local offset = -10
+            if tool then
+                local toolName = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(v, toolName) then
+                        offset = -6
+                        break
+                    end
+                end
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                    if string.find(v, toolName) then
+                        offset = -5
+                        break
+                    end
+                end
+            end
+
+            for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                    local isTarget = false
+
+                    if SelectedMob == "All" then
+                        isTarget = true
+                    elseif string.find(mob.Name, SelectedMob) then
+                        isTarget = true
+                    elseif SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then
+                        -- ✅ เพิ่มพิเศษ: ดึง Attacking Noob ด้วย
+                        if string.find(mob.Name, "Attacking Noob") then
+                            isTarget = true
+                        end
+                    end
+
+                    if isTarget then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end)
 end
-
-
-if _G.farmNpc then
-farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-pcall(function()
-local player = game.Players.LocalPlayer
-local char = player.Character
-local hum = char and char:FindFirstChild("Humanoid")
-
-if not char or not hum or hum.Health <= 0 then
-return
-end
-
-if not SelectedMob or SelectedMob == "" then return end
-
-local tool = char:FindFirstChildOfClass("Tool")      
-    local offset = -10      
-
-    if tool then      
-        local toolName = tool.Name      
-        for _, v in pairs(Cache.DevConfig["ListOfSword"]) do      
-            if string.find(v, toolName) then      
-                offset = -6      
-                break      
-            end      
-        end      
-        for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do      
-            if string.find(v, toolName) then      
-                offset = -5      
-                break      
-            end      
-        end      
-    end      
-
-    for _, mob in pairs(workspace.Npcs:GetChildren()) do      
-        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then      
-            local isTarget = false      
-
-            if SelectedMob == "All" then      
-                isTarget = true      
-            elseif string.find(mob.Name, SelectedMob) then      
-                isTarget = true      
-            end      
-
-            if isTarget then      
-                local root = mob.HumanoidRootPart      
-                root.CanCollide = false      
-                root.Size = Vector3.new(10,10,10)      
-                root.Anchored = true      
-                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0,0,offset)      
-
-                if mob.Humanoid.Health <= 0 then      
-                    root.Size = Vector3.new(0,0,0)      
-                    mob:Destroy()      
-                end      
-            end      
-        end      
-    end      
 end)
-end)
-
+		
 local equippedToolName = nil
 local equippedKills = -1
 		
