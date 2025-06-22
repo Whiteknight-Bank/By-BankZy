@@ -430,20 +430,15 @@ end)
 local equippedToolName = nil
 local equippedKills = -1
 
-local vim = game:GetService("VirtualInputManager")
-local function leftClick()
-    print("🖱️ คลิกซ้ายถูกจำลองแล้ว (leftClick)")
-    vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-    vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-end
-
 spawn(function()
-    while _G.farmNpc and wait(0.1) do
-        pcall(function()
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+        while wait(0.1) do
+            pcall(function()
+                if not _G.farmNpc then return end
+
+                local player = game.Players.LocalPlayer
+                local character = player.Character
+                local backpack = player:FindFirstChild("Backpack")
+                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
             if character and backpack and humanoid then
                 local function getQualifiedTool()
@@ -496,11 +491,11 @@ spawn(function()
                     equippedKills = -1
                     _G.forceHold = false
                 end
-            end
-        end)
-    end
+            end)
+        end
+    end)
 end)
-		
+
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
