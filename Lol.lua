@@ -381,7 +381,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
         end)
     end
 end)
-
+		
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             local player = game.Players.LocalPlayer
@@ -439,7 +439,6 @@ end)
             end
         end)
     end)
-end
 
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
