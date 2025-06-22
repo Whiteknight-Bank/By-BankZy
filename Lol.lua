@@ -327,11 +327,11 @@ page1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun" }, function(pcns) SelectedMob = pcns:match("^(.-)%(") or pcns end)
+page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun" }, function(pcns) 
+SelectedMob = pcns:match("^(.-)%(") or pcns 
+end)
 
 local farmLoop = nil
-
-local RunService = game:GetService("RunService")
 
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
@@ -342,7 +342,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
     end
 
     if _G.farmNpc then
-        farmLoop = RunService.Heartbeat:Connect(function()
+        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local targetNames = {}
 
