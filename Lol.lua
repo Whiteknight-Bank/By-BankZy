@@ -520,19 +520,24 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
+local autoKenThread = nil
+
 page1:Toggle("Auto Haki Ken", false, function(hkxn)
     _G.autoKen = hkxn
 
+    if autoKenThread then
+        autoKenThread:Disconnect()
+        autoKenThread = nil
+    end
+
     if hkxn then
-    spawn(function()
-        while _G.autoKen do
+        autoKenThread = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
                 local char = player.Character or workspace:FindFirstChild(player.Name)
 
                 if char then
                     local hasKen = false
-
                     for _, obj in ipairs(char:GetDescendants()) do
                         if obj.Name == "KenDodge" then
                             hasKen = true
@@ -559,194 +564,10 @@ page1:Toggle("Auto Haki Ken", false, function(hkxn)
                     end
                 end
             end)
-            task.wait(0.2)
-        end
-    end)
-end
+        end)
+    end
 end)
 		
-page1:Label("┇ Another Farm ┇")
-
-local altNpcTargets = {
-    ["Farm Sword"] = "Sword noob",
-    ["Farm Gun"] = "Gun noob"
-}
-
-page1:Dropdown("Select Mobs:", {
-    "Farm Sword",
-    "Farm Gun"
-}, function(selected)
-    _G.farmAltMob = selected
-end)
-
-local farmAltLoop = nil
-local equipToolThread = nil
-local isFarming = false
-local equippedToolName = nil
-local equippedKills = -1
-
-function stopAutoFarm()
-    if not isFarming then return end
-    isFarming = false
-    if farmAltLoop then
-        farmAltLoop:Disconnect()
-        farmAltLoop = nil
-    end
-    if equipToolThread then
-        equipToolThread:Disconnect()
-        equipToolThread = nil
-    end
-end
-
-function startAutoFarm()
-    if isFarming then return end
-    isFarming = true
-
-    farmAltLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if not _G.farmAlt then return end
-
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-            if not char or not hum or hum.Health <= 0 then return end
-
-            if _G.farmAltMob then
-                local targetName = altNpcTargets[_G.farmAltMob]
-                if targetName then
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("Model") and obj.Name == targetName then
-                            local head = obj:FindFirstChild("Head")
-                            if head and head:FindFirstChild("ClickDetector") then
-                                fireclickdetector(head.ClickDetector)
-                            end
-                        end
-                    end
-                end
-            end
-
-            local tool = char:FindFirstChildOfClass("Tool")
-            local offset = -10
-            if tool then
-                local toolName = tool.Name
-                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                    if string.find(v, toolName) then
-                        offset = -6
-                        break
-                    end
-                end
-                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                    if string.find(v, toolName) then
-                        offset = -5
-                        break
-                    end
-                end
-            end
-
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob.Name == "Attacking Noob(Lvl:100)" and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    local root = mob.HumanoidRootPart
-                    root.CanCollide = false
-                    root.Size = Vector3.new(10, 10, 10)
-                    root.Anchored = true
-                    root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                    if mob.Humanoid.Health <= 0 then
-                        root.Size = Vector3.new(0, 0, 0)
-                        mob:Destroy()
-                    end
-                end
-            end
-        end)
-    end)
-
-    equipToolThread = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            if not _G.farmAlt then return end
-            if _G.farmAltMob ~= "Farm Sword" and _G.farmAltMob ~= "Farm Gun" then return end
-
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local backpack = player:FindFirstChild("Backpack")
-            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-            if not character or not backpack or not humanoid then return end
-
-            if not character or not backpack or not humanoid then return end  
-
-        local function getQualifiedTool()  
-            for _, tool in ipairs(backpack:GetChildren()) do  
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then  
-                    local kills = tool.Kills.Value  
-                    if tool.Name == "Sword Master" and kills >= 49 then return tool, kills  
-                    elseif tool.Name == "The gunner!" and kills >= 14 then return tool, kills
-                    end  
-                end  
-            end  
-            return nil, nil  
-        end  
-							
-local tool, kills = getQualifiedTool()  
-                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then  
-                    _G.forceHold = true
-                    humanoid:EquipTool(tool)  
-                    equippedToolName = tool.Name  
-                    equippedKills = kills  
-                    wait(0.75)  
-                    if tool.Parent == character then  
-                        wait(0.75)
-                        leftClick()
-                    end  
-                    wait(0.5)  
-                    _G.forceHold = false  
-                end  
-
-                if humanoid.Health <= 0 then  
-                    humanoid:UnequipTools()  
-                    equippedToolName = nil  
-                    equippedKills = -1  
-                    _G.forceHold = false  
-                end  
-        end)
-    end)
-end
-
-page1:Toggle("Auto Farm", false, function(altt)
-    _G.farmAlt = altt
-
-    if not altt then
-        stopAutoFarm()
-        return
-    end
-
-    startAutoFarm()
-end)
-
-spawn(function()
-    while wait(0.5) do
-        pcall(function()
-            if not _G.farmAlt then return end
-
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local humanoid = character and character:FindFirstChild("Humanoid")
-
-            if humanoid and humanoid.Health <= 0 then
-                _G.farmAlt = false
-                _G.forceHold = true
-                stopAutoFarm()
-
-                -- รอจนกว่าตัวละครจะรีเซ็ต
-                repeat wait() until player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-                wait(1)
-
-                _G.forceHold = false
-                _G.farmAlt = true
-                startAutoFarm()
-            end
-        end)
-    end
-end)
-
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
@@ -828,12 +649,10 @@ spawn(function()
                     targetRoot.Anchored = true
                     targetRoot.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
 
-                    -- ✅ ขยายขนาด Hitbox (ร่างจริง)
                     if targetRoot.Size.Magnitude < 10 then -- ป้องกันไม่ให้ขยายซ้ำ
                         targetRoot.Size = Vector3.new(25, 25, 25)
                     end
 
-                    -- ❌ คืนค่าขนาดเดิมเมื่อตาย
                     if targetChar:FindFirstChild("Humanoid") and targetChar.Humanoid.Health <= 0 then
                         targetRoot.Anchored = false
                         targetRoot.Size = Vector3.new(2, 2, 1)
@@ -999,7 +818,7 @@ end)
 
 page4:Button("Buy Melee", function()
     if selectedMelee then  
-        for i = 1, 2 do  -- ซื้อ 2 ครั้ง
+        for i = 1, 2 do 
             local foundNPC = nil  
             for _, obj in ipairs(workspace:GetDescendants()) do  
                 if obj:IsA("Model") and obj.Name == selectedMelee then  
