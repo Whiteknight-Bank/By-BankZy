@@ -331,42 +331,54 @@ page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", 
 
 local farmLoop = nil
 
-page1:Toggle("Auto Farm", false, function(befrm) 
-_G.farmNpc = befrm
+page1:Toggle("Auto Farm", false, function(befrm)
+    _G.farmNpc = befrm
 
-if farmLoop then
-    farmLoop:Disconnect()
-    farmLoop = nil
-end
+    if farmLoop then
+        farmLoop:Disconnect()
+        farmLoop = nil
+    end
 
-if _G.farmNpc then
-spawn(function()
-while _G.farmNpc and wait(0.1) do
-pcall(function()
-local targetNames = {}
+    if _G.farmNpc then
+        local RunService = game:GetService("RunService")
+        farmLoop = RunService.Heartbeat:Connect(function()
+            pcall(function()
+                local targetNames = {}
 
-if SelectedMob == "All" then  
-                for _, v in pairs(npcList) do  
-                    table.insert(targetNames, v)  
-                end  
-            else  
-                local mapped = npcList[SelectedMob]  
-                if mapped then  
-                    table.insert(targetNames, mapped)  
-                end  
-            end  
+                if SelectedMob == "All" then
+                    for _, v in pairs(npcList) do
+                        if type(v) == "table" then
+                            for _, name in ipairs(v) do
+                                table.insert(targetNames, name)
+                            end
+                        else
+                            table.insert(targetNames, v)
+                        end
+                    end
+                else
+                    local mapped = npcList[SelectedMob]
+                    if mapped then
+                        if type(mapped) == "table" then
+                            for _, name in ipairs(mapped) do
+                                table.insert(targetNames, name)
+                            end
+                        else
+                            table.insert(targetNames, mapped)
+                        end
+                    end
+                end
 
-            for _, obj in ipairs(workspace:GetDescendants()) do  
-                if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
-                    local head = obj:FindFirstChild("Head")  
-                    if head and head:FindFirstChild("ClickDetector") then  
-                        fireclickdetector(head.ClickDetector)  
-                    end  
-                end  
-            end  
-        end)  
-    end  
-end)
+                for _, obj in ipairs(workspace:GetDescendants()) do
+                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                        local head = obj:FindFirstChild("Head")
+                        if head and head:FindFirstChild("ClickDetector") then
+                            fireclickdetector(head.ClickDetector)
+                        end
+                    end
+                end
+            end)
+        end)
+    end
 
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
