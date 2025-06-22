@@ -113,8 +113,8 @@ local npcList = {
     ["Attacking Noob"] = "Sad noob",
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob",
-    ["Farm Sword"] = "Sword noob",
-    ["Farm Gun"] = "Gun noob"
+    ["Attacking Noob( Farm Sword )"] = "Sword noob",
+    ["Attacking Noob( Farm Gun )"] = "Gun noob"
 }
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
