@@ -331,18 +331,19 @@ page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", 
 SelectedMob = pcns:match("^(.-)%(") or pcns 
 end)
 
+local clickLoop = nil
 local farmLoop = nil
 
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
-    if farmLoop then
-        farmLoop:Disconnect()
-        farmLoop = nil
+    if clickLoop then
+        clickLoop:Disconnect()
+        clickLoop = nil
     end
 
     if _G.farmNpc then
-        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        clickLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local targetNames = {}
 
@@ -381,7 +382,12 @@ page1:Toggle("Auto Farm", false, function(befrm)
         end)
     end
 end)
-		
+
+    if farmLoop then
+        farmLoop:Disconnect()
+        farmLoop = nil
+    end
+	
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             local player = game.Players.LocalPlayer
