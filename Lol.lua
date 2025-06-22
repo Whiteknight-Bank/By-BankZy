@@ -426,9 +426,16 @@ if _G.farmNpc then
     end)
 end
 end)
-		
+
 local equippedToolName = nil
 local equippedKills = -1
+
+local vim = game:GetService("VirtualInputManager")
+local function leftClick()
+    print("🖱️ คลิกซ้ายถูกจำลองแล้ว (leftClick)")
+    vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+    vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+end
 
 spawn(function()
     while _G.farmNpc and wait(0.1) do
@@ -443,13 +450,20 @@ spawn(function()
                     for _, tool in ipairs(backpack:GetChildren()) do
                         if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
                             local kills = tool.Kills.Value
-                            if tool.Name == "Thief!" and kills >= 19 then return tool, kills
-                            elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills
-                            elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills
-                            elseif tool.Name == "Marines!" and kills > 29 then return tool, kills
-                            elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills
-                            elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills
-                            elseif tool.Name == "The gunner!" and kills > 14 then return tool, kills
+                            if tool.Name == "Thief!" and kills >= 19 then
+                                return tool, kills
+                            elseif tool.Name == "Let them pay back!" and kills > 29 then
+                                return tool, kills
+                            elseif tool.Name == "Annoying noobs...." and kills > 9 then
+                                return tool, kills
+                            elseif tool.Name == "Marines!" and kills > 29 then
+                                return tool, kills
+                            elseif tool.Name == "The Strongest..." and kills > 0 then
+                                return tool, kills
+                            elseif tool.Name == "Sword Master" and kills > 49 then
+                                return tool, kills
+                            elseif tool.Name == "The gunner!" and kills > 14 then
+                                return tool, kills
                             end
                         end
                     end
@@ -464,10 +478,12 @@ spawn(function()
                     equippedToolName = tool.Name
                     equippedKills = kills
 
+                    print("✅ พบอาวุธ:", tool.Name, "| Kills:", kills)
+
                     wait(0.75)
                     if tool.Parent == character then
                         wait(0.75)
-                        leftClick() -- หรือ tool:Activate() ถ้าไม่มี leftClick
+                        leftClick()
                     end
 
                     wait(0.5)
