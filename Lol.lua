@@ -110,9 +110,11 @@ Cache.DevConfig["ListOfSword"] = {"Wooden Sword|Prices:100", "Katana|Price:5000"
 local npcList = {
     ["Thief"] = "Big head boy",
     ["Buggy pirate"] = "Bob",
-    ["Attacking Noob"] = "Sword noob",
+    ["Attacking Noob"] = "Sad noob",
     ["Marine"] = "Injured pirate",
-    ["Luffy"] = "That noob"
+    ["Luffy"] = "That noob",
+    ["Farm Sword"] = "Sword noob",
+    ["Farm Gun"] = "Gun noob"
 }
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
@@ -331,7 +333,9 @@ page1:Dropdown("Select Mobs:", {
 "Buggy pirate(Lvl:30)",
 "Attacking Noob(Lvl:100)",
 "Marine(Lvl:200)",
-"Luffy(Lvl:1000)"
+"Luffy(Lvl:1000)",
+"Farm Sword",
+"Farm Gun"
 }, function(pcns)
 SelectedMob = pcns:match("^(.-)%(") or pcns -- ตัดเอาชื่อมอนอย่างเดียว
 end)
@@ -360,23 +364,27 @@ if not SelectedMob then return end
 local targetNames = {}  
 
             if SelectedMob == "All" then  
-                for _, v in pairs(npcList) do  
-                    if typeof(v) == "table" then  
-                        for _, name in pairs(v) do  
-                            table.insert(targetNames, name)  
-                        end  
-                    else  
-                        table.insert(targetNames, v)  
-                    end  
-                end  
-            else  
-                local mapped = npcList[SelectedMob]  
-                if typeof(mapped) == "table" then  
-                    targetNames = mapped  
-                elseif typeof(mapped) == "string" then  
-                    table.insert(targetNames, mapped)  
-                end  
+    for _, v in pairs(npcList) do  
+        if typeof(v) == "table" then  
+            for _, name in pairs(v) do  
+                table.insert(targetNames, name)  
             end  
+        else  
+            table.insert(targetNames, v)  
+        end  
+    end  
+else  
+    local mapped = npcList[SelectedMob]  
+    if typeof(mapped) == "table" then  
+        targetNames = mapped  
+    elseif typeof(mapped) == "string" then  
+        table.insert(targetNames, mapped)  
+    end  
+
+    if SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then  
+        table.insert(targetNames, npcList["Attacking Noob"])
+    end  
+end  
 
             for _, obj in ipairs(workspace:GetDescendants()) do  
                 if obj:IsA("Model") and table.find(targetNames, obj.Name) then  
@@ -399,12 +407,10 @@ local player = game.Players.LocalPlayer
 local char = player.Character
 local hum = char and char:FindFirstChild("Humanoid")
 
--- หยุดฟาร์มถ้าตาย
 if not char or not hum or hum.Health <= 0 then
 return
 end
 
--- ถ้าไม่มี mob ที่เลือกไว้ ไม่ทำอะไร
 if not SelectedMob or SelectedMob == "" then return end
 
 local tool = char:FindFirstChildOfClass("Tool")      
@@ -473,7 +479,9 @@ local player = game.Players.LocalPlayer
                     local kills = tool.Kills.Value  
                     if tool.Name == "Thief!" and kills >= 19 then return tool, kills  
                     elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills  
-                    elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills  
+                    elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills  
+		    elseif tool.Name == "The gunner!" and kills > 14 then return tool, kills  
+		    elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills  
                     elseif tool.Name == "Marines!" and kills > 29 then return tool, kills  
                     elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills  
                     end  
@@ -494,7 +502,7 @@ local player = game.Players.LocalPlayer
                     wait(0.75)  
                     if tool.Parent == character then  
                         wait(0.75)
-                        leftClick()  -- จำลองคลิกซ้ายแทน tool:Activate()
+                        leftClick()
                     end  
 
                     wait(0.5)  
