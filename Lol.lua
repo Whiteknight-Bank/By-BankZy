@@ -338,20 +338,36 @@ if farmLoop then
     farmLoop = nil
 end
 
+local RunService = game:GetService("RunService")
+
 if _G.farmNpc then
     spawn(function()
-        while _G.farmNpc and wait(0.1) do
+        RunService.Heartbeat:Connect(function()
+            if not _G.farmNpc then return end
+
             pcall(function()
                 local targetNames = {}
 
                 if SelectedMob == "All" then
                     for _, v in pairs(npcList) do
-                        table.insert(targetNames, v)
+                        if type(v) == "table" then
+                            for _, name in ipairs(v) do
+                                table.insert(targetNames, name)
+                            end
+                        else
+                            table.insert(targetNames, v)
+                        end
                     end
                 else
                     local mapped = npcList[SelectedMob]
                     if mapped then
-                        table.insert(targetNames, mapped)
+                        if type(mapped) == "table" then
+                            for _, name in ipairs(mapped) do
+                                table.insert(targetNames, name)
+                            end
+                        else
+                            table.insert(targetNames, mapped)
+                        end
                     end
                 end
 
@@ -364,8 +380,9 @@ if _G.farmNpc then
                     end
                 end
             end)
-        end
+        end)
     end)
+end
 
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
