@@ -520,48 +520,41 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
+local function hasKenDodge(char)
+    for _, obj in ipairs(char:GetDescendants()) do
+        if obj.Name == "KenDodge" then
+            return true
+        end
+    end
+    return false
+end
+
 local autoKenThread = nil
 
-page1:Toggle("Auto Haki Ken", false, function(hkxn)
-    _G.autoKen = hkxn
+page1:Toggle("Auto Haki Ken", false, function(ken)
+    _G.autoKen = ken
 
     if autoKenThread then
         autoKenThread:Disconnect()
         autoKenThread = nil
     end
 
-    if hkxn then
+    if state then
         autoKenThread = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
                 local player = game.Players.LocalPlayer
                 local char = player.Character or workspace:FindFirstChild(player.Name)
+                if not char then return end
 
-                if char then
-                    local hasKen = false
-                    for _, obj in ipairs(char:GetDescendants()) do
-                        if obj.Name == "KenDodge" then
-                            hasKen = true
-                            break
-                        end
-                    end
+                if not hasKenDodge(char) then
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                    task.wait(0.1)
+                    vim:SendKeyEvent(false, Enum.KeyCode.R, false, game)
 
-                    if not hasKen then
-                        local miv = game:GetService("VirtualInputManager")
-                        miv:SendKeyEvent(true, Enum.KeyCode.R, false, game)
+                    repeat
                         task.wait(0.1)
-                        miv:SendKeyEvent(false, Enum.KeyCode.R, false, game)
-
-                        repeat
-                            task.wait(0.2)
-                            hasKen = false
-                            for _, obj in ipairs(char:GetDescendants()) do
-                                if obj.Name == "KenDodge" then
-                                    hasKen = true
-                                    break
-                                end
-                            end
-                        until hasKen or not _G.autoKen
-                    end
+                    until hasKenDodge(char) or not _G.autoKen
                 end
             end)
         end)
