@@ -367,7 +367,6 @@ if _G.farmNpc then
         end
     end)
 
-    -- ฟาร์ม mob
     farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             local player = game.Players.LocalPlayer
@@ -427,7 +426,11 @@ if _G.farmNpc then
     end)
 end
 end)
-
+		
+--[[
+if _G.farmNpc then
+    spawn(function()
+        while _G.farmNpc and wait(0.01) do  -- ✅ ปลอดภัย
 if not character or not backpack or not humanoid then return end
         local function getQualifiedTool()
             for _, tool in ipairs(backpack:GetChildren()) do
@@ -473,7 +476,7 @@ if not character or not backpack or not humanoid then return end
     end)
 end
 end)
-	
+]]--	
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
