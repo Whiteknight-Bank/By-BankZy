@@ -427,6 +427,9 @@ if _G.farmNpc then
 end
 end)
 		
+local equippedToolName = nil
+local equippedKills = -1
+
 spawn(function()
     while _G.farmNpc and wait(0.1) do
         pcall(function()
@@ -436,7 +439,6 @@ spawn(function()
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
             if character and backpack and humanoid then
-                -- ตัวอย่างฟังก์ชันหาอาวุธที่มีค่า kills เพียงพอ
                 local function getQualifiedTool()
                     for _, tool in ipairs(backpack:GetChildren()) do
                         if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
@@ -454,9 +456,6 @@ spawn(function()
                     return nil, nil
                 end
 
-                local equippedToolName = equippedToolName or nil
-                local equippedKills = equippedKills or -1
-
                 local tool, kills = getQualifiedTool()
 
                 if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
@@ -468,7 +467,7 @@ spawn(function()
                     wait(0.75)
                     if tool.Parent == character then
                         wait(0.75)
-                        leftClick()
+                        leftClick() -- หรือ tool:Activate() ถ้าไม่มี leftClick
                     end
 
                     wait(0.5)
