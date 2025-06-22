@@ -113,8 +113,8 @@ local npcList = {
     ["Attacking Noob"] = "Sad noob",
     ["Marine"] = "Injured pirate",
     ["Luffy"] = "That noob",
-    ["Attacking Noob( Farm Sword )"] = "Sword noob",
-    ["Attacking Noob( Farm Gun )"] = "Gun noob"
+    ["Farm Sword"] = "Sword noob",
+    ["Farm Gun"] = "Gun noob"
 }
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
@@ -327,7 +327,7 @@ page1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", "Luffy(Lvl:1000)", "Attacking Noob( Farm Sword )", "Attacking Noob( Farm Gun )" }, function(pcns) SelectedMob = pcns:match("^(.-)%(") or pcns end)
+page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun" }, function(pcns) SelectedMob = pcns:match("^(.-)%(") or pcns end)
 
 local farmLoop = nil
 
@@ -402,7 +402,7 @@ if _G.farmNpc then
                         isTarget = true
                     elseif mob.Name:match(SelectedMob) then
                         isTarget = true
-                    elseif SelectedMob == "Attacking Noob( Farm Sword )" or SelectedMob == "Attacking Noob( Farm Gun )" then
+                    elseif SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then
                         if mob.Name == "Attacking Noob(Lvl:100)" then
                             isTarget = true
                         end
