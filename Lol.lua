@@ -426,50 +426,6 @@ if _G.farmNpc then
     end)
 end
 end)
-    
-    spawn(function()
-        while wait(0.1) do
-            pcall(function()
-                if not _G.farmNpc then return end
-
-                local player = game.Players.LocalPlayer
-                local character = player.Character
-                local backpack = player:FindFirstChild("Backpack")
-                local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-                if not character or not backpack or not humanoid then return end
-
-                local function getQualifieTool()
-                    for _, tool in ipairs(backpack:GetChildren()) do
-                        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                            local kills = tool.Kills.Value
-
-                            if tool.Name == "Sword Master" and kills >= 50 then
-                                return tool
-                            end
-                        end
-                    end
-                    return nil
-                end
-
-                local tool = getQualifieTool()
-
-                if tool and not character:FindFirstChild(tool.Name) then
-                    humanoid:EquipTool(tool)
-                    task.wait(0.75)
-                    if character:FindFirstChild(tool.Name) then
-			wait(0.25)
-                        tool:Activate()
-                    end
-                end
-
-                if humanoid.Health <= 0 or not _G.farmNpc then
-                    humanoid:UnequipTools()
-                end
-            end)
-        end
-    end)
-end)
 
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
