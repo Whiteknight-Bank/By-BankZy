@@ -427,56 +427,65 @@ if _G.farmNpc then
 end
 end)
 		
---[[
-if _G.farmNpc then
-    spawn(function()
-        while _G.farmNpc and wait(0.01) do  -- ✅ ปลอดภัย
-if not character or not backpack or not humanoid then return end
-        local function getQualifiedTool()
-            for _, tool in ipairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
-                    local kills = tool.Kills.Value
-                    if tool.Name == "Thief!" and kills >= 19 then return tool, kills
-                    elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills
-                    elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills
-                    elseif tool.Name == "Marines!" and kills > 29 then return tool, kills
-                    elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills
-                    elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills
-                    elseif tool.Name == "The gunner!" and kills > 14 then return tool, kills
+spawn(function()
+    while _G.farmNpc and wait(0.1) do
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if character and backpack and humanoid then
+                -- ตัวอย่างฟังก์ชันหาอาวุธที่มีค่า kills เพียงพอ
+                local function getQualifiedTool()
+                    for _, tool in ipairs(backpack:GetChildren()) do
+                        if tool:IsA("Tool") and tool:FindFirstChild("Kills") then
+                            local kills = tool.Kills.Value
+                            if tool.Name == "Thief!" and kills >= 19 then return tool, kills
+                            elseif tool.Name == "Let them pay back!" and kills > 29 then return tool, kills
+                            elseif tool.Name == "Annoying noobs...." and kills > 9 then return tool, kills
+                            elseif tool.Name == "Marines!" and kills > 29 then return tool, kills
+                            elseif tool.Name == "The Strongest..." and kills > 0 then return tool, kills
+                            elseif tool.Name == "Sword Master" and kills > 49 then return tool, kills
+                            elseif tool.Name == "The gunner!" and kills > 14 then return tool, kills
+                            end
+                        end
                     end
+                    return nil, nil
+                end
+
+                local equippedToolName = equippedToolName or nil
+                local equippedKills = equippedKills or -1
+
+                local tool, kills = getQualifiedTool()
+
+                if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
+                    _G.forceHold = true
+                    humanoid:EquipTool(tool)
+                    equippedToolName = tool.Name
+                    equippedKills = kills
+
+                    wait(0.75)
+                    if tool.Parent == character then
+                        wait(0.75)
+                        leftClick()
+                    end
+
+                    wait(0.5)
+                    _G.forceHold = false
+                end
+
+                if humanoid.Health <= 0 then
+                    humanoid:UnequipTools()
+                    equippedToolName = nil
+                    equippedKills = -1
+                    _G.forceHold = false
                 end
             end
-            return nil, nil
-        end
-
-        local tool, kills = getQualifiedTool()
-
-        if tool and (equippedToolName ~= tool.Name or equippedKills ~= kills) then
-            _G.forceHold = true
-            humanoid:EquipTool(tool)
-            equippedToolName = tool.Name
-            equippedKills = kills
-
-            wait(0.75)
-            if tool.Parent == character then
-                wait(0.75)
-                leftClick()
-            end
-
-            wait(0.5)
-            _G.forceHold = false
-        end
-
-        if humanoid.Health <= 0 then
-            humanoid:UnequipTools()
-            equippedToolName = nil
-            equippedKills = -1
-            _G.forceHold = false
-        end
-    end)
-end
+        end)
+    end
 end)
-]]--	
+		
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
