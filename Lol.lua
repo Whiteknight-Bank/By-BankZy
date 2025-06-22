@@ -513,7 +513,6 @@ spawn(function()
     end    
 end)
 end
-end)
 
 page1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
