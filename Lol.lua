@@ -520,43 +520,43 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
-local function hasKenDodge(char)
-    for _, obj in ipairs(char:GetDescendants()) do
-        if obj.Name == "KenDodge" then
-            return true
-        end
-    end
-    return false
-end
+page1:Toggle("Auto Haki Ken", false, function(hkxn)
+    _G.autoKen = hkxn
 
-local autoKenThread = nil
+    if hkxn then
+        spawn(function()
+            while _G.autoKen do
+                pcall(function()
+                    local player = game.Players.LocalPlayer
+                    local char = player.Character or workspace:FindFirstChild(player.Name)
+                    if not char then return end
 
-page1:Toggle("Auto Haki Ken", false, function(ken)
-    _G.autoKen = ken
+                    local function hasKenDodge()
+                        for _, obj in ipairs(char:GetDescendants()) do
+                            if obj.Name == "KenDodge" then
+                                return true
+                            end
+                        end
+                        return false
+                    end
 
-    if autoKenThread then
-        autoKenThread:Disconnect()
-        autoKenThread = nil
-    end
-
-    if state then
-        autoKenThread = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character or workspace:FindFirstChild(player.Name)
-                if not char then return end
-
-                if not hasKenDodge(char) then
-                    local vim = game:GetService("VirtualInputManager")
-                    vim:SendKeyEvent(true, Enum.KeyCode.R, false, game)
-                    task.wait(0.1)
-                    vim:SendKeyEvent(false, Enum.KeyCode.R, false, game)
-
-                    repeat
+                    if not hasKenDodge() then
+                        local vim = game:GetService("VirtualInputManager")
+                        vim:SendKeyEvent(true, Enum.KeyCode.R, false, game)
                         task.wait(0.1)
-                    until hasKenDodge(char) or not _G.autoKen
-                end
-            end)
+                        vim:SendKeyEvent(false, Enum.KeyCode.R, false, game)
+
+                        repeat
+                            task.wait(0.2)
+                        until hasKenDodge() or not _G.autoKen
+			else
+                        repeat
+                            task.wait(0.2)
+                        until not hasKenDodge() or not _G.autoKen
+                    end
+                end)
+                task.wait(0.2)
+            end
         end)
     end
 end)
