@@ -605,7 +605,7 @@ page5:Toggle("Walk On Water", false, function(walk)
     end
 end)
 
-page5:Button("Rejoin Server", function()
+page5:Button("Button For Mobile", function()
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
 local UserInputService = game:GetService("UserInputService")
