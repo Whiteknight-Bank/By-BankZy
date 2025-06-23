@@ -625,7 +625,7 @@ page5:Toggle("Walk On Water", false, function(walk)
             local char = plr.Character or plr.CharacterAdded:Wait()
             local root = char:FindFirstChild("HumanoidRootPart")
             if root and seaPart then
-                local goalPos = Vector3.new(root.Position.X, 45, root.Position.Z)
+                local goalPos = Vector3.new(root.Position.X, 52, root.Position.Z)
                 seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
             end
         end)
@@ -644,7 +644,7 @@ page5:Toggle("Walk On Water", false, function(walk)
     end
 end)
 		
-page5:Label("┇ Function Button ┇")
+page5:Label("┇ Function Button Mobile [ BETA ] ┇")
 page5:Button("Button For Mobile", function()
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
