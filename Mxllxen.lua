@@ -118,7 +118,6 @@ local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Auto ┇")    
 
-
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
 
@@ -592,7 +591,7 @@ page5:Toggle("Walk On Water", false, function(walk)
         end
     end
 end)
-
+--[[
 spawn(function()
     while wait(0.1) do
         pcall(function()
@@ -611,5 +610,5 @@ spawn(function()
         end)
     end
 end)
-
+]]--
   end)
