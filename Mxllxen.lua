@@ -604,5 +604,90 @@ page5:Toggle("Walk On Water", false, function(walk)
         end
     end
 end)
-		
+
+page5:Button("Rejoin Server", function()
+local player = game.Players.LocalPlayer
+local mouse = player:GetMouse()
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local gui = Instance.new("ScreenGui")
+gui.Name = "KeyCircleButtons"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = player:WaitForChild("PlayerGui")
+
+local buttonLabels = {"Z", "X", "C", "V"}
+local keyCodes = {
+    Z = Enum.KeyCode.Z,
+    X = Enum.KeyCode.X,
+    C = Enum.KeyCode.C,
+    V = Enum.KeyCode.V,
+}
+
+local buttonSize = UDim2.new(0, 50, 0, 50)
+local spacing = 15
+local startY = 100
+
+local activeButtons = {}
+
+for i, key in ipairs(buttonLabels) do
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -60, 0, startY + (i - 1) * (50 + spacing))
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = button
+
+    activeButtons[key] = false
+
+    button.MouseButton1Click:Connect(function()
+        activeButtons[key] = not activeButtons[key]
+
+        if activeButtons[key] then
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+		else
+            button.BackgroundColor3 = Color3.new(0, 0, 0)
+        end
+    end)
+end
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        for key, isActive in pairs(activeButtons) do
+            if isActive then
+                local keyCode = keyCodes[key]
+                if keyCode then
+                    VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+                    task.wait(0.1)
+                    VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+                    print("Fired key:", key)
+
+                    activeButtons[key] = false
+                    local btn = gui:FindFirstChild(key .. "Button")
+                    if btn then
+                        btn.BackgroundColor3 = Color3.new(0, 0, 0)
+                    end
+                end
+                break
+            end
+        end
+    end
+end)
+end)
+
   end)
