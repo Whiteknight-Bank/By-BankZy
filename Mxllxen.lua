@@ -88,15 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local old;
-old = hookmetamethod(game, "__namecall", function(self, ...)
-local method = getnamecallmethod()
-if method ++ "Kick" and self == game.Players.LocalPlayer then
-return
-end
-return old(self,...)
-end)
-
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
@@ -131,15 +122,15 @@ page1:Label("┇ Function Auto ┇")
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
 
-page1:Label("┇ Function Item ┇")    
+page2:Label("┇ Function Item ┇")    
 		
 local selectedWeapon = nil
 
-page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     selectedWeapon = wapn
 end)
 
-page1:Button("Refresh Weapon", function()
+page2:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -151,7 +142,7 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
-page1:Toggle("Auto Click", false, function(lcik)
+page2:Toggle("Auto Click", false, function(lcik)
     _G.autoclick = lcik
 end)
 
@@ -166,7 +157,7 @@ end)
 end) 
 end)
 
-page1:Toggle("Auto Equip", false, function(aeq)
+page2:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
 
@@ -199,11 +190,11 @@ spawn(function()
     end
 end)
 
-page1:Label("┇ Function Farm ┇")
+page2:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page1:Dropdown("Select Mobs:", {
+page2:Dropdown("Select Mobs:", {
     "All", "", "",
     "", "",
     "", "", ""
@@ -211,7 +202,7 @@ page1:Dropdown("Select Mobs:", {
     SelectedMob = pcns 
 end)
 
-page1:Toggle("Auto Farm", false, function(befrm)
+page2:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)				
 
@@ -306,7 +297,13 @@ spawn(function()
         end)
     end
 end)
-		
+
+local Tab3 = Window:Taps("Island")
+local page3 = Tab3:newpage()
+
+page3:Label("┇ Teleport Island ┇")
+
+
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
