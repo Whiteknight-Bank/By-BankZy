@@ -99,6 +99,7 @@ if hookmetamethod then
         local NameCallMethod = getnamecallmethod()
 
         if tostring(string.lower(NameCallMethod)) == "kick" and not first then
+            print("AntiKick: blocked attempt to kick you.")
             return nil
         end
 
@@ -111,7 +112,7 @@ else
     warn("AntiKick: unsupported executor, missing hookmetamethod function.")
     return
 end
-
+		
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
