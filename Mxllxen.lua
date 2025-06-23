@@ -117,6 +117,21 @@ local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Auto ┇")    
+page1:Toggle("Notifile Shank", false, function(shk)
+    _G.shank = shk
+end)	
+
+page1:Toggle("Bring Fruit & Book", false, function(brdf)
+    _G.bringdf = brdf
+end)	
+
+page1:Toggle("Notifile White Bread", false, function(whbd)
+    _G.whitebread = whbd
+end)	
+
+page1:Button("Teleport All Chest" , function()
+        print("Not Working")
+end)
 
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
@@ -223,6 +238,14 @@ page2:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)				
 
+page2:Toggle("Auto Claim Quest Board", false, function(clmq)
+    _G.claimQuest = clmq
+end)	
+
+page2:Toggle("Auto Buso", false, function(buso)
+    _G.autobuso = buso
+end)
+
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
@@ -256,63 +279,6 @@ page2:Toggle("View", false, function(state)
 			end
 		end
 	end
-end)
-
-page2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
-	_G.bringPlayer = pla
-end)
-
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.bringPlayer and selectedPlayer ~= "" then
-                local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
-                if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local targetChar = targetPlayer.Character
-                    local targetRoot = targetChar.HumanoidRootPart
-
-                    targetRoot.CanCollide = false
-                    targetRoot.Anchored = true
-                    targetRoot.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -8)
-
-                    if targetRoot.Size.Magnitude < 10 then
-                        targetRoot.Size = Vector3.new(25, 25, 25)
-                    end
-
-                    if targetChar:FindFirstChild("Humanoid") and targetChar.Humanoid.Health <= 0 then
-                        targetRoot.Anchored = false
-                        targetRoot.Size = Vector3.new(2, 2, 1)
-                    end
-                end
-            end
-        end)
-    end
-end)
-		
-page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
-	_G.BringAllPlayer = plal
-end)
-
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.BringAllPlayer then
-                for i, v in pairs(game.Players:GetPlayers()) do
-                    if v ~= player and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                        local root = v.Character.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
-
-                        if v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                        end
-                    end
-                end
-            end
-        end)
-    end
 end)
 
 local Tab3 = Window:Taps("Island")
