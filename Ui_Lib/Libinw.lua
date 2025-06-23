@@ -58,7 +58,7 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
 corner.Parent = toggleButton
 
-local title = "Bank Hub"
+local title = " "
 local titleBar = Instance.new("TextLabel")
 titleBar.Size = UDim2.new(1, 0, 0, 35)
 titleBar.Position = UDim2.new(0, 0, 0, 0)
