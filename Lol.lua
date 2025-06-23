@@ -431,31 +431,49 @@ page1:Toggle("Auto Farm", false, function(befrm)
                     end
                 end
 
-                if SelectedMob == "Farm Gun" then
-                    local gunHit = nil
-                    local playerChar = workspace:FindFirstChild(player.Name)
-                    if playerChar then
-                        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
-                        if hrp and hrp:FindFirstChild("GunHitBox") then
-                            gunHit = hrp:FindFirstChild("GunHitBox")
-                        end
-                    end
+if SelectedMob == "Farm Gun" then
+    local playerChar = workspace:FindFirstChild(player.Name)
+    if playerChar then
+        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local gunHit = nil
 
-                    if gunHit then
-                        for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                            if mob.Name == "Attacking Noob(Lvl:100)" then
-                                local torso = mob:FindFirstChild("Torso")
-                                if torso then
-                                    gunHit.Parent = torso
-                                    gunHit.CFrame = torso.CFrame
-                                end
-                            end
+            -- หา GunHitBox ที่อาจอยู่ใน HRP หรือตัวมอนก่อนหน้า
+            local possibleParents = { hrp }
+            for _, mob in ipairs(workspace.Npcs:GetChildren()) do
+                if mob.Name == "Attacking Noob(Lvl:100)" then
+                    local torso = mob:FindFirstChild("Torso")
+                    if torso and torso:FindFirstChild("GunHitBox") then
+                        table.insert(possibleParents, torso)
+                    end
+                end
+            end
+
+            for _, parent in ipairs(possibleParents) do
+                local candidate = parent:FindFirstChild("GunHitBox")
+                if candidate then
+                    gunHit = candidate
+                    break
+                end
+            end
+
+            if gunHit and gunHit.Parent then
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob(Lvl:100)" then
+                        local torso = mob:FindFirstChild("Torso")
+                        if torso then
+                            gunHit.Parent = torso
+                            gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
                         end
                     end
                 end
-            end)
-        end)
+            end
+        end
     end
+end
+end)
+end)
+end
 end)
 
 page1:Toggle("Auto Quest", false, function(qust)
