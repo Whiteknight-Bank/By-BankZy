@@ -332,19 +332,42 @@ SelectedMob = pcns:match("^(.-)%(") or pcns
 end)
 
 local clickLoop = nil
-local farmLoop = nil
 
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
 
-    if clickLoop then
-        clickLoop:Disconnect()
-        clickLoop = nil
+    if farmLoop then
+        farmLoop:Disconnect()
+        farmLoop = nil
     end
 
     if _G.farmNpc then
-        clickLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
             pcall(function()
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local hum = char and char:FindFirstChild("Humanoid")
+                if not char or not hum or hum.Health <= 0 then return end
+                if not SelectedMob or SelectedMob == "" then return end
+
+                local offset = -10
+                local tool = char:FindFirstChildOfClass("Tool")
+                if tool then
+                    local toolName = tool.Name
+                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                        if string.find(v, toolName) then
+                            offset = -6
+                            break
+                        end
+                    end
+                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                        if string.find(v, toolName) then
+                            offset = -5
+                            break
+                        end
+                    end
+                end
+
                 local targetNames = {}
 
                 if SelectedMob == "All" then
@@ -378,73 +401,63 @@ page1:Toggle("Auto Farm", false, function(befrm)
                         end
                     end
                 end
+
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                        local isTarget = false
+
+                        if SelectedMob == "All" then
+                            isTarget = true
+                        elseif mob.Name:match(SelectedMob) then
+                            isTarget = true
+                        elseif SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then
+                            if mob.Name == "Attacking Noob(Lvl:100)" then
+                                isTarget = true
+                            end
+                        end
+
+                        if isTarget then
+                            local root = mob.HumanoidRootPart
+                            root.CanCollide = false
+                            root.Size = Vector3.new(10, 10, 10)
+                            root.Anchored = true
+                            root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                            if mob.Humanoid.Health <= 0 then
+                                root.Size = Vector3.new(0, 0, 0)
+                                mob:Destroy()
+                            end
+                        end
+                    end
+                end
+
+                if SelectedMob == "Farm Gun" then
+                    local gunHit = nil
+                    local playerChar = workspace:FindFirstChild(player.Name)
+                    if playerChar then
+                        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
+                        if hrp and hrp:FindFirstChild("GunHitBox") then
+                            gunHit = hrp:FindFirstChild("GunHitBox")
+                        end
+                    end
+
+                    if gunHit then
+                        for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                            if mob.Name == "Attacking Noob(Lvl:100)" then
+                                local torso = mob:FindFirstChild("Torso")
+                                if torso then
+                                    gunHit.Parent = torso
+                                    gunHit.CFrame = torso.CFrame
+                                    break
+                                end
+                            end
+                        end
+                    end
+                end
             end)
         end)
     end
 end)
-
-    if farmLoop then
-        farmLoop:Disconnect()
-        farmLoop = nil
-    end
-	
-    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-        pcall(function()
-            local player = game.Players.LocalPlayer
-            local char = player.Character
-            local hum = char and char:FindFirstChild("Humanoid")
-            if not char or not hum or hum.Health <= 0 then return end
-            if not SelectedMob or SelectedMob == "" then return end
-
-            local tool = char:FindFirstChildOfClass("Tool")
-            local offset = -10
-
-            if tool then
-                local toolName = tool.Name
-                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                    if string.find(v, toolName) then
-                        offset = -6
-                        break
-                    end
-                end
-                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                    if string.find(v, toolName) then
-                        offset = -5
-                        break
-                    end
-                end
-            end
-
-            for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                    local isTarget = false
-
-                    if SelectedMob == "All" then
-                        isTarget = true
-                    elseif mob.Name:match(SelectedMob) then
-                        isTarget = true
-                    elseif SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then
-                        if mob.Name == "Attacking Noob(Lvl:100)" then
-                            isTarget = true
-                        end
-                    end
-
-                    if isTarget then
-                        local root = mob.HumanoidRootPart
-                        root.CanCollide = false
-                        root.Size = Vector3.new(10, 10, 10)
-                        root.Anchored = true
-                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
-
-                        if mob.Humanoid.Health <= 0 then
-                            root.Size = Vector3.new(0, 0, 0)
-                            mob:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end)
 
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
