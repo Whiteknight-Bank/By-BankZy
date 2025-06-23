@@ -88,6 +88,15 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
+local old;
+old = hookmetamethod(game, "__namecall", function(self, ...)
+local method = getnamecallmethod()
+if method ++ "Kick" and self == game.Players.LocalPlayer then
+return
+end
+return old(self,...)
+end)
+
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
