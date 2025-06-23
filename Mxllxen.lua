@@ -92,7 +92,23 @@ local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whitek
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
-		
+
+local first = false
+
+if hookmetamethod then
+    local OldNameCall
+    OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
+        local Method = getnamecallmethod()
+
+        if typeof(Method) == "string" and Method:lower() == "kick" and not first then
+            first = true
+            return nil
+        end
+
+        return OldNameCall(Self, ...)
+    end))
+end
+
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
