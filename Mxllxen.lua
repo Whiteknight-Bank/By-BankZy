@@ -88,19 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local mt = getrawmetatable(game)
-setreadonly(mt, false)
-
-local oldNamecall = mt.__namecall
-
-mt.__namecall = newcclosure(function(self, ...)
-    local method = getnamecallmethod()
-    if method == "Kick" or method == "kick" then
-        return nil -- block Kick
-    end
-    return oldNamecall(self, ...)
-end)
-
 local lp = game:GetService("Players").LocalPlayer
 lp.Kick = function() return end
 
