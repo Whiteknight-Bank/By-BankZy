@@ -647,8 +647,8 @@ end)
 page5:Label("┇ Function Button Mobile [ BETA ] ┇")
 page5:Button("Button For Mobile", function()
 local player = game.Players.LocalPlayer
-local mouse = player:GetMouse()
 local UserInputService = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local gui = Instance.new("ScreenGui")
@@ -697,17 +697,34 @@ for i, key in ipairs(buttonLabels) do
         activeButtons[key] = not activeButtons[key]
 
         if activeButtons[key] then
-            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-		else
-            button.BackgroundColor3 = Color3.new(0, 0, 0)
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- เขียว
+        else
+            button.BackgroundColor3 = Color3.new(0, 0, 0) -- ดำ
         end
     end)
 end
 
+-- แก้ปัญหาเมาส์แสดงบนมือถือ
+UserInputService.MouseIconEnabled = false
+
+-- รองรับแตะบนมือถือแบบไม่ทำให้ควบคุมค้าง
+UserInputService.TouchTapInWorld:Connect(function(pos, gp)
+    for key, isActive in pairs(activeButtons) do
+        if isActive then
+            local keyCode = keyCodes[key]
+            if keyCode then
+                VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+            end
+            break
+        end
+    end
+end)
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
         for key, isActive in pairs(activeButtons) do
             if isActive then
                 local keyCode = keyCodes[key]
@@ -715,19 +732,10 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
                     VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
                     task.wait(0.1)
                     VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-                    print("Fired key:", key)
-
-                    activeButtons[key] = false
-                    local btn = gui:FindFirstChild(key .. "Button")
-                    if btn then
-                        btn.BackgroundColor3 = Color3.new(0, 0, 0)
-                    end
                 end
                 break
             end
         end
     end
 end)
-end)
-
   end)
