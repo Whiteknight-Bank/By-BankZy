@@ -432,40 +432,42 @@ page1:Toggle("Auto Farm", false, function(befrm)
                 end
 
 if SelectedMob == "Farm Gun" then
-    local playerChar = workspace:FindFirstChild(player.Name)
-    if playerChar then
-        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            local gunHit = nil
+    local playerChar = workspace:FindFirstChild(game.Players.LocalPlayer.Name)
+    if not playerChar then return end
+    local hrp = playerChar:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
 
-            -- หา GunHitBox ที่อาจอยู่ใน HRP หรือตัวมอนก่อนหน้า
-            local possibleParents = { hrp }
-            for _, mob in ipairs(workspace.Npcs:GetChildren()) do
-                if mob.Name == "Attacking Noob(Lvl:100)" then
-                    local torso = mob:FindFirstChild("Torso")
-                    if torso and torso:FindFirstChild("GunHitBox") then
-                        table.insert(possibleParents, torso)
-                    end
-                end
+    local gunHit = nil
+    local possibleParents = { hrp }
+    for _, mob in ipairs(workspace.Npcs:GetChildren()) do
+        if mob.Name == "Attacking Noob(Lvl:100)" then
+            local torso = mob:FindFirstChild("Torso")
+            if torso and torso:FindFirstChild("GunHitBox") then
+                table.insert(possibleParents, torso)
             end
+        end
+    end
 
-            for _, parent in ipairs(possibleParents) do
-                local candidate = parent:FindFirstChild("GunHitBox")
-                if candidate then
-                    gunHit = candidate
-                    break
-                end
-            end
+    for _, parent in ipairs(possibleParents) do
+        local candidate = parent:FindFirstChild("GunHitBox")
+        if candidate then
+            gunHit = candidate
+            break
+        end
+    end
 
-            if gunHit and gunHit.Parent then
-                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                    if mob.Name == "Attacking Noob(Lvl:100)" then
-                        local torso = mob:FindFirstChild("Torso")
-                        if torso then
-                            gunHit.Parent = torso
-                            gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
-                        end
-                    end
+    if gunHit and gunHit.Parent then
+        for _, mob in pairs(workspace.Npcs:GetChildren()) do
+            if mob.Name == "Attacking Noob(Lvl:100)" then
+                local torso = mob:FindFirstChild("Torso")
+                if torso then
+                    gunHit.Parent = torso
+                    gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
+                    wait(0.1)  -- รอให้ทำดาเมจ
+
+                    gunHit.Parent = hrp
+                    gunHit.CFrame = hrp.CFrame
+                    wait(0.1)  -- รอระยะก่อนวนยิงรอบใหม่
                 end
             end
         end
