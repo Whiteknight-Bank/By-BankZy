@@ -118,4 +118,271 @@ local page1 = Tab1:newpage()
 
 page1:Label("┇ Function Auto ┇")    
 
+
+local Tab5 = Window:Taps("Misc")
+local page5 = Tab5:newpage()
+
+page5:Label("┇ Function Sever ┇")
+page5:Button("Rejoin Server", function()
+create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
+wait(3)
+game.Players.LocalPlayer:Kick()
+game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+end)
+
+page5:Button("Hop Server", function()
+create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
+wait(3)
+
+local PlaceID = game.PlaceId
+          local AllIDs = {}
+          local foundAnything = ""
+          local actualHour = os.date("!*t").hour
+          local Deleted = false
+          --[[
+          local File = pcall(function()
+              AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+          end)
+          if not File then
+              table.insert(AllIDs, actualHour)
+              writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+          end
+          ]]
+          function TPReturner()
+              local Site;
+              if foundAnything == "" then
+                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+              else
+                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+              end
+              local ID = ""
+              if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                  foundAnything = Site.nextPageCursor
+              end
+              local num = 0;
+              for i,v in pairs(Site.data) do
+                  local Possible = true
+                  ID = tostring(v.id)
+                  if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                      for _,Existing in pairs(AllIDs) do
+                          if num ~= 0 then
+                              if ID == tostring(Existing) then
+                                  Possible = false
+                              end
+                          else
+                              if tonumber(actualHour) ~= tonumber(Existing) then
+                                  local delFile = pcall(function()
+                                      -- delfile("NotSameServers.json")
+                                      AllIDs = {}
+                                      table.insert(AllIDs, actualHour)
+                                  end)
+                              end
+                          end
+                          num = num + 1
+                      end
+                      if Possible == true then
+                          table.insert(AllIDs, ID)
+                          wait()
+                          pcall(function()
+                              -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+                              wait()
+                              game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                          end)
+                          wait(4)
+                      end
+                  end
+              end
+          end
+
+          function Teleport()
+              while wait() do
+                  pcall(function()
+                      TPReturner()
+                      if foundAnything ~= "" then
+                          TPReturner()
+                      end
+                  end)
+              end
+          end
+
+          Teleport()
+
+end)
+		
+page5:Label("┇ Another Functions ┇")
+page5:Button("Boost FPS", function()
+create:Notifile("", "Pls wait start boost fps & show fps", 3)
+wait(2)
+
+local ToDisable = {
+ Textures = true,
+ VisualEffects = true,
+ Parts = true,
+ Particles = true,
+ Sky = true
+}
+ 
+local ToEnable = {
+ FullBright = false
+}
+ 
+local Stuff = {}
+ 
+for _, v in next, game:GetDescendants() do
+ if ToDisable.Parts then
+  if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
+   v.Material = Enum.Material.SmoothPlastic
+   table.insert(Stuff, 1, v)
+  end
+ end
+ 
+ if ToDisable.Particles then
+  if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
+   v.Enabled = false
+   table.insert(Stuff, 1, v)
+  end
+ end
+ 
+ if ToDisable.VisualEffects then
+  if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
+   v.Enabled = false
+   table.insert(Stuff, 1, v)
+  end
+ end
+ 
+ if ToDisable.Textures then
+  if v:IsA("Decal") or v:IsA("Texture") then
+   v.Texture = ""
+   table.insert(Stuff, 1, v)
+  end
+ end
+ 
+ if ToDisable.Sky then
+  if v:IsA("Sky") then
+   v.Parent = nil
+   table.insert(Stuff, 1, v)
+  end
+ end
+end
+ 
+game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled "..#Stuff.." assets / effects. Settings :")
+ 
+for i, v in next, ToDisable do
+ print(tostring(i)..": "..tostring(v))
+end
+ 
+if ToEnable.FullBright then
+    local Lighting = game:GetService("Lighting")
+ 
+    Lighting.FogColor = Color3.fromRGB(255, 255, 255)
+    Lighting.FogEnd = math.huge
+    Lighting.FogStart = math.huge
+    Lighting.Ambient = Color3.fromRGB(255, 255, 255)
+    Lighting.Brightness = 5
+    Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
+    Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
+    Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
+    Lighting.Outlines = true
+				end
+-- FPS Counter Script (LocalScript)
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+-- สร้าง GUI
+local player = Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "FPSCounter"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- สร้าง TextLabel แสดง FPS
+local fpsLabel = Instance.new("TextLabel")
+fpsLabel.Size = UDim2.new(0, 120, 0, 35)                      -- ขนาดใหญ่ขึ้นนิดหน่อย
+fpsLabel.Position = UDim2.new(1, -130, 0, 10)                 -- มุมขวาบน
+fpsLabel.AnchorPoint = Vector2.new(0, 0)
+fpsLabel.BackgroundTransparency = 1                           -- ไม่มีพื้นหลัง
+fpsLabel.BorderSizePixel = 0
+fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)               -- สีเขียว
+fpsLabel.TextStrokeTransparency = 0.5                         -- ขอบตัวอักษร
+fpsLabel.Font = Enum.Font.SourceSansBold
+fpsLabel.TextSize = 22                                        -- ตัวอักษรใหญ่ขึ้น
+fpsLabel.Text = "FPS: 0"
+fpsLabel.TextXAlignment = Enum.TextXAlignment.Right          -- ชิดขวา
+fpsLabel.Parent = screenGui
+
+-- อัปเดต FPS ทุกวินาที
+local lastUpdate = tick()
+local frameCount = 0
+
+RunService.RenderStepped:Connect(function()
+	frameCount += 1
+	local currentTime = tick()
+	if currentTime - lastUpdate >= 1 then
+		local fps = math.floor(frameCount / (currentTime - lastUpdate))
+		fpsLabel.Text = "FPS: " .. fps
+		lastUpdate = currentTime
+		frameCount = 0
+	end
+end)
+end)
+
+local afkConnection
+
+page5:Toggle("Anti AFK", false, function(state)
+
+    if state then
+	create:Notifile("", "Protect kick from the server when you afk :)", 3)
+        local vu = game:GetService("VirtualUser")
+        afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
+            vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            wait(1)
+            vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        end)
+    else
+        if afkConnection then
+            afkConnection:Disconnect()
+            afkConnection = nil
+        end
+    end
+end)
+
+local RunService = game:GetService("RunService")
+local followConnection
+local seaPart
+
+page5:Toggle("Walk On Water", false, function(walk)
+    if walk then
+        create:Notifile("", "You can walk on sea now! :)", 3)
+
+        seaPart = Instance.new("Part")
+        seaPart.Name = "InvisibleSea"
+        seaPart.Anchored = true
+        seaPart.CanCollide = true
+        seaPart.Transparency = 1
+        seaPart.Size = Vector3.new(50, 1, 50)
+        seaPart.Parent = workspace
+
+        followConnection = RunService.RenderStepped:Connect(function()
+            local char = plr.Character or plr.CharacterAdded:Wait()
+            local root = char:FindFirstChild("HumanoidRootPart")
+            if root and seaPart then
+                local goalPos = Vector3.new(root.Position.X, -5.5, root.Position.Z)
+                seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
+            end
+        end)
+
+    else
+        create:Notifile("", "Off walk on sea now! :(", 3)
+
+        if followConnection then
+            followConnection:Disconnect()
+            followConnection = nil
+        end
+        if seaPart then
+            seaPart:Destroy()
+            seaPart = nil
+        end
+    end
+end)
+
   end)
