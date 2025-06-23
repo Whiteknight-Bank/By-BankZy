@@ -317,9 +317,32 @@ end)
 local Tab3 = Window:Taps("Island")
 local page3 = Tab3:newpage()
 
+local plr = game.Players.LocalPlayer
+
 page3:Label("┇ Teleport Island ┇")
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
 
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
 
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
+
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
+
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
+
+page3:Button("Bandit Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+end)
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
