@@ -94,19 +94,19 @@ local Window = create:Win("ReaperX Hub | One Piece Millenium")
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
 local first = false
+
 if hookmetamethod then
+    local OldNameCall
     OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
         local NameCallMethod = getnamecallmethod()
 
-        if tostring(string.lower(NameCallMethod)) == "kick" and not first then
+        if typeof(NameCallMethod) == "string" and NameCallMethod:lower() == "kick" and not first then
+            first = true
             return nil
         end
 
         return OldNameCall(Self, ...)
     end)
-    if not first then
-        first = true
-    end
 end
 		
 local Cache = { DevConfig = {} };
