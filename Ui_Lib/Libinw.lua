@@ -42,7 +42,7 @@ function library:Win(title)
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
 toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Position = UDim2.new(0.5, 422, 0.5, -250) -- ตรงมุมขวาบนของเมนู
+toggleButton.Position = UDim2.new(0.5, 460, 0.5, -250)
 toggleButton.Size = UDim2.new(0, 28, 0, 28)
 toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 toggleButton.BackgroundTransparency = 0.2
@@ -53,18 +53,18 @@ toggleButton.TextSize = 16
 toggleButton.TextXAlignment = Enum.TextXAlignment.Center
 toggleButton.TextYAlignment = Enum.TextYAlignment.Center
 toggleButton.ZIndex = 10
-toggleButton.Parent = gui -- อยู่ใน ScreenGui
+toggleButton.Parent = gui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
 corner.Parent = toggleButton
     
--- Title bar (ใช้ลาก)
     local titleBar = Instance.new("TextLabel")
     titleBar.Size = UDim2.new(1, 0, 0, 35)
     titleBar.Position = UDim2.new(0, 0, 0, 0)
     titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
+    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleBar.BackgroundTransparency = 0.4
     titleBar.BackgroundTransparency = 0.2
     titleBar.Text = title
     titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -73,12 +73,12 @@ corner.Parent = toggleButton
     titleBar.Parent = main
     titleBar.Active = true
 
-    -- Layouts
     local tabButtons = Instance.new("Frame", main)
     tabButtons.Size = UDim2.new(0, 120, 1, -35)
     tabButtons.Position = UDim2.new(0, 0, 0, 35)
     tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)BackgroundTransparency = 0.4
+    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    tabButtons.BackgroundTransparency = 0.4
     tabButtons.BackgroundTransparency = 0.3
 
     local tabLayout = Instance.new("UIListLayout", tabButtons)
@@ -90,7 +90,6 @@ corner.Parent = toggleButton
     pages.Position = UDim2.new(0, 130, 0, 40)
     pages.BackgroundTransparency = 1
 
-    -- Dragging Menu by titleBar (ลากเมนู)
     local dragging, dragStart, startPos
     titleBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -111,12 +110,10 @@ corner.Parent = toggleButton
         end
     end)
 
-    -- ตำแหน่งปุ่มติดซ้ายบนเมนูเสมอ
     RunService.RenderStepped:Connect(function()
         toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X - 85, 0, main.AbsolutePosition.Y)
     end)
 
-    -- Toggle ปิด/เปิดเมนูแบบมีแอนิเมชัน
     local isOpen = true
     local fullSize = main.Size
     local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
