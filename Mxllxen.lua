@@ -591,24 +591,5 @@ page5:Toggle("Walk On Water", false, function(walk)
         end
     end
 end)
---[[
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if hookmetamethod and not _G.HookedKick then
-                _G.HookedKick = true
-
-                local OldNameCall
-                OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-                    local method = getnamecallmethod()
-                    if typeof(method) == "string" and method:lower() == "kick" then
-                        return nil
-			end
-                    return self[method](self, ...)
-                end))
-            end
-        end)
-    end
-end)
-]]--
+		
   end)
