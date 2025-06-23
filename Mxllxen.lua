@@ -99,18 +99,14 @@ if hookmetamethod then
         local NameCallMethod = getnamecallmethod()
 
         if tostring(string.lower(NameCallMethod)) == "kick" and not first then
-            print("AntiKick: blocked attempt to kick you.")
             return nil
         end
 
         return OldNameCall(Self, ...)
     end)
-    if not First then
-        First = true
+    if not first then
+        first = true
     end
-else
-    warn("AntiKick: unsupported executor, missing hookmetamethod function.")
-    return
 end
 		
 local Cache = { DevConfig = {} };
