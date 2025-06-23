@@ -93,6 +93,25 @@ local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
+local first = false
+if hookmetamethod then
+    OldNameCall = hookmetamethod(game, "__namecall", function(Self, ...)
+        local NameCallMethod = getnamecallmethod()
+
+        if tostring(string.lower(NameCallMethod)) == "kick" and not first then
+            return nil
+        end
+
+        return OldNameCall(Self, ...)
+    end)
+    if not First then
+        First = true
+    end
+else
+    warn("AntiKick: unsupported executor, missing hookmetamethod function.")
+    return
+end
+
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
