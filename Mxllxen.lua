@@ -321,14 +321,14 @@ local plr = game.Players.LocalPlayer
 
 page3:Label("┇ Teleport Island ┇")
 page3:Button("Bandit Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-951, 58, -1154)
 end)
 
-page3:Button("Bandit Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+page3:Button("Buggy Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2527, 77, -135)
 end)
 
-page3:Button("Bandit Island" , function()
+page3:Button("Pyramid Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
 end)
 
