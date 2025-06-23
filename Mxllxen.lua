@@ -327,6 +327,34 @@ page3:Button("Snow Mountains Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(1567, 59, -4826)
 end)
 
+page3:Button("Revolutionary Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-3104, 63, -3830)
+end)
+
+page3:Button("Marine Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(2799, 77, -1440)
+end)
+
+page3:Button("Fishman Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-3999, 88, 430)
+end)
+
+page3:Button("Snowy Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1042, 58, -3245)
+end)
+
+page3:Button("Monkey Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-949, 63, 716)
+end)
+
+page3:Button("Duke Master Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(838, 61, -2133)
+end)
+
+page3:Button("Market Seller Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2520, 84, -1991)
+end)
+
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
