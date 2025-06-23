@@ -434,20 +434,48 @@ page1:Toggle("Auto Farm", false, function(befrm)
                             end
                         end
 
-                        -- ถ้าเป็น Farm Gun ให้จำลอง touch ระหว่าง tool กับ Torso
-                        if SelectedMob == "Farm Gun" and mob.Name == "Attacking Noob(Lvl:100)" then
-                            local torso = mob:FindFirstChild("Torso")
-                            if torso and tool and tool:FindFirstChild("Handle") then
-                                local handle = tool:FindFirstChild("Handle")
-                                firetouchinterest(handle, torso, 0)
-                                firetouchinterest(handle, torso, 1)
-                            end
+        if SelectedMob == "Farm Gun" then
+    local playerChar = workspace:FindFirstChild(player.Name)
+    if playerChar then
+        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local gunHit = nil
+
+            local possibleParents = { hrp }
+            for _, mob in ipairs(workspace.Npcs:GetChildren()) do
+                if mob.Name == "Attacking Noob(Lvl:100)" then
+                    local torso = mob:FindFirstChild("Torso")
+                    if torso and torso:FindFirstChild("GunHitBox") then
+                        table.insert(possibleParents, torso)
+                    end
+                end
+            end
+
+            for _, parent in ipairs(possibleParents) do
+                local candidate = parent:FindFirstChild("GunHitBox")
+                if candidate then
+                    gunHit = candidate
+                    break
+                end
+            end
+
+            if gunHit and gunHit.Parent then
+                for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                    if mob.Name == "Attacking Noob(Lvl:100)" then
+                        local torso = mob:FindFirstChild("Torso")
+                        if torso then
+                            gunHit.Parent = torso
+                            gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
                         end
                     end
                 end
-            end)
-        end)
+            end
+        end
     end
+end
+end)
+end)
+end
 end)
 		
 page1:Toggle("Auto Quest", false, function(qust)
