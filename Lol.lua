@@ -327,11 +327,15 @@ page1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page1:Dropdown("Select Mobs:", { "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)", "Attacking Noob(Lvl:100)", "Marine(Lvl:200)", "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun" }, function(pcns) 
-SelectedMob = pcns:match("^(.-)%(") or pcns 
+page1:Dropdown("Select Mobs:", {
+    "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)",
+    "Attacking Noob(Lvl:100)", "Marine(Lvl:200)",
+    "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun"
+}, function(pcns) 
+    SelectedMob = pcns:match("^(.-)%(") or pcns 
 end)
 
-local clickLoop = nil
+local farmLoop = nil
 
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
@@ -369,7 +373,6 @@ page1:Toggle("Auto Farm", false, function(befrm)
                 end
 
                 local targetNames = {}
-
                 if SelectedMob == "All" then
                     for _, v in pairs(npcList) do
                         if type(v) == "table" then
@@ -393,6 +396,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
                     end
                 end
 
+                -- ClickDetector
                 for _, obj in ipairs(workspace:GetDescendants()) do
                     if obj:IsA("Model") and table.find(targetNames, obj.Name) then
                         local head = obj:FindFirstChild("Head")
@@ -402,6 +406,7 @@ page1:Toggle("Auto Farm", false, function(befrm)
                     end
                 end
 
+                -- ดึงมอนมา
                 for _, mob in pairs(workspace.Npcs:GetChildren()) do
                     if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                         local isTarget = false
@@ -428,56 +433,23 @@ page1:Toggle("Auto Farm", false, function(befrm)
                                 mob:Destroy()
                             end
                         end
+
+                        -- ถ้าเป็น Farm Gun ให้จำลอง touch ระหว่าง tool กับ Torso
+                        if SelectedMob == "Farm Gun" and mob.Name == "Attacking Noob(Lvl:100)" then
+                            local torso = mob:FindFirstChild("Torso")
+                            if torso and tool and tool:FindFirstChild("Handle") then
+                                local handle = tool:FindFirstChild("Handle")
+                                firetouchinterest(handle, torso, 0)
+                                firetouchinterest(handle, torso, 1)
+                            end
+                        end
                     end
                 end
-
-if SelectedMob == "Farm Gun" then
-    local playerChar = workspace:FindFirstChild(game.Players.LocalPlayer.Name)
-    if not playerChar then return end
-    local hrp = playerChar:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    local gunHit = nil
-    local possibleParents = { hrp }
-    for _, mob in ipairs(workspace.Npcs:GetChildren()) do
-        if mob.Name == "Attacking Noob(Lvl:100)" then
-            local torso = mob:FindFirstChild("Torso")
-            if torso and torso:FindFirstChild("GunHitBox") then
-                table.insert(possibleParents, torso)
-            end
-        end
+            end)
+        end)
     end
-
-    for _, parent in ipairs(possibleParents) do
-        local candidate = parent:FindFirstChild("GunHitBox")
-        if candidate then
-            gunHit = candidate
-            break
-        end
-    end
-
-    if gunHit and gunHit.Parent then
-        for _, mob in pairs(workspace.Npcs:GetChildren()) do
-            if mob.Name == "Attacking Noob(Lvl:100)" then
-                local torso = mob:FindFirstChild("Torso")
-                if torso then
-                    gunHit.Parent = torso
-                    gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
-                    wait(0.1)  -- รอให้ทำดาเมจ
-
-                    gunHit.Parent = hrp
-                    gunHit.CFrame = hrp.CFrame
-                    wait(0.1)  -- รอระยะก่อนวนยิงรอบใหม่
-                end
-            end
-        end
-    end
-end
 end)
-end)
-end
-end)
-
+		
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
