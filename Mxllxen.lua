@@ -119,6 +119,185 @@ local page1 = Tab1:newpage()
 page1:Label("┇ Function Auto ┇")    
 
 
+local Tab2 = Window:Taps("Farm")
+local page2 = Tab2:newpage()
+
+page1:Label("┇ Function Item ┇")    
+		
+local selectedWeapon = nil
+
+page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+    selectedWeapon = wapn
+end)
+
+page1:Button("Refresh Weapon", function()
+    table.clear(Wapon)
+    for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if v:IsA("Tool") then
+            table.insert(Wapon, v.Name)
+        end
+    end
+				
+wait(0.3)
+create:Notifile("", "Dropdown Refresh!", 2)
+end)
+		
+page1:Toggle("Auto Click", false, function(lcik)
+    _G.autoclick = lcik
+end)
+
+spawn(function() 
+game:GetService("RunService").RenderStepped:Connect(function() 
+pcall(function() 
+if _G.autoclick then 
+game:GetService'VirtualUser':CaptureController() 
+game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
+end 
+end) 
+end) 
+end)
+
+page1:Toggle("Auto Equip", false, function(aeq)
+    _G.autoequip = aeq
+end)
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.autoequip or _G.forceHold then return end  -- ❗️บล็อกตอนมีการใช้จาก farm
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
+            local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+            if not character or not backpack or not humanoid then return end
+
+            local tool = backpack:FindFirstChild(selectedWeapon)
+            if tool and not character:FindFirstChild(tool.Name) then
+                humanoid:EquipTool(tool)
+                task.wait(0.05)
+
+                if character:FindFirstChild(tool.Name) then
+                    tool:Activate()
+                end
+            end
+
+            if humanoid.Health <= 0 then
+                humanoid:UnequipTools()
+            end
+        end)
+    end
+end)
+
+page1:Label("┇ Function Farm ┇")
+
+local SelectedMob = ""
+
+page1:Dropdown("Select Mobs:", {
+    "All", "", "",
+    "", "",
+    "", "", ""
+}, function(pcns) 
+    SelectedMob = pcns 
+end)
+
+page1:Toggle("Auto Farm", false, function(befrm)
+    _G.farmNpc = befrm
+end)				
+
+local Tab2 = Window:Taps("Players")
+local page2 = Tab2:newpage()
+
+page2:Label("┇ Player ┇")
+page2:Dropdown("Select Player:", playerNames, function(name)
+    selectedPlayer = name
+end)
+
+page2:Button("Refresh Player", function()
+    table.clear(playerNames)
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        table.insert(playerNames, player.Name)
+    end
+
+wait(0.3)
+create:Notifile("", "Dropdown Refresh!", 2)
+end)
+
+page2:Button("Click to Tp", function()
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
+end)
+
+page2:Toggle("View", false, function(state)
+	if selectedPlayer then
+		local target = Players:FindFirstChild(selectedPlayer)
+		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
+			if state then
+				Camera.CameraSubject = target.Character.Humanoid
+			else
+				Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+			end
+		end
+	end
+end)
+
+page2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
+	_G.bringPlayer = pla
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.bringPlayer and selectedPlayer ~= "" then
+                local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
+                if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                    local targetChar = targetPlayer.Character
+                    local targetRoot = targetChar.HumanoidRootPart
+
+                    targetRoot.CanCollide = false
+                    targetRoot.Anchored = true
+                    targetRoot.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -8)
+
+                    if targetRoot.Size.Magnitude < 10 then
+                        targetRoot.Size = Vector3.new(25, 25, 25)
+                    end
+
+                    if targetChar:FindFirstChild("Humanoid") and targetChar.Humanoid.Health <= 0 then
+                        targetRoot.Anchored = false
+                        targetRoot.Size = Vector3.new(2, 2, 1)
+                    end
+                end
+            end
+        end)
+    end
+end)
+		
+page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
+	_G.BringAllPlayer = plal
+end)
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.BringAllPlayer then
+                for i, v in pairs(game.Players:GetPlayers()) do
+                    if v ~= player and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        local root = v.Character.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.Anchored = true
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, -5)
+
+                        if v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+		
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
