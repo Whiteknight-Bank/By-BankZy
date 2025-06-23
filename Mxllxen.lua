@@ -595,7 +595,7 @@ page5:Toggle("Walk On Water", false, function(walk)
     end
 end)
 
-
+--[[
 spawn(function()
     while wait(0.1) do
         pcall(function()
@@ -614,5 +614,5 @@ spawn(function()
         end)
     end
 end)
-
+]]--
   end)
