@@ -99,15 +99,13 @@ spawn(function()
             if hookmetamethod and not _G.HookedKick then
                 _G.HookedKick = true
 
-                local first = false
                 local OldNameCall
-                OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(Self, ...)
-                    local Method = getnamecallmethod()
-                    if typeof(Method) == "string" and Method:lower() == "kick" and not first then
-                        first = true
+                OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+                    local method = getnamecallmethod()
+                    if typeof(method) == "string" and method:lower() == "kick" then
                         return nil
-                    end
-                    return OldNameCall(Self, ...)
+			end
+                    return self[method](self, ...)
                 end))
             end
         end)
