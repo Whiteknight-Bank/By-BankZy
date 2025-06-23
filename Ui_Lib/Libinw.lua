@@ -42,7 +42,6 @@ function library:Win(title)
 local toggleButton = Instance.new("TextButton")
 toggleButton.Name = "BankHubToggle"
 toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Position = UDim2.new(0.5, 460, 0.5, -250)
 toggleButton.Size = UDim2.new(0, 28, 0, 28)
 toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 toggleButton.BackgroundTransparency = 0.2
@@ -58,82 +57,89 @@ toggleButton.Parent = gui
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
 corner.Parent = toggleButton
+
+local title = "Bank Hub"
+local titleBar = Instance.new("TextLabel")
+titleBar.Size = UDim2.new(1, 0, 0, 35)
+titleBar.Position = UDim2.new(0, 0, 0, 0)
+titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+titleBar.BackgroundTransparency = 0.2
+titleBar.Text = title
+titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleBar.Font = Enum.Font.GothamBold
+titleBar.TextSize = 20
+titleBar.Parent = main
+titleBar.Active = true
+
+local tabButtons = Instance.new("Frame", main)
+tabButtons.Size = UDim2.new(0, 120, 1, -35)
+tabButtons.Position = UDim2.new(0, 0, 0, 35)
+tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+tabButtons.BackgroundTransparency = 0.3
+
+local tabLayout = Instance.new("UIListLayout", tabButtons)
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+tabLayout.Padding = UDim.new(0, 5)
+
+local pages = Instance.new("Frame", main)
+pages.Size = UDim2.new(1, -130, 1, -45)
+pages.Position = UDim2.new(0, 130, 0, 40)
+pages.BackgroundTransparency = 1
+
+-- Dragging system
+local dragging, dragStart, startPos
+titleBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = main.Position
+	end
+end)
+
+titleBar.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - dragStart
+		main.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+end)
+
+-- ✅ Fix: ตำแหน่งปุ่ม X ให้ติดมุมซ้ายบนของ main
+RunService.RenderStepped:Connect(function()
+	toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X + 10, 0, main.AbsolutePosition.Y + 5)
+end)
+
+-- Toggle hide/show with animation
+local isOpen = true
+local fullSize = main.Size
+local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+
+toggleButton.MouseButton1Click:Connect(function()
+	if isOpen then
+		local shrink = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
+		shrink:Play()
+		shrink.Completed:Once(function()
+			main.Visible = false
+			main.Size = fullSize
+		end)
+	else
+		main.Visible = true
+		main.Size = UDim2.new(0, 0, 0, 0)
+		TweenService:Create(main, tweenInfo, {Size = fullSize}):Play()
+	end
+	isOpen = not isOpen
+end)
     
-    local titleBar = Instance.new("TextLabel")
-    titleBar.Size = UDim2.new(1, 0, 0, 35)
-    titleBar.Position = UDim2.new(0, 0, 0, 0)
-    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    titleBar.BackgroundTransparency = 0.4
-    titleBar.BackgroundTransparency = 0.2
-    titleBar.Text = title
-    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleBar.Font = Enum.Font.GothamBold
-    titleBar.TextSize = 20
-    titleBar.Parent = main
-    titleBar.Active = true
-
-    local tabButtons = Instance.new("Frame", main)
-    tabButtons.Size = UDim2.new(0, 120, 1, -35)
-    tabButtons.Position = UDim2.new(0, 0, 0, 35)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    tabButtons.BackgroundTransparency = 0.4
-    tabButtons.BackgroundTransparency = 0.3
-
-    local tabLayout = Instance.new("UIListLayout", tabButtons)
-    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabLayout.Padding = UDim.new(0, 5)
-
-    local pages = Instance.new("Frame", main)
-    pages.Size = UDim2.new(1, -130, 1, -45)
-    pages.Position = UDim2.new(0, 130, 0, 40)
-    pages.BackgroundTransparency = 1
-
-    local dragging, dragStart, startPos
-    titleBar.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = main.Position
-        end
-    end)
-    titleBar.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - dragStart
-            main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end)
-
-    RunService.RenderStepped:Connect(function()
-        toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X - 85, 0, main.AbsolutePosition.Y)
-    end)
-
-    local isOpen = true
-    local fullSize = main.Size
-    local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-
-    toggleButton.MouseButton1Click:Connect(function()
-        if isOpen then
-            local shrink = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
-            shrink:Play()
-            shrink.Completed:Once(function()
-                main.Visible = false
-                main.Size = fullSize
-            end)
-        else
-            main.Visible = true
-            main.Size = UDim2.new(0, 0, 0, 0)
-            TweenService:Create(main, tweenInfo, {Size = fullSize}):Play()
-        end
-        isOpen = not isOpen
-    end)
-
 local tabs = {}
 
 function tabs:Taps(name)  
