@@ -191,14 +191,32 @@ end)
 
 page2:Label("┇ Function Farm ┇")
 
-local SelectedMob = ""
+local SelectedEnemy = ""
+local SelectedBoss = ""
 
-page2:Dropdown("Select Mobs:", {
-    "All", "", "",
-    "", "",
-    "", "", ""
+page2:Dropdown("Select Enemys:", {
+"Mountain Bandit", 
+"Buggy Pirate",
+"Desert Bandit",
+"Ice Monster",
+"Haki Monkey", 
+"Logia Bandit", 
+"Ito Bandit",
+"Vice-Admiral",
+"Skypiean",
+"Revolutionary Troop"
 }, function(pcns) 
-    SelectedMob = pcns 
+    SelectedEnemy = pcns 
+end)
+
+page2:Dropdown("Select Boss:", {
+"Buggy The Clown", 
+"Crocodile",
+"Bara Bandit",
+"Yeti",
+"Enel"
+}, function(pbos) 
+    SelectedBoss = pbos
 end)
 
 page2:Toggle("Auto Farm", false, function(befrm)
