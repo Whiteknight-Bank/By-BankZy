@@ -88,6 +88,22 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
+local mt = getrawmetatable(game)
+setreadonly(mt, false)
+
+local oldNamecall = mt.__namecall
+
+mt.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    if method == "Kick" or method == "kick" then
+        return nil -- block Kick
+    end
+    return oldNamecall(self, ...)
+end)
+
+local lp = game:GetService("Players").LocalPlayer
+lp.Kick = function() return end
+
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
@@ -311,21 +327,22 @@ page3:Button("Buggy Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2527, 77, -135)
 end)
 
-page3:Button("Pyramid Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+page3:Button("Desert Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(928, 78, 117)
 end)
 
-page3:Button("Bandit Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+page3:Button("Frossil Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4420, 61.82137680053711, -1539)
 end)
 
-page3:Button("Bandit Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+page3:Button("Sky Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-3880, 2063, 3098)
 end)
 
-page3:Button("Bandit Island" , function()
-        plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
+page3:Button("Snow Mountains Island" , function()
+        plr.Character.HumanoidRootPart.CFrame = CFrame.new(1567, 59, -4826)
 end)
+
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
