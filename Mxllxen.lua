@@ -93,25 +93,6 @@ local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if hookmetamethod and not _G.HookedKick then
-                _G.HookedKick = true
-
-                local OldNameCall
-                OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
-                    local method = getnamecallmethod()
-                    if typeof(method) == "string" and method:lower() == "kick" then
-                        return nil
-			end
-                    return self[method](self, ...)
-                end))
-            end
-        end)
-    end
-end)
-
 game.Players.LocalPlayer.Kick = function() return end
 
 local Cache = { DevConfig = {} };
@@ -611,6 +592,26 @@ page5:Toggle("Walk On Water", false, function(walk)
             seaPart:Destroy()
             seaPart = nil
         end
+    end
+end)
+
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if hookmetamethod and not _G.HookedKick then
+                _G.HookedKick = true
+
+                local OldNameCall
+                OldNameCall = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+                    local method = getnamecallmethod()
+                    if typeof(method) == "string" and method:lower() == "kick" then
+                        return nil
+			end
+                    return self[method](self, ...)
+                end))
+            end
+        end)
     end
 end)
 
