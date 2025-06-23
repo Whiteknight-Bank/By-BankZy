@@ -88,9 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local lp = game:GetService("Players").LocalPlayer
-lp.Kick = function() return end
-
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
