@@ -93,8 +93,6 @@ local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
-game.Players.LocalPlayer.Kick = function() return end
-
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
@@ -595,7 +593,6 @@ page5:Toggle("Walk On Water", false, function(walk)
     end
 end)
 
---[[
 spawn(function()
     while wait(0.1) do
         pcall(function()
@@ -614,5 +611,5 @@ spawn(function()
         end)
     end
 end)
-]]--
+
   end)
