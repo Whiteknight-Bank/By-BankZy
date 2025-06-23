@@ -130,7 +130,46 @@ page1:Toggle("Notifile White Bread", false, function(whbd)
 end)	
 
 page1:Button("Teleport All Chest" , function()
-        print("Not Working")
+       local player = game.Players.LocalPlayer
+local teleportDelay = 1 -- หน่วงเวลาก่อนวาร์ปจุดถัดไป
+
+local teleportPositions = {
+    Vector3.new(2927, 96, -1510),
+    Vector3.new(-789, 54, -3410),
+    Vector3.new(979, 64, -2208),
+    Vector3.new(-988, 160, -3274),
+    Vector3.new(-1061, 54, -3626),
+    Vector3.new(3157, 77, -1238),
+    Vector3.new(-845, 65, -825),
+    Vector3.new(-1194, 65, 1083),
+    Vector3.new(-2597, 118, -1978),
+    Vector3.new(1158, 56, 424),
+    Vector3.new(-2643, 58, -1920),
+    Vector3.new(2929, 98, -1510),
+    Vector3.new(829, 59, -286),
+    Vector3.new(1347, 151, 95),
+    Vector3.new(-877, 58, -1265),
+    Vector3.new(2783, 77, -1304),
+    Vector3.new(-815, 61, -1385),
+    Vector3.new(717, 61, 130),
+    Vector3.new(-2399, 79, -1914),
+    Vector3.new(-1056, 67, 886),
+    Vector3.new(-1073, 62, -1266),
+}
+
+spawn(function()
+    local character = player.Character or workspace:FindFirstChild(player.Name)
+    if not character then return end
+    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+    if not humanoidRootPart then return end
+
+    for _, pos in ipairs(teleportPositions) do
+        local targetCFrame = CFrame.new(pos.X, pos.Y + 3, pos.Z)
+        humanoidRootPart.CFrame = targetCFrame
+        wait(teleportDelay)
+    end
+create:Notifile("", "Done!!!", 3)
+end)
 end)
 
 local Tab2 = Window:Taps("Farm")
@@ -604,7 +643,8 @@ page5:Toggle("Walk On Water", false, function(walk)
         end
     end
 end)
-
+		
+page5:Label("┇ Function Button ┇")
 page5:Button("Button For Mobile", function()
 local player = game.Players.LocalPlayer
 local mouse = player:GetMouse()
