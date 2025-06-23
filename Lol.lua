@@ -448,7 +448,6 @@ page1:Toggle("Auto Farm", false, function(befrm)
                                 if torso then
                                     gunHit.Parent = torso
                                     gunHit.CFrame = torso.CFrame
-                                    break
                                 end
                             end
                         end
