@@ -352,39 +352,21 @@ end)
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.autostrg then
-                warn("⛔ _G.autostrg is false or nil")
-                return
-            end
-
-            if SelectedEnemy == "" then
-                warn("⛔ SelectedEnemy is empty")
-                return
-            end
+            if not _G.autostrg or SelectedEnemy == "" then return end
 
             local info = enemyQuestInfo[SelectedEnemy]
-            if not info then
-                warn("⛔ No enemyQuestInfo found for", SelectedEnemy)
-                return
-            end
+            if not info then return end
 
-            local quests = workspace:FindFirstChild("Quests")
-            if not quests then
-                warn("⛔ No Quests folder in workspace")
-                return
-            end
-
-            local questFolder = quests:FindFirstChild(info.questFolder)
-            if not questFolder then
-                warn("⛔ Quest folder", info.questFolder, "not found")
-                return
-            end
+            local questFolder = workspace:FindFirstChild("Quests"):FindFirstChild(info.questFolder)
+            if not questFolder then return end
 
             local questModel = questFolder:FindFirstChild(info.questModel)
             if not questModel then
-                warn("⛔ Quest model", info.questModel, "not found in", info.questFolder)
+                warn("❌ QuestModel", info.questModel, "not found in", info.questFolder)
                 return
             end
+
+            print("📦 Found questModel:", info.questModel)
 
             for _, obj in ipairs(questModel:GetDescendants()) do
                 if obj:IsA("ClickDetector") then
@@ -392,9 +374,9 @@ spawn(function()
                     local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
 
                     if part then
-                        local distance = (part.Position - info.position).Magnitude
-                        print("🔍 Checking:", parent.Name, "Dist:", distance)
-                        if distance < 1 then
+                        local dist = (part.Position - info.position).Magnitude
+                        print("📍", part:GetFullName(), "| Dist:", dist)
+                        if dist < 3 then
                             fireclickdetector(obj)
                             print("✅ Clicked quest for:", SelectedEnemy)
                             break
