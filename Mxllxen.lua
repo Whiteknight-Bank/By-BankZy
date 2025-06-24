@@ -262,9 +262,7 @@ page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
 local SelectedBoss = ""
-local SelectedQuest = ""
 		
--- Enemy Dropdown
 page2:Dropdown("Select Enemys:", {
     "Mountain Bandit", 
     "Buggy Pirate",
@@ -281,7 +279,6 @@ page2:Dropdown("Select Enemys:", {
     SelectedBoss = ""
 end)
 
--- Boss Dropdown
 page2:Dropdown("Select Boss:", {
     "Buggy The Clown", 
     "Crocodile",
@@ -293,22 +290,14 @@ page2:Dropdown("Select Boss:", {
     SelectedEnemy = ""
 end)
 
-page2:Dropdown("Select Quests:", {
-"Strength",
-"Sword",
-"Defense"
-}, function(qust)
-SelectedQuest = qust
-end)
-
-page2:Toggle("Auto Farm", false, function(enabled)
-    _G.farmNpc = enabled
+page2:Toggle("Auto Farm Strength", false, function(enabled)
+    _G.autostrg = enabled
 end)
 
 local RunService = game:GetService("RunService")
 
 RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
+    if not _G.autostrg then return end
 
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
@@ -333,8 +322,8 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 		
-page2:Toggle("Auto Claim Quest Board", false, function(clmq)
-    _G.claimQuest = clmq
+page2:Toggle("Auto Farm Sword", false, function(clmq)
+    _G.autosword = clmq
 end)	
 
 local questPositions = {
@@ -344,37 +333,9 @@ local questPositions = {
         ["bandit"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)
     }
 }
-
-spawn(function()
-    while wait(0.2) do
-        pcall(function()
-            if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest then
-                local quests = workspace:FindFirstChild("Quests")
-                local banditQuest = quests and quests:FindFirstChild("SpawnIslandQuests") and quests.SpawnIslandQuests:FindFirstChild("BanditQuest")
-                local targetPos = questPositions["Mountain Bandit"][SelectedQuest]
-
-                if banditQuest and targetPos then
-                    for _, model in ipairs(banditQuest:GetChildren()) do
-                        if model:IsA("Model") and model.Name == "bandit" then
-                            local anyPart = model:FindFirstChildWhichIsA("BasePart")
-                            local click = model:FindFirstChild("ClickDetector")
-
-                            if anyPart and click then
-                                if (anyPart.Position - targetPos).Magnitude < 1 then
-                                    fireclickdetector(click)
-                                    break
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
 		
-page2:Toggle("Auto Buso", false, function(buso)
-    _G.autobuso = buso
+page2:Toggle("Auto Farm Defense", false, function(buso)
+    _G.autodef = buso
 end)
 
 local Tab2 = Window:Taps("Players")
