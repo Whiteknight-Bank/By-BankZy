@@ -346,24 +346,25 @@ local questPositions = {
 }
 
 spawn(function()
-    while wait(0.2) do
+    while wait(0.1) do
         pcall(function()
-            if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest ~= nil then
-                local quests = workspace:FindFirstChild("Quests")
-                local spawnIsland = quests and quests:FindFirstChild("SpawnIslandQuests")
-                local banditQuest = spawnIsland and spawnIsland:FindFirstChild("BanditQuest")
+            if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest then
+                local pos = questPositions["Mountain Bandit"][SelectedQuest]
+                local banditQuest = workspace:FindFirstChild("Quests")
+                    and workspace.Quests:FindFirstChild("SpawnIslandQuests")
+                    and workspace.Quests.SpawnIslandQuests:FindFirstChild("BanditQuest")
 
-                if banditQuest then
-                    local expectedPos = questPositions["Mountain Bandit"][SelectedQuest]
+                if not banditQuest then return end
 
-                    for _, obj in ipairs(banditQuest:GetDescendants()) do
-                        if obj:IsA("ClickDetector") and obj.Parent:IsA("Part") then
-                            local part = obj.Parent
-                            if expectedPos and (part.Position - expectedPos).Magnitude < 1 then
-                                fireclickdetector(obj)
-                                print("Clicked quest:", SelectedQuest)
-                                break -- หยุดหลังคลิกตัวแรกที่เจอ
-                            end
+                for _, bandit in ipairs(banditQuest:GetChildren()) do
+                    if bandit:IsA("Model") and bandit.Name == "bandit" then
+                        -- หาพาร์ทใดก็ได้ใน model มาเช็คตำแหน่ง
+                        local part = bandit:FindFirstChildWhichIsA("BasePart", true)
+                        local click = bandit:FindFirstChildWhichIsA("ClickDetector", true)
+
+                        if part and click and part.Position == pos then
+                            fireclickdetector(click)
+                            break
                         end
                     end
                 end
