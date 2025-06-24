@@ -367,7 +367,7 @@ RunService.RenderStepped:Connect(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        local info = enemyQuestInfo[SelectedEnemy]
+        local info = enemyQuestStrg[SelectedEnemy]
         local quests = workspace:FindFirstChild("Quests")
         local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
 
@@ -400,10 +400,6 @@ page2:Toggle("Auto Claim Strength", false, function(enabled)
     _G.autostrg = enabled
 end)
 
-page2:Toggle("Auto Claim Strength", false, function(enabled)
-    _G.autostrg = enabled
-end)
-
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
@@ -423,7 +419,6 @@ spawn(function()
                         local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
 
                         if part and part.Position == info.position then
-                            print("🔥 Clicking quest at", part.Position)
                             fireclickdetector(obj)
                             break
                         end
