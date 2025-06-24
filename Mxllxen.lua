@@ -604,45 +604,6 @@ page5:Toggle("Anti AFK", false, function(state)
         end
     end
 end)
-
-local RunService = game:GetService("RunService")
-local followConnection
-local seaPart
-
-page5:Toggle("Walk On Water", false, function(walk)
-    if walk then
-        create:Notifile("", "You can walk on sea now! :)", 3)
-
-        seaPart = Instance.new("Part")
-        seaPart.Name = "InvisibleSea"
-        seaPart.Anchored = true
-        seaPart.CanCollide = true
-        seaPart.Transparency = 1
-        seaPart.Size = Vector3.new(50, 1, 50)
-        seaPart.Parent = workspace
-
-        followConnection = RunService.RenderStepped:Connect(function()
-            local char = plr.Character or plr.CharacterAdded:Wait()
-            local root = char:FindFirstChild("HumanoidRootPart")
-            if root and seaPart then
-                local goalPos = Vector3.new(root.Position.X, 52, root.Position.Z)
-                seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
-            end
-        end)
-
-    else
-        create:Notifile("", "Off walk on sea now! :(", 3)
-
-        if followConnection then
-            followConnection:Disconnect()
-            followConnection = nil
-        end
-        if seaPart then
-            seaPart:Destroy()
-            seaPart = nil
-        end
-    end
-end)
 		
 page5:Label("┇ Function Button Mobile [ BETA ] ┇")
 page5:Button("Button For Mobile", function()
@@ -670,6 +631,7 @@ local spacing = 15
 local startYRight = 100
 local activeButtons = {}
 
+-- ปุ่ม Z/X/C/V กดค้างได้
 local rightButtons = {"Z", "X", "C", "V"}
 for i, key in ipairs(rightButtons) do
     local button = Instance.new("TextButton")
@@ -698,6 +660,7 @@ for i, key in ipairs(rightButtons) do
     end)
 end
 
+-- ปุ่ม SPACE (ยิงทันที)
 do
     local key = "SPACE"
     local button = Instance.new("TextButton")
@@ -717,15 +680,14 @@ do
 
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    button.MouseButton1Down:Connect(function()
+    button.MouseButton1Click:Connect(function()
         VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
-    end)
-
-    button.MouseButton1Up:Connect(function()
+        task.wait(0.1)
         VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
     end)
 end
 
+-- ปุ่ม R แบบเปิดเขียว รอแตะจอยิง
 do
     local key = "R"
     local button = Instance.new("TextButton")
@@ -745,14 +707,33 @@ do
 
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    button.MouseButton1Down:Connect(function()
-        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
-    end)
+    activeButtons[key] = false
 
-    button.MouseButton1Up:Connect(function()
-        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
+    button.MouseButton1Click:Connect(function()
+        activeButtons[key] = not activeButtons[key]
+        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
     end)
 end
+
+-- ยิงปุ่ม R เมื่อแตะจอ แล้วปิดโหมด
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        if activeButtons["R"] then
+            local keyCode = keyCodes["R"]
+            if keyCode then
+                VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+                task.wait(0.1)
+                VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+            end
+            activeButtons["R"] = false
+            local btn = gui:FindFirstChild("RButton")
+            if btn then
+                btn.BackgroundColor3 = Color3.new(0, 0, 0)
+            end
+        end
+    end
+end)
 			end)
 		
   end)
