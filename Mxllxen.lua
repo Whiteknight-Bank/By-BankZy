@@ -117,6 +117,17 @@ local enemyList = {
 }
 ]]--
 
+local player = game.Players.LocalPlayer
+local RunService = game:GetService("RunService")
+
+local function isQuestGUIVisible()
+    local gui = player:FindFirstChild("PlayerGui")
+    if not gui then return false end
+
+    local quests = gui:FindFirstChild("QuestsGUI")
+    local main = quests and quests:FindFirstChild("MainFrame")
+    return main and main.Visible == true
+		end
 
 local Wapon = {}
 for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
@@ -345,55 +356,36 @@ local enemyQuestInfo = {
     }
 		}
 
-page2:Toggle("Auto Farm Strength", false, function(enabled)
-    _G.autostrg = enabled
+page2:Toggle("Auto Behind Farm", false, function(befrm)
+    _G.farmNpc = befrm
 end)
 
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if not _G.autostrg or SelectedEnemy == "" then return end
-
-            local info = enemyQuestInfo[SelectedEnemy]
-            if not info then return end
-
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            if not questFolder then return end
-
-            local questModel = questFolder:FindFirstChild(info.questModel)
-            if not questModel then return end
-
-            for _, obj in ipairs(questModel:GetDescendants()) do
-                if obj:IsA("ClickDetector") then
-                    local parent = obj.Parent
-                    local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-
-                    if part and part.Position == info.position then
-                        print("✅ Found EXACT match at:", part.Position)
-                        fireclickdetector(obj)
-                        break
-                    end
-                end
-            end
-        end)
-    end
+page2:Toggle("Auto Behind Farm", false, function(befrm)
+    _G.farmNpc = befrm
 end)
-		
-local RunService = game:GetService("RunService")
 
 RunService.RenderStepped:Connect(function()
-    if not _G.autostrg then return end
+    if not _G.farmNpc then return end
 
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        local Enemys = workspace:FindFirstChild("Enemys")
-        local player = game.Players.LocalPlayer
+        local info = enemyQuestInfo[SelectedEnemy]
+        local quests = workspace:FindFirstChild("Quests")
+        local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
+
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        if not (Enemys and hrp) then return end
+        if not hrp then return end
+
+        if not isQuestGUIVisible() and info and info.position then
+            hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+            return
+        end
+
+        local Enemys = workspace:FindFirstChild("Enemys")
+        if not Enemys then return end
 
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
@@ -407,8 +399,46 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
+
+page2:Toggle("Auto Claim Strength", false, function(enabled)
+    _G.autostrg = enabled
+end)
+
+page2:Toggle("Auto Claim Strength", false, function(enabled)
+    _G.autostrg = enabled
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autostrg or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestInfo[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+
+                        if part and part.Position == info.position then
+                            print("🔥 Clicking quest at", part.Position)
+                            fireclickdetector(obj)
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
 		
-page2:Toggle("Auto Farm Sword", false, function(clmq)
+page2:Toggle("Auto Claim Sword", false, function(clmq)
     _G.autosword = clmq
 end)	
 
@@ -420,7 +450,7 @@ local questPositions = {
     }
 }
 		
-page2:Toggle("Auto Farm Defense", false, function(buso)
+page2:Toggle("Auto Claim Defense", false, function(buso)
     _G.autodef = buso
 end)
 
