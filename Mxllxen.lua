@@ -292,62 +292,83 @@ page2:Dropdown("Select Boss:", {
     SelectedEnemy = ""
 end)
 
+local enemyQuestInfo = {
+    ["Mountain Bandit"] = {
+        questFolder = "SpawnIslandQuest",
+        questModel = "BanditQuest",
+        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+    },
+    ["Ice Monster"] = {
+        questFolder = "SnowIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+    },
+    ["Logia Bandit"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+    },
+    ["Skypiean"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+    },
+    ["Desert Bandit"] = {
+        questFolder = "SandsIslandQuest",
+        questModel = "DefeatDesertBanditStrength",
+        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+    },
+    ["Fishman"] = {
+        questFolder = "RockyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+    },
+    ["Revolutionary Troop"] = {
+        questFolder = "RevIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+    },
+    ["Buggy Pirate"] = {
+        questFolder = "OrangeTownQuest",
+        questModel = "BuggyPirateQuests",
+        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+    },
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+        questModel = "marineq",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    },
+    ["Ito Bandit"] = {
+        questFolder = "FarmIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    }
+		}
+
 page2:Toggle("Auto Farm Strength", false, function(enabled)
     _G.autostrg = enabled
 end)
 
-local enemyList = {
-    ["Yeti"] = "None",
-    ["Mountain Bandit"] = "SpawnIslandQuest",
-    ["Ice Monster"] = "SnowIslandQuest",
-    ["Logia Bandit"] = "SkyIslandQuest",
-    ["Skypiean"] = "SkyIslandQuest",
-    ["Desert Bandit"] = "SandsIslandQuest",
-    ["Fishman"] = "RockyIslandQuest",
-    ["Revolutionary Troop"] = "RevIslandQuest",
-    ["Buggy Pirate"] = "OrangeTownQuest",
-    ["Vice-Admiral"] = "MarineIslandQuest",
-    ["Haki Monkey"] = "None",
-    ["Ito Bandit"] = "FarmIslandQuest"
-}
-
-local questPositions = {
-    ["Mountain Bandit"] = Vector3.new(-947.672119, 61.9150543, -1139.79211),
-    ["Ice Monster"] = Vector3.new(-1063.10986, 62.7437477, -3285.20532),
-    ["Logia Bandit"] = Vector3.new(-4414.65381, 68.6773071, -1525.55737),
-    ["Skypiean"] = Vector3.new(-3856.99365, 2068.38159, 3104.50513),
-    ["Desert Bandit"] = Vector3.new(927.113708, 85.4592438, 125.499176),
-    ["Fishman"] = Vector3.new(-4029.39355, 96.7876511, 454.569122),
-    ["Revolutionary Troop"] = Vector3.new(-3094.93384, 66.9042282, -3807.8772),
-    ["Buggy Pirate"] = Vector3.new(-2362.24292, 64.4447784, -180.865555),
-    ["Vice-Admiral"] = Vector3.new(2807.47412, 80.1453857, -1462.3136),
-    ["Ito Bandit"] = Vector3.new(-835.759155, 92.8242264, -5633.88428)
-}
-
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.autostrg or not SelectedEnemy then return end
+            if not _G.claimQuest or not SelectedEnemy then return end
 
-            local questName = enemyList[SelectedEnemy]
-            local targetPos = questPositions[SelectedEnemy]
+            local info = enemyQuestInfo[SelectedEnemy]
+            if not info then return end
 
-            if questName == "None" then
-                -- ❌ ไม่ต้องคลิก quest แต่อนุญาตให้ค้นหาได้ (เผื่อเอาไว้ใช้ต่อ)
-                return
-            end
+            local questFolder = workspace:FindFirstChild("Quests"):FindFirstChild(info.questFolder)
+            if not questFolder then return end
 
-            local questParent = workspace:FindFirstChild(questName)
-            if not questParent or not targetPos then return end
+            local questModel = questFolder:FindFirstChild(info.questModel)
+            if not questModel then return end
 
-            for _, model in ipairs(questParent:GetDescendants()) do
-                if model:IsA("Model") and model.Name == SelectedEnemy then
-                    local part = model:FindFirstChildWhichIsA("BasePart", true)
-                    local click = model:FindFirstChildWhichIsA("ClickDetector", true)
-
-                    if part and click and (part.Position - targetPos).Magnitude < 1 then
-                        fireclickdetector(click)
-                        print("✅ Clicked:", SelectedEnemy)
+            for _, obj in ipairs(questModel:GetDescendants()) do
+                if obj:IsA("ClickDetector") then
+                    local part = obj.Parent:IsA("BasePart") and obj.Parent or obj.Parent:FindFirstChildWhichIsA("BasePart", true)
+                    if part and (part.Position - info.position).Magnitude < 1 then
+                        fireclickdetector(obj)
+                        print("✅ Clicked quest for:", SelectedEnemy)
                         break
                     end
                 end
