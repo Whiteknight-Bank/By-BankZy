@@ -172,6 +172,112 @@ local enemyQuestStrg = {
     }
 		}
 
+local enemyQuestSword = {
+    ["Mountain Bandit"] = {
+        questFolder = "SpawnIslandQuests",
+        questModel = "bandit",
+        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+    },
+    ["Ice Monster"] = {
+        questFolder = "SnowIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+    },
+    ["Logia Bandit"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+    },
+    ["Skypiean"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+    },
+    ["Desert Bandit"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "DefeatDesertBanditBlade",
+        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+    },
+    ["Fishman"] = {
+        questFolder = "RockyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+    },
+    ["Revolutionary Troop"] = {
+        questFolder = "RevIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+    },
+    ["Buggy Pirate"] = {
+        questFolder = "OrangeTownQuest",
+        questModel = "BuggyPirateQuests",
+        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+    },
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+        questModel = "marin",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    },
+    ["Ito Bandit"] = {
+        questFolder = "FarmIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    }
+		}
+
+local enemyQuestDef = {
+    ["Mountain Bandit"] = {
+        questFolder = "SpawnIslandQuests",
+        questModel = "bandit",
+        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+    },
+    ["Ice Monster"] = {
+        questFolder = "SnowIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+    },
+    ["Logia Bandit"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+    },
+    ["Skypiean"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+    },
+    ["Desert Bandit"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "DefeatDesertBanditDefense",
+        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+    },
+    ["Fishman"] = {
+        questFolder = "RockyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+    },
+    ["Revolutionary Troop"] = {
+        questFolder = "RevIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+    },
+    ["Buggy Pirate"] = {
+        questFolder = "OrangeTownQuest",
+        questModel = "BuggyPirateQuests",
+        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+    },
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+        questModel = "marine",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    },
+    ["Ito Bandit"] = {
+        questFolder = "FarmIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    }
+		}
+
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
@@ -520,20 +626,74 @@ spawn(function()
     end
 end)
 		
-page2:Toggle("Auto Claim Sword", false, function(clmq)
-    _G.autosword = clmq
+page2:Toggle("Auto Claim Sword", false, function(clmsw)
+    _G.autosword = clmsw
 end)	
 
-local questPositions = {
-    ["Mountain Bandit"] = {
-        ["Strength"] = Vector3.new(-947.672119, 61.9150543, -1139.79211),
-        ["bandit"]    = Vector3.new(-955.031982, 61.9568481, -1139.79199),
-        ["bandit"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)
-    }
-}
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autosword or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestSword[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+
+                        if part and part.Position == info.position then
+                            fireclickdetector(obj)
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
 		
-page2:Toggle("Auto Claim Defense", false, function(buso)
-    _G.autodef = buso
+page2:Toggle("Auto Claim Defense", false, function(cldef)
+    _G.autodef = cldef
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autodef or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestDef[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+
+                        if part and part.Position == info.position then
+                            fireclickdetector(obj)
+                            break
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+page2:Toggle("Auto Claim Sniper", false, function(clsni)
+    _G.autosni = clsni
 end)
 
 local Tab2 = Window:Taps("Players")
