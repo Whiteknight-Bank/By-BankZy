@@ -117,6 +117,59 @@ local enemyList = {
 }
 ]]--
 
+local enemyQuestStrg = {
+    ["Mountain Bandit"] = {
+        questFolder = "SpawnIslandQuests",
+        questModel = "BanditQuest",
+        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+    },
+    ["Ice Monster"] = {
+        questFolder = "SnowIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+    },
+    ["Logia Bandit"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+    },
+    ["Skypiean"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+    },
+    ["Desert Bandit"] = {
+        questFolder = "SandsIslandQuests",
+        questModel = "DefeatDesertBanditStrength",
+        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+    },
+    ["Fishman"] = {
+        questFolder = "RockyIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+    },
+    ["Revolutionary Troop"] = {
+        questFolder = "RevIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+    },
+    ["Buggy Pirate"] = {
+        questFolder = "OrangeTownQuest",
+        questModel = "BuggyPirateQuests",
+        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+    },
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+        questModel = "marineq",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    },
+    ["Ito Bandit"] = {
+        questFolder = "FarmIslandQuest",
+        questModel = "IceMonstersQuest",
+        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    }
+		}
+
 local player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -303,63 +356,6 @@ page2:Dropdown("Select Boss:", {
     SelectedEnemy = ""
 end)
 
-local enemyQuestInfo = {
-    ["Mountain Bandit"] = {
-        questFolder = "SpawnIslandQuests",
-        questModel = "BanditQuest",
-        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
-    },
-    ["Ice Monster"] = {
-        questFolder = "SnowIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
-    },
-    ["Logia Bandit"] = {
-        questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
-    },
-    ["Skypiean"] = {
-        questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
-    },
-    ["Desert Bandit"] = {
-        questFolder = "SandsIslandQuests",
-        questModel = "DefeatDesertBanditStrength",
-        position = Vector3.new(927.113708, 85.4592438, 125.499176)
-    },
-    ["Fishman"] = {
-        questFolder = "RockyIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
-    },
-    ["Revolutionary Troop"] = {
-        questFolder = "RevIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
-    },
-    ["Buggy Pirate"] = {
-        questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateQuests",
-        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
-    },
-    ["Vice-Admiral"] = {
-        questFolder = "MarineIslandQuest",
-        questModel = "marineq",
-        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
-    },
-    ["Ito Bandit"] = {
-        questFolder = "FarmIslandQuest",
-        questModel = "IceMonstersQuest",
-        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
-    }
-		}
-
-page2:Toggle("Auto Behind Farm", false, function(befrm)
-    _G.farmNpc = befrm
-end)
-
 page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
@@ -413,7 +409,7 @@ spawn(function()
         pcall(function()
             if not _G.autostrg or SelectedEnemy == "" or isQuestGUIVisible() then return end
 
-            local info = enemyQuestInfo[SelectedEnemy]
+            local info = enemyQuestStrg[SelectedEnemy]
             if not info then return end
 
             local quests = workspace:FindFirstChild("Quests")
