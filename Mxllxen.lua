@@ -339,7 +339,7 @@ end)
 
 local questPositions = {
     ["Mountain Bandit"] = {
-        ["Strength"] = Vector3.new(-951.352112, 61.9148483, -1139.79199),
+        ["Strength"] = Vector3.new(-947.672119, 61.9150543, -1139.79211),
         ["Sword"]    = Vector3.new(-955.031982, 61.9568481, -1139.79199),
         ["Defense"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)
     }
@@ -350,7 +350,7 @@ spawn(function()
         pcall(function()
             if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest ~= nil then
                 local quests = workspace:FindFirstChild("Quests")
-                local spawnIsland = quests and quests:FindFirstChild("SpawnIslandQuest")
+                local spawnIsland = quests and quests:FindFirstChild("SpawnIslandQuests")
                 local banditQuest = spawnIsland and spawnIsland:FindFirstChild("BanditQuest")
 
                 if banditQuest then
@@ -361,7 +361,8 @@ spawn(function()
                             local part = obj.Parent
                             if expectedPos and (part.Position - expectedPos).Magnitude < 1 then
                                 fireclickdetector(obj)
-                                print("Clicked correct quest at", SelectedQuest)
+                                print("Clicked quest:", SelectedQuest)
+                                break -- หยุดหลังคลิกตัวแรกที่เจอ
                             end
                         end
                     end
@@ -370,7 +371,7 @@ spawn(function()
         end)
     end
 end)
-
+		
 page2:Toggle("Auto Buso", false, function(buso)
     _G.autobuso = buso
 end)
