@@ -176,7 +176,7 @@ local enemyQuestSword = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
         questModel = "bandit",
-        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+        position = Vector3.new(-951.352112, 61.9148483, -1139.79199)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
@@ -196,7 +196,7 @@ local enemyQuestSword = {
     ["Desert Bandit"] = {
         questFolder = "SandIslandQuests",
         questModel = "DefeatDesertBanditBlade",
-        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+        position = Vector3.new(923.887878, 85.4589615, 123.72757)
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
@@ -216,7 +216,7 @@ local enemyQuestSword = {
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
         questModel = "marin",
-        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+        position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
@@ -229,7 +229,7 @@ local enemyQuestDef = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
         questModel = "bandit",
-        position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
+        position = Vector3.new(-955.031982, 61.9568481, -1139.79199, 0, 0, -1, 0, 1, 0, 1, 0, 0)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
@@ -249,7 +249,7 @@ local enemyQuestDef = {
     ["Desert Bandit"] = {
         questFolder = "SandIslandQuests",
         questModel = "DefeatDesertBanditDefense",
-        position = Vector3.new(927.113708, 85.4592438, 125.499176)
+        position = Vector3.new(920.663147, 85.5009918, 121.955994)
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
