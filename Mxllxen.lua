@@ -268,6 +268,20 @@ page1:Toggle("Notifile Shank", false, function(shk)
     _G.shank = shk
 end)	
 
+local notified = false
+
+spawn(function()
+    while wait(0.1) do
+        if _G.shank and not notified then
+            local shanks = workspace:FindFirstChild("Shanks [Click For Gryphon]")
+            if shanks then
+                notified = true
+                create:Notifile("", "Found Shanks [Click For Gryphon] แล้ว!", 5)
+            end
+        end
+    end
+end)
+
 page1:Toggle("Notifile White Bread", false, function(whbd)
     _G.whitebread = whbd
 end)	
