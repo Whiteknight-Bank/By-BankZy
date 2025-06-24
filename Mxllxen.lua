@@ -91,7 +91,9 @@ task.spawn(function()
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 3.5)
+wait(1.5)
+create:Notifile("", "You should antikick in infinite yield", 8)
 
 local Cache = { DevConfig = {} };
 
@@ -396,6 +398,7 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 
+page2:Label("┇ Function Claim Quest ┇")
 page2:Toggle("Auto Claim Strength", false, function(enabled)
     _G.autostrg = enabled
 end)
@@ -743,6 +746,13 @@ RunService.RenderStepped:Connect(function()
 		frameCount = 0
 	end
 end)
+end)
+
+page5:Button("Boost FPS", function()
+create:Notifile("", "Excute infinite yield", 3)
+wait(2)
+
+loadstring()()
 end)
 
 local afkConnection
