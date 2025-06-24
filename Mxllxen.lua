@@ -357,30 +357,22 @@ spawn(function()
             local info = enemyQuestInfo[SelectedEnemy]
             if not info then return end
 
-            local questFolder = workspace:FindFirstChild("Quests"):FindFirstChild(info.questFolder)
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
             if not questFolder then return end
 
             local questModel = questFolder:FindFirstChild(info.questModel)
-            if not questModel then
-                warn("❌ QuestModel", info.questModel, "not found in", info.questFolder)
-                return
-            end
-
-            print("📦 Found questModel:", info.questModel)
+            if not questModel then return end
 
             for _, obj in ipairs(questModel:GetDescendants()) do
                 if obj:IsA("ClickDetector") then
                     local parent = obj.Parent
                     local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
 
-                    if part then
-                        local dist = (part.Position - info.position).Magnitude
-                        print("📍", part:GetFullName(), "| Dist:", dist)
-                        if dist < 3 then
-                            fireclickdetector(obj)
-                            print("✅ Clicked quest for:", SelectedEnemy)
-                            break
-                        end
+                    if part and part.Position == info.position then
+                        print("✅ Found EXACT match at:", part.Position)
+                        fireclickdetector(obj)
+                        break
                     end
                 end
             end
