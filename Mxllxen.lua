@@ -748,7 +748,7 @@ RunService.RenderStepped:Connect(function()
 end)
 end)
 
-page5:Button("Boost FPS", function()
+page5:Button("Infinite yield", function()
 create:Notifile("", "Excute infinite yield", 3)
 wait(1)
 
