@@ -656,18 +656,6 @@ gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- ปุ่มฝั่งขวา
-local rightButtons = {"Z", "X", "C", "V"}
-
--- ปุ่มฝั่งซ้าย
-local leftButtons = {"R"}
-
--- ปุ่มยิงทันที (ไม่ต้องเข้าสีเขียว)
-local instantFireKeys = {
-    SPACE = true,
-}
-
--- Map KeyCode
 local keyCodes = {
     Z = Enum.KeyCode.Z,
     X = Enum.KeyCode.X,
@@ -680,12 +668,11 @@ local keyCodes = {
 local buttonSize = UDim2.new(0, 50, 0, 50)
 local spacing = 15
 local startYRight = 100
-local startYLeft = 100
 
 local activeButtons = {}
-local selectedSkillKey = nil
 
--- 🔘 สร้างปุ่มฝั่งขวา (Z/X/C/V)
+-- 🔘 ปุ่ม Z/X/C/V (ฝั่งขวา)
+local rightButtons = {"Z", "X", "C", "V"}
 for i, key in ipairs(rightButtons) do
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
@@ -702,12 +689,9 @@ for i, key in ipairs(rightButtons) do
     button.AutoButtonColor = true
     button.Parent = gui
 
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = button
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
     activeButtons[key] = false
-
     button.MouseButton1Click:Connect(function()
         for otherKey, _ in pairs(activeButtons) do
             if otherKey ~= key then
@@ -718,67 +702,19 @@ for i, key in ipairs(rightButtons) do
                 end
             end
         end
-
         activeButtons[key] = not activeButtons[key]
-        if activeButtons[key] then
-            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        else
-            button.BackgroundColor3 = Color3.new(0, 0, 0)
-        end
+        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
     end)
 end
 
--- 🔘 สร้างปุ่มฝั่งซ้าย (R)
-for i, key in ipairs(leftButtons) do
-    local button = Instance.new("TextButton")
-    button.Name = key .. "Button"
-    button.Text = key
-    button.Size = buttonSize
-    button.Position = UDim2.new(0, 10, 0, startYLeft + (i - 1) * (50 + spacing))
-    button.AnchorPoint = Vector2.new(0, 0)
-    button.BackgroundColor3 = Color3.new(0, 0, 0)
-    button.BackgroundTransparency = 0.4
-    button.BorderSizePixel = 0
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.GothamBold
-    button.TextScaled = true
-    button.AutoButtonColor = true
-    button.Parent = gui
-
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = button
-
-    activeButtons[key] = false
-
-    button.MouseButton1Click:Connect(function()
-        for otherKey, _ in pairs(activeButtons) do
-            if otherKey ~= key then
-                activeButtons[otherKey] = false
-                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
-                if otherBtn then
-                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-                end
-            end
-        end
-
-        activeButtons[key] = not activeButtons[key]
-        if activeButtons[key] then
-            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-        else
-            button.BackgroundColor3 = Color3.new(0, 0, 0)
-        end
-    end)
-end
-
--- 🔘 ปุ่ม Spacebar ยิงทันที (ใกล้กระโดด)
+-- 🔘 ปุ่ม Spacebar (⎵) อยู่ล่างขวา ใกล้ปุ่มกระโดด
 do
     local key = "SPACE"
     local button = Instance.new("TextButton")
     button.Name = "SpaceButton"
-    button.Text = "⎵" -- สัญลักษณ์ Space bar
+    button.Text = "⎵"
     button.Size = buttonSize
-    button.Position = UDim2.new(0, 10, 1, -60) -- ล่างซ้าย
+    button.Position = UDim2.new(1, -70, 1, -70) -- มุมล่างขวา
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -789,9 +725,7 @@ do
     button.AutoButtonColor = true
     button.Parent = gui
 
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(1, 0)
-    corner.Parent = button
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
     button.MouseButton1Click:Connect(function()
         local keyCode = keyCodes[key]
@@ -803,10 +737,44 @@ do
     end)
 end
 
--- ✅ แตะหน้าจอเพื่อยิงสกิล (จากปุ่มที่เปิดเขียวอยู่)
+-- 🔘 ปุ่ม R (ล่างซ้าย)
+do
+    local key = "R"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(0, 10, 1, -60)
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    activeButtons[key] = false
+    button.MouseButton1Click:Connect(function()
+        for otherKey, _ in pairs(activeButtons) do
+            if otherKey ~= key then
+                activeButtons[otherKey] = false
+                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
+                if otherBtn then
+                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+            end
+        end
+        activeButtons[key] = not activeButtons[key]
+        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+    end)
+end
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
-
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
         for key, isActive in pairs(activeButtons) do
             if isActive then
