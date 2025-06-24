@@ -247,7 +247,6 @@ page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
 local SelectedBoss = ""
-local noclipConnection
 
 -- Enemy Dropdown
 page2:Dropdown("Select Enemys:", {
@@ -280,39 +279,10 @@ end)
 
 page2:Toggle("Auto Farm", false, function(enabled)
     _G.farmNpc = enabled
-
-    if enabled then
-        noclipConnection = game:GetService("RunService").Stepped:Connect(function()
-            pcall(function()
-                local char = game.Players.LocalPlayer.Character
-                if char then
-                    for _, part in pairs(char:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-        end)
-				else
-        if noclipConnection then
-            noclipConnection:Disconnect()
-            noclipConnection = nil
-        end
-        pcall(function()
-            local char = game.Players.LocalPlayer.Character
-            if char then
-                for _, part in pairs(char:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = true
-                    end
-                end
-            end
-        end)
-    end
 end)
 
 local RunService = game:GetService("RunService")
+
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
@@ -330,8 +300,8 @@ RunService.RenderStepped:Connect(function()
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                 if mob.Humanoid.Health > 0 then
                     local mobHRP = mob.HumanoidRootPart
-                    local underFeetPos = mobHRP.Position - Vector3.new(0, 2.5, 0) -- ใต้ตีนประมาณ 2.5 หน่วย
-                    hrp.CFrame = CFrame.new(underFeetPos, mobHRP.Position)
+                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5
+                    hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
                     break
                 end
             end
