@@ -101,6 +101,21 @@ Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
+local enemyList = {
+    ["Yeti"] = "YetisIslandQuest",
+    ["Mountain Bandit"] = "SpawnIslandQuest",
+    ["Ice Monster"] = "SnowIslandQuest",
+    ["Logia Bandit"] = "SkyIslandQuest",
+    ["Skypiean"] = "SkyIslandQuest",
+    ["Desert Bandit"] = "SandsIslandQuest",
+    ["Fishman"] = "RockyIslandQuest",
+    ["Revolutionary Troop"] = "RevIslandQuest",
+    ["Buggy Pirate"] = "OrangeTownQuest",
+    ["Vice-Admiral"] = "MarineIslandQuest",
+    ["Haki Monkey"] = "GrassyIslandQuest",
+    ["Ito Bandit"] = "FarmIslandQuest"
+		}
+
 local Wapon = {}
 for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
     if v:IsA("Tool") then
@@ -247,7 +262,8 @@ page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
 local SelectedBoss = ""
-
+local SelectedQuest = ""
+		
 -- Enemy Dropdown
 page2:Dropdown("Select Enemys:", {
     "Mountain Bandit", 
@@ -275,6 +291,14 @@ page2:Dropdown("Select Boss:", {
 }, function(choice)
     SelectedBoss = choice
     SelectedEnemy = ""
+end)
+
+page2:Dropdown("Select Quests:", {
+"Strength",
+"Sword",
+"Defense"
+}, function(qust)
+SelectedQuest = qust
 end)
 
 page2:Toggle("Auto Farm", false, function(enabled)
@@ -312,6 +336,40 @@ end)
 page2:Toggle("Auto Claim Quest Board", false, function(clmq)
     _G.claimQuest = clmq
 end)	
+
+local questPositions = {
+    ["Mountain Bandit"] = {
+        ["Strength"] = Vector3.new(-951.352112, 61.9148483, -1139.79199),
+        ["Sword"]    = Vector3.new(-955.031982, 61.9568481, -1139.79199),
+        ["Defense"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)
+    }
+}
+
+spawn(function()
+    while wait(0.2) do
+        pcall(function()
+            if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest ~= nil then
+                local quests = workspace:FindFirstChild("Quests")
+                local spawnIsland = quests and quests:FindFirstChild("SpawnIslandQuest")
+                local banditQuest = spawnIsland and spawnIsland:FindFirstChild("BanditQuest")
+
+                if banditQuest then
+                    local expectedPos = questPositions["Mountain Bandit"][SelectedQuest]
+
+                    for _, obj in ipairs(banditQuest:GetDescendants()) do
+                        if obj:IsA("ClickDetector") and obj.Parent:IsA("Part") then
+                            local part = obj.Parent
+                            if expectedPos and (part.Position - expectedPos).Magnitude < 1 then
+                                fireclickdetector(obj)
+                                print("Clicked correct quest at", SelectedQuest)
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
 
 page2:Toggle("Auto Buso", false, function(buso)
     _G.autobuso = buso
