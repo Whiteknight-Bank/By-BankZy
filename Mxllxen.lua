@@ -172,6 +172,12 @@ local enemyQuestStrg = {
     }
 		}
 
+local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
+    SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
+    SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
+    SafeZoneOuterSpace.Position = Vector3.new((math.random(-1000000, 1000000)), (math.random(10000, 50000)), (math.random(-1000000, 1000000)))
+    SafeZoneOuterSpace.Anchored = true
+		
 local player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
 
@@ -331,6 +337,14 @@ end)
 
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
+
+page2:Label("┇ Safe Zone ┇")
+page2:Button("Safe Zone Part", function()
+    local char = game.Players.LocalPlayer.Character
+    if char and char:FindFirstChild("HumanoidRootPart") then
+        char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
+    end
+end)
 
 page2:Label("┇ Function Item ┇")    
 		
