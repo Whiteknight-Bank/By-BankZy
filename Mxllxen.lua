@@ -352,7 +352,7 @@ end)
 spawn(function()
     while wait(0.1) do
         pcall(function()
-            if not _G.claimQuest or not SelectedEnemy then return end
+            if not _G.autostrg or not SelectedEnemy then return end
 
             local info = enemyQuestInfo[SelectedEnemy]
             if not info then return end
