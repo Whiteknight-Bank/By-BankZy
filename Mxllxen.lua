@@ -249,34 +249,62 @@ local SelectedEnemy = ""
 local SelectedBoss = ""
 
 page2:Dropdown("Select Enemys:", {
-"Mountain Bandit", 
-"Buggy Pirate",
-"Desert Bandit",
-"Ice Monster",
-"Haki Monkey", 
-"Logia Bandit", 
-"Ito Bandit",
-"Vice-Admiral",
-"Skypiean",
-"Revolutionary Troop"
-}, function(pcns) 
-    SelectedEnemy = pcns 
+    "Mountain Bandit", 
+    "Buggy Pirate",
+    "Desert Bandit",
+    "Ice Monster",
+    "Haki Monkey", 
+    "Logia Bandit", 
+    "Ito Bandit",
+    "Vice-Admiral",
+    "Skypiean",
+    "Revolutionary Troop"
+}, function(choice)
+    SelectedEnemy = choice
+    SelectedBoss = "" -- ถ้าเลือกศัตรู เคลียร์บอส
 end)
 
 page2:Dropdown("Select Boss:", {
-"Buggy The Clown", 
-"Crocodile",
-"Bara Bandit",
-"Yeti",
-"Enel"
-}, function(pbos) 
-    SelectedBoss = pbos
+    "Buggy The Clown", 
+    "Crocodile",
+    "Bara Bandit",
+    "Yeti",
+    "Enel"
+}, function(choice)
+    SelectedBoss = choice
+    SelectedEnemy = "" -- ถ้าเลือกบอส เคลียร์ศัตรู
 end)
 
-page2:Toggle("Auto Farm", false, function(befrm)
-    _G.farmNpc = befrm
-end)				
+page2:Toggle("Auto Farm", false, function(enabled)
+    _G.farmNpc = enabled
+end)
 
+spawn(function()
+    while wait(0.2) do
+        if _G.farmNpc then
+            pcall(function()
+                local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+                if targetName == "" then return end
+
+                local Enemys = workspace:FindFirstChild("Enemys")
+                local player = game.Players.LocalPlayer
+                local char = player.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                if not (Enemys and hrp) then return end
+
+                for _, mob in pairs(Enemys:GetChildren()) do
+                    if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") then
+                        local mobHRP = mob.HumanoidRootPart
+                        local behindPos = mobHRP.CFrame.Position - mobHRP.CFrame.LookVector * 4
+                        hrp.CFrame = CFrame.new(behindPos, mobHRP.Position) -- หันหน้าเข้าหามอน
+                        break
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
 page2:Toggle("Auto Claim Quest Board", false, function(clmq)
     _G.claimQuest = clmq
 end)	
