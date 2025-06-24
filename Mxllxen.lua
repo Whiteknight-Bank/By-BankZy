@@ -199,13 +199,73 @@ for _, player in ipairs(game.Players:GetPlayers()) do
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Auto ┇")    
-page1:Toggle("Notifile Shank", false, function(shk)
-    _G.shank = shk
+page1:Label("┇ Function Auto ┇")  
+page1:Toggle("Bring Devil Fruit", false, function(brdf)
+    _G.bringdf = brdf
 end)	
 
-page1:Toggle("Bring Fruit & Book", false, function(brdf)
-    _G.bringdf = brdf
+spawn(function()
+    while wait(0.1) do
+        if _G.bringdf then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local character = player.Character or workspace:FindFirstChild(player.Name)
+
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    
+                    local equippedTool = character:FindFirstChildOfClass("Tool")
+                    if equippedTool and string.match(equippedTool.Name, "Fruit$") then
+                        humanoid:UnequipTools()
+                    end
+
+                    for _, tool in ipairs(workspace:GetChildren()) do
+                        if tool:IsA("Tool") and tool:FindFirstChild("Handle") then
+                            if string.match(tool.Name, "Fruit$") then
+                                tool.Parent = character
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+page1:Toggle("Bring HakiBook", false, function(brbok)
+    _G.bringbook = brbok
+end)	
+
+spawn(function()
+    while wait(0.1) do
+        if _G.bringbook then
+            pcall(function()
+                local player = game.Players.LocalPlayer
+                local character = player.Character or workspace:FindFirstChild(player.Name)
+
+                if character then
+                    local humanoid = character:FindFirstChildOfClass("Humanoid")
+                    
+                    local equippedTool = character:FindFirstChildOfClass("Tool")
+                    if equippedTool and string.match(equippedTool.Name, "Book$") then
+                        humanoid:UnequipTools()
+                    end
+
+                    for _, tool in ipairs(workspace:GetChildren()) do
+                        if tool:IsA("Tool") and tool:FindFirstChild("Handle") then
+                            if string.match(tool.Name, "Book$") then
+                                tool.Parent = character
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+page1:Toggle("Notifile Shank", false, function(shk)
+    _G.shank = shk
 end)	
 
 page1:Toggle("Notifile White Bread", false, function(whbd)
