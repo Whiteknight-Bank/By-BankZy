@@ -648,7 +648,6 @@ page5:Label("┇ Function Button Mobile [ BETA ] ┇")
 page5:Button("Button For Mobile", function()
 local player = game.Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
-local ContextActionService = game:GetService("ContextActionService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local gui = Instance.new("ScreenGui")
@@ -669,7 +668,8 @@ local buttonSize = UDim2.new(0, 50, 0, 50)
 local spacing = 15
 local startY = 100
 
-local activeButtons = {}
+-- จำปุ่มที่อยู่ในโหมดรอยิง
+local selectedSkillKey = nil
 
 for i, key in ipairs(buttonLabels) do
     local button = Instance.new("TextButton")
@@ -691,50 +691,39 @@ for i, key in ipairs(buttonLabels) do
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = button
 
-    activeButtons[key] = false
-
     button.MouseButton1Click:Connect(function()
-        activeButtons[key] = not activeButtons[key]
-
-        if activeButtons[key] then
-            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- เขียว
+        -- กดอีกครั้งเพื่อปิด
+        if selectedSkillKey == key then
+            selectedSkillKey = nil
+            button.BackgroundColor3 = Color3.new(0, 0, 0)
         else
-            button.BackgroundColor3 = Color3.new(0, 0, 0) -- ดำ
+            -- ปิดปุ่มอื่นก่อน
+            for _, otherKey in ipairs(buttonLabels) do
+                local otherButton = gui:FindFirstChild(otherKey .. "Button")
+                if otherButton then
+                    otherButton.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+            end
+            -- เปิดปุ่มที่เลือก
+            selectedSkillKey = key
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
         end
     end)
 end
 
--- แก้ปัญหาเมาส์แสดงบนมือถือ
-UserInputService.MouseIconEnabled = false
+-- ฟังการแตะจอแบบไม่รบกวนการเดิน
+UserInputService.TouchTapInWorld:Connect(function(position, processed)
+    if selectedSkillKey then
+        local keyCode = keyCodes[selectedSkillKey]
+        if keyCode then
+            -- ยิงสกิลด้วยปุ่มที่เลือก
+            VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+            task.wait(0.1)
+            VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+            print("ยิงสกิล:", selectedSkillKey)
 
--- รองรับแตะบนมือถือแบบไม่ทำให้ควบคุมค้าง
-UserInputService.TouchTapInWorld:Connect(function(pos, gp)
-    for key, isActive in pairs(activeButtons) do
-        if isActive then
-            local keyCode = keyCodes[key]
-            if keyCode then
-                VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
-                task.wait(0.1)
-                VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-            end
-            break
-        end
-    end
-end)
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        for key, isActive in pairs(activeButtons) do
-            if isActive then
-                local keyCode = keyCodes[key]
-                if keyCode then
-                    VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
-                    task.wait(0.1)
-                    VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-                end
-                break
-            end
+            -- ไม่ปิดปุ่ม เพื่อให้ยังใช้ได้ซ้ำ
+            -- ถ้าอยากปิดอัตโนมัติให้ใส่ selectedSkillKey = nil
         end
     end
 end)
