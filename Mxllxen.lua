@@ -618,12 +618,12 @@ gui.IgnoreGuiInset = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local keyCodes = {
-    Z = Enum.KeyCode.Z,
-    X = Enum.KeyCode.X,
-    C = Enum.KeyCode.C,
-    V = Enum.KeyCode.V,
-    R = Enum.KeyCode.R,
-    SPACE = Enum.KeyCode.Space,
+	Z = Enum.KeyCode.Z,
+	X = Enum.KeyCode.X,
+	C = Enum.KeyCode.C,
+	V = Enum.KeyCode.V,
+	R = Enum.KeyCode.R,
+	SPACE = Enum.KeyCode.Space,
 }
 
 local buttonSize = UDim2.new(0, 50, 0, 50)
@@ -631,108 +631,113 @@ local spacing = 15
 local startYRight = 100
 local activeButtons = {}
 
--- ปุ่ม Z/X/C/V กดค้างได้
-local rightButtons = {"Z", "X", "C", "V"}
-for i, key in ipairs(rightButtons) do
-    local button = Instance.new("TextButton")
-    button.Name = key .. "Button"
-    button.Text = key
-    button.Size = buttonSize
-    button.Position = UDim2.new(1, -60, 0, startYRight + (i - 1) * (50 + spacing))
-    button.AnchorPoint = Vector2.new(0, 0)
-    button.BackgroundColor3 = Color3.new(0, 0, 0)
-    button.BackgroundTransparency = 0.4
-    button.BorderSizePixel = 0
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.GothamBold
-    button.TextScaled = true
-    button.AutoButtonColor = true
-    button.Parent = gui
+-- 🔘 Z/X/C/V — แตะค้าง แล้ว "ปล่อย" ค่อยยิง
+local pressFlags = {}
+for i, key in ipairs({"Z", "X", "C", "V"}) do
+	local button = Instance.new("TextButton")
+	button.Name = key .. "Button"
+	button.Text = key
+	button.Size = buttonSize
+	button.Position = UDim2.new(1, -60, 0, startYRight + (i - 1) * (50 + spacing))
+	button.AnchorPoint = Vector2.new(0, 0)
+	button.BackgroundColor3 = Color3.new(0, 0, 0)
+	button.BackgroundTransparency = 0.4
+	button.BorderSizePixel = 0
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.GothamBold
+	button.TextScaled = true
+	button.AutoButtonColor = true
+	button.Parent = gui
 
-    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+	Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    button.MouseButton1Down:Connect(function()
-        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
-    end)
+	button.MouseButton1Down:Connect(function()
+		pressFlags[key] = true
+		button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+	end)
 
-    button.MouseButton1Up:Connect(function()
-        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
-    end)
+	button.MouseButton1Up:Connect(function()
+		if pressFlags[key] then
+			VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
+			task.wait(0.1)
+			VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
+			pressFlags[key] = false
+		end
+		button.BackgroundColor3 = Color3.new(0, 0, 0)
+	end)
 end
 
--- ปุ่ม SPACE (ยิงทันที)
+-- 🔘 ปุ่ม Space — ยิงทันที
 do
-    local key = "SPACE"
-    local button = Instance.new("TextButton")
-    button.Name = "SpaceButton"
-    button.Text = "⎵"
-    button.Size = buttonSize
-    button.Position = UDim2.new(1, -110, 1, -130)
-    button.AnchorPoint = Vector2.new(0, 0)
-    button.BackgroundColor3 = Color3.new(0, 0, 0)
-    button.BackgroundTransparency = 0.4
-    button.BorderSizePixel = 0
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.GothamBlack
-    button.TextScaled = true
-    button.AutoButtonColor = true
-    button.Parent = gui
+	local key = "SPACE"
+	local button = Instance.new("TextButton")
+	button.Name = "SpaceButton"
+	button.Text = "⎵"
+	button.Size = buttonSize
+	button.Position = UDim2.new(1, -110, 1, -130)
+	button.AnchorPoint = Vector2.new(0, 0)
+	button.BackgroundColor3 = Color3.new(0, 0, 0)
+	button.BackgroundTransparency = 0.4
+	button.BorderSizePixel = 0
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.GothamBlack
+	button.TextScaled = true
+	button.AutoButtonColor = true
+	button.Parent = gui
 
-    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+	Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    button.MouseButton1Click:Connect(function()
-        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
-        task.wait(0.1)
-        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
-    end)
+	button.MouseButton1Click:Connect(function()
+		VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
+		task.wait(0.1)
+		VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
+	end)
 end
 
--- ปุ่ม R แบบเปิดเขียว รอแตะจอยิง
+-- 🔘 ปุ่ม R — โหมดรอแตะจอยิง
 do
-    local key = "R"
-    local button = Instance.new("TextButton")
-    button.Name = key .. "Button"
-    button.Text = key
-    button.Size = buttonSize
-    button.Position = UDim2.new(0, 10, 1, -60)
-    button.AnchorPoint = Vector2.new(0, 0)
-    button.BackgroundColor3 = Color3.new(0, 0, 0)
-    button.BackgroundTransparency = 0.4
-    button.BorderSizePixel = 0
-    button.TextColor3 = Color3.new(1, 1, 1)
-    button.Font = Enum.Font.GothamBold
-    button.TextScaled = true
-    button.AutoButtonColor = true
-    button.Parent = gui
+	local key = "R"
+	local button = Instance.new("TextButton")
+	button.Name = key .. "Button"
+	button.Text = key
+	button.Size = buttonSize
+	button.Position = UDim2.new(0, 10, 1, -60)
+	button.AnchorPoint = Vector2.new(0, 0)
+	button.BackgroundColor3 = Color3.new(0, 0, 0)
+	button.BackgroundTransparency = 0.4
+	button.BorderSizePixel = 0
+	button.TextColor3 = Color3.new(1, 1, 1)
+	button.Font = Enum.Font.GothamBold
+	button.TextScaled = true
+	button.AutoButtonColor = true
+	button.Parent = gui
 
-    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+	Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    activeButtons[key] = false
+	activeButtons[key] = false
 
-    button.MouseButton1Click:Connect(function()
-        activeButtons[key] = not activeButtons[key]
-        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
-    end)
+	button.MouseButton1Click:Connect(function()
+		activeButtons[key] = not activeButtons[key]
+		button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+	end)
 end
 
--- ยิงปุ่ม R เมื่อแตะจอ แล้วปิดโหมด
+-- 🔘 แตะหน้าจอเพื่อยิง R ถ้าโหมดเปิด
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        if activeButtons["R"] then
-            local keyCode = keyCodes["R"]
-            if keyCode then
-                VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
-                task.wait(0.1)
-                VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-            end
-            activeButtons["R"] = false
-            local btn = gui:FindFirstChild("RButton")
-            if btn then
-                btn.BackgroundColor3 = Color3.new(0, 0, 0)
-            end
-        end
-    end
+	if gameProcessed then return end
+	if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+		if activeButtons["R"] then
+			local keyCode = keyCodes["R"]
+			VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+			task.wait(0.1)
+			VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+			activeButtons["R"] = false
+			local btn = gui:FindFirstChild("RButton")
+			if btn then
+				btn.BackgroundColor3 = Color3.new(0, 0, 0)
+			end
+		end
+	end
 end)
 			end)
 		
