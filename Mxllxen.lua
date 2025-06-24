@@ -339,42 +339,31 @@ end)
 
 local questPositions = {
     ["Mountain Bandit"] = {
-        ["Strength"] = Vector3.new(-947.672119, 61.9150543, -1139.79211), -- BanditQuest
-        ["Sword"]    = Vector3.new(-955.031982, 61.9568481, -1139.79199), -- bandit model
-        ["Defense"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)  -- bandit model
+        ["Strength"] = Vector3.new(-947.672119, 61.9150543, -1139.79211),
+        ["bandit"]    = Vector3.new(-955.031982, 61.9568481, -1139.79199),
+        ["bandit"]  = Vector3.new(-951.352112, 61.9148483, -1139.79199)
     }
 }
 
 spawn(function()
-    while wait(0.1) do
+    while wait(0.2) do
         pcall(function()
             if _G.claimQuest and SelectedEnemy == "Mountain Bandit" and SelectedQuest then
-                local pos = questPositions["Mountain Bandit"][SelectedQuest]
                 local quests = workspace:FindFirstChild("Quests")
-                local spawnIsland = quests and quests:FindFirstChild("SpawnIslandQuests")
-                local banditQuest = spawnIsland and spawnIsland:FindFirstChild("BanditQuest")
+                local banditQuest = quests and quests:FindFirstChild("SpawnIslandQuests") and quests.SpawnIslandQuests:FindFirstChild("BanditQuest")
+                local targetPos = questPositions["Mountain Bandit"][SelectedQuest]
 
-                if not banditQuest or not pos then return end
+                if banditQuest and targetPos then
+                    for _, model in ipairs(banditQuest:GetChildren()) do
+                        if model:IsA("Model") and model.Name == "bandit" then
+                            local anyPart = model:FindFirstChildWhichIsA("BasePart")
+                            local click = model:FindFirstChild("ClickDetector")
 
-                -- 🟥 กรณี STR
-                if SelectedQuest == "Strength" then
-                    local click = banditQuest:FindFirstChildWhichIsA("ClickDetector", true)
-                    local part = banditQuest:FindFirstChildWhichIsA("BasePart", true)
-
-                    if click and part and part.Position == pos then
-                        fireclickdetector(click)
-                        print("✅ Clicked BanditQuest:", SelectedQuest)
-                    end
-
-                elseif SelectedQuest == "Sword" or SelectedQuest == "Defense" then
-                    for _, bandit in ipairs(banditQuest:GetChildren()) do
-                        if bandit:IsA("Model") and bandit.Name == "bandit" then
-                            local part = bandit:FindFirstChildWhichIsA("BasePart", true)
-                            local click = bandit:FindFirstChildWhichIsA("ClickDetector", true)
-
-                            if part and click and part.Position == pos then
-                                fireclickdetector(click)
-                                break
+                            if anyPart and click then
+                                if (anyPart.Position - targetPos).Magnitude < 1 then
+                                    fireclickdetector(click)
+                                    break
+                                end
                             end
                         end
                     end
