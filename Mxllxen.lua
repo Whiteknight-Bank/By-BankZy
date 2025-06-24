@@ -229,7 +229,7 @@ local enemyQuestDef = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
         questModel = "bandit",
-        position = Vector3.new(-955.031982, 61.9568481, -1139.79199, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+        position = Vector3.new(-955.031982, 61.9568481, -1139.79199)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
@@ -565,7 +565,6 @@ RunService.RenderStepped:Connect(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        -- รวมข้อมูลทั้ง 3 ที่เป็นไปได้
         local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
         local quests = workspace:FindFirstChild("Quests")
         local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
