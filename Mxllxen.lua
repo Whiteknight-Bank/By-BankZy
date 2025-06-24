@@ -100,7 +100,7 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
-
+--[[
 local enemyList = {
     ["Yeti"] = "YetisIslandQuest", ---None (Quest Strength)
     ["Mountain Bandit"] = "SpawnIslandQuest", -- BanditQuest (-947.672119, 61.9150543, -1139.79211)
@@ -115,6 +115,8 @@ local enemyList = {
     ["Haki Monkey"] = "GrassyIslandQuest", -- None (Quest Strength )
     ["Ito Bandit"] = "FarmIslandQuest" -- IceMonstersQuest --(-835.759155, 92.8242264, -5633.88428)
 }
+]]--
+
 
 local Wapon = {}
 for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
@@ -292,6 +294,66 @@ end)
 
 page2:Toggle("Auto Farm Strength", false, function(enabled)
     _G.autostrg = enabled
+end)
+
+local enemyList = {
+    ["Yeti"] = "None",
+    ["Mountain Bandit"] = "SpawnIslandQuest",
+    ["Ice Monster"] = "SnowIslandQuest",
+    ["Logia Bandit"] = "SkyIslandQuest",
+    ["Skypiean"] = "SkyIslandQuest",
+    ["Desert Bandit"] = "SandsIslandQuest",
+    ["Fishman"] = "RockyIslandQuest",
+    ["Revolutionary Troop"] = "RevIslandQuest",
+    ["Buggy Pirate"] = "OrangeTownQuest",
+    ["Vice-Admiral"] = "MarineIslandQuest",
+    ["Haki Monkey"] = "None",
+    ["Ito Bandit"] = "FarmIslandQuest"
+}
+
+local questPositions = {
+    ["Mountain Bandit"] = Vector3.new(-947.672119, 61.9150543, -1139.79211),
+    ["Ice Monster"] = Vector3.new(-1063.10986, 62.7437477, -3285.20532),
+    ["Logia Bandit"] = Vector3.new(-4414.65381, 68.6773071, -1525.55737),
+    ["Skypiean"] = Vector3.new(-3856.99365, 2068.38159, 3104.50513),
+    ["Desert Bandit"] = Vector3.new(927.113708, 85.4592438, 125.499176),
+    ["Fishman"] = Vector3.new(-4029.39355, 96.7876511, 454.569122),
+    ["Revolutionary Troop"] = Vector3.new(-3094.93384, 66.9042282, -3807.8772),
+    ["Buggy Pirate"] = Vector3.new(-2362.24292, 64.4447784, -180.865555),
+    ["Vice-Admiral"] = Vector3.new(2807.47412, 80.1453857, -1462.3136),
+    ["Ito Bandit"] = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+}
+
+spawn(function()
+    while wait(0.1) do
+        pcall(function()
+            if not _G.autostrg or not SelectedEnemy then return end
+
+            local questName = enemyList[SelectedEnemy]
+            local targetPos = questPositions[SelectedEnemy]
+
+            if questName == "None" then
+                -- ❌ ไม่ต้องคลิก quest แต่อนุญาตให้ค้นหาได้ (เผื่อเอาไว้ใช้ต่อ)
+                return
+            end
+
+            local questParent = workspace:FindFirstChild(questName)
+            if not questParent or not targetPos then return end
+
+            for _, model in ipairs(questParent:GetDescendants()) do
+                if model:IsA("Model") and model.Name == SelectedEnemy then
+                    local part = model:FindFirstChildWhichIsA("BasePart", true)
+                    local click = model:FindFirstChildWhichIsA("ClickDetector", true)
+
+                    if part and click and (part.Position - targetPos).Magnitude < 1 then
+                        fireclickdetector(click)
+                        print("✅ Clicked:", SelectedEnemy)
+                        break
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 local RunService = game:GetService("RunService")
