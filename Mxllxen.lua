@@ -402,7 +402,7 @@ page3:Button("Monkey Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-949, 63, 716)
 end)
 
-page3:Button("Duke Master Island" , function()
+page3:Button("Maple Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(838, 61, -2133)
 end)
 
