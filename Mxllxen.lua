@@ -556,6 +556,8 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
+local currentTargetMob = nil
+
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
@@ -563,7 +565,8 @@ RunService.RenderStepped:Connect(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        local info = enemyQuestStrg[SelectedEnemy]
+        -- รวมข้อมูลทั้ง 3 ที่เป็นไปได้
+        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
         local quests = workspace:FindFirstChild("Quests")
         local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
 
@@ -579,11 +582,22 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
+        if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
+            local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
+            if mobHRP then
+                local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
+                hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
+            end
+            return
+        end
+
+        currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                 if mob.Humanoid.Health > 0 then
+                    currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5
+                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
                     hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
                     break
                 end
@@ -591,7 +605,7 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
-
+		
 page2:Label("┇ Function Claim Quest ┇")
 page2:Toggle("Auto Claim Strength", false, function(enabled)
     _G.autostrg = enabled
