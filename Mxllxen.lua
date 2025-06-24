@@ -668,10 +668,8 @@ local keyCodes = {
 local buttonSize = UDim2.new(0, 50, 0, 50)
 local spacing = 15
 local startYRight = 100
-
 local activeButtons = {}
 
--- 🔘 ปุ่ม Z/X/C/V (ฝั่งขวา)
 local rightButtons = {"Z", "X", "C", "V"}
 for i, key in ipairs(rightButtons) do
     local button = Instance.new("TextButton")
@@ -691,30 +689,22 @@ for i, key in ipairs(rightButtons) do
 
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    activeButtons[key] = false
-    button.MouseButton1Click:Connect(function()
-        for otherKey, _ in pairs(activeButtons) do
-            if otherKey ~= key then
-                activeButtons[otherKey] = false
-                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
-                if otherBtn then
-                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-                end
-            end
-        end
-        activeButtons[key] = not activeButtons[key]
-        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+    button.MouseButton1Down:Connect(function()
+        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
+    end)
+
+    button.MouseButton1Up:Connect(function()
+        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
     end)
 end
 
--- 🔘 ปุ่ม Spacebar (⎵) อยู่ล่างขวา ใกล้ปุ่มกระโดด
 do
     local key = "SPACE"
     local button = Instance.new("TextButton")
     button.Name = "SpaceButton"
     button.Text = "⎵"
     button.Size = buttonSize
-    button.Position = UDim2.new(1, -70, 1, -70) -- มุมล่างขวา
+    button.Position = UDim2.new(1, -110, 1, -130)
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -727,17 +717,15 @@ do
 
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    button.MouseButton1Click:Connect(function()
-        local keyCode = keyCodes[key]
-        if keyCode then
-            VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
-            task.wait(0.1)
-            VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-        end
+    button.MouseButton1Down:Connect(function()
+        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
+    end)
+
+    button.MouseButton1Up:Connect(function()
+        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
     end)
 end
 
--- 🔘 ปุ่ม R (ล่างซ้าย)
 do
     local key = "R"
     local button = Instance.new("TextButton")
@@ -757,43 +745,14 @@ do
 
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
-    activeButtons[key] = false
-    button.MouseButton1Click:Connect(function()
-        for otherKey, _ in pairs(activeButtons) do
-            if otherKey ~= key then
-                activeButtons[otherKey] = false
-                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
-                if otherBtn then
-                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-                end
-            end
-        end
-        activeButtons[key] = not activeButtons[key]
-        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+    button.MouseButton1Down:Connect(function()
+        VirtualInputManager:SendKeyEvent(true, keyCodes[key], false, game)
+    end)
+
+    button.MouseButton1Up:Connect(function()
+        VirtualInputManager:SendKeyEvent(false, keyCodes[key], false, game)
     end)
 end
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-        for key, isActive in pairs(activeButtons) do
-            if isActive then
-                local keyCode = keyCodes[key]
-                if keyCode then
-                    VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
-                    task.wait(0.1)
-                    VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-                end
-                activeButtons[key] = false
-                local btn = gui:FindFirstChild(key .. "Button")
-                if btn then
-                    btn.BackgroundColor3 = Color3.new(0, 0, 0)
-                end
-                break
-            end
-        end
-    end
-end)
 			end)
 		
   end)
