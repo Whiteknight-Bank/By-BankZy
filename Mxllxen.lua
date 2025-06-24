@@ -656,27 +656,42 @@ gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local buttonLabels = {"Z", "X", "C", "V"}
+-- ปุ่มฝั่งขวา
+local rightButtons = {"Z", "X", "C", "V"}
+
+-- ปุ่มฝั่งซ้าย
+local leftButtons = {"R"}
+
+-- ปุ่มยิงทันที (ไม่ต้องเข้าสีเขียว)
+local instantFireKeys = {
+    SPACE = true,
+}
+
+-- Map KeyCode
 local keyCodes = {
     Z = Enum.KeyCode.Z,
     X = Enum.KeyCode.X,
     C = Enum.KeyCode.C,
     V = Enum.KeyCode.V,
+    R = Enum.KeyCode.R,
+    SPACE = Enum.KeyCode.Space,
 }
 
 local buttonSize = UDim2.new(0, 50, 0, 50)
 local spacing = 15
-local startY = 100
+local startYRight = 100
+local startYLeft = 100
 
--- จำปุ่มที่อยู่ในโหมดรอยิง
+local activeButtons = {}
 local selectedSkillKey = nil
 
-for i, key in ipairs(buttonLabels) do
+-- 🔘 สร้างปุ่มฝั่งขวา (Z/X/C/V)
+for i, key in ipairs(rightButtons) do
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
     button.Text = key
     button.Size = buttonSize
-    button.Position = UDim2.new(1, -60, 0, startY + (i - 1) * (50 + spacing))
+    button.Position = UDim2.new(1, -60, 0, startYRight + (i - 1) * (50 + spacing))
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -691,39 +706,123 @@ for i, key in ipairs(buttonLabels) do
     corner.CornerRadius = UDim.new(1, 0)
     corner.Parent = button
 
+    activeButtons[key] = false
+
     button.MouseButton1Click:Connect(function()
-        -- กดอีกครั้งเพื่อปิด
-        if selectedSkillKey == key then
-            selectedSkillKey = nil
-            button.BackgroundColor3 = Color3.new(0, 0, 0)
-        else
-            -- ปิดปุ่มอื่นก่อน
-            for _, otherKey in ipairs(buttonLabels) do
-                local otherButton = gui:FindFirstChild(otherKey .. "Button")
-                if otherButton then
-                    otherButton.BackgroundColor3 = Color3.new(0, 0, 0)
+        for otherKey, _ in pairs(activeButtons) do
+            if otherKey ~= key then
+                activeButtons[otherKey] = false
+                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
+                if otherBtn then
+                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
                 end
             end
-            -- เปิดปุ่มที่เลือก
-            selectedSkillKey = key
+        end
+
+        activeButtons[key] = not activeButtons[key]
+        if activeButtons[key] then
             button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        else
+            button.BackgroundColor3 = Color3.new(0, 0, 0)
         end
     end)
 end
 
--- ฟังการแตะจอแบบไม่รบกวนการเดิน
-UserInputService.TouchTapInWorld:Connect(function(position, processed)
-    if selectedSkillKey then
-        local keyCode = keyCodes[selectedSkillKey]
+-- 🔘 สร้างปุ่มฝั่งซ้าย (R)
+for i, key in ipairs(leftButtons) do
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(0, 10, 0, startYLeft + (i - 1) * (50 + spacing))
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = button
+
+    activeButtons[key] = false
+
+    button.MouseButton1Click:Connect(function()
+        for otherKey, _ in pairs(activeButtons) do
+            if otherKey ~= key then
+                activeButtons[otherKey] = false
+                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
+                if otherBtn then
+                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+            end
+        end
+
+        activeButtons[key] = not activeButtons[key]
+        if activeButtons[key] then
+            button.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        else
+            button.BackgroundColor3 = Color3.new(0, 0, 0)
+        end
+    end)
+end
+
+-- 🔘 ปุ่ม Spacebar ยิงทันที (ใกล้กระโดด)
+do
+    local key = "SPACE"
+    local button = Instance.new("TextButton")
+    button.Name = "SpaceButton"
+    button.Text = "⎵" -- สัญลักษณ์ Space bar
+    button.Size = buttonSize
+    button.Position = UDim2.new(0, 10, 1, -60) -- ล่างซ้าย
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBlack
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(1, 0)
+    corner.Parent = button
+
+    button.MouseButton1Click:Connect(function()
+        local keyCode = keyCodes[key]
         if keyCode then
-            -- ยิงสกิลด้วยปุ่มที่เลือก
             VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
             task.wait(0.1)
             VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
-            print("ยิงสกิล:", selectedSkillKey)
+        end
+    end)
+end
 
-            -- ไม่ปิดปุ่ม เพื่อให้ยังใช้ได้ซ้ำ
-            -- ถ้าอยากปิดอัตโนมัติให้ใส่ selectedSkillKey = nil
+-- ✅ แตะหน้าจอเพื่อยิงสกิล (จากปุ่มที่เปิดเขียวอยู่)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+        for key, isActive in pairs(activeButtons) do
+            if isActive then
+                local keyCode = keyCodes[key]
+                if keyCode then
+                    VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+                    task.wait(0.1)
+                    VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+                end
+                activeButtons[key] = false
+                local btn = gui:FindFirstChild(key .. "Button")
+                if btn then
+                    btn.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+                break
+            end
         end
     end
 end)
