@@ -294,7 +294,7 @@ end)
 
 local enemyQuestInfo = {
     ["Mountain Bandit"] = {
-        questFolder = "SpawnIslandQuest",
+        questFolder = "SpawnIslandQuests",
         questModel = "BanditQuest",
         position = Vector3.new(-947.672119, 61.9150543, -1139.79211)
     },
@@ -314,7 +314,7 @@ local enemyQuestInfo = {
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
-        questFolder = "SandsIslandQuest",
+        questFolder = "SandsIslandQuests",
         questModel = "DefeatDesertBanditStrength",
         position = Vector3.new(927.113708, 85.4592438, 125.499176)
     },
