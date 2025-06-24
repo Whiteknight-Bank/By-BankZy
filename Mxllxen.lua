@@ -141,7 +141,7 @@ local enemyQuestStrg = {
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
-        questFolder = "SandsIslandQuests",
+        questFolder = "SandIslandQuests",
         questModel = "DefeatDesertBanditStrength",
         position = Vector3.new(927.113708, 85.4592438, 125.499176)
     },
