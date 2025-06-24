@@ -750,9 +750,9 @@ end)
 
 page5:Button("Boost FPS", function()
 create:Notifile("", "Excute infinite yield", 3)
-wait(2)
+wait(1)
 
-loadstring()()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Diy.lua"))()
 end)
 
 local afkConnection
