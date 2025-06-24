@@ -247,7 +247,9 @@ page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
 local SelectedBoss = ""
+local noclipConnection
 
+-- Enemy Dropdown
 page2:Dropdown("Select Enemys:", {
     "Mountain Bandit", 
     "Buggy Pirate",
@@ -261,9 +263,10 @@ page2:Dropdown("Select Enemys:", {
     "Revolutionary Troop"
 }, function(choice)
     SelectedEnemy = choice
-    SelectedBoss = "" -- ถ้าเลือกศัตรู เคลียร์บอส
+    SelectedBoss = ""
 end)
 
+-- Boss Dropdown
 page2:Dropdown("Select Boss:", {
     "Buggy The Clown", 
     "Crocodile",
@@ -272,37 +275,68 @@ page2:Dropdown("Select Boss:", {
     "Enel"
 }, function(choice)
     SelectedBoss = choice
-    SelectedEnemy = "" -- ถ้าเลือกบอส เคลียร์ศัตรู
+    SelectedEnemy = ""
 end)
 
 page2:Toggle("Auto Farm", false, function(enabled)
     _G.farmNpc = enabled
-end)
 
-spawn(function()
-    while wait(0.2) do
-        if _G.farmNpc then
+    if enabled then
+        noclipConnection = game:GetService("RunService").Stepped:Connect(function()
             pcall(function()
-                local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
-                if targetName == "" then return end
-
-                local Enemys = workspace:FindFirstChild("Enemys")
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local hrp = char and char:FindFirstChild("HumanoidRootPart")
-                if not (Enemys and hrp) then return end
-
-                for _, mob in pairs(Enemys:GetChildren()) do
-                    if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") then
-                        local mobHRP = mob.HumanoidRootPart
-                        local behindPos = mobHRP.CFrame.Position - mobHRP.CFrame.LookVector * 4
-                        hrp.CFrame = CFrame.new(behindPos, mobHRP.Position) -- หันหน้าเข้าหามอน
-                        break
+                local char = game.Players.LocalPlayer.Character
+                if char then
+                    for _, part in pairs(char:GetDescendants()) do
+                        if part:IsA("BasePart") then
+                            part.CanCollide = false
+                        end
                     end
                 end
             end)
+        end)
+				else
+        if noclipConnection then
+            noclipConnection:Disconnect()
+            noclipConnection = nil
         end
+        pcall(function()
+            local char = game.Players.LocalPlayer.Character
+            if char then
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = true
+                    end
+                end
+            end
+        end)
     end
+end)
+
+local RunService = game:GetService("RunService")
+RunService.RenderStepped:Connect(function()
+    if not _G.farmNpc then return end
+
+    pcall(function()
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        if targetName == "" then return end
+
+        local Enemys = workspace:FindFirstChild("Enemys")
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not (Enemys and hrp) then return end
+
+        for _, mob in pairs(Enemys:GetChildren()) do
+            if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
+                if mob.Humanoid.Health > 0 then
+                    local mobHRP = mob.HumanoidRootPart
+                    local underFeetPos = mobHRP.Position - Vector3.new(0, 2.5, 0) -- ใต้ตีนประมาณ 2.5 หน่วย
+                    hrp.CFrame = CFrame.new(underFeetPos, mobHRP.Position)
+                    break
+                end
+            end
+        end
+    end)
 end)
 		
 page2:Toggle("Auto Claim Quest Board", false, function(clmq)
