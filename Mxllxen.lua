@@ -102,22 +102,6 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
---[[
-local enemyList = {
-    ["Yeti"] = "YetisIslandQuest", ---None (Quest Strength)
-    ["Mountain Bandit"] = "SpawnIslandQuest", -- BanditQuest (-947.672119, 61.9150543, -1139.79211)
-    ["Ice Monster"] = "SnowIslandQuest", -- IceMonstersQuest --(-1063.10986, 62.7437477, -3285.20532)
-    ["Logia Bandit"] = "SkyIslandQuest", -- IceMonstersQuest --(-4414.65381, 68.6773071, -1525.55737)
-    ["Skypiean"] = "SkyIslandQuest", -- IceMonstersQuest --(-3856.99365, 2068.38159, 3104.50513)
-    ["Desert Bandit"] = "SandsIslandQuest", -- DefeatDesertBanditStrength or (927.113708, 85.4592438, 125.499176)
-    ["Fishman"] = "RockyIslandQuest", -- IceMonstersQuest --(-4029.39355, 96.7876511, 454.569122)
-    ["Revolutionary Troop"] = "RevIslandQuest", -- IceMonstersQuest --(-3094.93384, 66.9042282, -3807.8772)
-    ["Buggy Pirate"] = "OrangeTownQuest", -- BuggyPirateQuests -- (-2362.24292, 64.4447784, -180.865555)
-    ["Vice-Admiral"] = "MarineIslandQuest", -- marineq --(2807.47412, 80.1453857, -1462.3136)
-    ["Haki Monkey"] = "GrassyIslandQuest", -- None (Quest Strength )
-    ["Ito Bandit"] = "FarmIslandQuest" -- IceMonstersQuest --(-835.759155, 92.8242264, -5633.88428)
-}
-]]--
 
 local enemyQuestStrg = {
     ["Mountain Bandit"] = {
@@ -228,7 +212,7 @@ local enemyQuestSword = {
 local enemyQuestDef = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
-        questModel = "bandit",
+        questModel = "Bandit",
         position = Vector3.new(-955.031982, 61.9568481, -1139.79199)
     },
     ["Ice Monster"] = {
