@@ -653,30 +653,22 @@ page2:Dropdown("Select Enemys:", {
     "None",
     "Mountain Bandit", 
     "Buggy Pirate",
+    "Buggy The Clown",
     "Desert Bandit",
+    "Crocodile",
     "Ice Monster",
     "Haki Monkey", 
     "Vice-Admiral", 
     "Revolutionary Troop",
     "Skypiean",
+    "Enel",
     "Logia Bandit",
+    "Bara Bandit",
     "Fishman",
-    "Ito Bandit"
+    "Ito Bandit", 
+    "Yeti"
 }, function(choice)
     SelectedEnemy = choice
-    SelectedBoss = ""
-end)
-
-page2:Dropdown("Select Boss:", {
-    "None",
-    "Buggy The Clown", 
-    "Crocodile",
-    "Bara Bandit",
-    "Enel",
-    "Yeti"
-}, function(choose)
-    SelectedBoss = choose
-    SelectedEnemy = ""
 end)
 
 page2:Toggle("Auto Bring Farm", false, function(brfrm)
@@ -741,7 +733,7 @@ RunService.RenderStepped:Connect(function()
     if not _G.farmBring then return end
 
     pcall(function()
-        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy
         if targetName == "" then return end
 
         local player = game.Players.LocalPlayer
@@ -891,9 +883,9 @@ end)
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
-            if not _G.autostrg or (SelectedEnemy == "" and SelectedBoss == "") or isQuestGUIVisible() then return end
+            if not _G.autostrg or SelectedEnemy == "" or isQuestGUIVisible() then return end
 
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+            local targetName = SelectedEnemy ~= "" and SelectedEnemy
             local info = enemyQuestStrg[targetName]
             if not info then return end
 
@@ -933,9 +925,9 @@ end)
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
-            if not _G.autosword or (SelectedEnemy == "" and SelectedBoss == "") or isQuestGUIVisible() then return end
+            if not _G.autosword or SelectedEnemy == "" or isQuestGUIVisible() then return end
 
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+            local targetName = SelectedEnemy ~= "" and SelectedEnemy
             local info = enemyQuestSword[targetName]
             if not info then return end
 
@@ -975,9 +967,9 @@ end)
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
-            if not _G.autodef or (SelectedEnemy == "" and SelectedBoss == "") or isQuestGUIVisible() then return end
+            if not _G.autodef or SelectedEnemy == "" or isQuestGUIVisible() then return end
 
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+            local targetName = SelectedEnemy ~= "" and SelectedEnemy
             local info = enemyQuestDef[targetName]
             if not info then return end
 
@@ -1017,9 +1009,9 @@ end)
 spawn(function()
     while task.wait(0.5) do
         pcall(function()
-            if not _G.autosni or (SelectedEnemy == "" and SelectedBoss == "") or isQuestGUIVisible() then return end
+            if not _G.autosni or SelectedEnemy == "" or isQuestGUIVisible() then return end
 
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+            local targetName = SelectedEnemy ~= "" and SelectedEnemy
             local info = enemyQuestSniper[targetName]
             if not info then return end
 
