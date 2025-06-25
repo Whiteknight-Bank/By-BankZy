@@ -673,6 +673,7 @@ page2:Dropdown("Select Enemys:", {
     "Revolutionary Troop",
     "Skypiean",
     "Logia Bandit",
+    "Fishman",
     "Ito Bandit"
 }, function(choice)
     SelectedEnemy = choice
@@ -683,8 +684,8 @@ page2:Dropdown("Select Boss:", {
     "Buggy The Clown", 
     "Crocodile",
     "Bara Bandit",
-    "Yeti",
-    "Enel"
+    "Enel",
+    "Yeti"
 }, function(choice)
     SelectedBoss = choice
     SelectedEnemy = ""
