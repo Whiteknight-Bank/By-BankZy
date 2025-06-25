@@ -293,6 +293,11 @@ for _, questTable in ipairs(allQuests) do
     for _, entry in pairs(questTable) do
         local folder = questsFolder:FindFirstChild(entry.questFolder)
 
+        if not folder then
+            warn("❌ ไม่พบ folder:", entry.questFolder)
+            continue
+        end
+
         local found = false
         for _, inst in ipairs(folder:GetChildren()) do
             if inst:IsA("BasePart") and inst:FindFirstChild(entry.questModel) then
