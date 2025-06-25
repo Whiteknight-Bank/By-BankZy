@@ -145,7 +145,7 @@ local enemyQuestStrg = {
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
-        questFolder = "OrangeTownQuest",
+        questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
         newName = "BuggyPirateStrgQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
@@ -205,7 +205,7 @@ local enemyQuestSword = {
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
-        questFolder = "OrangeTownQuest",
+        questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
         newName = "BuggyPirateSwordQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
@@ -267,7 +267,7 @@ local enemyQuestDef = {
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
-        questFolder = "OrangeTownQuest",
+        questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
         newName = "BuggyPirateDefQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
@@ -287,27 +287,38 @@ local enemyQuestDef = {
 		}
 
 local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef}
+local questsFolder = workspace:FindFirstChild("Quests")
 
 for _, questTable in ipairs(allQuests) do
     for _, entry in pairs(questTable) do
-        local quests = workspace:FindFirstChild("Quests")
-        local folder = quests and quests:FindFirstChild(entry.questFolder)
-        
-        if folder then
-            local model = folder:FindFirstChild(entry.questModel)
-            if model and model:IsA("Model") then
-                local part = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
-                if part then
-                    local distance = (part.Position - entry.position).Magnitude
-                    if distance < 3 then  -- ปรับความแม่นได้ (เช่น <3)
-                        if entry.newName then
-                            pcall(function()
-                                model.Name = entry.newName
-                            end)
+        local folder = questsFolder:FindFirstChild(entry.questFolder)
+
+        local found = false
+        for _, inst in ipairs(folder:GetChildren()) do
+            if inst:IsA("BasePart") then
+                if inst.Position == entry.position then
+                    if entry.newName then
+                        local oldName = inst.Name
+                        local success, err = pcall(function()
+                            inst.Name = entry.newName
+                        end)
+
+                        if success then
+                            print("✅ เปลี่ยนชื่อ:", oldName, "→", inst.Name, "ใน", entry.questFolder)
+                        else
+                            warn("❌ เปลี่ยนชื่อไม่สำเร็จ:", err)
                         end
+                    else
+                        print("🟡 ไม่มี newName ใน entry นี้")
                     end
+                    found = true
+                    break
                 end
             end
+        end
+
+        if not found then
+            warn("⚠️ ไม่พบ Instance ที่ตำแหน่ง:", tostring(entry.position), "ใน", entry.questFolder)
         end
     end
 end
