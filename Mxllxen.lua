@@ -1073,17 +1073,57 @@ page2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page2:Toggle("View", false, function(state)
-	if selectedPlayer then
-		local target = Players:FindFirstChild(selectedPlayer)
-		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
-			if state then
-				Camera.CameraSubject = target.Character.Humanoid
-			else
-				Camera.CameraSubject = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-			end
-		end
-	end
+local viewing = nil
+local viewDied = nil
+local viewChanged = nil
+
+page2:Toggle("Spectate Player", false, function(spac)
+    local speaker = game.Players.LocalPlayer
+    local cam = workspace.CurrentCamera
+
+    local function stopSpectate()
+        StopFreecam()
+        if viewing ~= nil then
+            viewing = nil
+        end
+        if viewDied then
+            viewDied:Disconnect()
+            viewDied = nil
+        end
+        if viewChanged then
+            viewChanged:Disconnect()
+            viewChanged = nil
+        end
+        if speaker.Character then
+            cam.CameraSubject = speaker.Character
+        end
+    end
+
+    if spec then
+        local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
+        if targetPlayer and targetPlayer.Character then
+            viewing = targetPlayer
+            cam.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+
+            local humanoid = targetPlayer.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                viewDied = humanoid.Died:Connect(function()
+                    stopSpectate()
+                end)
+            end
+
+            viewChanged = targetPlayer.CharacterAdded:Connect(function(char)
+                task.wait(1)
+                if viewing == targetPlayer then
+                    cam.CameraSubject = char:FindFirstChild("Humanoid") or char:FindFirstChild("HumanoidRootPart")
+                end
+            end)
+        else
+            stopSpectate()
+        end
+    else
+        stopSpectate()
+    end
 end)
 
 local Tab3 = Window:Taps("Island")
