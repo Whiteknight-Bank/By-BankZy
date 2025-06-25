@@ -111,17 +111,20 @@ local enemyQuestStrg = {
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceStgthQuest",
+        questModel = "IceMonstersQuest",
+        newName = "IceStgthQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "LogiaBStrgthQuest",
+        questModel = "IceMonstersQuest",
+        newName = "LogiaBStrgthQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "SkyStrgthQuest",
+        questModel = "IceMonstersQuest",
+        newName = "SkyStrgthQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -131,17 +134,20 @@ local enemyQuestStrg = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "FishStrgthQuest",
+        questModel = "IceMonstersQuest",
+        newName = "FishStrgthQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "RenaryStrgQuest",
+        questModel = "IceMonstersQuest",
+        newName = "RenaryStrgQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateStrgQuests",
+        questModel = "BuggyPirateQuests",
+        newName = "BuggyPirateStrgQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
@@ -151,7 +157,8 @@ local enemyQuestStrg = {
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "ItoStrengthQuest",
+        questModel = "IceMonstersQuest",
+        newName = "ItoStrengthQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
@@ -164,17 +171,20 @@ local enemyQuestSword = {
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceSwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "IceSwordQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "LogiaBSwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "LogiaBSwordQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "SkySwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "SkySwordQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -184,27 +194,32 @@ local enemyQuestSword = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "FishSwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "FishSwordQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "RevonarySwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "RevonarySwordQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateSwordQuests",
+        questModel = "BuggyPirateQuests",
+        newName = "BuggyPirateSwordQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-        questModel = "marineSword",
+        questModel = "marin",
+        newName = "marineSword",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "ItoSwordQuest",
+        questModel = "IceMonstersQuest",
+        newName = "ItoSwordQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
@@ -212,22 +227,26 @@ local enemyQuestSword = {
 local enemyQuestDef = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
-        questModel = "Bandit",
+        questModel = "bandit",
+        newName = "Bandit",
         position = Vector3.new(-955.031982, 61.9568481, -1139.79199)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceDefQuest",
+        questModel = "IceMonstersQuest",
+        newName = "IceDefQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "LogiaBanditDefQuest",
+        questModel = "IceMonstersQuest",
+        newName = "LogiaBanditDefQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "SkyDefQuest",
+        questModel = "IceMonstersQuest",
+        newName = "SkyDefQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -237,41 +256,54 @@ local enemyQuestDef = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "FishDefQuest",
+        questModel = "IceMonstersQuest",
+        newName = "FishDefQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "RevolunaryDefQuest",
+        questModel = "IceMonstersQuest",
+        newName = "RevolunaryDefQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateDefQuests",
+        questModel = "BuggyPirateQuests",
+        newName = "BuggyPirateDefQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-        questModel = "MarineGun",
+	questModel = "marine",
+        newName = "MarineGun",
         position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "ItoDefQuest",
+	questModel = "IceMonstersQuest",
+        newName = "ItoDefQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
 
-local function renameQuests(map)
-    for name, info in pairs(map) do
-        local folder = workspace:FindFirstChild("Quests"):FindFirstChild(info.questFolder)
+local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef}
+
+for _, questTable in ipairs(allQuests) do
+    for _, entry in pairs(questTable) do
+        local quests = workspace:FindFirstChild("Quests")
+        local folder = quests and quests:FindFirstChild(entry.questFolder)
+        
         if folder then
-            for _, model in ipairs(folder:GetChildren()) do
-                if model:IsA("Model") then
-                    local part = model:FindFirstChildWhichIsA("BasePart", true)
-                    if part and (part.Position - info.position).Magnitude < 1 then
-                        if model.Name ~= info.questModel then
-                            model.Name = info.questModel
+            local model = folder:FindFirstChild(entry.questModel)
+            if model and model:IsA("Model") then
+                local part = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+                if part then
+                    local distance = (part.Position - entry.position).Magnitude
+                    if distance < 3 then  -- ปรับความแม่นได้ (เช่น <3)
+                        if entry.newName then
+                            pcall(function()
+                                model.Name = entry.newName
+                            end)
                         end
                     end
                 end
