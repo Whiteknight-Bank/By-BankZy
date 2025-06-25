@@ -291,7 +291,7 @@ local questsFolder = workspace:FindFirstChild("Quests")
 
 for _, questTable in ipairs(allQuests) do
     for _, entry in pairs(questTable) do
-        local folder = questsFolder:FindFirstChild(entry.questFolder)
+        local folder = questsFolder and questsFolder:FindFirstChild(entry.questFolder)
 
         if not folder then
             warn("❌ ไม่พบ folder:", entry.questFolder)
@@ -299,42 +299,42 @@ for _, questTable in ipairs(allQuests) do
         end
 
         local found = false
-        print("\n🔎 เริ่มค้นหาใน:", entry.questFolder, "→", entry.questModel)
-        print("🎯 CFrame ที่ต้องการ:", entry.cframe)
+        print("\n🔎 เริ่มค้นหาใน:", entry.questFolder, "→ กำลังหาโมเดล:", entry.questModel)
+        print("🎯 Position ที่ต้องการ:", tostring(entry.position))
 
-        for _, inst in ipairs(folder:GetChildren()) do
-            if inst:IsA("BasePart") then
-                local hasModel = inst:FindFirstChild(entry.questModel) ~= nil
-                local cframeMatch = inst.CFrame == entry.cframe
+        for _, inst in ipairs(folder:GetDescendants()) do
+            if inst:IsA("Model") or inst:IsA("Part") then
+                local questObj = inst:FindFirstChild(entry.questModel)
 
-                print("→ ตรวจ:", inst.Name)
-                print("   🧱 CFrame:", inst.CFrame)
-                print("   ✅ เทียบ CFrame:", cframeMatch)
-                print("   🔍 มี questModel:", hasModel)
+                if questObj then
+                    local base = inst:IsA("Part") and inst or inst:FindFirstChildWhichIsA("BasePart", true)
+                    if base then
+                        local posMatch = (base.Position - entry.position).Magnitude < 1
+                        print("→ เจอ:", inst.Name, "| posMatch:", posMatch)
 
-                if hasModel and cframeMatch then
-                    if entry.newName then
-                        local oldName = inst.Name
-                        local success, err = pcall(function()
-                            inst.Name = entry.newName
-                        end)
-
-                        if success then
-                            print("✅ เปลี่ยนชื่อ:", oldName, "→", inst.Name, "ใน", entry.questFolder)
-                        else
-                            warn("❌ เปลี่ยนชื่อไม่สำเร็จ:", err)
+                        if posMatch then
+                            if entry.newName then
+                                local success, err = pcall(function()
+                                    inst.Name = entry.newName
+                                end)
+                                if success then
+                                    print("✅ Rename:", entry.questModel, "→", inst.Name)
+                                else
+                                    warn("❌ Rename ผิดพลาด:", err)
+                                end
+                            else
+                                print("⚠️ ไม่มี newName ให้ Rename")
+                            end
+                            found = true
+                            break
                         end
-                    else
-                        print("🟡 ไม่มี newName ใน entry นี้")
                     end
-                    found = true
-                    break
                 end
             end
         end
 
         if not found then
-            warn("⚠️ ไม่พบ Instance ที่ CFrame:", tostring(entry.cframe), "ใน", entry.questFolder)
+            warn("⚠️ ไม่พบโมเดลที่ตรงกับ", entry.questModel, "และตำแหน่งที่ต้องการใน", entry.questFolder)
         end
     end
 end
