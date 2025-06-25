@@ -1076,6 +1076,16 @@ end)
 local viewing = nil
 local viewDied = nil
 local viewChanged = nil
+local fcRunning = false
+
+function StopFreecam()
+	if not fcRunning then return end
+	Input.StopCapture()
+	RunService:UnbindFromRenderStep("Freecam")
+	PlayerState.Pop()
+	workspace.Camera.FieldOfView = 70
+	fcRunning = false
+end
 
 page2:Toggle("Spectate Player", false, function(spac)
     local speaker = game.Players.LocalPlayer
@@ -1083,9 +1093,7 @@ page2:Toggle("Spectate Player", false, function(spac)
 
     local function stopSpectate()
         StopFreecam()
-        if viewing ~= nil then
-            viewing = nil
-        end
+        viewing = nil
         if viewDied then
             viewDied:Disconnect()
             viewDied = nil
@@ -1099,11 +1107,19 @@ page2:Toggle("Spectate Player", false, function(spac)
         end
     end
 
-    if spac then  -- <<< แก้ตรงนี้ให้ตรงกับชื่อ parameter
+    if spac then
+        if type(selectedPlayer) ~= "string" then
+            stopSpectate()
+            return
+        end
+
         local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
         if targetPlayer and targetPlayer.Character then
             viewing = targetPlayer
-            cam.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+            local subject = targetPlayer.Character:FindFirstChild("Humanoid") or targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+            if subject then
+                cam.CameraSubject = subject
+            end
 
             local humanoid = targetPlayer.Character:FindFirstChild("Humanoid")
             if humanoid then
@@ -1115,7 +1131,10 @@ page2:Toggle("Spectate Player", false, function(spac)
             viewChanged = targetPlayer.CharacterAdded:Connect(function(char)
                 task.wait(1)
                 if viewing == targetPlayer then
-                    cam.CameraSubject = char:FindFirstChild("Humanoid") or char:FindFirstChild("HumanoidRootPart")
+                    local newSubject = char:FindFirstChild("Humanoid") or char:FindFirstChild("HumanoidRootPart")
+                    if newSubject then
+                        cam.CameraSubject = newSubject
+                    end
                 end
             end)
         else
