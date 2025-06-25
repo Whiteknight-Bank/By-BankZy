@@ -673,20 +673,20 @@ page2:Dropdown("Select Boss:", {
     "Bara Bandit",
     "Enel",
     "Yeti"
-}, function(choice)
-    SelectedBoss = choice
+}, function(choose)
+    SelectedBoss = choose
     SelectedEnemy = ""
 end)
 
-page2:Toggle("Auto Behind Farm", false, function(befrm)
-    _G.farmNpc = befrm
+page2:Toggle("Auto Bring Farm", false, function(brfrm)
+    _G.farmBring = brfrm
 end)
 
 local lastSafeTP = 0
 local safeTPDelay = 2 -- หน่วงวินาทีก่อนวาร์ปกลับ SafeZone
 
 RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
+    if not _G.farmBring then return end
 
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
@@ -733,37 +733,54 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 
+local maxPullCount = 2
+local currentPulled = {}
+
 RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
+    if not _G.farmBring then return end
+
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        local char = game.Players.LocalPlayer.Character
+        local player = game.Players.LocalPlayer
+        local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
+        for i = #currentPulled, 1, -1 do
+            local mob = currentPulled[i]
+            if not mob or not mob:FindFirstChild("Humanoid") or mob.Humanoid.Health <= 0 then
+                if mob then mob:Destroy() end
+                table.remove(currentPulled, i)
+            end
+        end
+
+        if #currentPulled >= maxPullCount then return end
+
         for _, mob in pairs(Enemys:GetChildren()) do
-            if mob:IsA("Model") and mob.Name == targetName then
+            if mob:IsA("Model") and mob.Name == targetName and not table.find(currentPulled, mob) then
                 local mobHRP = mob:FindFirstChild("HumanoidRootPart")
                 local mobHum = mob:FindFirstChild("Humanoid")
 
-                if mobHRP and mobHum then
-                    if mobHum.Health > 0 then
-                        local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
-                        local frontRightPos = hrp.Position + offset
-                        local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
-                        mobHRP.CFrame = lookCF
+                if mobHRP and mobHum and mobHum.Health > 0 then
+                    table.insert(currentPulled, mob)
 
-                        mobHRP.Size = Vector3.new(10, 10, 10)
-                        mobHRP.Transparency = 0.5
-                        mobHRP.CanCollide = false
-			else
-                        mob:Destroy()
-                    end
+                    local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
+                    local frontRightPos = hrp.Position + offset
+                    local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
+                    mobHRP.CFrame = lookCF
+
+                    mobHRP.Size = Vector3.new(10, 10, 10)
+                    mobHRP.Transparency = 0.8
+                    mobHRP.CanCollide = false
+                end
+
+                if #currentPulled >= maxPullCount then
+                    break
                 end
             end
         end
