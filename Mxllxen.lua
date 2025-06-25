@@ -679,80 +679,30 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-
-local lastSafeTP = 0
-local safeTPDelay = 1
-
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
-    pcall(function()
-        local player = game.Players.LocalPlayer
-        local char = player.Character
-        local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
 
+    pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
         if targetName == "" then return end
 
-        for _, part in ipairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = false
-            end
-        end
+        local char = game.Players.LocalPlayer.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
 
-        local quests = workspace:FindFirstChild("Quests")
-        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
-        local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
+        local Enemys = workspace:FindFirstChild("Enemys")
+        if not Enemys then return end
 
-        if not isQuestGUIVisible() and info and info.position then
-            hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+        for _, mob in pairs(Enemys:GetChildren()) do
+            if mob:IsA("Model") and mob.Name == targetName then
+                local mobHRP = mob:FindFirstChild("HumanoidRootPart")
+                local mobHum = mob:FindFirstChild("Humanoid")
 
-            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
-            if questModel then
-                for _, obj in ipairs(questModel:GetDescendants()) do
-                    if obj:IsA("ClickDetector") then
-                        local parent = obj.Parent
-                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-                        if part and (part.Position - info.position).Magnitude < 3 then
-                            fireclickdetector(obj)
-                            break
-                        end
-                    end
-                end
-            end
-
-            return
-        end
-
-if isQuestGUIVisible() and tick() - lastSafeTP > safeTPDelay then
-    lastSafeTP = tick()
-
-    local safePart = nil
-            if enemyQuestStrg[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            elseif enemyQuestSword[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            elseif enemyQuestDef[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-	end
-
-    if safePart and hrp then
-        hrp.CFrame = safePart.CFrame + Vector3.new(0, 3, 0)
-    end
-end
-            
-	local Enemys = workspace:FindFirstChild("Enemys")
-            if Enemys then
-                for _, mob in pairs(Enemys:GetChildren()) do
-                    if mob:IsA("Model") and mob.Name == targetName then
-                        local mobHRP = mob:FindFirstChild("HumanoidRootPart")
-                        local mobHum = mob:FindFirstChild("Humanoid")
-                        if mobHRP and mobHum and mobHum.Health > 0 then
-                            local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
-                            local frontRightPos = hrp.Position + offset
-                            mobHRP.CFrame = CFrame.lookAt(frontRightPos, hrp.Position)
-                        end
-                    end
+                if mobHRP and mobHum and mobHum.Health > 0 then
+                    local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
+                    local frontRightPos = hrp.Position + offset
+                    local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
+                    mobHRP.CFrame = lookCF
                 end
             end
         end
