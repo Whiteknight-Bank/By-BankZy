@@ -679,39 +679,38 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-spawn(function()
-    while wait(0.5) do
-        pcall(function()
-            if not _G.farmNpc then return end
+RunService.RenderStepped:Connect(function()
+    if not _G.farmNpc then return end
 
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
-            if targetName == "" then return end
+    pcall(function()
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        if targetName == "" then return end
 
-            local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
+        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
+        if not info then return end
 
-            local char = player.Character
-            local hrp = char and char:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
+        local char = player.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
 
-            -- ปิดชนตัว
-            for _, part in ipairs(char:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
+        for _, part in ipairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+
+        if not isQuestGUIVisible() then
+            local safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            if safePart then
+                hrp.CFrame = safePart.CFrame + Vector3.new(0, 5, 0)
             end
 
-            if not isQuestGUIVisible() and info and info.position then
-                hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
-            elseif isQuestGUIVisible() == false and questFolder then
-                hrp.CFrame = SafeZoneOuterSpace.CFrame + Vector3.new(0, 5, 0)
-            end
-        end)
-    end
+        elseif info.position then
+            hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+        end
+    end)
 end)
 
--- ✅ ลูปดึงมอนมาหน้าเรา
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
@@ -732,8 +731,9 @@ RunService.RenderStepped:Connect(function()
                 local mobHum = mob:FindFirstChild("Humanoid")
 
                 if mobHRP and mobHum and mobHum.Health > 0 then
-                    local frontPos = hrp.Position + hrp.CFrame.LookVector * 4
-                    local lookCF = CFrame.lookAt(frontPos, hrp.Position)
+                    local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
+                    local frontRightPos = hrp.Position + offset
+                    local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
                     mobHRP.CFrame = lookCF
                 end
             end
