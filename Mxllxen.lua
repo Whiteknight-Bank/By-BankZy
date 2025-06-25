@@ -1629,7 +1629,88 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
-create:Notifile("", "Button For Mobile ver. 2.7.4 [BETA]", 3)
+do
+    local key = "J"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -60, 1, -60)
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    button.MouseButton1Click:Connect(function()
+        local keyCode = Enum.KeyCode.J
+        VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+        task.wait(0.1)
+        VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+    end)
+end
+
+do
+    local key = "Q"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -180, 1, -170) -- บนซ้ายของ Space
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    button.MouseButton1Click:Connect(function()
+        local keyCode = Enum.KeyCode.Q
+        VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+        task.wait(0.1)
+        VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+    end)
+end
+
+do
+    local key = "E"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -180, 1, -90)
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    button.MouseButton1Click:Connect(function()
+        local keyCode = Enum.KeyCode.E
+        VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
+        task.wait(0.1)
+        VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
+    end)
+end
+				
+create:Notifile("", "Button For Mobile ver. 4.2.75 [BETA]", 3)
 			end)
 
 wait(1)local Players = game:GetService("Players")
