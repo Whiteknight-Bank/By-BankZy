@@ -207,8 +207,8 @@ local enemyQuestSword = {
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RevonarySwordQuest",
-        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+        newName = "RevonaryBladeQuest",
+        position = Vector3.new(-3098.60962, 66.9039612, -3807.74756)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuests",
@@ -276,7 +276,7 @@ local enemyQuestDef = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "RevolunaryDefQuest",
-        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+        position = Vector3.new(-3102.28809, 66.9459763, -3807.61768)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuests",
@@ -303,19 +303,19 @@ local enemyQuestSniper = {
         questFolder = "SpawnIslandQuests",
         questModel = "MonkeyQuest",
         newName = "MonkeyGunQuest",
-        position = Vector3.new(-955.032, 61.957, -1139.792)
+        position = Vector3.new(-952.788574, 66.0822601, 678.413635)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "IceGunQuest",
-        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+        position = Vector3.new(-1059.99097, 62.7434807, -3287.15747)
     },
-    ["Logia Bandit"] = {
-        questFolder = "SkyIslandQuest",
+    ["Yeti"] = {
+        questFolder = "YetiIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "",
-        position = Vector3.new()
+        position = Vector3.new(1557.05554, 62.7163467, -4889.20605)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
@@ -342,9 +342,9 @@ local enemyQuestSniper = {
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-	questModel = "marine",
+	questModel = "marin",
         newName = "MarineGun",
-        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+        position = Vector3.new(2810.15869, 80.145195, -1459.79517)
      }
 		}
 
