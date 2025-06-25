@@ -298,7 +298,6 @@ local enemyQuestDef = {
     }
 		}
 		
---[[
 local enemyQuestSniper = {
     ["Haki Monkey"] = {
         questFolder = "SpawnIslandQuests",
@@ -315,54 +314,41 @@ local enemyQuestSniper = {
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "LogiaBanditDefQuest",
-        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+        newName = "",
+        position = Vector3.new()
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "SkyDefQuest",
-        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+        position = Vector3.new()
     },
     ["Desert Bandit"] = {
         questFolder = "SandIslandQuests",
-        questModel = "DefeatDesertBanditDefense",
-        position = Vector3.new(920.663147, 85.5009918, 121.955994)
-    },
-    ["Fishman"] = {
-        questFolder = "RockyIslandQuest",
-        questModel = "IceMonstersQuest",
-        newName = "FishDefQuest",
-        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+        questModel = "",
+        position = Vector3.new()
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RevolunaryDefQuest",
-        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+        newName = "RevolunaryGunQuest",
+        position = Vector3.new()
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
-        newName = "BuggyPirateDefQuests",
-        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+        newName = "",
+        position = Vector3.new()
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
 	questModel = "marine",
         newName = "MarineGun",
         position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
-    },
-    ["Ito Bandit"] = {
-        questFolder = "FarmIslandQuest",
-	questModel = "IceMonstersQuest",
-        newName = "ItoDefQuest",
-        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
-    }
+     }
 		}
-]]--
 
-local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef}
+local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef, enemyQuestSniper}
 local questsFolder = workspace:FindFirstChild("Quests")
 
 for _, questTable in ipairs(allQuests) do
