@@ -217,6 +217,7 @@ local enemyQuestSword = {
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
         questModel = "marine",
+	newName = "MarineSwordQuest",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
     ["Ito Bandit"] = {
@@ -224,6 +225,12 @@ local enemyQuestSword = {
         questModel = "IceMonstersQuest",
         newName = "ItoSwordQuest",
         position = Vector3.new(-834.440369, 92.8242264, -5637.3208)
+    },
+    ["Enel"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+	newName = "EnelBladeQuest",
+        position = Vector3.new(-3861.70581, 2064.40186, 3110.15918)
     }
 		}
 
@@ -281,11 +288,11 @@ local enemyQuestDef = {
         newName = "BuggyPirateDefQuests",
         position = Vector3.new(-2369.60303, 64.4866104, -180.865417)
     },
-    ["Vice-Admiral"] = {
-        questFolder = "MarineIslandQuest",
-	questModel = "marine",
-        newName = "MarineGun",
-        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    ["Enel"] = {
+        questFolder = "SkyIslandQuest",
+	questModel = "IceMonstersQuest",
+        newName = "EnelDefenseQuest",
+        position = Vector3.new(-3856.99365, 2064.36011, 3104.50513)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
@@ -314,11 +321,11 @@ local enemyQuestSniper = {
         newName = "",
         position = Vector3.new(1557.05554, 62.7163467, -4889.20605)
     },
-    ["Skypiean"] = {
+    ["Enel"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "SkyDefQuest",
-        position = Vector3.new()
+        newName = "EnelGunQuest",
+        position = Vector3.new(-3859.3501, 2064.36011, 3107.33105)
     },
     ["Enel"] = {
         questFolder = "SandIslandQuests",
