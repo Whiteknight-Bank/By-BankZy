@@ -698,6 +698,14 @@ RunService.RenderStepped:Connect(function()
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
+        -- ทำ NoClip (ให้ทะลุสิ่งของ)
+        for _, part in ipairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+
+        -- วาร์ปไปจุดรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
             return
@@ -706,23 +714,25 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
+        -- กรณีล็อกเป้ามอนอยู่แล้ว
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
-                hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
+                local underPos = mobHRP.Position - Vector3.new(0, -3, 0) -- ใต้ขา
+                hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0) -- หงาย
             end
             return
         end
 
+        -- หาเป้าใหม่
         currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                 if mob.Humanoid.Health > 0 then
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
-                    hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
+                    local underPos = mobHRP.Position - Vector3.new(0, -3, 0)
+                    hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0)
                     break
                 end
             end
