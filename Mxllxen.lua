@@ -679,6 +679,8 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
+local safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
@@ -687,7 +689,7 @@ RunService.RenderStepped:Connect(function()
         if targetName == "" then return end
 
         local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
-        if not info then return end
+        if not info or not info.position then return end
 
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
@@ -699,18 +701,15 @@ RunService.RenderStepped:Connect(function()
             end
         end
 
-        if not isQuestGUIVisible() then
-            local safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            if safePart then
-                hrp.CFrame = safePart.CFrame + Vector3.new(0, 5, 0)
-            end
-
-        elseif info.position then
+        if isQuestGUIVisible() then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+
+        elseif safePart then
+            hrp.CFrame = safePart.CFrame + Vector3.new(0, 5, 0)
         end
     end)
 end)
-
+		
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
