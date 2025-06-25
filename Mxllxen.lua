@@ -1530,28 +1530,11 @@ create:Notifile("", "Button For Mobile ver. 2.7.4 [BETA]", 3)
 			end)
 
 wait(1)
-create:Notifile("", "Don't worry, Turn Anti Cheat Now!", 6)
-local player = game:GetService("Players").LocalPlayer
-local playerGui = player:FindFirstChild("PlayerGui")
 local replicatedStorage = game:GetService("ReplicatedStorage")
-local starterGui = game:GetService("StarterGui")
 
-local remoteOnePieceM = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("OnePieceM")
-if remoteOnePieceM then 
-remoteOnePieceM:Destroy() 
-end
-
-local remoteAdmin = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("Admin")
-if remoteAdmin then 
-remoteAdmin:Destroy() 
-end
-
-if game.Players.LocalPlayer.PlayerValues:FindFirstChild("Banned")then 
-game.Players.LocalPlayer.PlayerValues.Banned:Destroy()
-end 
-
+create:Notifile("", "Don't worry, Turn Anti Cheat Now!", 6)
 wait(2)
-local remotewater = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("DamageWater")
+local remotewater = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("WaterDamage")
 if remotewater then 
 remotewater:Destroy() 
 end
