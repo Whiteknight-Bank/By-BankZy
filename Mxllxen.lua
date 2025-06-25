@@ -718,7 +718,7 @@ RunService.RenderStepped:Connect(function()
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local underPos = mobHRP.Position - Vector3.new(0, 3, 0) -- ใต้ขา
+                local underPos = mobHRP.Position - Vector3.new(0, 5, 0) -- ใต้ขา
                 hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0) -- หงาย
             end
             return
