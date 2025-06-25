@@ -902,7 +902,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("❗️", targetName..": Not Found Quest Strength", 3)
+                create:Notifile("", " ", targetName..": Not Found Quest Strength", 3)
             end
         end)
     end
@@ -944,7 +944,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("❗️", targetName..": Not Found Quest Sword", 3)
+                create:Notifile("", " ", targetName..": Not Found Quest Sword", 3)
             end
         end)
     end
@@ -986,7 +986,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("❗️", targetName..": Not Found Quest Defense", 3)
+                create:Notifile("", " ", targetName..": Not Found Quest Defense", 3)
             end
         end)
     end
@@ -1028,7 +1028,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("❗️", targetName..": Not Found Quest Gun", 3)
+                create:Notifile("", " ", targetName..": Not Found Quest Gun", 3)
             end
         end)
     end
