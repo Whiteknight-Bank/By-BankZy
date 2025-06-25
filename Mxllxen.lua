@@ -158,6 +158,12 @@ local enemyQuestStrg = {
         questModel = "IceMonstersQuest",
         newName = "ItoStrengthQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    },
+    ["Crocodile"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "CrocodileQuests",
+        newName = "CrocodileStrengthQuests",
+        position = Vector3.new(927.113708, 81.4713745, 125.499176)
     }
 		}
 
@@ -237,6 +243,12 @@ local enemyQuestSword = {
         questModel = "IceMonstersQuest",
 	newName = "EnelBladeQuest",
         position = Vector3.new(-3861.70581, 2064.40186, 3110.15918)
+    },
+    ["Crocodile"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "CrocodileQuests",
+        newName = "CrocodileSwordQuests",
+        position = Vector3.new(920.663147, 81.513298, 121.955994)
     }
 		}
 
@@ -356,7 +368,13 @@ local enemyQuestSniper = {
 	questModel = "marin",
         newName = "MarineGun",
         position = Vector3.new(2810.15869, 80.145195, -1459.79517)
-     }
+     },
+     ["Crocodile"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "CrocodileQuests",
+        newName = "CrocodileGunQuests",
+        position = Vector3.new(923.887878, 81.4711914, 123.72757)
+    }
 		}
 
 local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef, enemyQuestSniper}
