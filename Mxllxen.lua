@@ -647,7 +647,6 @@ end)
 page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
-local SelectedBoss = ""
 		
 page2:Dropdown("Select Enemys:", {
     "None",
@@ -745,12 +744,14 @@ RunService.RenderStepped:Connect(function()
         if not Enemys then return end
 
         for i = #currentPulled, 1, -1 do
-            local mob = currentPulled[i]
-            if not mob or not mob:FindFirstChild("Humanoid") or mob.Humanoid.Health <= 0 then
-                if mob then mob:Destroy() end
-                table.remove(currentPulled, i)
-            end
-        end
+    local mob = currentPulled[i]
+    if not mob
+        or not mob:FindFirstChild("Humanoid")
+        or mob.Humanoid.Health <= 0
+        or not mob:IsDescendantOf(workspace) then -- <- เพิ่มเงื่อนไขนี้ด้วย
+        table.remove(currentPulled, i)
+    end
+end
 
         if #currentPulled >= maxPullCount then return end
 
