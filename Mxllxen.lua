@@ -173,7 +173,7 @@ local enemyQuestSword = {
         questFolder = "GrassyIslandQuest",
 	questModel = "MonkeyQuest",
         newName = "MonkeySwordQuest",
-        position = Vector3.new(-3861.70581, 2068.42334, 3110.15918)
+        position = Vector3.new(-951.820618, 66.0820541, 681.963806)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
@@ -241,7 +241,7 @@ local enemyQuestDef = {
         questFolder = "GrassyIslandQuest",
 	questModel = "MonkeyQuest",
         newName = "MonkeyDefQuest",
-        position = Vector3.new(-3859.3501, 2068.38159, 3107.33105)
+        position = Vector3.new(-950.852905, 66.1240616, 685.514099, 0.96481657)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
