@@ -725,12 +725,10 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 
-local maxPullCount = 2
-local currentPulled = {}
+local currentMob = nil
 
 RunService.RenderStepped:Connect(function()
     if not _G.farmBring then return end
-
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy
         if targetName == "" then return end
@@ -743,40 +741,35 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        for i = #currentPulled, 1, -1 do
-    local mob = currentPulled[i]
-    if not mob
-        or not mob:FindFirstChild("Humanoid")
-        or mob.Humanoid.Health <= 0
-        or not mob:IsDescendantOf(workspace) then -- <- เพิ่มเงื่อนไขนี้ด้วย
-        table.remove(currentPulled, i)
-    end
-end
+        if not currentMob
+            or not currentMob:FindFirstChild("Humanoid")
+            or currentMob.Humanoid.Health <= 0
+            or not currentMob:IsDescendantOf(workspace) then
 
-        if #currentPulled >= maxPullCount then return end
+            currentMob = nil
 
-        for _, mob in pairs(Enemys:GetChildren()) do
-            if mob:IsA("Model") and mob.Name == targetName and not table.find(currentPulled, mob) then
-                local mobHRP = mob:FindFirstChild("HumanoidRootPart")
-                local mobHum = mob:FindFirstChild("Humanoid")
-
-                if mobHRP and mobHum and mobHum.Health > 0 then
-                    table.insert(currentPulled, mob)
-
-                    local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
-                    local frontRightPos = hrp.Position + offset
-                    local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
-                    mobHRP.CFrame = lookCF
-
-                    mobHRP.Size = Vector3.new(10, 10, 10)
-                    mobHRP.Transparency = 0.8
-                    mobHRP.CanCollide = false
-                end
-
-                if #currentPulled >= maxPullCount then
-                    break
+            for _, mob in pairs(Enemys:GetChildren()) do
+                if mob:IsA("Model") and mob.Name == targetName then
+                    local mobHum = mob:FindFirstChild("Humanoid")
+                    if mobHum and mobHum.Health > 0 then
+                        currentMob = mob
+                        break
+                    end
                 end
             end
+        end
+
+        if currentMob and currentMob:FindFirstChild("HumanoidRootPart") then
+            local mobHRP = currentMob.HumanoidRootPart
+            local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
+            local frontRightPos = hrp.Position + offset
+            local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
+
+            mobHRP.CFrame = lookCF
+
+            mobHRP.Size = Vector3.new(10, 10, 10)
+            mobHRP.Transparency = 0.8
+            mobHRP.CanCollide = false
         end
     end)
 end)
