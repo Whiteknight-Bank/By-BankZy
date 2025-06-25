@@ -327,12 +327,6 @@ local enemyQuestSniper = {
         newName = "EnelGunQuest",
         position = Vector3.new(-3859.3501, 2064.36011, 3107.33105)
     },
-    ["Enel"] = {
-        questFolder = "SandIslandQuests",
-        questModel = "IceMonstersQuest",
-	newName = "EnelGunQuest",
-        position = Vector3.new()
-    },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
