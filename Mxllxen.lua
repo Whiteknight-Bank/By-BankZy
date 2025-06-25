@@ -679,6 +679,57 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
+local lastSafeTP = 0
+local safeTPDelay = 2 -- หน่วงวินาทีก่อนวาร์ปกลับ SafeZone
+
+RunService.RenderStepped:Connect(function()
+    if not _G.farmNpc then return end
+
+    pcall(function()
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        if targetName == "" then return end
+
+        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
+        if not info then return end
+
+        local quests = workspace:FindFirstChild("Quests")
+        local questFolder = quests and quests:FindFirstChild(info.questFolder)
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+
+        for _, part in ipairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+
+        if not isQuestGUIVisible() and info.position then
+            hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+            return
+        end
+
+        if isQuestGUIVisible() and tick() - lastSafeTP > safeTPDelay then
+            lastSafeTP = tick()
+
+            local safePart = nil
+            if enemyQuestStrg[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            elseif enemyQuestSword[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            elseif enemyQuestDef[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            end
+
+            if safePart then
+                hrp.CFrame = safePart.CFrame + Vector3.new(0, 3, 0)
+            end
+        end
+    end)
+end)
+
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
 
