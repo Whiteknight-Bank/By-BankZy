@@ -1099,7 +1099,7 @@ page2:Toggle("Spectate Player", false, function(spac)
         end
     end
 
-    if spec then
+    if spac then  -- <<< แก้ตรงนี้ให้ตรงกับชื่อ parameter
         local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
         if targetPlayer and targetPlayer.Character then
             viewing = targetPlayer
