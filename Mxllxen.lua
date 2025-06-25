@@ -679,9 +679,9 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-local function getRotatedCFrame(position, angleDeg)
-    -- หมุนเอียงลง 45° แกน X (หน้าก้มลงพื้น)
-    local rotation = CFrame.Angles(math.rad(angleDeg), 0, 0)
+local function getRotatedCFrame(position)
+    -- หันเฉียงลงพื้น 45° (หัวก้ม ไม่ใช่หงาย)
+    local rotation = CFrame.Angles(math.rad(-45), 0, 0)
     return CFrame.new(position) * rotation
 end
 
@@ -702,14 +702,14 @@ RunService.RenderStepped:Connect(function()
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
-        -- ปิดการชนทุกส่วน
+        -- NoClip กันชน
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
-        -- ไปที่จุดรับเควส
+        -- วาร์ปไปจุดรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
             return
@@ -718,15 +718,15 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        -- ถ้ามีมอนอยู่แล้ว
+        -- ถ้ามีเป้ามอนอยู่แล้ว
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
                 local backOffset = -mobHRP.CFrame.LookVector * 5.5
                 local upOffset = Vector3.new(0, 6, 0)
-                local finalPos = mobHRP.Position + backOffset + upOffset
+                local safePos = mobHRP.Position + backOffset + upOffset
 
-                hrp.CFrame = getRotatedCFrame(finalPos, 45) -- หัวเฉียงลง 45 องศา
+                hrp.CFrame = getRotatedCFrame(safePos)
             end
             return
         end
@@ -740,9 +740,9 @@ RunService.RenderStepped:Connect(function()
                     local mobHRP = mob.HumanoidRootPart
                     local backOffset = -mobHRP.CFrame.LookVector * 5.5
                     local upOffset = Vector3.new(0, 6, 0)
-                    local finalPos = mobHRP.Position + backOffset + upOffset
+                    local safePos = mobHRP.Position + backOffset + upOffset
 
-                    hrp.CFrame = getRotatedCFrame(finalPos, 45) -- หัวเฉียงลง 45 องศา
+                    hrp.CFrame = getRotatedCFrame(safePos)
                     break
                 end
             end
