@@ -679,10 +679,11 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-local function getRotatedCFrame(position)
-    -- หันเฉียงลงพื้น 45° (หัวก้ม ไม่ใช่หงาย)
-    local rotation = CFrame.Angles(math.rad(-45), 0, 0)
-    return CFrame.new(position) * rotation
+local function getLookDownCFrame(fromPos, toPos)
+    -- สร้าง CFrame หันไปที่เป้ามอน แล้วหมุนเอียงเฉพาะแกน X ลง 45°
+    local lookCFrame = CFrame.lookAt(fromPos, toPos)
+    local tiltX = CFrame.Angles(math.rad(-45), 0, 0)
+    return lookCFrame * tiltX
 end
 
 local currentTargetMob = nil
@@ -702,14 +703,14 @@ RunService.RenderStepped:Connect(function()
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
-        -- NoClip กันชน
+        -- NoClip
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
-        -- วาร์ปไปจุดรับเควส
+        -- ไปจุดรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
             return
@@ -718,15 +719,12 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        -- ถ้ามีเป้ามอนอยู่แล้ว
+        -- ถ้ามีมอนที่ล็อกอยู่
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local backOffset = -mobHRP.CFrame.LookVector * 5.5
-                local upOffset = Vector3.new(0, 6, 0)
-                local safePos = mobHRP.Position + backOffset + upOffset
-
-                hrp.CFrame = getRotatedCFrame(safePos)
+                local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
+                hrp.CFrame = getLookDownCFrame(backPos, mobHRP.Position)
             end
             return
         end
@@ -738,11 +736,8 @@ RunService.RenderStepped:Connect(function()
                 if mob.Humanoid.Health > 0 then
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local backOffset = -mobHRP.CFrame.LookVector * 5.5
-                    local upOffset = Vector3.new(0, 6, 0)
-                    local safePos = mobHRP.Position + backOffset + upOffset
-
-                    hrp.CFrame = getRotatedCFrame(safePos)
+                    local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
+                    hrp.CFrame = getLookDownCFrame(backPos, mobHRP.Position)
                     break
                 end
             end
