@@ -679,22 +679,10 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-local function getLookDownCFrame(fromPos, toPos)
-    -- สร้าง CFrame หันตรงไปที่มอน และหมุนเฉียงหัวลง 45°
-    local lookCFrame = CFrame.lookAt(fromPos, toPos)
-    local tiltX = CFrame.Angles(math.rad(-45), 0, 0) -- เอียงหัวลง
-    return lookCFrame * tiltX
-end
-
 local currentTargetMob = nil
-local camera = workspace.CurrentCamera
 
 RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then
-        -- เมื่อปิดฟาร์ม กลับกล้องปกติ
-        camera.CameraType = Enum.CameraType.Custom
-        return
-    end
+    if not _G.farmNpc then return end
 
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
@@ -707,57 +695,42 @@ RunService.RenderStepped:Connect(function()
         local player = game.Players.LocalPlayer
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        local humanoid = char and char:FindFirstChildOfClass("Humanoid")
-        if not hrp or not humanoid then return end
+        if not hrp then return end
 
-        -- ล็อกตัวไม่ชน
+        -- ปิดชน
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
-        -- ปิดฟิสิกส์ให้ล้มเฉย ๆ (กันสั่น)
-        humanoid.PlatformStand = true
-
-        -- ล็อกกล้องไม่ให้หมุนตามตัว
-        camera.CameraType = Enum.CameraType.Scriptable
-
-        -- ถ้าไปรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
-            camera.CFrame = hrp.CFrame * CFrame.new(0, 5, -10) * CFrame.Angles(math.rad(-10), 0, 0)
             return
         end
 
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        -- ถ้ามีมอนเดิมแล้ว ยังไม่ตาย
+        -- ถ้ามีมอนเดิม
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
-                local finalCF = getLookDownCFrame(backPos, mobHRP.Position)
-
-                hrp.CFrame = finalCF
-                camera.CFrame = finalCF * CFrame.new(0, 3, 10) -- กล้องอยู่ด้านหลังหันเข้าตัว
+                local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
+                hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
             end
             return
         end
 
-        -- หามอนใหม่
+        -- หาเป้าใหม่
         currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                 if mob.Humanoid.Health > 0 then
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
-                    local finalCF = getLookDownCFrame(backPos, mobHRP.Position)
-
-                    hrp.CFrame = finalCF
-                    camera.CFrame = finalCF * CFrame.new(0, 3, 10) -- กล้องตามหลัง
+                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
+                    hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
                     break
                 end
             end
@@ -767,10 +740,31 @@ end)
 		
 page2:Toggle("Auto KenHaki", false, function(kenhki)
     _G.kenhaki = kenhki
+
+    if kenhki then
+        -- รอกระบวนการโหลดตัวละคร
+        task.spawn(function()
+            wait(0.3)
+            -- กด K 1 ครั้ง (Auto Ken)
+            keypress(0x4B) -- K = 0x4B
+            wait(0.1)
+            keyrelease(0x4B)
+        end)
+    end
 end)
 
 page2:Toggle("Auto BusoHaki", false, function(bshki)
     _G.busohaki = bshki
+
+    if bshki then
+        task.spawn(function()
+            wait(0.3)
+            -- กด J 1 ครั้ง (Auto Buso)
+            keypress(0x4A) -- J = 0x4A
+            wait(0.1)
+            keyrelease(0x4A)
+        end)
+    end
 end)
 
 page2:Label("┇ Function Claim Quest ┇")
