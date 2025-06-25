@@ -293,20 +293,26 @@ for _, questTable in ipairs(allQuests) do
     for _, entry in pairs(questTable) do
         local folder = questsFolder:FindFirstChild(entry.questFolder)
 
+        if not folder then
+            warn("❌ ไม่พบ folder:", entry.questFolder)
+            continue
+        end
+
         local found = false
-        print("\n🔎 เริ่มค้นหาใน:", entry.questFolder, "->", entry.questModel)
-        print("🎯 ตำแหน่งที่ต้องการ:", entry.position)
+        print("\n🔎 เริ่มค้นหาใน:", entry.questFolder, "→", entry.questModel)
+        print("🎯 CFrame ที่ต้องการ:", entry.cframe)
 
         for _, inst in ipairs(folder:GetChildren()) do
             if inst:IsA("BasePart") then
                 local hasModel = inst:FindFirstChild(entry.questModel) ~= nil
-                local posMatch = inst.Position == entry.position
+                local cframeMatch = inst.CFrame == entry.cframe
 
                 print("→ ตรวจ:", inst.Name)
-                print("   📍 Position:", inst.Position, "| ตรง?:", posMatch)
-                print("   🔎 มี questModel:", hasModel)
+                print("   🧱 CFrame:", inst.CFrame)
+                print("   ✅ เทียบ CFrame:", cframeMatch)
+                print("   🔍 มี questModel:", hasModel)
 
-                if hasModel and posMatch then
+                if hasModel and cframeMatch then
                     if entry.newName then
                         local oldName = inst.Name
                         local success, err = pcall(function()
@@ -328,7 +334,7 @@ for _, questTable in ipairs(allQuests) do
         end
 
         if not found then
-            warn("⚠️ ไม่พบ Instance ที่ตรง:", tostring(entry.position), "ใน", entry.questFolder)
+            warn("⚠️ ไม่พบ Instance ที่ CFrame:", tostring(entry.cframe), "ใน", entry.questFolder)
         end
     end
 end
