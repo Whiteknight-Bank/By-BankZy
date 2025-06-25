@@ -679,13 +679,13 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
-local lastSafeTeleport = 0  -- เวลาครั้งล่าสุดที่วาร์ปไป SafeZone
-local safeTeleportCooldown = 2  -- หน่วงวาร์ป 2 วินาที
+
+local lastSafeTP = 0
+local safeTPDelay = 1
 
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
     pcall(function()
-        local now = tick()
         local player = game.Players.LocalPlayer
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
@@ -724,23 +724,24 @@ RunService.RenderStepped:Connect(function()
             return
         end
 
-        if isQuestGUIVisible() and now - lastSafeTeleport >= safeTeleportCooldown then
-            lastSafeTeleport = now  -- บันทึกเวลาวาร์ปล่าสุด
+if isQuestGUIVisible() and tick() - lastSafeTP > safeTPDelay then
+    lastSafeTP = tick()
 
-            local safePart = nil
+    local safePart = nil
             if enemyQuestStrg[targetName] then
                 safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
             elseif enemyQuestSword[targetName] then
                 safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
             elseif enemyQuestDef[targetName] then
                 safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            end
+	end
 
-            if safePart then
-                hrp.CFrame = safePart.CFrame + Vector3.new(0, 2, 0)
-            end
-
-            local Enemys = workspace:FindFirstChild("Enemys")
+    if safePart and hrp then
+        hrp.CFrame = safePart.CFrame + Vector3.new(0, 3, 0)
+    end
+end
+            
+	local Enemys = workspace:FindFirstChild("Enemys")
             if Enemys then
                 for _, mob in pairs(Enemys:GetChildren()) do
                     if mob:IsA("Model") and mob.Name == targetName then
