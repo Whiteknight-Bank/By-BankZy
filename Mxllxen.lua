@@ -91,9 +91,7 @@ task.spawn(function()
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 3.5)
-
-create:Notifile("", "You should antikick in infinite yield", 8)
+create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 2)
 
 local Cache = { DevConfig = {} };
 
@@ -698,7 +696,7 @@ RunService.RenderStepped:Connect(function()
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
-        -- ทำ NoClip (ให้ทะลุสิ่งของ)
+        -- NoClip
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
@@ -714,25 +712,30 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        -- กรณีล็อกเป้ามอนอยู่แล้ว
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local underPos = mobHRP.Position - Vector3.new(0, 5, 0) -- ใต้ขา
-                hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0) -- หงาย
+                -- วาร์ป "ด้านหลัง + ขึ้นบน + เอียงหน้า 45°"
+                local backOffset = -mobHRP.CFrame.LookVector * 5.5
+                local upOffset = Vector3.new(0, 6, 0)
+                local finalPos = mobHRP.Position + backOffset + upOffset
+                local lookDir = mobHRP.Position - finalPos
+                hrp.CFrame = CFrame.new(finalPos, finalPos + lookDir) * CFrame.Angles(math.rad(45), 0, 0)
             end
             return
         end
 
-        -- หาเป้าใหม่
         currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
                 if mob.Humanoid.Health > 0 then
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local underPos = mobHRP.Position - Vector3.new(0, 3, 0)
-                    hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0)
+                    local backOffset = -mobHRP.CFrame.LookVector * 5.5
+                    local upOffset = Vector3.new(0, 6, 0)
+                    local finalPos = mobHRP.Position + backOffset + upOffset
+                    local lookDir = mobHRP.Position - finalPos
+                    hrp.CFrame = CFrame.new(finalPos, finalPos + lookDir) * CFrame.Angles(math.rad(45), 0, 0)
                     break
                 end
             end
@@ -1214,7 +1217,7 @@ page5:Toggle("Anti AFK", false, function(state)
 end)
 		
 page5:Label("┇ Function Button Mobile [ BETA ] ┇")
-page5:Button("Button For Mobile", function()
+page5:Button("Button For One Piece Millennium 1", function()
 local player = game.Players.LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -1360,6 +1363,12 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
         end
     end
 end)
+
+create:Notifile("", "Button For Mobile ver. 2.7.4 [BETA]", 3)
 			end)
+
+create:Notifile("", "Don't worry, Turn Anti Cheat Now!", 6)
+wait(2)
+create:Notifile("", "Don't worry, Turn Anti Water Now!", 6)
 		
   end)
