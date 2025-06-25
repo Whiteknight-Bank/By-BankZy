@@ -432,6 +432,32 @@ for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
     end
 
+local wasAutoClaimQ = false
+local debounceDie = false
+
+spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+
+            if hum and hum.Health <= 0 and not debounceDie then
+                debounceDie = true
+
+                wasAutoClaimQ = _G.autoclaimq
+
+                _G.autoclaimq = false
+
+                task.delay(2, function()
+                    _G.autoclaimq = wasAutoClaimQ
+                    debounceDie = false
+                end)
+            end
+        end)
+    end
+end)
+
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
@@ -647,7 +673,8 @@ end)
 page2:Label("┇ Function Farm ┇")
 
 local SelectedEnemy = ""
-		
+local SelectedQuest = ""
+
 page2:Dropdown("Select Enemys:", {
     "Mountain Bandit", 
     "Buggy Pirate",
@@ -667,6 +694,155 @@ page2:Dropdown("Select Enemys:", {
     "Yeti"
 }, function(choice)
     SelectedEnemy = choice
+end)
+
+page2:Dropdown("Select Quests:", {
+    "Strength", 
+    "Sword",
+    "Defense",
+    "Gun"
+}, function(qust)
+    SelectedQuest = qust
+end)
+
+page2:Toggle("Auto Claim Quest", false, function(clmq)
+    _G.autoclaimq = clmq
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autoclaimq or SelectedQuest ~= "Strength" or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestStrg[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.newName or info.questModel)
+            local clicked = false
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            clicked = true
+                            break
+                        end
+                    end
+                end
+            end
+
+            if not clicked then
+                create:Notifile("", "Not found: " .. SelectedEnemy .. " - No Strength Quest", 3)
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autoclaimq or SelectedQuest ~= "Sword" or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestSword[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.newName or info.questModel)
+            local clicked = false
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            clicked = true
+                            break
+                        end
+                    end
+                end
+            end
+
+            if not clicked then
+                create:Notifile("", "Not found: " .. SelectedEnemy .. " - No Sword Quest", 3)
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autoclaimq or SelectedQuest ~= "Defense" or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestDef[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.newName or info.questModel)
+            local clicked = false
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            clicked = true
+                            break
+                        end
+                    end
+                end
+            end
+
+            if not clicked then
+                create:Notifile("", "Not found: " .. SelectedEnemy .. " - No Defense Quest", 3)
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autoclaimq or SelectedQuest ~= "Gun" or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestSniper[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local questModel = questFolder and questFolder:FindFirstChild(info.newName or info.questModel)
+            local clicked = false
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            clicked = true
+                            break
+                        end
+                    end
+                end
+            end
+
+            if not clicked then
+                create:Notifile("", "Not found: " .. SelectedEnemy .. " - No Gun Quest", 3)
+            end
+        end)
+    end
 end)
 
 page2:Toggle("Auto Bring Farm", false, function(brfrm)
@@ -868,175 +1044,6 @@ spawn(function()
                     :FireServer()
             end)
         end
-    end
-end)
-
-page2:Label("┇ Function Claim Quest ┇")
-page2:Toggle("Auto Claim Strength", false, function(enabled)
-    _G.autostrg = enabled
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.autostrg or SelectedEnemy == "" or isQuestGUIVisible() then return end
-
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy
-            local info = enemyQuestStrg[targetName]
-            if not info then return end
-
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            local modelName = info.newName or info.questModel
-            local questModel = questFolder and questFolder:FindFirstChild(modelName)
-
-            local clicked = false
-
-            if questModel then
-                for _, obj in ipairs(questModel:GetDescendants()) do
-                    if obj:IsA("ClickDetector") then
-                        local parent = obj.Parent
-                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-
-                        if part and (part.Position - info.position).Magnitude < 3 then
-                            fireclickdetector(obj)
-                            clicked = true
-                            break
-                        end
-                    end
-                end
-            end
-
-            if not clicked then
-                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Strength", 3)
-            end
-        end)
-    end
-end)
-
-page2:Toggle("Auto Claim Sword", false, function(clmsw)
-    _G.autosword = clmsw
-end)	
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.autosword or SelectedEnemy == "" or isQuestGUIVisible() then return end
-
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy
-            local info = enemyQuestSword[targetName]
-            if not info then return end
-
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            local modelName = info.newName or info.questModel
-            local questModel = questFolder and questFolder:FindFirstChild(modelName)
-
-            local clicked = false
-
-            if questModel then
-                for _, obj in ipairs(questModel:GetDescendants()) do
-                    if obj:IsA("ClickDetector") then
-                        local parent = obj.Parent
-                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-
-                        if part and (part.Position - info.position).Magnitude < 3 then
-                            fireclickdetector(obj)
-                            clicked = true
-                            break
-                        end
-                    end
-                end
-            end
-
-            if not clicked then
-                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Sword", 3)
-            end
-        end)
-    end
-end)
-		
-page2:Toggle("Auto Claim Defense", false, function(cldef)
-    _G.autodef = cldef
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.autodef or SelectedEnemy == "" or isQuestGUIVisible() then return end
-
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy
-            local info = enemyQuestDef[targetName]
-            if not info then return end
-
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            local modelName = info.newName or info.questModel
-            local questModel = questFolder and questFolder:FindFirstChild(modelName)
-
-            local clicked = false
-
-            if questModel then
-                for _, obj in ipairs(questModel:GetDescendants()) do
-                    if obj:IsA("ClickDetector") then
-                        local parent = obj.Parent
-                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-
-                        if part and (part.Position - info.position).Magnitude < 3 then
-                            fireclickdetector(obj)
-                            clicked = true
-                            break
-                        end
-                    end
-                end
-            end
-
-            if not clicked then
-                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Defense", 3)
-            end
-        end)
-    end
-end)
-		
-page2:Toggle("Auto Claim Sniper", false, function(clsni)
-    _G.autosni = clsni
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.autosni or SelectedEnemy == "" or isQuestGUIVisible() then return end
-
-            local targetName = SelectedEnemy ~= "" and SelectedEnemy
-            local info = enemyQuestSniper[targetName]
-            if not info then return end
-
-            local quests = workspace:FindFirstChild("Quests")
-            local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            local modelName = info.newName or info.questModel
-            local questModel = questFolder and questFolder:FindFirstChild(modelName)
-
-            local clicked = false
-
-            if questModel then
-                for _, obj in ipairs(questModel:GetDescendants()) do
-                    if obj:IsA("ClickDetector") then
-                        local parent = obj.Parent
-                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
-
-                        if part and (part.Position - info.position).Magnitude < 3 then
-                            fireclickdetector(obj)
-                            clicked = true
-                            break
-                        end
-                    end
-                end
-            end
-
-            if not clicked then
-                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Gun", 3)
-            end
-        end)
     end
 end)
 		
