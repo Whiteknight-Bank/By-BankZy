@@ -299,32 +299,33 @@ for _, questTable in ipairs(allQuests) do
         end
 
         local found = false
-        print("\n🔎 เริ่มค้นหาใน:", entry.questFolder, "→ กำลังหาโมเดล:", entry.questModel)
+        print("\n🔍 เริ่มค้นหาใน:", entry.questFolder, "→ กำลังหา:", entry.questModel)
         print("🎯 Position ที่ต้องการ:", tostring(entry.position))
 
         for _, inst in ipairs(folder:GetDescendants()) do
-            if inst:IsA("Model") or inst:IsA("Part") then
-                local questObj = inst:FindFirstChild(entry.questModel)
-
-                if questObj then
-                    local base = inst:IsA("Part") and inst or inst:FindFirstChildWhichIsA("BasePart", true)
+            if inst:IsA("BasePart") then
+                if inst.Name == entry.questModel then
+                    local base = inst:IsA("BasePart") and inst or inst:FindFirstChildWhichIsA("BasePart", true)
                     if base then
-                        local posMatch = (base.Position - entry.position).Magnitude < 1
-                        print("→ เจอ:", inst.Name, "| posMatch:", posMatch)
+                        local dist = (base.Position - entry.position).Magnitude
+                        print("→ เจอ:", inst.Name, "| ระยะห่าง:", dist)
 
-                        if posMatch then
+                        if dist < 1 then
                             if entry.newName then
+                                local oldName = inst.Name
                                 local success, err = pcall(function()
                                     inst.Name = entry.newName
                                 end)
+
                                 if success then
-                                    print("✅ Rename:", entry.questModel, "→", inst.Name)
+                                    print("✅ เปลี่ยนชื่อ:", oldName, "→", inst.Name)
                                 else
-                                    warn("❌ Rename ผิดพลาด:", err)
+                                    warn("❌ เปลี่ยนชื่อไม่สำเร็จ:", err)
                                 end
                             else
-                                print("⚠️ ไม่มี newName ให้ Rename")
+                                print("⚠️ ไม่มี newName ให้เปลี่ยน")
                             end
+
                             found = true
                             break
                         end
@@ -334,7 +335,7 @@ for _, questTable in ipairs(allQuests) do
         end
 
         if not found then
-            warn("⚠️ ไม่พบโมเดลที่ตรงกับ", entry.questModel, "และตำแหน่งที่ต้องการใน", entry.questFolder)
+            warn("⚠️ ไม่พบ:", entry.questModel, "ใน", entry.questFolder, "หรือตำแหน่งไม่ตรง")
         end
     end
 end
