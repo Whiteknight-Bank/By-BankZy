@@ -1529,8 +1529,61 @@ end)
 create:Notifile("", "Button For Mobile ver. 2.7.4 [BETA]", 3)
 			end)
 
+wait(1)
 create:Notifile("", "Don't worry, Turn Anti Cheat Now!", 6)
+local player = game:GetService("Players").LocalPlayer
+local playerGui = player:FindFirstChild("PlayerGui")
+local replicatedStorage = game:GetService("ReplicatedStorage")
+local starterGui = game:GetService("StarterGui")
+
+local remoteOnePieceM = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("OnePieceM")
+if remoteOnePieceM then 
+remoteOnePieceM:Destroy() 
+end
+
+local remoteAdmin = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("Admin")
+if remoteAdmin then 
+remoteAdmin:Destroy() 
+end
+
+local firstRemote = replicatedStorage:FindFirstChildOfClass("RemoteEvent")
+if firstRemote then 
+firstRemote:Destroy() 
+end
+
+if playerGui then
+    local ocean = playerGui:FindFirstChild("Ocean")
+    if ocean then
+        local swim = ocean:FindFirstChild("SwimmingScript")
+        if swim then swim:Destroy() end
+
+        local underwater = ocean:FindFirstChild("UnderwaterOverlayScript")
+        if underwater then underwater:Destroy() end
+    end
+
+    local updater = playerGui:FindFirstChild("LocalUpdater")
+    if updater then updater:Destroy() end
+end
+
+local oceanStarter = starterGui:FindFirstChild("Ocean")
+if oceanStarter then
+    local swimS = oceanStarter:FindFirstChild("SwimmingScript")
+    if swimS then swimS:Destroy() end
+
+    local underS = oceanStarter:FindFirstChild("UnderwaterOverlayScript")
+    if underS then underS:Destroy() end
+end
+
+local bannedVal = player:FindFirstChild("PlayerValues") and player.PlayerValues:FindFirstChild("Banned")
+if bannedVal then 
+bannedVal:Destroy() 
+end
+
 wait(2)
+local remoteAdmin = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("Admin")
+if remoteAdmin then 
+remoteAdmin:Destroy() 
+end
 create:Notifile("", "Don't worry, Turn Anti Water Now!", 6)
 		
   end)
