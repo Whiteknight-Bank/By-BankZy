@@ -718,7 +718,7 @@ RunService.RenderStepped:Connect(function()
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                local underPos = mobHRP.Position - Vector3.new(0, -3, 0) -- ใต้ขา
+                local underPos = mobHRP.Position - Vector3.new(0, 3, 0) -- ใต้ขา
                 hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0) -- หงาย
             end
             return
@@ -731,7 +731,7 @@ RunService.RenderStepped:Connect(function()
                 if mob.Humanoid.Health > 0 then
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
-                    local underPos = mobHRP.Position - Vector3.new(0, -3, 0)
+                    local underPos = mobHRP.Position - Vector3.new(0, 3, 0)
                     hrp.CFrame = CFrame.new(underPos) * CFrame.Angles(math.rad(90), 0, 0)
                     break
                 end
@@ -739,7 +739,7 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
-
+		
 page2:Toggle("Auto KenHaki", false, function(kenhki)
     _G.kenhaki = kenhki
 end)
