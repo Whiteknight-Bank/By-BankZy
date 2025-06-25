@@ -118,7 +118,7 @@ local enemyQuestStrg = {
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "LogiaBStrgthQuest",
+        newName = "LogiaBanditStrgthQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
@@ -178,14 +178,14 @@ local enemyQuestSword = {
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "LogiaBSwordQuest",
+        newName = "LogiaBanditSwordQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "SkySwordQuest",
-        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+        position = Vector3.new(-3861.70581, 2068.42334, 3110.15918)
     },
     ["Desert Bandit"] = {
         questFolder = "SandIslandQuests",
@@ -196,7 +196,7 @@ local enemyQuestSword = {
         questFolder = "RockyIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "FishSwordQuest",
-        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+        position = Vector3.new(-4032.18628, 96.7876511, 452.172302)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
@@ -208,19 +208,13 @@ local enemyQuestSword = {
         questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
         newName = "BuggyPirateSwordQuests",
-        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+        position = Vector3.new(-2365.92603, 64.4445572, -180.865417)
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
         questModel = "marin",
         newName = "marineSword",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
-    },
-    ["Haki Monkey"] = {
-        questFolder = "GrassyIslandQuest",
-	questModel = "MonkeyQuest",
-        newName = "MonkeySwordQuest",
-        position = Vector3.new(-951.820618, 66.0820541, 681.963806)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
@@ -241,7 +235,7 @@ local enemyQuestDef = {
         questFolder = "SnowIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "IceDefQuest",
-        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+        position = Vector3.new(-1056.87231, 62.7855415, -3289.11206)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
@@ -253,7 +247,7 @@ local enemyQuestDef = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "SkyDefQuest",
-        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+        position = Vector3.new(-3859.3501, 2068.38159, 3107.33105)
     },
     ["Desert Bandit"] = {
         questFolder = "SandIslandQuests",
@@ -264,7 +258,7 @@ local enemyQuestDef = {
         questFolder = "RockyIslandQuest",
         questModel = "IceMonstersQuest",
         newName = "FishDefQuest",
-        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+        position = Vector3.new(-4034.97925, 96.8292542, 449.778961)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
@@ -276,13 +270,13 @@ local enemyQuestDef = {
         questFolder = "OrangeTownQuests",
         questModel = "BuggyPirateQuests",
         newName = "BuggyPirateDefQuests",
-        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+        position = Vector3.new(-2369.60303, 64.4866104, -180.865417)
     },
-    ["Haki Monkey"] = {
-        questFolder = "GrassyIslandQuest",
-	questModel = "MonkeyQuest",
-        newName = "MonkeyDefQuest",
-        position = Vector3.new(-950.852905, 66.1240616, 685.514099)
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+	questModel = "marine",
+        newName = "MarineGun",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
@@ -291,6 +285,7 @@ local enemyQuestDef = {
         position = Vector3.new(-833.125732, 92.8658295, -5640.75293)
     }
 		}
+		
 --[[
 local enemyQuestSniper = {
     ["Haki Monkey"] = {
