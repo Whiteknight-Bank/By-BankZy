@@ -118,7 +118,7 @@ local enemyQuestStrg = {
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "LogiaBanditStrgthQuest",
+        newName = "LogiaBStrgthQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
@@ -169,6 +169,12 @@ local enemyQuestSword = {
         questModel = "bandit",
         position = Vector3.new(-951.352112, 61.9148483, -1139.79199)
     },
+    ["Haki Monkey"] = {
+        questFolder = "GrassyIslandQuest",
+	questModel = "MonkeyQuest",
+        newName = "MonkeySwordQuest",
+        position = Vector3.new(-3861.70581, 2068.42334, 3110.15918)
+    },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
         questModel = "IceMonstersQuest",
@@ -178,7 +184,7 @@ local enemyQuestSword = {
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "LogiaBanditSwordQuest",
+        newName = "LogiaBSwordQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
@@ -230,6 +236,12 @@ local enemyQuestDef = {
         questModel = "bandit",
         newName = "Bandit",
         position = Vector3.new(-955.032, 61.957, -1139.792)
+    },
+    ["Haki Monkey"] = {
+        questFolder = "GrassyIslandQuest",
+	questModel = "MonkeyQuest",
+        newName = "MonkeyDefQuest",
+        position = Vector3.new(-3859.3501, 2068.38159, 3107.33105)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
