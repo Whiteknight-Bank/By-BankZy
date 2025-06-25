@@ -92,7 +92,7 @@ local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whitek
 local Window = create:Win("ReaperX Hub | One Piece Millenium")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 3.5)
-wait(1.5)
+
 create:Notifile("", "You should antikick in infinite yield", 8)
 
 local Cache = { DevConfig = {} };
@@ -111,17 +111,17 @@ local enemyQuestStrg = {
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "IceStgthQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "LogiaBStrgthQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "SkyStrgthQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -131,17 +131,17 @@ local enemyQuestStrg = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "FishStrgthQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "RenaryStrgQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateQuests",
+        questModel = "BuggyPirateStrgQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
@@ -151,7 +151,7 @@ local enemyQuestStrg = {
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "ItoStrengthQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
@@ -164,17 +164,17 @@ local enemyQuestSword = {
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "IceSwordQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "LogiaBSwordQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "SkySwordQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -184,27 +184,27 @@ local enemyQuestSword = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "FishSwordQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "RevonarySwordQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateQuests",
+        questModel = "BuggyPirateSwordQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-        questModel = "marin",
+        questModel = "marineSword",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "ItoSwordQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
@@ -217,17 +217,17 @@ local enemyQuestDef = {
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "IceDefQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "LogiaBanditDefQuest",
         position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
     },
     ["Skypiean"] = {
         questFolder = "SkyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "SkyDefQuest",
         position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
     },
     ["Desert Bandit"] = {
@@ -237,30 +237,48 @@ local enemyQuestDef = {
     },
     ["Fishman"] = {
         questFolder = "RockyIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "FishDefQuest",
         position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "RevolunaryDefQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
         questFolder = "OrangeTownQuest",
-        questModel = "BuggyPirateQuests",
+        questModel = "BuggyPirateDefQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-        questModel = "marine",
+        questModel = "MarineGun",
         position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
-        questModel = "IceMonstersQuest",
+        questModel = "ItoDefQuest",
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
+
+local function renameQuests(map)
+    for name, info in pairs(map) do
+        local folder = workspace:FindFirstChild("Quests"):FindFirstChild(info.questFolder)
+        if folder then
+            for _, model in ipairs(folder:GetChildren()) do
+                if model:IsA("Model") then
+                    local part = model:FindFirstChildWhichIsA("BasePart", true)
+                    if part and (part.Position - info.position).Magnitude < 1 then
+                        if model.Name ~= info.questModel then
+                            model.Name = info.questModel
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
 
 local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Name = "SafeZoneOuterSpacePart"
