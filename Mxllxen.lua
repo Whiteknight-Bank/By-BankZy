@@ -1499,6 +1499,8 @@ local keyCodes = {
     C = Enum.KeyCode.C,
     V = Enum.KeyCode.V,
     R = Enum.KeyCode.R,
+    Q = Enum.KeyCode.Q,
+    E = Enum.KeyCode.E,
     SPACE = Enum.KeyCode.Space,
 }
 
@@ -1699,14 +1701,13 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- ปุ่ม J
 do
     local key = "J"
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
     button.Text = key
     button.Size = buttonSize
-    button.Position = UDim2.new(0, 70, 1, -60) -- ข้าง R
+    button.Position = UDim2.new(0, 70, 1, -60)
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
