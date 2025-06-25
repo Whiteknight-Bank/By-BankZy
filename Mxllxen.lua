@@ -409,6 +409,7 @@ local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
 		
 local player = game.Players.LocalPlayer
 local RunService = game:GetService("RunService")
+local replicatedStorage = game:GetService("ReplicatedStorage")
 
 local function isQuestGUIVisible()
     local gui = player:FindFirstChild("PlayerGui")
@@ -1588,8 +1589,35 @@ end)
 create:Notifile("", "Button For Mobile ver. 2.7.4 [BETA]", 3)
 			end)
 
-wait(1)
-local replicatedStorage = game:GetService("ReplicatedStorage")
+wait(1)local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local oldNamecall
+local oldIndex
+local oldKick
+
+if hookfunction and LocalPlayer and LocalPlayer.Kick then
+    oldKick = hookfunction(LocalPlayer.Kick, function(...) 
+        return 
+    end)
+end
+
+if hookmetamethod then
+    oldIndex = hookmetamethod(game, "__index", function(self, key)
+        if self == LocalPlayer and tostring(key):lower() == "kick" then
+            return function() return end
+        end
+        return oldIndex(self, key)
+    end)
+
+    oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+        local method = getnamecallmethod and getnamecallmethod():lower()
+        if self == LocalPlayer and method == "kick" then
+            return
+        end
+        return oldNamecall(self, ...)
+    end)
+end
 
 create:Notifile("", "Don't worry, Turn Anti Cheat Now!", 6)
 wait(2)
