@@ -1041,6 +1041,17 @@ end)
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
+page2:Label("┇ Remove Weapon ┇")
+page2:Dropdown("Select Weapon Removed:", {"Remove Sword", "Remove Gun"}, function(remove)
+    selectedRemove = remove
+end)
+
+page2:Button("Click Remove", function()
+
+wait(0.3)
+create:Notifile("", "Weapon has removed!", 2)
+end)
+
 page2:Label("┇ Player ┇")
 page2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
@@ -1189,6 +1200,30 @@ end)
 page3:Button("Market Seller Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2520, 84, -1991)
 end)
+
+local Tab6 = Window:Taps("Shop")
+local page6 = Tab6:newpage()
+
+page6:Label("┇ Shop Black Market Seller ┇")
+page6:Button("Random Devil Fruit", function()
+local args = {
+    [1] = "Fruit"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+			end)
+
+page6:Button("Random HakiBook", function()
+local args = {
+    [1] = "Book"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+			end)
+
+page6:Label("┇ Shop Weapon Soon . . . ┇")
+page6:Label("┇ Shop Gun Soon . . . ┇")
+page6:Label("┇ Shop Shop BlackLeg Soon . . . ┇")
 
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
