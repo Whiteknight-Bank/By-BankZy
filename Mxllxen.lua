@@ -229,7 +229,7 @@ local enemyQuestDef = {
         questFolder = "SpawnIslandQuests",
         questModel = "bandit",
         newName = "Bandit",
-        position = Vector3.new(-955.031982, 61.9568481, -1139.79199)
+        position = Vector3.new(-955.032, 61.957, -1139.792)
     },
     ["Ice Monster"] = {
         questFolder = "SnowIslandQuest",
