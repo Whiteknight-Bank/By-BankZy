@@ -679,6 +679,12 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
+local function getRotatedCFrame(position, angleDeg)
+    -- หมุนเอียงลง 45° แกน X (หน้าก้มลงพื้น)
+    local rotation = CFrame.Angles(math.rad(angleDeg), 0, 0)
+    return CFrame.new(position) * rotation
+end
+
 local currentTargetMob = nil
 
 RunService.RenderStepped:Connect(function()
@@ -696,14 +702,14 @@ RunService.RenderStepped:Connect(function()
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
-        -- NoClip
+        -- ปิดการชนทุกส่วน
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
-        -- วาร์ปไปจุดรับเควส
+        -- ไปที่จุดรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
             return
@@ -712,19 +718,20 @@ RunService.RenderStepped:Connect(function()
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
+        -- ถ้ามีมอนอยู่แล้ว
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
-                -- วาร์ป "ด้านหลัง + ขึ้นบน + เอียงหน้า 45°"
                 local backOffset = -mobHRP.CFrame.LookVector * 5.5
                 local upOffset = Vector3.new(0, 6, 0)
                 local finalPos = mobHRP.Position + backOffset + upOffset
-                local lookDir = mobHRP.Position - finalPos
-                hrp.CFrame = CFrame.new(finalPos, finalPos + lookDir) * CFrame.Angles(math.rad(45), 0, 0)
+
+                hrp.CFrame = getRotatedCFrame(finalPos, 45) -- หัวเฉียงลง 45 องศา
             end
             return
         end
 
+        -- หาเป้าใหม่
         currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
@@ -734,8 +741,8 @@ RunService.RenderStepped:Connect(function()
                     local backOffset = -mobHRP.CFrame.LookVector * 5.5
                     local upOffset = Vector3.new(0, 6, 0)
                     local finalPos = mobHRP.Position + backOffset + upOffset
-                    local lookDir = mobHRP.Position - finalPos
-                    hrp.CFrame = CFrame.new(finalPos, finalPos + lookDir) * CFrame.Angles(math.rad(45), 0, 0)
+
+                    hrp.CFrame = getRotatedCFrame(finalPos, 45) -- หัวเฉียงลง 45 องศา
                     break
                 end
             end
