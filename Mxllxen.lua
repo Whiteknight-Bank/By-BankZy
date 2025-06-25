@@ -179,6 +179,12 @@ local enemyQuestSword = {
         newName = "IceSwordQuest",
         position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
     },
+    ["Yeti"] = {
+        questFolder = "YetiIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "YetiSwordQuest",
+        position = Vector3.new(1559.76025, 62.7584152, -4886.70947)
+    },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
@@ -253,6 +259,12 @@ local enemyQuestDef = {
         newName = "IceDefQuest",
         position = Vector3.new(-1056.87231, 62.7855415, -3289.11206)
     },
+    ["Yeti"] = {
+        questFolder = "YetiIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "YetiDefenseQuest",
+        position = Vector3.new(1554.35364, 62.716629, -4891.70264)
+    },
     ["Logia Bandit"] = {
         questFolder = "SkyIslandQuest",
         questModel = "IceMonstersQuest",
@@ -318,7 +330,7 @@ local enemyQuestSniper = {
     ["Yeti"] = {
         questFolder = "YetiIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "",
+        newName = "YetiGunQuest",
         position = Vector3.new(1557.05554, 62.7163467, -4889.20605)
     },
     ["Enel"] = {
