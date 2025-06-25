@@ -678,67 +678,83 @@ end)
 page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
-
-local safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-
+	
 RunService.RenderStepped:Connect(function()
     if not _G.farmNpc then return end
     pcall(function()
-        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
-        if targetName == "" then return end
-
-        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
-        local quests = workspace:FindFirstChild("Quests")
-        local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
-
         local player = game.Players.LocalPlayer
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
         if not hrp then return end
 
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        if targetName == "" then return end
+
+        -- ปิดชนทุกชิ้นส่วน
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
+        local quests = workspace:FindFirstChild("Quests")
+        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
+        local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
+
+        -- ถ้ายังไม่ได้เปิด GUI เควส ให้ไปตำแหน่งรับเควส + fireclick
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
-            return
+
+            -- fireclickdetector
+            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            break
+                        end
+                    end
+                end
+            end
+
+            return -- รอรอบหน้าให้ GUI เปิดก่อนวาร์ปต่อ
         end
-    end)
-end)
-		
-RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
 
-    pcall(function()
-        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
-        if targetName == "" then return end
+        if isQuestGUIVisible() then
+            local safePart = nil
+            if enemyQuestStrg[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            elseif enemyQuestSword[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            elseif enemyQuestDef[targetName] then
+                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+            end
 
-        local char = player.Character
-        local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
+            if safePart then
+                hrp.CFrame = safePart.CFrame + Vector3.new(0, 2, 0)
+            end
 
-        local Enemys = workspace:FindFirstChild("Enemys")
-        if not Enemys then return end
-
-        for _, mob in pairs(Enemys:GetChildren()) do
-            if mob:IsA("Model") and mob.Name == targetName then
-                local mobHRP = mob:FindFirstChild("HumanoidRootPart")
-                local mobHum = mob:FindFirstChild("Humanoid")
-
-                if mobHRP and mobHum and mobHum.Health > 0 then
-                    local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2
-                    local frontRightPos = hrp.Position + offset
-                    local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
-                    mobHRP.CFrame = lookCF
+            local Enemys = workspace:FindFirstChild("Enemys")
+            if Enemys then
+                for _, mob in pairs(Enemys:GetChildren()) do
+                    if mob:IsA("Model") and mob.Name == targetName then
+                        local mobHRP = mob:FindFirstChild("HumanoidRootPart")
+                        local mobHum = mob:FindFirstChild("Humanoid")
+                        if mobHRP and mobHum and mobHum.Health > 0 then
+                            local offset = hrp.CFrame.LookVector * 4 + hrp.CFrame.RightVector * 2.5
+                            local frontRightPos = hrp.Position + offset
+                            mobHRP.CFrame = CFrame.lookAt(frontRightPos, hrp.Position)
+                        end
+                    end
                 end
             end
         end
     end)
 end)
-
+		
 --[[
 local currentTargetMob = nil
 
