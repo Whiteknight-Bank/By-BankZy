@@ -568,7 +568,7 @@ end)
 local Tab2 = Window:Taps("Farm")
 local page2 = Tab2:newpage()
 
-page2:Label("┇ Safe Zone ┇")
+page2:Label("┇ Other ┇")
 page2:Button("Safe Zone Part", function()
     local char = game.Players.LocalPlayer.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
@@ -649,7 +649,6 @@ page2:Label("┇ Function Farm ┇")
 local SelectedEnemy = ""
 		
 page2:Dropdown("Select Enemys:", {
-    "None",
     "Mountain Bandit", 
     "Buggy Pirate",
     "Buggy The Clown",
@@ -675,7 +674,9 @@ page2:Toggle("Auto Bring Farm", false, function(brfrm)
 end)
 
 local lastSafeTP = 0
-local safeTPDelay = 2 -- หน่วงวินาทีก่อนวาร์ปกลับ SafeZone
+local safeTPDelay = 2
+local questVisibleAt = 0
+local allowBring = false
 
 RunService.RenderStepped:Connect(function()
     if not _G.farmBring then return end
@@ -702,24 +703,25 @@ RunService.RenderStepped:Connect(function()
         end
 
         if not isQuestGUIVisible() and info.position then
+            allowBring = false
+            questVisibleAt = 0
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
             return
         end
 
-        if isQuestGUIVisible() and tick() - lastSafeTP > safeTPDelay then
-            lastSafeTP = tick()
-
-            local safePart = nil
-            if enemyQuestStrg[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            elseif enemyQuestSword[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-            elseif enemyQuestDef[targetName] then
-                safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+        if isQuestGUIVisible() then
+            if questVisibleAt == 0 then
+                questVisibleAt = tick()
             end
 
-            if safePart then
-                hrp.CFrame = safePart.CFrame + Vector3.new(0, 3, 0)
+            if tick() - questVisibleAt > safeTPDelay and not allowBring then
+                allowBring = true
+                lastSafeTP = tick()
+
+                local safePart = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+                if safePart then
+                    hrp.CFrame = safePart.CFrame + Vector3.new(0, 3, 0)
+                end
             end
         end
     end)
@@ -728,7 +730,8 @@ end)
 local currentMob = nil
 
 RunService.RenderStepped:Connect(function()
-    if not _G.farmBring then return end
+    if not _G.farmBring or not allowBring then return end
+
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy
         if targetName == "" then return end
@@ -766,7 +769,6 @@ RunService.RenderStepped:Connect(function()
             local lookCF = CFrame.lookAt(frontRightPos, hrp.Position)
 
             mobHRP.CFrame = lookCF
-
             mobHRP.Size = Vector3.new(10, 10, 10)
             mobHRP.Transparency = 0.8
             mobHRP.CanCollide = false
@@ -906,7 +908,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("", " ", targetName..": Not Found Quest Strength", 3)
+                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Strength", 3)
             end
         end)
     end
@@ -948,7 +950,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("", " ", targetName..": Not Found Quest Sword", 3)
+                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Sword", 3)
             end
         end)
     end
@@ -990,7 +992,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("", " ", targetName..": Not Found Quest Defense", 3)
+                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Defense", 3)
             end
         end)
     end
@@ -1032,7 +1034,7 @@ spawn(function()
             end
 
             if not clicked then
-                create:Notifile("", " ", targetName..": Not Found Quest Gun", 3)
+                create:Notifile("", "Not found:" .. targetName .. "there is no Quest Gun", 3)
             end
         end)
     end
@@ -1040,17 +1042,6 @@ end)
 		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
-
-page2:Label("┇ Remove Weapon ┇")
-page2:Dropdown("Select Weapon Removed:", {"Remove Sword", "Remove Gun"}, function(remove)
-    selectedRemove = remove
-end)
-
-page2:Button("Click Remove", function()
-
-wait(0.3)
-create:Notifile("", "Weapon has removed!", 2)
-end)
 
 page2:Label("┇ Player ┇")
 page2:Dropdown("Select Player:", playerNames, function(name)
@@ -1200,30 +1191,6 @@ end)
 page3:Button("Market Seller Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2520, 84, -1991)
 end)
-
-local Tab6 = Window:Taps("Shop")
-local page6 = Tab6:newpage()
-
-page6:Label("┇ Shop Black Market Seller ┇")
-page6:Button("Random Devil Fruit", function()
-local args = {
-    [1] = "Fruit"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
-			end)
-
-page6:Button("Random HakiBook", function()
-local args = {
-    [1] = "Book"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
-			end)
-
-page6:Label("┇ Shop Weapon Soon . . . ┇")
-page6:Label("┇ Shop Gun Soon . . . ┇")
-page6:Label("┇ Shop Shop BlackLeg Soon . . . ┇")
 
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
