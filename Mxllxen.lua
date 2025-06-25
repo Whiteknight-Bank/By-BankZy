@@ -141,7 +141,7 @@ local enemyQuestStrg = {
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RenaryStrgQuest",
+        newName = "RevolutionnaryStrgQuest",
         position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
     },
     ["Buggy Pirate"] = {
@@ -207,7 +207,7 @@ local enemyQuestSword = {
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RevonaryBladeQuest",
+        newName = "RevolutionnaryBladeQuest",
         position = Vector3.new(-3098.60962, 66.9039612, -3807.74756)
     },
     ["Buggy Pirate"] = {
@@ -218,8 +218,7 @@ local enemyQuestSword = {
     },
     ["Vice-Admiral"] = {
         questFolder = "MarineIslandQuest",
-        questModel = "marin",
-        newName = "marineSword",
+        questModel = "marine",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
     ["Ito Bandit"] = {
@@ -275,7 +274,7 @@ local enemyQuestDef = {
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RevolunaryDefQuest",
+        newName = "RevolutionnaryDefQuest",
         position = Vector3.new(-3102.28809, 66.9459763, -3807.61768)
     },
     ["Buggy Pirate"] = {
@@ -300,7 +299,7 @@ local enemyQuestDef = {
 		
 local enemyQuestSniper = {
     ["Haki Monkey"] = {
-        questFolder = "SpawnIslandQuests",
+        questFolder = "GrassyIslandQuests",
         questModel = "MonkeyQuest",
         newName = "MonkeyGunQuest",
         position = Vector3.new(-952.788574, 66.0822601, 678.413635)
@@ -323,15 +322,16 @@ local enemyQuestSniper = {
         newName = "SkyDefQuest",
         position = Vector3.new()
     },
-    ["Desert Bandit"] = {
+    ["Enel"] = {
         questFolder = "SandIslandQuests",
-        questModel = "",
+        questModel = "IceMonstersQuest",
+	newName = "EnelGunQuest",
         position = Vector3.new()
     },
     ["Revolutionary Troop"] = {
         questFolder = "RevIslandQuest",
         questModel = "IceMonstersQuest",
-        newName = "RevolunaryGunQuest",
+        newName = "RevolutionnaryGunQuest",
         position = Vector3.new()
     },
     ["Buggy Pirate"] = {
@@ -729,7 +729,15 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
-		
+
+page2:Toggle("Auto KenHaki", false, function(kenhki)
+    _G.kenhaki = kenhki
+end)
+
+page2:Toggle("Auto BusoHaki", false, function(bshki)
+    _G.busohaki = bshki
+end)
+
 page2:Label("┇ Function Claim Quest ┇")
 page2:Toggle("Auto Claim Strength", false, function(enabled)
     _G.autostrg = enabled
