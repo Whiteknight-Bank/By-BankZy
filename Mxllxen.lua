@@ -304,7 +304,7 @@ local enemyQuestDef = {
 		
 local enemyQuestSniper = {
     ["Haki Monkey"] = {
-        questFolder = "GrassyIslandQuests",
+        questFolder = "GrassyIslandQuest",
         questModel = "MonkeyQuest",
         newName = "MonkeyGunQuest",
         position = Vector3.new(-952.788574, 66.0822601, 678.413635)
