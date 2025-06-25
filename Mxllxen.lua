@@ -295,7 +295,7 @@ for _, questTable in ipairs(allQuests) do
 
         local found = false
         for _, inst in ipairs(folder:GetChildren()) do
-            if inst:IsA("BasePart") and inst:FindFirstChild(folder.questModel) then
+            if inst:IsA("BasePart") and inst:FindFirstChild(entry.questModel) then
                 if inst.Position == entry.position then
                     if entry.newName then
                         local oldName = inst.Name
