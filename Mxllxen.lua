@@ -680,16 +680,21 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
 end)
 
 local function getLookDownCFrame(fromPos, toPos)
-    -- สร้าง CFrame หันไปที่เป้ามอน แล้วหมุนเอียงเฉพาะแกน X ลง 45°
+    -- สร้าง CFrame หันตรงไปที่มอน และหมุนเฉียงหัวลง 45°
     local lookCFrame = CFrame.lookAt(fromPos, toPos)
-    local tiltX = CFrame.Angles(math.rad(-45), 0, 0)
+    local tiltX = CFrame.Angles(math.rad(-45), 0, 0) -- เอียงหัวลง
     return lookCFrame * tiltX
 end
 
 local currentTargetMob = nil
+local camera = workspace.CurrentCamera
 
 RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
+    if not _G.farmNpc then
+        -- เมื่อปิดฟาร์ม กลับกล้องปกติ
+        camera.CameraType = Enum.CameraType.Custom
+        return
+    end
 
     pcall(function()
         local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
@@ -699,37 +704,49 @@ RunService.RenderStepped:Connect(function()
         local quests = workspace:FindFirstChild("Quests")
         local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
 
+        local player = game.Players.LocalPlayer
         local char = player.Character
         local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
+        local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+        if not hrp or not humanoid then return end
 
-        -- NoClip
+        -- ล็อกตัวไม่ชน
         for _, part in ipairs(char:GetDescendants()) do
             if part:IsA("BasePart") then
                 part.CanCollide = false
             end
         end
 
-        -- ไปจุดรับเควส
+        -- ปิดฟิสิกส์ให้ล้มเฉย ๆ (กันสั่น)
+        humanoid.PlatformStand = true
+
+        -- ล็อกกล้องไม่ให้หมุนตามตัว
+        camera.CameraType = Enum.CameraType.Scriptable
+
+        -- ถ้าไปรับเควส
         if not isQuestGUIVisible() and info and info.position then
             hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
+            camera.CFrame = hrp.CFrame * CFrame.new(0, 5, -10) * CFrame.Angles(math.rad(-10), 0, 0)
             return
         end
 
         local Enemys = workspace:FindFirstChild("Enemys")
         if not Enemys then return end
 
-        -- ถ้ามีมอนที่ล็อกอยู่
+        -- ถ้ามีมอนเดิมแล้ว ยังไม่ตาย
         if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
             local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
             if mobHRP then
                 local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
-                hrp.CFrame = getLookDownCFrame(backPos, mobHRP.Position)
+                local finalCF = getLookDownCFrame(backPos, mobHRP.Position)
+
+                hrp.CFrame = finalCF
+                camera.CFrame = finalCF * CFrame.new(0, 3, 10) -- กล้องอยู่ด้านหลังหันเข้าตัว
             end
             return
         end
 
-        -- หาเป้าใหม่
+        -- หามอนใหม่
         currentTargetMob = nil
         for _, mob in pairs(Enemys:GetChildren()) do
             if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
@@ -737,7 +754,10 @@ RunService.RenderStepped:Connect(function()
                     currentTargetMob = mob
                     local mobHRP = mob.HumanoidRootPart
                     local backPos = mobHRP.Position - mobHRP.CFrame.LookVector * 5.5 + Vector3.new(0, 6, 0)
-                    hrp.CFrame = getLookDownCFrame(backPos, mobHRP.Position)
+                    local finalCF = getLookDownCFrame(backPos, mobHRP.Position)
+
+                    hrp.CFrame = finalCF
+                    camera.CFrame = finalCF * CFrame.new(0, 3, 10) -- กล้องตามหลัง
                     break
                 end
             end
