@@ -1607,6 +1607,76 @@ do
     end)
 end
 
+do
+    local key = "Q"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -180, 1, -170)
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    activeButtons[key] = false
+    button.MouseButton1Click:Connect(function()
+        for otherKey, _ in pairs(activeButtons) do
+            if otherKey ~= key then
+                activeButtons[otherKey] = false
+                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
+                if otherBtn then
+                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+            end
+        end
+        activeButtons[key] = not activeButtons[key]
+        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+    end)
+end
+
+do
+    local key = "E"
+    local button = Instance.new("TextButton")
+    button.Name = key .. "Button"
+    button.Text = key
+    button.Size = buttonSize
+    button.Position = UDim2.new(1, -180, 1, -90) -- ด้านล่างของ Q
+    button.AnchorPoint = Vector2.new(0, 0)
+    button.BackgroundColor3 = Color3.new(0, 0, 0)
+    button.BackgroundTransparency = 0.4
+    button.BorderSizePixel = 0
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamBold
+    button.TextScaled = true
+    button.AutoButtonColor = true
+    button.Parent = gui
+
+    Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
+
+    activeButtons[key] = false
+    button.MouseButton1Click:Connect(function()
+        for otherKey, _ in pairs(activeButtons) do
+            if otherKey ~= key then
+                activeButtons[otherKey] = false
+                local otherBtn = gui:FindFirstChild(otherKey .. "Button")
+                if otherBtn then
+                    otherBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+                end
+            end
+        end
+        activeButtons[key] = not activeButtons[key]
+        button.BackgroundColor3 = activeButtons[key] and Color3.fromRGB(0, 255, 0) or Color3.new(0, 0, 0)
+    end)
+				end
+
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -1629,13 +1699,14 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
+-- ปุ่ม J
 do
     local key = "J"
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
     button.Text = key
     button.Size = buttonSize
-    button.Position = UDim2.new(1, -60, 1, -60)
+    button.Position = UDim2.new(0, 70, 1, -60) -- ข้าง R
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -1657,12 +1728,12 @@ do
 end
 
 do
-    local key = "Q"
+    local key = "K"
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
     button.Text = key
     button.Size = buttonSize
-    button.Position = UDim2.new(1, -180, 1, -170) -- บนซ้ายของ Space
+    button.Position = UDim2.new(0, 130, 1, -60)
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -1676,7 +1747,7 @@ do
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
     button.MouseButton1Click:Connect(function()
-        local keyCode = Enum.KeyCode.Q
+        local keyCode = Enum.KeyCode.K
         VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
         task.wait(0.1)
         VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
@@ -1684,12 +1755,12 @@ do
 end
 
 do
-    local key = "E"
+    local key = "L"
     local button = Instance.new("TextButton")
     button.Name = key .. "Button"
     button.Text = key
     button.Size = buttonSize
-    button.Position = UDim2.new(1, -180, 1, -90)
+    button.Position = UDim2.new(0, 190, 1, -60)
     button.AnchorPoint = Vector2.new(0, 0)
     button.BackgroundColor3 = Color3.new(0, 0, 0)
     button.BackgroundTransparency = 0.4
@@ -1703,13 +1774,13 @@ do
     Instance.new("UICorner", button).CornerRadius = UDim.new(1, 0)
 
     button.MouseButton1Click:Connect(function()
-        local keyCode = Enum.KeyCode.E
+        local keyCode = Enum.KeyCode.L
         VirtualInputManager:SendKeyEvent(true, keyCode, false, game)
         task.wait(0.1)
         VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
     end)
-end
-				
+end		
+
 create:Notifile("", "Button For Mobile ver. 4.2.75 [BETA]", 3)
 			end)
 
