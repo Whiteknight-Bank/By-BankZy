@@ -216,6 +216,12 @@ local enemyQuestSword = {
         newName = "marineSword",
         position = Vector3.new(2812.84082, 80.1873169, -1457.27649)
     },
+    ["Haki Monkey"] = {
+        questFolder = "GrassyIslandQuest",
+	questModel = "MonkeyQuest",
+        newName = "MonkeySwordQuest",
+        position = Vector3.new(-951.820618, 66.0820541, 681.963806)
+    },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
         questModel = "IceMonstersQuest",
@@ -272,11 +278,11 @@ local enemyQuestDef = {
         newName = "BuggyPirateDefQuests",
         position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
     },
-    ["Vice-Admiral"] = {
-        questFolder = "MarineIslandQuest",
-	questModel = "marine",
-        newName = "MarineGun",
-        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    ["Haki Monkey"] = {
+        questFolder = "GrassyIslandQuest",
+	questModel = "MonkeyQuest",
+        newName = "MonkeyDefQuest",
+        position = Vector3.new(-950.852905, 66.1240616, 685.514099)
     },
     ["Ito Bandit"] = {
         questFolder = "FarmIslandQuest",
