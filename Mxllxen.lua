@@ -679,6 +679,37 @@ page2:Toggle("Auto Behind Farm", false, function(befrm)
     _G.farmNpc = befrm
 end)
 
+RunService.RenderStepped:Connect(function()
+    if not _G.farmNpc then return end
+
+    pcall(function()
+        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
+        if targetName == "" then return end
+
+        local player = game.Players.LocalPlayer
+        local char = player.Character
+        local hrp = char and char:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
+
+        local Enemys = workspace:FindFirstChild("Enemys")
+        if not Enemys then return end
+
+        for _, mob in pairs(Enemys:GetChildren()) do
+            if mob:IsA("Model") and mob.Name == targetName then
+                local mobHRP = mob:FindFirstChild("HumanoidRootPart")
+                local mobHum = mob:FindFirstChild("Humanoid")
+
+                if mobHRP and mobHum and mobHum.Health > 0 then
+                    local frontPos = hrp.Position + hrp.CFrame.LookVector * 4
+                    local lookCF = CFrame.lookAt(frontPos, hrp.Position)
+                    mobHRP.CFrame = lookCF
+                end
+            end
+        end
+    end)
+end)
+
+--[[
 local currentTargetMob = nil
 
 RunService.RenderStepped:Connect(function()
@@ -737,33 +768,39 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
+]]--
 		
 page2:Toggle("Auto KenHaki", false, function(kenhki)
     _G.kenhaki = kenhki
+end)
 
-    if kenhki then
-        -- รอกระบวนการโหลดตัวละคร
-        task.spawn(function()
-            wait(0.3)
-            -- กด K 1 ครั้ง (Auto Ken)
-            keypress(0x4B) -- K = 0x4B
-            wait(0.1)
-            keyrelease(0x4B)
-        end)
+spawn(function()
+    while wait(0.1) do
+        if _G.kenhaki then
+            pcall(function()
+                game:GetService("ReplicatedStorage")
+                    :WaitForChild("RemoteEvents")
+                    :WaitForChild("Kenbunshoku")
+                    :FireServer()
+            end)
+        end
     end
 end)
 
 page2:Toggle("Auto BusoHaki", false, function(bshki)
     _G.busohaki = bshki
+end)
 
-    if bshki then
-        task.spawn(function()
-            wait(0.3)
-            -- กด J 1 ครั้ง (Auto Buso)
-            keypress(0x4A) -- J = 0x4A
-            wait(0.1)
-            keyrelease(0x4A)
-        end)
+spawn(function()
+    while wait(0.1) do
+        if _G.busohaki then
+            pcall(function()
+                game:GetService("ReplicatedStorage")
+                    :WaitForChild("RemoteEvents")
+                    :WaitForChild("Busoshoku")
+                    :FireServer()
+            end)
+        end
     end
 end)
 
