@@ -748,7 +748,8 @@ spawn(function()
 
             local quests = workspace:FindFirstChild("Quests")
             local questFolder = quests and quests:FindFirstChild(info.questFolder)
-            local questModel = questFolder and questFolder:FindFirstChild(info.questModel)
+            local modelName = info.newName or info.questModel
+            local questModel = questFolder and questFolder:FindFirstChild(modelName)
 
             if questModel then
                 for _, obj in ipairs(questModel:GetDescendants()) do
@@ -756,17 +757,22 @@ spawn(function()
                         local parent = obj.Parent
                         local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
 
-                        if part and part.Position == info.position then
+                        if part and (part.Position - info.position).Magnitude < 3 then
                             fireclickdetector(obj)
+                            print("✅ Fired ClickDetector at", part.Position, "→", modelName)
                             break
+                        else
+                            print("❌ ไม่ตรงตำแหน่ง:", part and part.Position)
                         end
                     end
                 end
+            else
+                warn("⚠️ ไม่พบ questModel:", modelName)
             end
         end)
     end
 end)
-
+		
 page2:Toggle("Auto Claim Sniper", false, function(clsni)
     _G.autosni = clsni
 end)
