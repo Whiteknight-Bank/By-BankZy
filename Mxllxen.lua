@@ -249,6 +249,12 @@ local enemyQuestSword = {
         questModel = "CrocodileQuests",
         newName = "CrocodileSwordQuests",
         position = Vector3.new(920.663147, 81.513298, 121.955994)
+    },
+    ["Buggy The Clown"] = {
+        questFolder = "OrangeTownQuests",
+        questModel = "BuggyTheClownQuests",
+        newName = "BuggyDefenseQuests",
+        position = Vector3.new(-2362.24292, 60.4571304, -180.865555)
     }
 		}
 
@@ -323,6 +329,12 @@ local enemyQuestDef = {
 	questModel = "IceMonstersQuest",
         newName = "ItoDefQuest",
         position = Vector3.new(-833.125732, 92.8658295, -5640.75293)
+    },
+    ["Buggy The Clown"] = {
+        questFolder = "OrangeTownQuests",
+        questModel = "BuggyTheClownQuests",
+        newName = "BuggySwordQuests",
+        position = Vector3.new(-2362.24292, 60.4571304, -180.865555)
     }
 		}
 		
@@ -374,6 +386,12 @@ local enemyQuestSniper = {
         questModel = "CrocodileQuests",
         newName = "CrocodileGunQuests",
         position = Vector3.new(923.887878, 81.4711914, 123.72757)
+    },
+    ["Buggy The Clown"] = {
+        questFolder = "OrangeTownQuests",
+        questModel = "BuggyTheClownQuests",
+        newName = "BuggyGunQuests",
+        position = Vector3.new(-2365.92603, 60.4568977, -180.865417)
     }
 		}
 
