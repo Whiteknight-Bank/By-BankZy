@@ -285,6 +285,69 @@ local enemyQuestDef = {
         position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
     }
 		}
+--[[
+local enemyQuestSniper = {
+    ["Haki Monkey"] = {
+        questFolder = "SpawnIslandQuests",
+        questModel = "MonkeyQuest",
+        newName = "MonkeyGunQuest",
+        position = Vector3.new(-955.032, 61.957, -1139.792)
+    },
+    ["Ice Monster"] = {
+        questFolder = "SnowIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "IceGunQuest",
+        position = Vector3.new(-1063.10986, 62.7437477, -3285.20532)
+    },
+    ["Logia Bandit"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "LogiaBanditDefQuest",
+        position = Vector3.new(-4414.65381, 68.6773071, -1525.55737)
+    },
+    ["Skypiean"] = {
+        questFolder = "SkyIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "SkyDefQuest",
+        position = Vector3.new(-3856.99365, 2068.38159, 3104.50513)
+    },
+    ["Desert Bandit"] = {
+        questFolder = "SandIslandQuests",
+        questModel = "DefeatDesertBanditDefense",
+        position = Vector3.new(920.663147, 85.5009918, 121.955994)
+    },
+    ["Fishman"] = {
+        questFolder = "RockyIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "FishDefQuest",
+        position = Vector3.new(-4029.39355, 96.7876511, 454.569122)
+    },
+    ["Revolutionary Troop"] = {
+        questFolder = "RevIslandQuest",
+        questModel = "IceMonstersQuest",
+        newName = "RevolunaryDefQuest",
+        position = Vector3.new(-3094.93384, 66.9042282, -3807.8772)
+    },
+    ["Buggy Pirate"] = {
+        questFolder = "OrangeTownQuests",
+        questModel = "BuggyPirateQuests",
+        newName = "BuggyPirateDefQuests",
+        position = Vector3.new(-2362.24292, 64.4447784, -180.865555)
+    },
+    ["Vice-Admiral"] = {
+        questFolder = "MarineIslandQuest",
+	questModel = "marine",
+        newName = "MarineGun",
+        position = Vector3.new(2807.47412, 80.1453857, -1462.3136)
+    },
+    ["Ito Bandit"] = {
+        questFolder = "FarmIslandQuest",
+	questModel = "IceMonstersQuest",
+        newName = "ItoDefQuest",
+        position = Vector3.new(-835.759155, 92.8242264, -5633.88428)
+    }
+		}
+]]--
 
 local allQuests = {enemyQuestStrg, enemyQuestSword, enemyQuestDef}
 local questsFolder = workspace:FindFirstChild("Quests")
@@ -593,11 +656,11 @@ page2:Dropdown("Select Enemys:", {
     "Desert Bandit",
     "Ice Monster",
     "Haki Monkey", 
-    "Logia Bandit", 
-    "Ito Bandit",
-    "Vice-Admiral",
+    "Vice-Admiral", 
+    "Revolutionary Troop",
     "Skypiean",
-    "Revolutionary Troop"
+    "Logia Bandit",
+    "Ito Bandit"
 }, function(choice)
     SelectedEnemy = choice
     SelectedBoss = ""
@@ -775,6 +838,36 @@ page2:Toggle("Auto Claim Sniper", false, function(clsni)
     _G.autosni = clsni
 end)
 
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.autosni or SelectedEnemy == "" or isQuestGUIVisible() then return end
+
+            local info = enemyQuestSniper[SelectedEnemy]
+            if not info then return end
+
+            local quests = workspace:FindFirstChild("Quests")
+            local questFolder = quests and quests:FindFirstChild(info.questFolder)
+            local modelName = info.newName or info.questModel
+            local questModel = questFolder and questFolder:FindFirstChild(modelName)
+
+            if questModel then
+                for _, obj in ipairs(questModel:GetDescendants()) do
+                    if obj:IsA("ClickDetector") then
+                        local parent = obj.Parent
+                        local part = parent:IsA("BasePart") and parent or parent:FindFirstChildWhichIsA("BasePart", true)
+
+                        if part and (part.Position - info.position).Magnitude < 3 then
+                            fireclickdetector(obj)
+                            break
+                        end
+                    end
+		end
+            end
+        end)
+    end
+end)
+		
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
