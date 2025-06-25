@@ -1546,43 +1546,14 @@ if remoteAdmin then
 remoteAdmin:Destroy() 
 end
 
-local firstRemote = replicatedStorage:FindFirstChildOfClass("RemoteEvent")
-if firstRemote then 
-firstRemote:Destroy() 
-end
-
-if playerGui then
-    local ocean = playerGui:FindFirstChild("Ocean")
-    if ocean then
-        local swim = ocean:FindFirstChild("SwimmingScript")
-        if swim then swim:Destroy() end
-
-        local underwater = ocean:FindFirstChild("UnderwaterOverlayScript")
-        if underwater then underwater:Destroy() end
-    end
-
-    local updater = playerGui:FindFirstChild("LocalUpdater")
-    if updater then updater:Destroy() end
-end
-
-local oceanStarter = starterGui:FindFirstChild("Ocean")
-if oceanStarter then
-    local swimS = oceanStarter:FindFirstChild("SwimmingScript")
-    if swimS then swimS:Destroy() end
-
-    local underS = oceanStarter:FindFirstChild("UnderwaterOverlayScript")
-    if underS then underS:Destroy() end
-end
-
-local bannedVal = player:FindFirstChild("PlayerValues") and player.PlayerValues:FindFirstChild("Banned")
-if bannedVal then 
-bannedVal:Destroy() 
-end
+if game.Players.LocalPlayer.PlayerValues:FindFirstChild("Banned")then 
+game.Players.LocalPlayer.PlayerValues.Banned:Destroy()
+end 
 
 wait(2)
-local remoteAdmin = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("Admin")
-if remoteAdmin then 
-remoteAdmin:Destroy() 
+local remotewater = replicatedStorage:FindFirstChild("RemoteEvents") and replicatedStorage.RemoteEvents:FindFirstChild("DamageWater")
+if remotewater then 
+remotewater:Destroy() 
 end
 create:Notifile("", "Don't worry, Turn Anti Water Now!", 6)
 		
