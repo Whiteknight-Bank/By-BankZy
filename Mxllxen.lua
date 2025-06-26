@@ -1247,6 +1247,16 @@ page3:Button("Market Seller Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2520, 84, -1991)
 end)
 
+local Tab4 = Window:Taps("Shop")
+local page4 = Tab4:newpage()
+
+page4:Label("┇ Shop Black Market Seller ┇")
+page4:Button("Random Devil Fruit", function()
+			end)
+
+page4:Button("Random HakiBook", function()
+			end)
+
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
@@ -1788,7 +1798,7 @@ Gui.Parent = player:WaitForChild("PlayerGui")
 local button = Instance.new("TextButton")
 button.Parent = Gui
 button.Size = UDim2.new(0, 60, 0, 60)
-button.Position = UDim2.new(1, -90, 0, -10)
+button.Position = UDim2.new(1, -80, 0, -10)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BackgroundTransparency = 0.5
 button.BorderSizePixel = 2
