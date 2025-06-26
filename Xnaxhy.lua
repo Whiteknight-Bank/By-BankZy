@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "InW Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
