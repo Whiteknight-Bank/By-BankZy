@@ -254,7 +254,7 @@ local enemyQuestSword = {
         questFolder = "OrangeTownQuests",
         questModel = "BuggyTheClownQuests",
         newName = "BuggyDefenseQuests",
-        position = Vector3.new(-2362.24292, 60.4571304, -180.865555)
+        position = Vector3.new(-2369.60303, 60.4989929, -180.865417)
     }
 		}
 
@@ -1549,7 +1549,7 @@ do
 	local key = "SPACE"
 	local button = Instance.new("TextButton")
 	button.Name = "SpaceButton"
-	button.Text = "⎵"
+	button.Text = "Space"
 	button.Size = buttonSize
 	button.Position = UDim2.new(1, -110, 1, -130)
 	button.AnchorPoint = Vector2.new(0, 0)
@@ -1780,9 +1780,46 @@ do
         task.wait(0.1)
         VirtualInputManager:SendKeyEvent(false, keyCode, false, game)
     end)
-end		
+end
 
-create:Notifile("", "Button For Mobile ver. 4.2.75 [BETA]", 3)
+local Gui = Instance.new("ScreenGui")
+Gui.Parent = player:WaitForChild("PlayerGui")
+
+local button = Instance.new("TextButton")
+button.Parent = Gui
+button.Size = UDim2.new(0, 60, 0, 60)
+button.Position = UDim2.new(1, -90, 0, -10)
+button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+button.BackgroundTransparency = 0.5
+button.BorderSizePixel = 2
+button.BorderColor3 = Color3.fromRGB(255, 255, 255)
+button.Text = "Drop"
+button.TextColor3 = Color3.fromRGB(255, 255, 255)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 25
+button.AutoButtonColor = false
+button.ClipsDescendants = true
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(1, 0)
+uiCorner.Parent = button
+
+button.MouseEnter:Connect(function()
+    button.BackgroundTransparency = 0.2
+end)
+
+button.MouseLeave:Connect(function()
+    button.BackgroundTransparency = 0.5
+end)
+
+button.MouseButton1Click:Connect(function()
+    local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+    if tool then
+        tool.Parent = game.Workspace
+    end
+end)
+
+create:Notifile("", "Button For Mobile Ver.5 [BETA]", 3)
 			end)
 
 wait(1)local Players = game:GetService("Players")
