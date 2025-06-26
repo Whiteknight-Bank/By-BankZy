@@ -497,7 +497,7 @@ spawn(function()
 
                 _G.autoclaimq = false
 
-                task.delay(2, function()
+                task.delay(4, function()
                     _G.autoclaimq = wasAutoClaimQ
                     debounceDie = false
                 end)
@@ -1819,7 +1819,7 @@ local button = Instance.new("TextButton")
 button.Name = "DropButton"
 button.Parent = Gui
 button.Size = UDim2.new(0, 60, 0, 60)
-button.Position = UDim2.new(0, 10, 1, -70)
+button.Position = UDim2.new(1, -70, 0, 10) -- ✅ มุมขวาบนสุด
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BackgroundTransparency = 0.5
 button.BorderSizePixel = 2
