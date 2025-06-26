@@ -88,7 +88,6 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
@@ -847,7 +846,7 @@ end)
 spawn(function()
     while wait(0) do
         pcall(function()
-            if _G.gemsgift then
+            if _G.gemgift then
 local A_1 = "RewardMark"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardDaily
     Event:FireServer(A_1)
@@ -972,7 +971,7 @@ spawn(function()
     end
 end)
 
-page2:Toggle("Auto Death Kaizu' Boss (50/50%)", false, function(zki)
+page2:Toggle("Auto Death Kaizu' Boss", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -992,6 +991,8 @@ spawn(function()
 end)
 
 page2:Label("┇ Function Farming ┇")
+local Wapon = {}
+
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
