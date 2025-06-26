@@ -1060,7 +1060,24 @@ RunService.RenderStepped:Connect(function()
     end)
 end)
 ]]--
-		
+
+page2:Toggle("Auto Flame Leg", false, function(flme)
+    _G.autoflameleg = flme
+end)
+
+spawn(function()
+    while wait(0.1) do
+        if _G.autoflameleg then
+            pcall(function()
+                game:GetService("ReplicatedStorage")
+                    :WaitForChild("RemoteEvents")
+                    :WaitForChild("Diable")
+                    :FireServer()
+            end)
+        end
+    end
+end)
+
 page2:Toggle("Auto KenHaki", false, function(kenhki)
     _G.kenhaki = kenhki
 end)
@@ -1793,12 +1810,16 @@ do
 end
 
 local Gui = Instance.new("ScreenGui")
-Gui.Parent = player:WaitForChild("PlayerGui")
+Gui.Name = "DropToolGui"
+Gui.ResetOnSpawn = false
+Gui.IgnoreGuiInset = true
+Gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
 local button = Instance.new("TextButton")
+button.Name = "DropButton"
 button.Parent = Gui
 button.Size = UDim2.new(0, 60, 0, 60)
-button.Position = UDim2.new(1, -100, 1, -10)
+button.Position = UDim2.new(0, 10, 1, -70)
 button.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 button.BackgroundTransparency = 0.5
 button.BorderSizePixel = 2
@@ -1823,13 +1844,17 @@ button.MouseLeave:Connect(function()
 end)
 
 button.MouseButton1Click:Connect(function()
-    local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
-    if tool then
-        tool.Parent = game.Workspace
+    local player = game.Players.LocalPlayer
+    local char = player.Character
+    if char then
+        local tool = char:FindFirstChildOfClass("Tool")
+        if tool then
+            tool.Parent = game.Workspace
+        end
     end
 end)
 
-create:Notifile("", "Button For Mobile Ver.5 [BETA]", 3)
+create:Notifile("", "Button For Mobile Ver.6", 3)
 			end)
 
 wait(1)local Players = game:GetService("Players")
