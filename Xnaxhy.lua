@@ -3069,15 +3069,30 @@ spawn(function()
             local requirement = missionData:FindFirstChild("MissionRequirement")
             local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
 
-            if not allDaily or allDaily.Value ~= true then
-                return
+            if objective and requirement then
+                if objective.Value == "Quests" then
+                    if requirement.Value == 1 then
+                        -- ถ้า QQQ_AllDaily ยังไม่ true ให้หยุด
+                        if not allDaily or allDaily.Value ~= true then
+                            return
+                        else
+                            return -- true แล้วก็ไม่ต้องรีเซ็ต
+                        end
+                    else
+                        -- ถ้า requirement ≠ 1 → รีเซ็ตได้เลย
+                        local stats = userFolder:FindFirstChild("Stats")
+                        if stats then
+                            stats:FireServer()
+                        end
+                        return
+                    end
+                end
             end
 
-            if objective.Value ~= "Quests" or (requirement and requirement.Value ~= 1) then
-                local stats = userFolder:FindFirstChild("Stats")
-                if stats then
-                    stats:FireServer()
-                end
+            -- ถ้าไม่ใช่ "Quests" ก็รีเซ็ตได้
+            local stats = userFolder:FindFirstChild("Stats")
+            if stats then
+                stats:FireServer()
             end
         end)
     end
