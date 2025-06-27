@@ -3067,6 +3067,11 @@ spawn(function()
 
             local objective = missionData:FindFirstChild("MissionObjective")
             local requirement = missionData:FindFirstChild("MissionRequirement")
+            local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
+
+            if not allDaily or allDaily.Value ~= true then
+                return
+            end
 
             if objective.Value ~= "Quests" or (requirement and requirement.Value ~= 1) then
                 local stats = userFolder:FindFirstChild("Stats")
