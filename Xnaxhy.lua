@@ -3077,9 +3077,10 @@ spawn(function()
         end)
     end
 end)
---[[
+		
 spawn(function()
-    while wait() do
+    local hasClaimed = false
+    while task.wait(0.2) do
         pcall(function()
             if not _G.farmgems then return end
 
@@ -3094,17 +3095,27 @@ spawn(function()
             local objective = missionData:FindFirstChild("MissionObjective")
             local requirement = missionData:FindFirstChild("MissionRequirement")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not objective or not retum then return end
+            if not objective or not retum or not requirement then return end
 
-            if objective.Value == "Quests" then
-                if requirement and requirement.Value == 1 then
-                    retum:FireServer("Claim1")
-		end
+            if objective.Value == "Quests" and not hasClaimed then
+                retum:FireServer("Claim1")
+                hasClaimed = true
+                return
+            end
+
+            if hasClaimed and requirement.Value == 1 then
+                retum:FireServer("Claim1")
+                hasClaimed = false -- reset รอรอบใหม่
+                return
+            end
+
+            if objective.Value ~= "Quests" then
+                hasClaimed = false
             end
         end)
     end
 end)
-]]
+		
 spawn(function()
     while wait() do
         pcall(function()
