@@ -3038,26 +3038,24 @@ local page7 = Tab7:newpage()
 page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Section("Warning: It Will Reset Stats You All")
 
-page7:Toggle("Farm Gems", false, function(atrs)
-    _G.farmcomp = atrs
+page7:Toggle("Farm Gems", false, function(gms)
+    _G.farmgems = gms
 end)
 
--- ✅ ยิง Retum ตลอดทุกวินาที
 spawn(function()
     while wait() do
         pcall(function()
-            if not _G.farmcomp then return end
+            if not _G.farmgems then return end
 
             workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
         end)
     end
 end)
 
--- ✅ ยิง ResetStats ทุก 2.2 วินาที **ถ้ายังไม่ใช่ "Quests"**
 spawn(function()
     while wait(2.2) do
         pcall(function()
-            if not _G.farmcomp then return end
+            if not _G.farmgems then return end
 
             local player = game.Players.LocalPlayer
             local userId = player.UserId
@@ -3080,8 +3078,78 @@ spawn(function()
         end)
     end
 end)
-		
-page7:Toggle("Auto Claim Weekly", false, function(clmw)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            local player = game.Players.LocalPlayer
+            local userId = player.UserId
+
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local objective = missionData:FindFirstChild("MissionObjective")
+            if not objective or objective.Value ~= "Quests" then return end
+
+            local missionGui = player:FindFirstChild("PlayerGui"):FindFirstChild("MissionGui")
+            if not missionGui or not missionGui:FindFirstChild("Frame") then return end
+            if not missionGui.Frame.Visible then return end
+
+            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
+            if Compass then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local oldPos = hrp.Position
+                    player.Character.Humanoid:UnequipTools()
+                    Compass.Parent = player.Character
+
+                    hrp.CFrame = CFrame.new(Vector3.new(109, 268, -37))
+
+                    Compass:Activate()
+                    wait(0.2)
+
+                    hrp.CFrame = CFrame.new(oldPos)
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmgems then return end
+local A_1 = "Claim"
+local A_2 = "Daily1"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily2"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily3"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily4"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+            end
+        end)
+    end
+end)
+
+page7:Toggle("Auto Farm Compass", false, function(clmw)
     _G.claimwek = clmw
 end)
 
