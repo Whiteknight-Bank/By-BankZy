@@ -3081,7 +3081,7 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if not _G.farmcomp then return end
+            if not _G.farmgems then return end
 
             local player = game.Players.LocalPlayer
             local userId = player.UserId
