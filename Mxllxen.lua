@@ -95,7 +95,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBuy"] = {""};
+Cache.DevConfig["ListOfBuy"] = {"Katana"};
 Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
@@ -999,67 +999,6 @@ RunService.RenderStepped:Connect(function()
         end
     end)
 end)
-		
---[[
-local currentTargetMob = nil
-
-RunService.RenderStepped:Connect(function()
-    if not _G.farmNpc then return end
-
-    pcall(function()
-        local targetName = SelectedEnemy ~= "" and SelectedEnemy or SelectedBoss
-        if targetName == "" then return end
-
-        local info = enemyQuestStrg[targetName] or enemyQuestSword[targetName] or enemyQuestDef[targetName]
-        local quests = workspace:FindFirstChild("Quests")
-        local questFolder = info and quests and quests:FindFirstChild(info.questFolder)
-
-        local player = game.Players.LocalPlayer
-        local char = player.Character
-        local hrp = char and char:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
-
-        -- ปิดชน
-        for _, part in ipairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = false
-            end
-        end
-
-        if not isQuestGUIVisible() and info and info.position then
-            hrp.CFrame = CFrame.new(info.position + Vector3.new(0, 3, 0))
-            return
-        end
-
-        local Enemys = workspace:FindFirstChild("Enemys")
-        if not Enemys then return end
-
-        -- ถ้ามีมอนเดิม
-        if currentTargetMob and currentTargetMob:FindFirstChild("Humanoid") and currentTargetMob.Humanoid.Health > 0 then
-            local mobHRP = currentTargetMob:FindFirstChild("HumanoidRootPart")
-            if mobHRP then
-                local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
-                hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
-            end
-            return
-        end
-
-        -- หาเป้าใหม่
-        currentTargetMob = nil
-        for _, mob in pairs(Enemys:GetChildren()) do
-            if mob:IsA("Model") and mob.Name == targetName and mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                if mob.Humanoid.Health > 0 then
-                    currentTargetMob = mob
-                    local mobHRP = mob.HumanoidRootPart
-                    local behindPos = mobHRP.Position - mobHRP.CFrame.LookVector * 4
-                    hrp.CFrame = CFrame.new(behindPos, mobHRP.Position)
-                    break
-                end
-            end
-        end
-    end)
-end)
-]]--
 
 page2:Toggle("Auto Flame Leg", false, function(flme)
     _G.autoflameleg = flme
@@ -1115,7 +1054,7 @@ end)
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
-page2:Dropdown("Select Join Army:", Cache.DevConfig["ListOfBuy"], function(army)
+page2:Dropdown("Select Join Army:", Cache.DevConfig["ListOfJoin"], function(army)
     selectedArmy = army
 end)
 
@@ -1142,7 +1081,11 @@ game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("
 			end
 				
 wait(0.3)
+if selectedArmy then
 create:Notifile("", "You has join army now!", 2)
+elseif not selectedArmy then
+create:Notifile("", "Choose army you join!", 2)
+end
 end)
 		
 page2:Label("┇ Player ┇")
