@@ -3077,7 +3077,7 @@ spawn(function()
         end)
     end
 end)
-
+--[[
 spawn(function()
     while wait() do
         pcall(function()
@@ -3104,7 +3104,7 @@ spawn(function()
         end)
     end
 end)
-
+]]
 spawn(function()
     while wait() do
         pcall(function()
