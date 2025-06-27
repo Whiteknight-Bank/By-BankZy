@@ -1296,7 +1296,7 @@ page2:Button("Refresh Weapon", function()
 page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
-
+--[[
 local MobList = { "Boar", "Crab", "Angry", "Freddy" }
 
 local function IsMobAllowed(mobName)
@@ -1340,7 +1340,7 @@ spawn(function()
         end)
     end
 end)
-		
+]]		
 page2:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
@@ -3097,7 +3097,74 @@ spawn(function()
         end)
     end
 end)
-		
+
+local MobList = { "Lv4 Boar", "Crab", "Lv2 Angry" }
+
+local function IsMobAllowed(mobName)
+    for _, allowedMob in ipairs(MobList) do
+        if string.find(mobName, allowedMob) then
+            return true
+        end
+    end
+    return false
+end
+
+spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            local player = game.Players.LocalPlayer
+            local character = player.Character
+            local tool = character and character:FindFirstChildOfClass("Tool")
+            local userId = player.UserId
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            if daily3 and daily3.Value == true then return end -- ✅ หยุดเมื่อผ่านเควส
+
+            if not tool or tool.Name ~= "Melee" then return end
+
+            for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and 
+                   mob:FindFirstChild("Humanoid") and 
+                   IsMobAllowed(mob.Name) then
+
+                    local mobRoot = mob.HumanoidRootPart
+                    local playerRoot = character:FindFirstChild("HumanoidRootPart")
+                    if not playerRoot then return end
+
+                    -- ✅ วาร์ปขึ้นด้านหลังมอน
+                    playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 7, 5)
+
+                    -- ✅ ฆ่าทันที
+                    mob.Humanoid.Health = 0
+                    task.wait(0.2)
+
+                    -- ✅ ร่อนลงด้วย Tween ลงใกล้มอน
+                    local TweenService = game:GetService("TweenService")
+                    local descendTween = TweenService:Create(
+                        playerRoot,
+                        TweenInfo.new(0.3, Enum.EasingStyle.Linear),
+                        {CFrame = mobRoot.CFrame * CFrame.new(0, 2, -2)}
+                    )
+                    descendTween:Play()
+                    descendTween.Completed:Wait()
+
+                    -- ✅ ตีมอน (หลังมันตายแล้ว ดูสมจริง)
+                    tool:Activate()
+
+                    task.wait(0.5) -- เว้นระยะก่อนลูปตัวต่อไป
+                end
+            end
+        end)
+    end
+end)
+
 spawn(function()
     local hasClaimed = false
     while task.wait(0.2) do
