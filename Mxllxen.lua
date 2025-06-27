@@ -95,8 +95,8 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBox1"] = {"Common Box"};
-Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
+Cache.DevConfig["ListOfBuy"] = {""};
+Cache.DevConfig["ListOfDuke"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
@@ -1269,11 +1269,31 @@ local page4 = Tab4:newpage()
 
 page4:Label("┇ Shop Black Market Seller ┇")
 page4:Button("Random Devil Fruit", function()
+local args = {
+    [1] = "Fruit"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+
 			end)
 
 page4:Button("Random HakiBook", function()
+local args = {
+    [1] = "Book"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+
 			end)
 
+page4:Label("┇ Shop Weapon ┇")
+page4:Dropdown("Select Weapon:", Cache.DevConfig["ListOfBuy"], function(buy)
+    selectedBuy = buy
+end)
+
+page4:Button("Buy", function()
+
+			end)
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
 
