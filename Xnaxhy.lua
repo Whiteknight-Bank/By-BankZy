@@ -3066,9 +3066,9 @@ spawn(function()
             if not missionData then return end
 
             local objective = missionData:FindFirstChild("MissionObjective")
-            if not objective then return end
+            local requirement = missionData:FindFirstChild("MissionRequirement")
 
-            if objective.Value ~= "Quests" then
+            if objective.Value ~= "Quests" or (requirement and requirement.Value ~= 1) then
                 local stats = userFolder:FindFirstChild("Stats")
                 if stats then
                     stats:FireServer()
