@@ -3038,40 +3038,35 @@ local page7 = Tab7:newpage()
 page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Section("Warning: It Will Reset Stats You All")
 
-page7:Toggle("Auto Farm Compass", false, function(atrs)
+page7:Toggle("Farm Gems", false, function(atrs)
     _G.farmcomp = atrs
 end)
 
 spawn(function()
     while wait() do
         pcall(function()
-            if _G.farmcomp then
-		task.wait(2.2)
-                workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
-            end
+            if not _G.farmcomp then return end
+
+            local player = game.Players.LocalPlayer
+            local userId = player.UserId
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local objective = missionData:FindFirstChild("MissionObjective")
+            if not objective then return end
+
+            if objective.Value == "Quests" then return end
+
+            task.wait(2.2)
+            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
+            workspace.UserData["User_"..userId].Stats:FireServer()
         end)
     end
 end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmcomp then return end;
-            local Compass = game.Players.LocalPlayer.Backpack:FindFirstChild("Compass");
-            local Compass2 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
-	    local Compass3 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
-            if Compass or Compass2 or Compass3 then
-                local OldPostiton = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-                game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                Compass.Parent = game.Players.LocalPlayer.Character;
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Compass.Poser.Value);
-                Compass:Activate();
-                wait(0.2);
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(OldPostiton);
-            end
-        end)
-    end
-end)		
+		
 page7:Toggle("Auto Claim Weekly", false, function(clmw)
     _G.claimwek = clmw
 end)
