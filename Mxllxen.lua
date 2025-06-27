@@ -95,7 +95,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBuy"] = {"Katana"};
+Cache.DevConfig["ListOfBuy"] = {"Katana" "SS2", "SS3"};
 Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
@@ -1071,7 +1071,7 @@ local args = {
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
-elseif	selectedArmy == "" then
+elseif	selectedArmy == "Revolutionary" then
 local args = {
     [1] = "Rev"
 }
