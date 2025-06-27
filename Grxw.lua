@@ -93,21 +93,17 @@ local Window = create:Win("ReaperX Hub | Steve's One Piece ")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
-local lastBuffer = nil -- ✅ ตัวแปรเก็บ buffer ไว้ใช้ต่อ
+local lastBuffer = nil
 
-task.delay(2, function() -- ✅ Delay เพื่อไม่ให้กระตุก
-    local oldNamecall
-    oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-        local args = {...}
-        local method = getnamecallmethod()
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
 
-        if self == game:GetService("ReplicatedStorage"):FindFirstChild("ByteNetReliable") and method == "FireServer" then
-            print("Hooked ByteNetReliable!", ...)
-            lastBuffer = args[1] -- ✅ เก็บ buffer ไว้ใช้งาน
-        end
+    if self == game:GetService("ReplicatedStorage"):FindFirstChild("ByteNetReliable") and method == "FireServer" then
+        lastBuffer = (...)[1] -- เก็บ buffer แค่ตัวแรก
+    end
 
-        return oldNamecall(self, ...)
-    end)
+    return oldNamecall(self, ...)
 end)
 
 local Tab1 = Window:Taps("Auto")
