@@ -3112,6 +3112,9 @@ spawn(function()
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
+            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            if not daily3 or daily3.Value ~= true then return end -- ⛔ หยุดถ้ายังไม่ผ่าน Daily3
+
             local objective = missionData:FindFirstChild("MissionObjective")
             local requirement = missionData:FindFirstChild("MissionRequirement")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
@@ -3149,6 +3152,9 @@ spawn(function()
 
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
+
+            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            if not daily3 or daily3.Value ~= true then return end -- ⛔ หยุดถ้ายังไม่ผ่าน Daily3
 
             local objective = missionData:FindFirstChild("MissionObjective")
             if not objective or objective.Value ~= "Quests" then return end
