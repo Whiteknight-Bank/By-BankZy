@@ -3058,15 +3058,18 @@ spawn(function()
             local objective = missionData:FindFirstChild("MissionObjective")
             if not objective then return end
 
-            if objective.Value == "Quests" then return end
-
-            task.wait(2.2)
+            -- ✅ ยิง Retum ได้เสมอ
             workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-            workspace.UserData["User_"..userId].Stats:FireServer()
+
+            -- ✅ ยิง ResetStats เฉพาะตอนยังไม่ใช่ Quests
+            if objective.Value ~= "Quests" then
+                task.wait(2.2)
+                workspace.UserData["User_"..userId].Stats:FireServer()
+            end
         end)
     end
 end)
-		
+
 page7:Toggle("Auto Claim Weekly", false, function(clmw)
     _G.claimwek = clmw
 end)
