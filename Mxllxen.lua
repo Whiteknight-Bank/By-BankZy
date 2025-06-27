@@ -96,7 +96,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBuy"] = {""};
-Cache.DevConfig["ListOfDuke"] = {"Uncommon Box"};
+Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
@@ -1115,6 +1115,36 @@ end)
 local Tab2 = Window:Taps("Players")
 local page2 = Tab2:newpage()
 
+page2:Dropdown("Select Join Army:", Cache.DevConfig["ListOfBuy"], function(army)
+    selectedArmy = army
+end)
+
+page2:Button("Join Army", function()
+  if selectedArmy == "Pirate" then  
+local args = {
+    [1] = "Pirate"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+elseif selectedArmy == "Marine" then
+local args = {
+    [1] = "Marine"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+elseif	selectedArmy == "" then
+local args = {
+    [1] = "Rev"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+					
+			end
+				
+wait(0.3)
+create:Notifile("", "You has join army now!", 2)
+end)
+		
 page2:Label("┇ Player ┇")
 page2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
