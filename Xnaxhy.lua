@@ -3085,6 +3085,33 @@ spawn(function()
 
             local player = game.Players.LocalPlayer
             local userId = player.UserId
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local objective = missionData:FindFirstChild("MissionObjective")
+            local requirement = missionData:FindFirstChild("MissionRequirement")
+            local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
+            if not objective or not retum then return end
+
+            if objective.Value == "Quests" then
+                if requirement and requirement.Value == 1 then
+                    retum:FireServer("Claim1")
+		end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            local player = game.Players.LocalPlayer
+            local userId = player.UserId
 
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
             if not userFolder then return end
