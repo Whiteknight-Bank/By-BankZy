@@ -3042,10 +3042,20 @@ page7:Toggle("Farm Gems", false, function(atrs)
     _G.farmcomp = atrs
 end)
 
-local stopResetStats = false
-
+-- ✅ ยิง Retum ตลอดทุกวินาที
 spawn(function()
     while wait() do
+        pcall(function()
+            if not _G.farmcomp then return end
+
+            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
+        end)
+    end
+end)
+
+-- ✅ ยิง ResetStats ทุก 2.2 วินาที **ถ้ายังไม่ใช่ "Quests"**
+spawn(function()
+    while wait(2.2) do
         pcall(function()
             if not _G.farmcomp then return end
 
@@ -3060,28 +3070,12 @@ spawn(function()
             local objective = missionData:FindFirstChild("MissionObjective")
             if not objective then return end
 
-            -- ✅ Retum ทำงานเรื่อยๆ
-            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-
-            -- ✅ ตรวจว่า Objective เปลี่ยนเป็น "Quests" แล้วหรือยัง
-            if objective.Value == "Quests" then
-                stopResetStats = true
-            end
-        end)
-    end
-end)
-
--- ✅ ResetStats ทำงานทุก 2.2 วินาที จนกว่า stopResetStats จะเป็น true
-spawn(function()
-    while wait(2.2) do
-        pcall(function()
-            if not _G.farmcomp then return end
-            if stopResetStats then return end
-
-            local userId = game.Players.LocalPlayer.UserId
-            local stats = workspace.UserData:FindFirstChild("User_"..userId)
-            if stats and stats:FindFirstChild("Stats") then
-                stats.Stats:FireServer()
+            -- ✅ ยิง ResetStats ถ้ายังไม่เป็น Quests
+            if objective.Value ~= "Quests" then
+                local stats = userFolder:FindFirstChild("Stats")
+                if stats then
+                    stats:FireServer()
+                end
             end
         end)
     end
