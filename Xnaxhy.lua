@@ -3068,7 +3068,6 @@ spawn(function()
             local objective = missionData:FindFirstChild("MissionObjective")
             if not objective then return end
 
-            -- ✅ ยิง ResetStats ถ้ายังไม่เป็น Quests
             if objective.Value ~= "Quests" then
                 local stats = userFolder:FindFirstChild("Stats")
                 if stats then
@@ -3120,6 +3119,7 @@ spawn(function()
     end
 end)
 
+--[[
 spawn(function()
     while wait() do
         pcall(function()
@@ -3148,7 +3148,7 @@ wait(.8)
         end)
     end
 end)
-
+]]--
 page7:Toggle("Auto Farm Compass", false, function(clmw)
     _G.claimwek = clmw
 end)
