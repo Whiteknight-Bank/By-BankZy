@@ -3108,10 +3108,9 @@ end)
 		
 local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" }
 
-local TweenService = game:GetService("TweenService")
 local waitForRespawnTime = 5
 local waitAnimationTime 0.3
-local safePosition = Vector3.new(84.84996795654297, 282.3868103027344, -37.05710220336914)
+local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
     for _, allowedMob in ipairs(AllowedMobs) do
@@ -3190,7 +3189,8 @@ spawn(function()
             end
         end)
     end
-end)		
+end)	
+
 spawn(function()
     local hasClaimed = false
     while task.wait(0.2) do
