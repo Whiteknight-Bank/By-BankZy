@@ -3235,7 +3235,7 @@ local player = game.Players.LocalPlayer
 	if tool and tool.Name == "Melee" then
             tool:Activate()
 	end
-	task.wait(0.1)
+	task.wait(0.5)
             alreadyVisited[foundMob] = true
 
 	while foundMob.Humanoid.Health > 0 do
@@ -3329,41 +3329,19 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do
+    while task.wait() do
         pcall(function()
             if _G.farmgems then
-local A_1 = "Claim"
-local A_2 = "Daily1"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily2"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily3"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily4"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local args = {
-    [1] = "Claim",
-    [2] = "AllDaily"
-}
-workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
-wait(.8)
-local args = {
-    [1] = "Claim",
-    [2] = "Challenge9"
-}
-workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
-wait(0.8)
+                local userId = game.Players.LocalPlayer.UserId
+                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
+                local Event = userFolder:WaitForChild("ChallengesRemote")
+
+                local dailies = {"Daily1", "Daily2", "Daily3", "Daily4", "AllDaily", "Challenge9"}
+
+                for _, daily in ipairs(dailies) do
+                    Event:FireServer("Claim", daily)
+                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+                end
             end
         end)
     end
