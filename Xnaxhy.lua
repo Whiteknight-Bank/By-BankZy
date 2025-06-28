@@ -3129,8 +3129,6 @@ spawn(function()
 
             local player = game.Players.LocalPlayer
             local character = player.Character
-            local tool = character and character:FindFirstChildOfClass("Tool")
-            if not tool or tool.Name ~= "Melee" then return end
 
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
@@ -3145,6 +3143,9 @@ spawn(function()
             if not objective or objective.Value ~= "Quests" then return end
             if daily3 and daily3.Value == true then return end
 
+	    local tool = character and character:FindFirstChildOfClass("Tool")
+            if not tool or tool.Name ~= "Melee" then return end
+							
             local foundMob = nil
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("HumanoidRootPart") and
