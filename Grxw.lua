@@ -119,6 +119,7 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
+-- ฟังก์ชันหา Coconut ใน getnilinstances
 function getNil(name, class)
     for _, v in next, getnilinstances() do
         if v.ClassName == class and v.Name == name then
@@ -126,7 +127,8 @@ function getNil(name, class)
         end
     end
 end
-		
+
+-- ลูปยิงรับผลไม้เมื่อเปิด _G.autofruit
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
@@ -140,6 +142,7 @@ spawn(function()
                     [2] = {fruit}
                 }
                 game:GetService("ReplicatedStorage").ByteNetReliable:FireServer(unpack(args))
+                print("🔥 Sent harvest for Coconut")
             end
         end)
     end
