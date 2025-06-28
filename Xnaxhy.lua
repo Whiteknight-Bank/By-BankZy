@@ -3106,7 +3106,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Crab", "Lv2 Angry", "Bandit", "Freddy" }
+local AllowedMobs = { "Boar", "Crab", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
 
 local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
@@ -3168,7 +3168,7 @@ spawn(function()
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(-1, 0, -1)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, -3, -1)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
