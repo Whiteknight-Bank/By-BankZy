@@ -3106,7 +3106,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Crab", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
+local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
 
 local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
@@ -3168,7 +3168,7 @@ spawn(function()
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, -3, -1)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
@@ -3224,8 +3224,7 @@ spawn(function()
         end)
     end
 end)
-		
-spawn(function()
+		spawn(function()
     while wait() do
         pcall(function()
             if not _G.farmgems then return end
@@ -3240,7 +3239,7 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end -- ⛔ หยุดถ้ายังไม่ผ่าน Daily3
+            if not daily3 or daily3.Value ~= true then return end
 
             local objective = missionData:FindFirstChild("MissionObjective")
             if not objective or objective.Value ~= "Quests" then return end
@@ -3254,16 +3253,40 @@ spawn(function()
                 local hrp = player.Character:FindFirstChild("HumanoidRootPart")
                 if hrp then
                     local oldPos = hrp.Position
+
                     player.Character.Humanoid:UnequipTools()
-
                     Compass.Parent = player.Character
-
                     hrp.CFrame = CFrame.new(Compass.Poser.Value)
                     Compass:Activate()
 
                     wait(0.2)
 
                     hrp.CFrame = CFrame.new(109, 268, -37)
+
+                    -- ✅ Equip Tool ที่ลงท้ายชื่อ "Fruit"
+                    for _, tool in pairs(player.Backpack:GetChildren()) do
+                        if tool:IsA("Tool") and string.find(tool.Name, "Fruit") then
+                            tool.Parent = player.Character
+                            wait(0.1)
+                            tool:Activate()
+                            break
+                        end
+                    end
+
+                    -- ✅ FireServer RemoteEvent ชื่อ "Relay" จาก getnilinstances()
+                    local function getNil(name, class)
+                        for _, v in next, getnilinstances() do
+                            if v.ClassName == class and v.Name == name then
+                                return v
+                            end
+                        end
+                        return nil
+                    end
+
+                    local relayRemote = getNil("Relay", "RemoteEvent")
+                    if relayRemote then
+                        relayRemote:FireServer(0)
+                    end
                 end
             end
         end)
@@ -3289,11 +3312,18 @@ local A_2 = "Daily3"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
     Event:FireServer(A_1,A_2)
 wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily4"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
+local args = {
+    [1] = "Claim",
+    [2] = "AllDaily"
+}
+workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
 wait(.8)
+local args = {
+    [1] = "Claim",
+    [2] = "Challenge9"
+}
+workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
+wait(0.8)
             end
         end)
     end
