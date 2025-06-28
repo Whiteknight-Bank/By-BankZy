@@ -3262,14 +3262,24 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end
-
+            local alldaily = missionData:FindFirstChild("QQQ_AllDaily")
             local objective = missionData:FindFirstChild("MissionObjective")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not objective or not retum then return end
 
-            if objective.Value == "Quests" then
+            if not daily3 or not alldaily or not objective or not retum then return end
+
+            -- รอจน QQQ_Daily3 เริ่ม
+            if daily3.Value == true and objective.Value == "Quests" then
+                -- เคลมเควส
                 retum:FireServer("Claim1")
+
+                -- รอจน QQQ_AllDaily เป็น true
+                repeat task.wait(0.5)
+                until alldaily.Value == true
+
+                -- รอจนรีเซ็ต (รอกลับเป็น false ก่อนจะเริ่มรอบใหม่)
+                repeat task.wait(0.5)
+                until daily3.Value == false and alldaily.Value == false
             end
         end)
     end
