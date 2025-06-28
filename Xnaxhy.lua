@@ -3130,7 +3130,7 @@ local BoxList = {
     "Rare Box",
     "Ultra Rare Box"
 }
-
+--[[
 spawn(function() 
 local alreadyVisited = {} 
 while task.wait(0.1) do 
@@ -3272,7 +3272,7 @@ end
     end)
 end
 end)
---[[
+]]
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
@@ -3316,7 +3316,7 @@ spawn(function()
         end)
     end
 end)
-]]
+
 spawn(function()
     while wait() do
         pcall(function()
