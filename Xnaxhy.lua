@@ -3168,7 +3168,7 @@ spawn(function()
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(-1, 0.5, -1)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
