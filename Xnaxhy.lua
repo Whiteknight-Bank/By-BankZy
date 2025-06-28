@@ -3106,7 +3106,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
+local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy" }
 
 local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
@@ -3261,19 +3261,18 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end -- หยุดถ้ายังไม่ผ่าน Daily3
-
             local objective = missionData:FindFirstChild("MissionObjective")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not objective or not retum then return end
+            if not daily3 or not objective or not retum then return end
 
-            if objective.Value == "Quests" and not hasClaimed then
+            if daily3.Value == true and objective.Value == "Quests" and not hasClaimed then
                 retum:FireServer("Claim1")
                 hasClaimed = true
                 return
             end
 
-            if objective.Value ~= "Quests" then
+            -- รีเซ็ตเมื่อเควส daily3 หายไป (อาจทำรอบใหม่)
+            if daily3.Value ~= true then
                 hasClaimed = false
             end
         end)
@@ -3326,41 +3325,19 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do
+    while task.wait() do
         pcall(function()
             if _G.farmgems then
-local A_1 = "Claim"
-local A_2 = "Daily1"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily2"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily3"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local A_1 = "Claim"
-local A_2 = "Daily4"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
-local args = {
-    [1] = "Claim",
-    [2] = "AllDaily"
-}
-workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
-wait(.8)
-local args = {
-    [1] = "Claim",
-    [2] = "Challenge9"
-}
-workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
-wait(0.8)
+                local userId = game.Players.LocalPlayer.UserId
+                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
+                local Event = userFolder:WaitForChild("ChallengesRemote")
+
+                local dailies = {"Daily1", "Daily2", "Daily3", "Daily4", "AllDaily", "Challenge9"}
+
+                for _, daily in ipairs(dailies) do
+                    Event:FireServer("Claim", daily)
+                    task.wait(0.1) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+                end
             end
         end)
     end
