@@ -3052,6 +3052,24 @@ spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.farmgems then
+            pcall(function()
+                for _, enemie in pairs(workspace.Enemies:GetChildren()) do
+                    if enemie:IsA("Model") then
+                      for _, child in pairs(enemie.Torso:GetChildren()) do
+                                    if child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                                end  
+                    end
+                end
+            end)
+        end
+    end
+end)
+
 spawn(function()
     while wait(2.2) do
         pcall(function()
