@@ -3212,34 +3212,35 @@ local player = game.Players.LocalPlayer
             end
         end
 
-        if foundMob then
-            local mobRoot = foundMob.HumanoidRootPart
+if foundMob then
+    local mobRoot = foundMob.HumanoidRootPart
 
-            hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-            task.wait(0.1)
+    hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+    task.wait(0.1)
 
-            foundMob.Humanoid.Health = 0
-            if foundMob.Humanoid.Health > 0 then
-                foundMob.Humanoid.Health = 0
-            end
+    repeat
+        foundMob.Humanoid.Health = 0
+        task.wait(0.05)
+    until foundMob.Humanoid.Health <= 0
 
-            local descendTween = TweenService:Create(
-                hrp,
-                TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
-            )
-            descendTween:Play()
-            descendTween.Completed:Wait()
+    local descendTween = TweenService:Create(
+        hrp,
+        TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+        {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
+    )
+    descendTween:Play()
+    descendTween.Completed:Wait()
 
-	if tool and tool.Name == "Melee" then
-            tool:Activate()
-	end
-	task.wait(0.5)
-            alreadyVisited[foundMob] = true
+    if tool and tool.Name == "Melee" then
+        tool:Activate()
+    end
+    task.wait(0.5)
 
-	while foundMob.Humanoid.Health > 0 do
-                    task.wait(0.1)
-		end
+    alreadyVisited[foundMob] = true
+
+    while foundMob.Humanoid.Health > 0 do
+        task.wait(0.1)
+    end
         else
             alreadyVisited = {}
             hrp.CFrame = CFrame.new(safePosition)
