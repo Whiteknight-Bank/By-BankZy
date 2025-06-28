@@ -3052,16 +3052,14 @@ spawn(function()
     end
 end)
 
-local hasFoundQuest = false
-
 spawn(function()
-    while wait(1) do
+    while wait(2.2) do
         pcall(function()
             if not _G.farmgems then return end
 
             local player = game.Players.LocalPlayer
             local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
             if not userFolder then return end
 
             local missionData = userFolder:FindFirstChild("Data")
@@ -3071,34 +3069,25 @@ spawn(function()
             local requirement = missionData:FindFirstChild("MissionRequirement")
             local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
 
-            if not objective or not requirement then return end
+            local stats = userFolder:FindFirstChild("Stats")
+            if not stats then return end
 
-            if not hasFoundQuest then
+            if objective and requirement then
                 if objective.Value == "Quests" then
-                    hasFoundQuest = true
-                else
-                    local stats = userFolder:FindFirstChild("Stats")
-                    if stats then
-                        stats:FireServer() -- รีเซ็ตหา Quests
+                    if not allDaily or allDaily.Value ~= true then
+                        return -- ⛔ ยังไม่พร้อม reset
                     end
+
+                    stats:FireServer()
+                    return
                 end
-                return
             end
 
-            if hasFoundQuest then
-                if requirement.Value == 1 then
-                    if allDaily and allDaily.Value == true then
-                        local stats = userFolder:FindFirstChild("Stats")
-                        if stats then
-                            stats:FireServer() -- รีเซ็ตตอน QQQ_AllDaily เป็น true
-                        end
-                    end
-                end
-            end
+            stats:FireServer()
         end)
     end
 end)
-
+		
 local AllowedMobs = { "Boar", "Crab", "Angry", "Freddy", "Bandit" }
 
 local waitForRespawnTime = 5
@@ -3161,7 +3150,7 @@ spawn(function()
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, 0)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
