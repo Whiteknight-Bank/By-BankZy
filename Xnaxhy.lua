@@ -3121,6 +3121,13 @@ local function IsMobAllowed(mobName)
     return false
 end
 
+local BoxList = {
+    "Common Box",
+    "Uncomon Box",
+    "Rare Box",
+    "Ultra Rare Box"
+}
+
 spawn(function()
     local alreadyVisited = {}
     while task.wait(0.1) do
@@ -3138,9 +3145,58 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if daily3 and daily3.Value == true then return end
 
-            if not tool or tool.Name ~= "Melee" then return end
+            for _, value in pairs(player.Backpack:GetChildren()) do
+                if table.find(BoxList, value.Name) then
+                    player.Character.Humanoid:UnequipTools()
+                    value.Parent = player.Character
+                    wait(0.1)
+                    value:Activate()
+                    wait(0.5)
+
+                    for _, fruitTool in pairs(player.Backpack:GetChildren()) do
+                        if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
+                            fruitTool.Parent = player.Character
+                            wait(0.1)
+                            fruitTool:Activate()
+                            break
+                        end
+                    end
+                    break
+                end
+            end
+
+            if daily3 and daily3.Value == true then
+                local heldTool = character and character:FindFirstChild("Melee")
+                if heldTool then
+                    heldTool.Parent = player.Backpack
+                    wait(0.1)
+                end
+
+                for _, t in pairs(player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and string.find(t.Name, "Fruit") then
+                        t.Parent = player.Character
+                        wait(0.1)
+                        t:Activate()
+                        break
+                    end
+                end
+
+                return
+            end
+
+            if not tool then
+                for _, t in pairs(player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and t.Name == "Melee" then
+                        t.Parent = player.Character
+                        wait(0.1)
+                        break
+                    end
+                end
+            end
+
+            tool = character and character:FindFirstChild("Melee")
+            if not tool then return end
 
             local hrp = character and character:FindFirstChild("HumanoidRootPart")
             if not hrp then return end
@@ -3151,7 +3207,7 @@ spawn(function()
                    mob:FindFirstChild("Humanoid") and
                    mob.Humanoid.Health > 0 and
                    IsMobAllowed(mob.Name) and
-                   not alreadyVisited[mob] then -- เช็คว่ามอนไม่เคยวาป
+                   not alreadyVisited[mob] then
                     foundMob = mob
                     break
                 end
@@ -3161,7 +3217,7 @@ spawn(function()
                 local mobRoot = foundMob.HumanoidRootPart
 
                 hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                task.wait(0.1) -- รอวาร์ปเสร็จ
+                task.wait(0.1)
 
                 foundMob.Humanoid.Health = 0
 
@@ -3181,8 +3237,7 @@ spawn(function()
                 while foundMob.Humanoid.Health > 0 do
                     task.wait(0.1)
                 end
-
-		else
+            else
                 alreadyVisited = {}
                 hrp.CFrame = CFrame.new(safePosition)
                 task.wait(waitForRespawnTime)
@@ -3224,7 +3279,8 @@ spawn(function()
         end)
     end
 end)
-		spawn(function()
+
+spawn(function()
     while wait() do
         pcall(function()
             if not _G.farmgems then return end
@@ -3263,30 +3319,6 @@ end)
 
                     hrp.CFrame = CFrame.new(109, 268, -37)
 
-                    -- ✅ Equip Tool ที่ลงท้ายชื่อ "Fruit"
-                    for _, tool in pairs(player.Backpack:GetChildren()) do
-                        if tool:IsA("Tool") and string.find(tool.Name, "Fruit") then
-                            tool.Parent = player.Character
-                            wait(0.1)
-                            tool:Activate()
-                            break
-                        end
-                    end
-
-                    -- ✅ FireServer RemoteEvent ชื่อ "Relay" จาก getnilinstances()
-                    local function getNil(name, class)
-                        for _, v in next, getnilinstances() do
-                            if v.ClassName == class and v.Name == name then
-                                return v
-                            end
-                        end
-                        return nil
-                    end
-
-                    local relayRemote = getNil("Relay", "RemoteEvent")
-                    if relayRemote then
-                        relayRemote:FireServer(0)
-                    end
                 end
             end
         end)
@@ -3309,6 +3341,11 @@ local A_2 = "Daily2"
 wait(.8)
 local A_1 = "Claim"
 local A_2 = "Daily3"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily4"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
     Event:FireServer(A_1,A_2)
 wait(.8)
