@@ -3099,10 +3099,11 @@ spawn(function()
     end
 end)
 
-local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" } -- เปลี่ยนชื่อจาก MobList
-local waitForRespawnTime = 5 -- เวลารอเกิดมอน (ประมาณ)
-local waitAnimationTime = 1.5 -- เวลาลงอนิเมชั่นเพิ่มเป็น 1.5 วิ
-local safePosition = Vector3.new(100, 10, 100) -- เปลี่ยนจุดนี้เป็นจุดเซฟที่ต้องการวาร์ปไปถ้าไม่มีมอน
+local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" }
+
+local waitForRespawnTime = 5
+local waitAnimationTime = 1.5
+local safePosition = Vector3.new(100, 10, 100)
 
 local function IsMobAllowed(mobName)
     for _, allowedMob in ipairs(AllowedMobs) do
@@ -3114,6 +3115,7 @@ local function IsMobAllowed(mobName)
 end
 
 spawn(function()
+    local alreadyVisited = {}
     while task.wait(0.1) do
         pcall(function()
             if not _G.farmgems then return end
@@ -3129,31 +3131,32 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if daily3 and daily3.Value == true then return end -- หยุดเมื่อผ่านเควส
+            if daily3 and daily3.Value == true then return end
 
             if not tool or tool.Name ~= "Melee" then return end
 
-            local foundMob = nil
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
 
+            local foundMob = nil
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("HumanoidRootPart") and
                    mob:FindFirstChild("Humanoid") and
                    mob.Humanoid.Health > 0 and
-                   IsMobAllowed(mob.Name) then
+                   IsMobAllowed(mob.Name) and
+                   not alreadyVisited[mob] then -- เช็คว่ามอนไม่เคยวาป
                     foundMob = mob
                     break
                 end
             end
 
-            local hrp = character and character:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
-
             if foundMob then
                 local mobRoot = foundMob.HumanoidRootPart
-                hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                foundMob.Humanoid.Health = 0
 
-                task.wait(0.2)
+                hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+                task.wait(0.1)
+
+                foundMob.Humanoid.Health = 0
 
                 local descendTween = TweenService:Create(
                     hrp,
@@ -3162,17 +3165,19 @@ spawn(function()
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
+
                 tool:Activate()
+
+                alreadyVisited[foundMob] = true
 
                 while foundMob.Humanoid.Health > 0 do
                     task.wait(0.1)
                 end
 
-                task.wait(waitForRespawnTime)
-
 		else
+                alreadyVisited = {}
                 hrp.CFrame = CFrame.new(safePosition)
-                task.wait(1)
+                task.wait(waitForRespawnTime)
             end
         end)
     end
