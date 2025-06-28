@@ -3106,9 +3106,8 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
+local AllowedMobs = { "Boar", "Angry", "Bandit", "Freddy", "Thug", "Lv34 Freddi" }
 
-local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
 
