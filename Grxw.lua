@@ -96,7 +96,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 local plr = game:GetService("Players").LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
 local sellPos = CFrame.new(90.08035, 0.98381, 3.02662, 6e-05, 1e-06, 1, -0.0349, 0.999, 1e-06, -0.999, -0.0349, 6e-05)
-
+--[[
 local latestBuffer = nil
 
 local namecall
@@ -109,7 +109,24 @@ namecall = hookmetamethod(game, "__namecall", function(self, ...)
     end
     return namecall(self, ...)
 end)
+]]
+local lastArgs = nil
 
+-- Hook FireServer เพื่อดัก buffer และ args ที่ถูกต้อง
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+    if self == game.ReplicatedStorage:WaitForChild("ByteNetReliable") and method == "FireServer" then
+        -- เงื่อนไข: เป็นการเก็บผลไม้เท่านั้น
+        if args[2] and typeof(args[2]) == "table" and args[2][1] and args[2][1].Name == "Strawberry" then
+            lastArgs = args -- เก็บ args[1] (buffer) และ args[2] (object)
+            print("✅ Captured Strawberry args:", args[1], args[2][1])
+        end
+    end
+    return oldNamecall(self, ...)
+end)
+		
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
@@ -119,30 +136,12 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
--- ฟังก์ชันหา Coconut ใน getnilinstances
-function getNil(name, class)
-    for _, v in next, getnilinstances() do
-        if v.ClassName == class and v.Name == name then
-            return v
-        end
-    end
-end
-
--- ลูปยิงรับผลไม้เมื่อเปิด _G.autofruit
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
-            if not _G.autofruit then return end
-            if not latestBuffer then return end
-
-            local fruit = getNil("Coconut", "Model")
-            if fruit then
-                local args = {
-                    [1] = latestBuffer,
-                    [2] = {fruit}
-                }
-                game:GetService("ReplicatedStorage").ByteNetReliable:FireServer(unpack(args))
-                print("🔥 Sent harvest for Coconut")
+            if _G.autofruit and lastArgs then
+                game:GetService("ReplicatedStorage").ByteNetReliable:FireServer(unpack(lastArgs))
+                print("🍈 Re-fired for Coconut")
             end
         end)
     end
