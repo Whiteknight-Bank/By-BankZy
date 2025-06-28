@@ -119,6 +119,32 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
+function getNil(name, class)
+    for _, v in next, getnilinstances() do
+        if v.ClassName == class and v.Name == name then
+            return v
+        end
+    end
+end
+		
+spawn(function()
+    while task.wait(0.2) do
+        pcall(function()
+            if not _G.autofruit then return end
+            if not latestBuffer then return end
+
+            local fruit = getNil("Coconut", "Model")
+            if fruit then
+                local args = {
+                    [1] = latestBuffer,
+                    [2] = {fruit}
+                }
+                game:GetService("ReplicatedStorage").ByteNetReliable:FireServer(unpack(args))
+            end
+        end)
+    end
+end)
+
 page1:Toggle("Sell Inventory", false, function(state)
     if state then
         local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
