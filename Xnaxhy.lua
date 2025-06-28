@@ -3099,11 +3099,11 @@ spawn(function()
     end
 end)
 
-local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" }
+local AllowedMobs = { "Boar", "Crab", "Angry", "Freddy", "Bandit" }
 
 local waitForRespawnTime = 5
-local waitAnimationTime = 1.5
-local safePosition = Vector3.new(100, 10, 100)
+local waitAnimationTime = 0.3
+local safePosition = Vector3.new(84.84996795654297, 282.3868103027344, -37.05710220336914)
 
 local function IsMobAllowed(mobName)
     for _, allowedMob in ipairs(AllowedMobs) do
@@ -3161,13 +3161,14 @@ spawn(function()
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 2, -2)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, 0)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
 
                 tool:Activate()
 
+		task.wait(2)
                 alreadyVisited[foundMob] = true
 
                 while foundMob.Humanoid.Health > 0 do
