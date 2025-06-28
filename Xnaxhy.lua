@@ -3037,14 +3037,24 @@ local page7 = Tab7:newpage()
 
 
 page7:Label("┇ For Making a lot Gems ┇")
+		
+page7:Toggle("Farm Gems", false, function(gms)
+    _G.farmgems = gms
+end)
 
-page7:Toggle("Anti Enemies Attack", false, function(ndmg)
-    _G.antimob = ndmg
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
+        end)
+    end
 end)
 
 task.spawn(function()
     while task.wait(0.01) do
-        if _G.antimob then
+        if _G.farmgems then
             pcall(function()
                 for _, enemie in pairs(workspace.Enemies:GetChildren()) do
                     if enemie:IsA("Model") then
@@ -3057,20 +3067,6 @@ task.spawn(function()
                 end
             end)
         end
-    end
-end)
-
-page7:Toggle("Farm Gems", false, function(gms)
-    _G.farmgems = gms
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmgems then return end
-
-            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-        end)
     end
 end)
 
@@ -3110,7 +3106,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Angry", "Bandit", "Freddy", "Thug", "Lv34 Freddi" }
+local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Thug", "Lv34 Freddi" }
 
 local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
