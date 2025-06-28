@@ -3038,8 +3038,8 @@ local page7 = Tab7:newpage()
 
 page7:Label("┇ For Making a lot Gems ┇")
 
-page7:Toggle("No Dmg Enemies", false, function(gms)
-    _G.antimob = gms
+page7:Toggle("No Dmg Enemies", false, function(ndmg)
+    _G.antimob = ndmg
 end)
 
 task.spawn(function()
