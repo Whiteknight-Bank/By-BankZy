@@ -3296,7 +3296,9 @@ spawn(function()
             if daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
                 -- ลองยิง Claim1 ซ้ำ ๆ เผื่อรอบที่ข้อมูลเพิ่งอัปเดต
                 for i = 1, 5 do
-                    retum:FireServer("Claim1")
+                    if retum then -- Additional safety check
+                        retum:FireServer("Claim1")
+                    end
                     task.wait(0.3)
                     if alldaily.Value == true then
                         break -- ถ้าได้แล้วจบรอบเลย
