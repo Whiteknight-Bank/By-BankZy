@@ -3109,7 +3109,7 @@ end)
 local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" }
 
 local waitForRespawnTime = 5
-local waitAnimationTime 0.3
+local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
