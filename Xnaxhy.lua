@@ -3037,24 +3037,14 @@ local page7 = Tab7:newpage()
 
 
 page7:Label("┇ For Making a lot Gems ┇")
-		
-page7:Toggle("Farm Gems", false, function(gms)
-    _G.farmgems = gms
-end)
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmgems then return end
-
-            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-        end)
-    end
+page7:Toggle("No Dmg Enemies", false, function(gms)
+    _G.antimob = gms
 end)
 
 task.spawn(function()
     while task.wait(0.01) do
-        if _G.farmgems then
+        if _G.antimob then
             pcall(function()
                 for _, enemie in pairs(workspace.Enemies:GetChildren()) do
                     if enemie:IsA("Model") then
@@ -3067,6 +3057,20 @@ task.spawn(function()
                 end
             end)
         end
+    end
+end)
+
+page7:Toggle("Farm Gems", false, function(gms)
+    _G.farmgems = gms
+end)
+
+spawn(function()
+    while wait() do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
+        end)
     end
 end)
 
