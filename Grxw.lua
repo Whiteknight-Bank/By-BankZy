@@ -93,47 +93,46 @@ local Window = create:Win("ReaperX Hub | Steve's One Piece ")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
+local plr = game:GetService("Players").LocalPlayer
+local rs = game:GetService("ReplicatedStorage")
+local sellPos = CFrame.new(90.08035, 0.98381, 3.02662, 6e-05, 1e-06, 1, -0.0349, 0.999, 1e-06, -0.999, -0.0349, 6e-05)
+
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Auto Fruit ┇")
+page1:Label("┇ Function Fruit ┇")
 
 page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
-
-    if frut then
-        task.spawn(function()
-            while _G.autofruit do
-                -- ถ้ามี buffer แล้ว
-                if lastBuffer then
-                    local function getNil(name, class)
-                        for _, v in next, getnilinstances() do
-                            if v.ClassName == class and v.Name == name then
-                                return v
-                            end
-                        end
-                    end
-
-                    local bell = getNil("Bell Pepper", "Model")
-                    if bell then
-                        local args = {
-                            [1] = lastBuffer,
-                            [2] = {
-                                [1] = bell
-                            }
-                        }
-
-                        pcall(function()
-                            game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-                        end)
-                    end
-                end
-
-                task.wait(1)
-            end
-        end)
-    end
-
 end)
-		
+
+page1:Toggle("Sell Inventory", false, function(state)
+    if state then
+        local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local orig = hrp.CFrame
+            hrp.CFrame = sellPos
+            task.wait(0.1)
+            rs.GameEvents.Sell_Inventory:FireServer()
+            task.wait(0.1)
+            hrp.CFrame = orig
+        end
+    end
+end)
+
+page1:Toggle("Sell Item In Hand", false, function(state)
+    if state then
+        local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+        if hrp then
+            local orig = hrp.CFrame
+            hrp.CFrame = sellPos
+            task.wait(0.1)
+            rs.GameEvents.Sell_Item:FireServer()
+            task.wait(0.1)
+            hrp.CFrame = orig
+        end
+    end
+end)
+
+
 end)
