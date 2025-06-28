@@ -3106,10 +3106,11 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Crab", "Lv2 Angry", "Freddy" }
+local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" }
 
+local TweenService = game:GetService("TweenService")
 local waitForRespawnTime = 5
-local waitAnimationTime = 0.3
+local waitAnimationTime 0.3
 local safePosition = Vector3.new(84.84996795654297, 282.3868103027344, -37.05710220336914)
 
 local function IsMobAllowed(mobName)
@@ -3129,7 +3130,7 @@ spawn(function()
 
             local player = game.Players.LocalPlayer
             local character = player.Character
-
+            local tool = character and character:FindFirstChildOfClass("Tool")
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
             if not userFolder then return end
@@ -3137,15 +3138,14 @@ spawn(function()
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
-            local objective = missionData:FindFirstChild("MissionObjective")
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-
-            if not objective or objective.Value ~= "Quests" then return end
             if daily3 and daily3.Value == true then return end
 
-	    local tool = character and character:FindFirstChildOfClass("Tool")
             if not tool or tool.Name ~= "Melee" then return end
-							
+
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+
             local foundMob = nil
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
                 if mob:FindFirstChild("HumanoidRootPart") and
@@ -3162,21 +3162,21 @@ spawn(function()
                 local mobRoot = foundMob.HumanoidRootPart
 
                 hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                task.wait(0.1)
+                task.wait(0.1) -- รอวาร์ปเสร็จ
 
                 foundMob.Humanoid.Health = 0
 
                 local descendTween = TweenService:Create(
                     hrp,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -0.5)}
                 )
                 descendTween:Play()
                 descendTween.Completed:Wait()
 
                 tool:Activate()
 
-		task.wait(2)
+                task.wait(3)
                 alreadyVisited[foundMob] = true
 
                 while foundMob.Humanoid.Health > 0 do
@@ -3190,8 +3190,7 @@ spawn(function()
             end
         end)
     end
-end)
-		
+end)		
 spawn(function()
     local hasClaimed = false
     while task.wait(0.2) do
