@@ -97,6 +97,19 @@ local plr = game:GetService("Players").LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
 local sellPos = CFrame.new(90.08035, 0.98381, 3.02662, 6e-05, 1e-06, 1, -0.0349, 0.999, 1e-06, -0.999, -0.0349, 6e-05)
 
+local latestBuffer = nil
+
+local namecall
+namecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    if self == game.ReplicatedStorage.ByteNetReliable and method == "FireServer" then
+        local args = {...}
+        latestBuffer = args[1]
+        print("✅ Hooked buffer:", latestBuffer)
+    end
+    return namecall(self, ...)
+end)
+
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
