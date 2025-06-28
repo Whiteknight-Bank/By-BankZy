@@ -3088,7 +3088,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Crab", "Angry", "Freddy", "Bandit" }
+local AllowedMobs = { "Boar", "Crab", "Lv2 Angry", "Freddy" }
 
 local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
@@ -3112,6 +3112,8 @@ spawn(function()
             local player = game.Players.LocalPlayer
             local character = player.Character
             local tool = character and character:FindFirstChildOfClass("Tool")
+            if not tool or tool.Name ~= "Melee" then return end
+
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
             if not userFolder then return end
@@ -3119,13 +3121,11 @@ spawn(function()
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
+            local objective = missionData:FindFirstChild("MissionObjective")
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+
+            if not objective or objective.Value ~= "Quests" then return end
             if daily3 and daily3.Value == true then return end
-
-            if not tool or tool.Name ~= "Melee" then return end
-
-            local hrp = character and character:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
 
             local foundMob = nil
             for _, mob in pairs(workspace.Enemies:GetChildren()) do
@@ -3255,15 +3255,27 @@ end)
 spawn(function()
     while wait() do
         pcall(function()
-            if not _G.farmgems then return end
-
-            local userId = game.Players.LocalPlayer.UserId
-            local remote = workspace.UserData["User_"..userId]:FindFirstChild("ChallengesRemote")
-            if not remote then return end
-
-            for i = 1, 4 do
-                remote:FireServer("Claim", "Daily" .. i)
-                wait(0.8)
+            if _G.farmgems then
+local A_1 = "Claim"
+local A_2 = "Daily1"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily2"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily3"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily4"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
             end
         end)
     end
