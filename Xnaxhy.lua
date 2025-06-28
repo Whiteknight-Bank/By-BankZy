@@ -3106,7 +3106,7 @@ spawn(function()
     end
 end)
 		
-local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy" }
+local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Lv8 Thug" }
 
 local waitForRespawnTime = 5
 local waitAnimationTime = 0.3
@@ -3123,128 +3123,131 @@ end
 
 local BoxList = {
     "Common Box",
-    "Uncomon Box",
+    "Uncommon Box",
     "Rare Box",
     "Ultra Rare Box"
 }
 
-spawn(function()
-    local alreadyVisited = {}
-    while task.wait(0.1) do
-        pcall(function()
-            if not _G.farmgems then return end
+spawn(function() 
+local alreadyVisited = {} 
+while task.wait(0.1) do 
+pcall(function() 
+if not _G.farmgems then return end
 
-            local player = game.Players.LocalPlayer
-            local character = player.Character
-            local tool = character and character:FindFirstChildOfClass("Tool")
-            local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-            if not userFolder then return end
+local player = game.Players.LocalPlayer
+        local character = player.Character
+        local tool = character and character:FindFirstChildOfClass("Tool")
+        local userId = player.UserId
+        local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+        if not userFolder then return end
 
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
+        local missionData = userFolder:FindFirstChild("Data")
+        if not missionData then return end
 
-            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+        local daily3 = missionData:FindFirstChild("QQQ_Daily3")
 
-            for _, value in pairs(player.Backpack:GetChildren()) do
-                if table.find(BoxList, value.Name) then
-                    player.Character.Humanoid:UnequipTools()
-                    value.Parent = player.Character
-                    wait(0.1)
-                    value:Activate()
-                    wait(0.5)
+        for _, value in pairs(player.Backpack:GetChildren()) do
+            if table.find(BoxList, value.Name) then
+                player.Character.Humanoid:UnequipTools()
+                value.Parent = player.Character
+                wait(0.1)
+                value:Activate()
+                wait(0.5)
 
-                    for _, fruitTool in pairs(player.Backpack:GetChildren()) do
-                        if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
-                            fruitTool.Parent = player.Character
-                            wait(0.1)
-                            fruitTool:Activate()
-                            break
-                        end
+                for _, fruitTool in pairs(player.Backpack:GetChildren()) do
+                    if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
+                        fruitTool.Parent = player.Character
+                        wait(0.1)
+                        fruitTool:Activate()
+                        break
                     end
+                end
+                break
+            end
+        end
+
+        if daily3 and daily3.Value == true then
+            local heldTool = character and character:FindFirstChild("Melee")
+            if heldTool then
+                heldTool.Parent = player.Backpack
+                wait(0.1)
+            end
+
+            for _, t in pairs(player.Backpack:GetChildren()) do
+                if t:IsA("Tool") and string.find(t.Name, "Fruit") then
+                    t.Parent = player.Character
+                    wait(0.1)
+                    t:Activate()
                     break
                 end
             end
 
-            if daily3 and daily3.Value == true then
-                local heldTool = character and character:FindFirstChild("Melee")
-                if heldTool then
-                    heldTool.Parent = player.Backpack
+            return
+        end
+
+        if not tool then
+            for _, t in pairs(player.Backpack:GetChildren()) do
+                if t:IsA("Tool") and t.Name == "Melee" then
+                    t.Parent = player.Character
                     wait(0.1)
-                end
-
-                for _, t in pairs(player.Backpack:GetChildren()) do
-                    if t:IsA("Tool") and string.find(t.Name, "Fruit") then
-                        t.Parent = player.Character
-                        wait(0.1)
-                        t:Activate()
-                        break
-                    end
-                end
-
-                return
-            end
-
-            if not tool then
-                for _, t in pairs(player.Backpack:GetChildren()) do
-                    if t:IsA("Tool") and t.Name == "Melee" then
-                        t.Parent = player.Character
-                        wait(0.1)
-                        break
-                    end
-                end
-            end
-
-            tool = character and character:FindFirstChild("Melee")
-            if not tool then return end
-
-            local hrp = character and character:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
-
-            local foundMob = nil
-            for _, mob in pairs(workspace.Enemies:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and
-                   mob:FindFirstChild("Humanoid") and
-                   mob.Humanoid.Health > 0 and
-                   IsMobAllowed(mob.Name) and
-                   not alreadyVisited[mob] then
-                    foundMob = mob
                     break
                 end
             end
+        end
 
-            if foundMob then
-                local mobRoot = foundMob.HumanoidRootPart
+        tool = character and character:FindFirstChild("Melee")
+        if not tool then return end
 
-                hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                task.wait(0.1)
+        local hrp = character and character:FindFirstChild("HumanoidRootPart")
+        if not hrp then return end
 
+        local foundMob = nil
+        for _, mob in pairs(workspace.Enemies:GetChildren()) do
+            if mob:FindFirstChild("HumanoidRootPart") and
+               mob:FindFirstChild("Humanoid") and
+               mob.Humanoid.Health > 0 and
+               IsMobAllowed(mob.Name) and
+               not alreadyVisited[mob] then
+                foundMob = mob
+                break
+            end
+        end
+
+        if foundMob then
+            local mobRoot = foundMob.HumanoidRootPart
+
+            hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+            task.wait(0.1)
+
+            foundMob.Humanoid.Health = 0
+            if foundMob.Humanoid.Health > 0 then
                 foundMob.Humanoid.Health = 0
-
-                local descendTween = TweenService:Create(
-                    hrp,
-                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
-                )
-                descendTween:Play()
-                descendTween.Completed:Wait()
-
-                tool:Activate()
-
-                task.wait(3)
-                alreadyVisited[foundMob] = true
-
-                while foundMob.Humanoid.Health > 0 do
-                    task.wait(0.1)
-                end
-            else
-                alreadyVisited = {}
-                hrp.CFrame = CFrame.new(safePosition)
-                task.wait(waitForRespawnTime)
             end
-        end)
-    end
-end)	
+
+            local descendTween = TweenService:Create(
+                hrp,
+                TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+                {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
+            )
+            descendTween:Play()
+            descendTween.Completed:Wait()
+
+	if tool and tool.Name == "Melee" then
+            tool:Activate()
+	end
+	task.wait(0.1)
+            alreadyVisited[foundMob] = true
+
+	while foundMob.Humanoid.Health > 0 do
+                    task.wait(0.1)
+		end
+        else
+            alreadyVisited = {}
+            hrp.CFrame = CFrame.new(safePosition)
+        end
+    end)
+end
+end)
 
 spawn(function()
     local hasClaimed = false
@@ -3261,18 +3264,19 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            if not daily3 or daily3.Value ~= true then return end -- หยุดถ้ายังไม่ผ่าน Daily3
+
             local objective = missionData:FindFirstChild("MissionObjective")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not daily3 or not objective or not retum then return end
+            if not objective or not retum then return end
 
-            if daily3.Value == true and objective.Value == "Quests" and not hasClaimed then
+            if objective.Value == "Quests" and not hasClaimed then
                 retum:FireServer("Claim1")
                 hasClaimed = true
                 return
             end
 
-            -- รีเซ็ตเมื่อเควส daily3 หายไป (อาจทำรอบใหม่)
-            if daily3.Value ~= true then
+            if objective.Value ~= "Quests" then
                 hasClaimed = false
             end
         end)
@@ -3325,19 +3329,41 @@ spawn(function()
 end)
 
 spawn(function()
-    while task.wait() do
+    while wait() do
         pcall(function()
             if _G.farmgems then
-                local userId = game.Players.LocalPlayer.UserId
-                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
-                local Event = userFolder:WaitForChild("ChallengesRemote")
-
-                local dailies = {"Daily1", "Daily2", "Daily3", "Daily4", "AllDaily", "Challenge9"}
-
-                for _, daily in ipairs(dailies) do
-                    Event:FireServer("Claim", daily)
-                    task.wait(0.1) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
-                end
+local A_1 = "Claim"
+local A_2 = "Daily1"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily2"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily3"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local A_1 = "Claim"
+local A_2 = "Daily4"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
+local args = {
+    [1] = "Claim",
+    [2] = "AllDaily"
+}
+workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
+wait(.8)
+local args = {
+    [1] = "Claim",
+    [2] = "Challenge9"
+}
+workspace:WaitForChild("UserData"):WaitForChild("User_7307691486"):WaitForChild("ChallengesRemote"):FireServer(unpack(args))
+wait(0.8)
             end
         end)
     end
@@ -4402,4 +4428,3 @@ local page9 = Tab9:newpage()
 page9:Section("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
 
 	end)
-
