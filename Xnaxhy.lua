@@ -3052,8 +3052,10 @@ spawn(function()
     end
 end)
 
+local hasFoundQuest = false
+
 spawn(function()
-    while wait(2.2) do
+    while wait(1) do
         pcall(function()
             if not _G.farmgems then return end
 
@@ -3069,39 +3071,41 @@ spawn(function()
             local requirement = missionData:FindFirstChild("MissionRequirement")
             local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
 
-            if objective and requirement then
+            if not objective or not requirement then return end
+
+            if not hasFoundQuest then
                 if objective.Value == "Quests" then
-                    if requirement.Value == 1 then
-                        -- ถ้า QQQ_AllDaily ยังไม่ true ให้หยุด
-                        if not allDaily or allDaily.Value ~= true then
-                            return
-                        else
-                            return -- true แล้วก็ไม่ต้องรีเซ็ต
-                        end
-                    else
-                        -- ถ้า requirement ≠ 1 → รีเซ็ตได้เลย
-                        local stats = userFolder:FindFirstChild("Stats")
-                        if stats then
-                            stats:FireServer()
-                        end
-                        return
+                    hasFoundQuest = true
+                else
+                    local stats = userFolder:FindFirstChild("Stats")
+                    if stats then
+                        stats:FireServer() -- รีเซ็ตหา Quests
                     end
                 end
+                return
             end
 
-            -- ถ้าไม่ใช่ "Quests" ก็รีเซ็ตได้
-            local stats = userFolder:FindFirstChild("Stats")
-            if stats then
-                stats:FireServer()
+            if hasFoundQuest then
+                if requirement.Value == 1 then
+                    if allDaily and allDaily.Value == true then
+                        local stats = userFolder:FindFirstChild("Stats")
+                        if stats then
+                            stats:FireServer() -- รีเซ็ตตอน QQQ_AllDaily เป็น true
+                        end
+                    end
+                end
             end
         end)
     end
 end)
 
-local MobList = { "Lv4 Boar", "Crab", "Lv2 Angry" }
+local AllowedMobs = { "Lv4 Boar", "Crab", "Lv2 Angry" } -- เปลี่ยนชื่อจาก MobList
+local waitForRespawnTime = 5 -- เวลารอเกิดมอน (ประมาณ)
+local waitAnimationTime = 1.5 -- เวลาลงอนิเมชั่นเพิ่มเป็น 1.5 วิ
+local safePosition = Vector3.new(100, 10, 100) -- เปลี่ยนจุดนี้เป็นจุดเซฟที่ต้องการวาร์ปไปถ้าไม่มีมอน
 
 local function IsMobAllowed(mobName)
-    for _, allowedMob in ipairs(MobList) do
+    for _, allowedMob in ipairs(AllowedMobs) do
         if string.find(mobName, allowedMob) then
             return true
         end
@@ -3125,46 +3129,55 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if daily3 and daily3.Value == true then return end -- ✅ หยุดเมื่อผ่านเควส
+            if daily3 and daily3.Value == true then return end -- หยุดเมื่อผ่านเควส
 
             if not tool or tool.Name ~= "Melee" then return end
 
-            for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and 
-                   mob:FindFirstChild("Humanoid") and 
+            local foundMob = nil
+
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and
+                   mob:FindFirstChild("Humanoid") and
+                   mob.Humanoid.Health > 0 and
                    IsMobAllowed(mob.Name) then
-
-                    local mobRoot = mob.HumanoidRootPart
-                    local playerRoot = character:FindFirstChild("HumanoidRootPart")
-                    if not playerRoot then return end
-
-                    -- ✅ วาร์ปขึ้นด้านหลังมอน
-                    playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 7, 5)
-
-                    -- ✅ ฆ่าทันที
-                    mob.Humanoid.Health = 0
-                    task.wait(0.2)
-
-                    -- ✅ ร่อนลงด้วย Tween ลงใกล้มอน
-                    local TweenService = game:GetService("TweenService")
-                    local descendTween = TweenService:Create(
-                        playerRoot,
-                        TweenInfo.new(0.3, Enum.EasingStyle.Linear),
-                        {CFrame = mobRoot.CFrame * CFrame.new(0, 2, -2)}
-                    )
-                    descendTween:Play()
-                    descendTween.Completed:Wait()
-
-                    -- ✅ ตีมอน (หลังมันตายแล้ว ดูสมจริง)
-                    tool:Activate()
-
-                    task.wait(0.5) -- เว้นระยะก่อนลูปตัวต่อไป
+                    foundMob = mob
+                    break
                 end
+            end
+
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
+
+            if foundMob then
+                local mobRoot = foundMob.HumanoidRootPart
+                hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+                foundMob.Humanoid.Health = 0
+
+                task.wait(0.2)
+
+                local descendTween = TweenService:Create(
+                    hrp,
+                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 2, -2)}
+                )
+                descendTween:Play()
+                descendTween.Completed:Wait()
+                tool:Activate()
+
+                while foundMob.Humanoid.Health > 0 do
+                    task.wait(0.1)
+                end
+
+                task.wait(waitForRespawnTime)
+
+		else
+                hrp.CFrame = CFrame.new(safePosition)
+                task.wait(1)
             end
         end)
     end
 end)
-
+		
 spawn(function()
     local hasClaimed = false
     while task.wait(0.2) do
@@ -3180,22 +3193,15 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end -- ⛔ หยุดถ้ายังไม่ผ่าน Daily3
+            if not daily3 or daily3.Value ~= true then return end -- หยุดถ้ายังไม่ผ่าน Daily3
 
             local objective = missionData:FindFirstChild("MissionObjective")
-            local requirement = missionData:FindFirstChild("MissionRequirement")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not objective or not retum or not requirement then return end
+            if not objective or not retum then return end
 
             if objective.Value == "Quests" and not hasClaimed then
                 retum:FireServer("Claim1")
                 hasClaimed = true
-                return
-            end
-
-            if hasClaimed and requirement.Value == 1 then
-                retum:FireServer("Claim1")
-                hasClaimed = false -- reset รอรอบใหม่
                 return
             end
 
