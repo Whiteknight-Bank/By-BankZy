@@ -3035,9 +3035,9 @@ end)
 local Tab7 = Window:Taps("Quest Sam")
 local page7 = Tab7:newpage()
 
-page7:Label("┇ For Making a Lot Of Compasses ┇")
-page7:Section("Warning: It Will Reset Stats You All")
 
+page7:Label("┇ For Making a lot Gems ┇")
+		
 page7:Toggle("Farm Gems", false, function(gms)
     _G.farmgems = gms
 end)
@@ -3249,7 +3249,6 @@ end
 end)
 
 spawn(function()
-    local hasClaimed = false
     while task.wait(0.2) do
         pcall(function()
             if not _G.farmgems then return end
@@ -3263,20 +3262,14 @@ spawn(function()
             if not missionData then return end
 
             local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end -- หยุดถ้ายังไม่ผ่าน Daily3
+            if not daily3 or daily3.Value ~= true then return end
 
             local objective = missionData:FindFirstChild("MissionObjective")
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
             if not objective or not retum then return end
 
-            if objective.Value == "Quests" and not hasClaimed then
+            if objective.Value == "Quests" then
                 retum:FireServer("Claim1")
-                hasClaimed = true
-                return
-            end
-
-            if objective.Value ~= "Quests" then
-                hasClaimed = false
             end
         end)
     end
@@ -3346,6 +3339,7 @@ spawn(function()
     end
 end)
 
+page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Toggle("Auto Farm Compass", false, function(clmw)
     _G.claimwek = clmw
 end)
