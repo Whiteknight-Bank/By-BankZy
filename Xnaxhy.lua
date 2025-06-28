@@ -3138,113 +3138,133 @@ pcall(function()
 if not _G.farmgems then return end
 
 local player = game.Players.LocalPlayer
-        local character = player.Character
-        local tool = character and character:FindFirstChildOfClass("Tool")
-        local userId = player.UserId
-        local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-        if not userFolder then return end
+local playerCharacter = player.Character or player.CharacterAdded:Wait()
+local userId = player.UserId
+local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+if not userFolder then return end
 
-        local missionData = userFolder:FindFirstChild("Data")
-        if not missionData then return end
+local missionData = userFolder:FindFirstChild("Data")
+if not missionData then return end
 
-        local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+local daily3 = missionData:FindFirstChild("QQQ_Daily3")
 
-        for _, value in pairs(player.Backpack:GetChildren()) do
-            if table.find(BoxList, value.Name) then
-                player.Character.Humanoid:UnequipTools()
-                value.Parent = player.Character
+local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
+
+for _, value in pairs(player.Backpack:GetChildren()) do
+    if table.find(BoxList, value.Name) then
+        playerCharacter.Humanoid:UnequipTools()
+        value.Parent = playerCharacter
+        wait(0.1)
+        value:Activate()
+        wait(0.5)
+
+        for _, fruitTool in pairs(player.Backpack:GetChildren()) do
+            if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
+                fruitTool.Parent = playerCharacter
                 wait(0.1)
-                value:Activate()
-                wait(0.5)
-
-                for _, fruitTool in pairs(player.Backpack:GetChildren()) do
-                    if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
-                        fruitTool.Parent = player.Character
-                        wait(0.1)
-                        fruitTool:Activate()
-                        break
-                    end
-                end
+                fruitTool:Activate()
                 break
             end
         end
+        break
+    end
+end
 
-        if daily3 and daily3.Value == true then
-            local heldTool = character and character:FindFirstChild("Melee")
-            if heldTool then
-                heldTool.Parent = player.Backpack
-                wait(0.1)
-            end
+if daily3 and daily3.Value == true then
+    local heldTool = playerCharacter:FindFirstChild("Melee")
+    if heldTool then
+        heldTool.Parent = player.Backpack
+        wait(0.1)
+    end
 
-            for _, t in pairs(player.Backpack:GetChildren()) do
-                if t:IsA("Tool") and string.find(t.Name, "Fruit") then
-                    t.Parent = player.Character
-                    wait(0.1)
-                    t:Activate()
-                    break
-                end
-            end
-
-            return
+    for _, t in pairs(player.Backpack:GetChildren()) do
+        if t:IsA("Tool") and string.find(t.Name, "Fruit") then
+            t.Parent = playerCharacter
+            wait(0.1)
+            t:Activate()
+            break
         end
+    end
 
-        if not tool then
-            for _, t in pairs(player.Backpack:GetChildren()) do
-                if t:IsA("Tool") and t.Name == "Melee" then
-                    t.Parent = player.Character
-                    wait(0.1)
-                    break
-                end
-            end
+    return
+end
+
+if not currentTool then
+    for _, t in pairs(player.Backpack:GetChildren()) do
+        if t:IsA("Tool") and t.Name == "Melee" then
+            t.Parent = playerCharacter
+            wait(0.1)
+            break
         end
+    end
+end
 
-        tool = character and character:FindFirstChild("Melee")
-        if not tool then return end
+local meleeTool = playerCharacter:FindFirstChild("Melee")
+if not meleeTool then return end
 
-        local hrp = character and character:FindFirstChild("HumanoidRootPart")
-        if not hrp then return end
+local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
+if not playerHRP then return end
 
-        local foundMob = nil
-        for _, mob in pairs(workspace.Enemies:GetChildren()) do
-            if mob:FindFirstChild("HumanoidRootPart") and
-               mob:FindFirstChild("Humanoid") and
-               mob.Humanoid.Health > 0 and
-               IsMobAllowed(mob.Name) and
-               not alreadyVisited[mob] then
-                foundMob = mob
-                break
-            end
-        end
+-- หา Mob
+local targetMob = nil
+for _, mob in pairs(workspace.Enemies:GetChildren()) do
+    if mob:FindFirstChild("HumanoidRootPart") and
+       mob:FindFirstChild("Humanoid") and
+       mob.Humanoid.Health > 0 and
+       IsMobAllowed(mob.Name) and
+       not alreadyVisited[mob] then
+        targetMob = mob
+        break
+    end
+end
 
-if foundMob then
-    local mobRoot = foundMob.HumanoidRootPart
+-- เจอ Mob แล้ว
+if targetMob then
+    local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
+    if not mobRoot then return end
 
-    hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
     task.wait(0.1)
 
     repeat
-        foundMob.Humanoid.Health = 0
+        targetMob.Humanoid.Health = 0
         task.wait(0.05)
-    until foundMob.Humanoid.Health <= 0
+    until targetMob.Humanoid.Health <= 0
 
     local descendTween = TweenService:Create(
-        hrp,
+        playerHRP,
         TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-        {CFrame = mobRoot.CFrame * CFrame.new(0, 0.5, -1)}
+        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
     )
     descendTween:Play()
     descendTween.Completed:Wait()
 
-    if tool and tool.Name == "Melee" then
-        tool:Activate()
+    if meleeTool then
+        meleeTool:Activate()
     end
+
     task.wait(0.5)
+    alreadyVisited[targetMob] = true
 
-    alreadyVisited[foundMob] = true
+    local wewladFolder = workspace:FindFirstChild("WEWLAD")
+    if wewladFolder then
+        local userWewlad = wewladFolder:FindFirstChild("User_" .. userId)
+        if userWewlad then
+            repeat
+                if userWewlad:FindFirstChildWhichIsA("Part") then
+                    break
+                else
+                    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+                end
+                task.wait(0.2)
+            until userWewlad:FindFirstChildWhichIsA("Part")
+        end
+    end
 
-    while foundMob.Humanoid.Health > 0 do
+    while targetMob.Humanoid.Health > 0 do
         task.wait(0.1)
     end
+end
         else
             alreadyVisited = {}
             hrp.CFrame = CFrame.new(safePosition)
@@ -3272,16 +3292,22 @@ spawn(function()
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
             if not daily3 or not alldaily or not objective or not retum then return end
 
-            -- 1. รอจนเข้าเงื่อนไขเริ่มรอบใหม่
+            -- ถ้าเข้าเงื่อนไขเริ่มรอบใหม่
             if daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
-                -- ยิง Claim1 รอบนี้
-                retum:FireServer("Claim1")
+                -- ลองยิง Claim1 ซ้ำ ๆ เผื่อรอบที่ข้อมูลเพิ่งอัปเดต
+                for i = 1, 5 do
+                    retum:FireServer("Claim1")
+                    task.wait(0.3)
+                    if alldaily.Value == true then
+                        break -- ถ้าได้แล้วจบรอบเลย
+                    end
+                end
 
-                -- 2. รอจน AllDaily เป็น true (จบรอบ)
+                -- รอจน AllDaily == true
                 repeat task.wait(0.5)
                 until alldaily.Value == true
 
-                -- 3. รอจน AllDaily กลับเป็น false และ Daily3 กับ Objective พร้อมเริ่มรอบใหม่
+                -- รอรอบใหม่
                 repeat task.wait(0.5)
                 until alldaily.Value == false and daily3.Value == true and objective.Value == "Quests"
             end
