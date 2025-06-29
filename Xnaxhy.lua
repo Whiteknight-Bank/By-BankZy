@@ -3240,6 +3240,7 @@ spawn(function()
 end)
 
 spawn(function()
+    local claimed = false
     while task.wait(0.2) do
         pcall(function()
             if not _G.farmgems then return end
@@ -3258,18 +3259,20 @@ spawn(function()
             local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
             if not daily3 or not alldaily or not objective or not retum then return end
 
-            -- ถ้าเข้าเงื่อนไขเริ่มรอบใหม่
-            if daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
-                -- ยิง Claim1 แค่ครั้งเดียว
+            -- ถ้ายังไม่เคลมรอบนี้ และเงื่อนไขถูกต้อง
+            if not claimed and daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
                 retum:FireServer("Claim1")
+                claimed = true
+            end
 
-                -- รอจน AllDaily == true
+            -- ถ้าเคลมแล้ว และจบรอบ (AllDaily = true) → เตรียมรอรอบถัดไป
+            if claimed and alldaily.Value == true then
+                -- รอจน AllDaily กลับไปเป็น false = เริ่มรอบใหม่ได้
                 repeat task.wait(0.5)
-                until alldaily.Value == true
+                until alldaily.Value == false
 
-                -- รอรอบใหม่
-                repeat task.wait(0.5)
-                until alldaily.Value == false and daily3.Value == true and objective.Value == "Quests"
+                -- รีเซ็ต flag สำหรับรอบใหม่
+                claimed = false
             end
         end)
     end
