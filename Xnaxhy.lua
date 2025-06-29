@@ -3124,13 +3124,6 @@ local function IsMobAllowed(mobName)
     return false
 end
 
-local BoxList = {
-    "Common Box",
-    "Uncommon Box",
-    "Rare Box",
-    "Ultra Rare Box"
-}
-
 spawn(function() 
     local alreadyVisited = {} 
     while task.wait(0.1) do 
@@ -3146,49 +3139,12 @@ spawn(function()
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
-            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            local quest = missionData:FindFirstChild("Quests")
+            local missionRequirement = missionData:FindFirstChild("MissionRequirement")
 
             local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
 
-            for _, value in pairs(player.Backpack:GetChildren()) do
-                if table.find(BoxList, value.Name) then
-                    playerCharacter.Humanoid:UnequipTools()
-                    value.Parent = playerCharacter
-                    wait(0.1)
-                    value:Activate()
-                    wait(0.5)
-
-                    for _, fruitTool in pairs(player.Backpack:GetChildren()) do
-                        if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
-                            fruitTool.Parent = playerCharacter
-                            wait(0.1)
-                            fruitTool:Activate()
-                            break
-                        end
-                    end
-                    break
-                end
-            end
-
-            if daily3 and daily3.Value == true then
-                local heldTool = playerCharacter:FindFirstChild("Melee")
-                if heldTool then
-                    heldTool.Parent = player.Backpack
-                    wait(0.1)
-                end
-
-                for _, t in pairs(player.Backpack:GetChildren()) do
-                    if t:IsA("Tool") and string.find(t.Name, "Fruit") then
-                        t.Parent = playerCharacter
-                        wait(0.1)
-                        t:Activate()
-                        break
-                    end
-                end
-
-                return
-            end
-
+            -- Equip Melee ถ้ายังไม่ถือ
             if not currentTool then
                 for _, t in pairs(player.Backpack:GetChildren()) do
                     if t:IsA("Tool") and t.Name == "Melee" then
@@ -3204,6 +3160,12 @@ spawn(function()
 
             local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
             if not playerHRP then return end
+
+            -- ❌ ถ้า Quests เป็น "None" หรือ MissionRequirement ไม่ใช่ 1 → รอก่อน
+            if (not quest or quest.Value == "None") or (missionRequirement and missionRequirement.Value ~= 1) then
+                playerHRP.CFrame = CFrame.new(safePosition)
+                return
+            end
 
             -- หา Mob
             local targetMob = nil
@@ -3293,16 +3255,8 @@ spawn(function()
 
             -- ถ้าเข้าเงื่อนไขเริ่มรอบใหม่
             if daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
-                -- ลองยิง Claim1 ซ้ำ ๆ เผื่อรอบที่ข้อมูลเพิ่งอัปเดต
-                for i = 1, 5 do
-                    if retum then -- Additional safety check
-                        retum:FireServer("Claim1")
-                    end
-                    task.wait(0.3)
-                    if alldaily.Value == true then
-                        break -- ถ้าได้แล้วจบรอบเลย
-                    end
-                end
+                -- ยิง Claim1 แค่ครั้งเดียว
+                retum:FireServer("Claim1")
 
                 -- รอจน AllDaily == true
                 repeat task.wait(0.5)
