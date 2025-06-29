@@ -3176,78 +3176,75 @@ spawn(function()
             if not playerHRP then return end
 
             if missionObjective and missionRequirement then
-            if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
-            playerHRP.CFrame = CFrame.new(safePosition)
-             return
-               end
-            end
+if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
+playerHRP.CFrame = CFrame.new(safePosition)
+return
+end
+end
 
-            -- หา Mob
-            local targetMob = nil
-            for _, mob in pairs(workspace.Enemies:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and
-                   mob:FindFirstChild("Humanoid") and
-                   mob.Humanoid.Health > 0 and
-                   IsMobAllowed(mob.Name) and
-                   not alreadyVisited[mob] then
-                    targetMob = mob
-                    break
-                end
-            end
+-- หา Mob  
+        local targetMob = nil  
+        for _, mob in pairs(workspace.Enemies:GetChildren()) do  
+            if mob:FindFirstChild("HumanoidRootPart") and  
+               mob:FindFirstChild("Humanoid") and  
+               mob.Humanoid.Health > 0 and  
+               IsMobAllowed(mob.Name) and  
+               not alreadyVisited[mob] then  
+                targetMob = mob  
+                break  
+            end  
+        end  
 
-            -- เจอ Mob แล้ว
-       if targetMob then
-    local mobRoot = targetMob:FindFirstChild("Torso") or targetMob:FindFirstChild("HumanoidRootPart")
-    if not mobRoot then return end
+        -- เจอ Mob แล้ว  
+        if targetMob then  
+local mobRoot = targetMob:FindFirstChild("Torso") or targetMob:FindFirstChild("HumanoidRootPart")  
+if not mobRoot then return end  
 
-    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-    task.wait(0.1)
+-- วาปขึ้นไปบนหัวมอนก่อน  
+playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)  
+task.wait(0.1)  
 
-    repeat
-        targetMob.Humanoid.Health = 0
-        task.wait(0.05)
-    until targetMob.Humanoid.Health <= 0
+-- ฆ่ามอนด้วยการเซ็ต HP เป็น 0  
+repeat  
+    targetMob.Humanoid.Health = 0  
+    task.wait(0.05)  
+until targetMob.Humanoid.Health <= 0  
 
-    local descendTween = TweenService:Create(
-        playerHRP,
-        TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, 0)}
-    )
-    descendTween:Play()
-    descendTween.Completed:Wait()
+-- ค่อยๆ ลงไปชนตัวมัน  
+local descendTween = TweenService:Create(  
+    playerHRP,  
+    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),  
+    {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}  
+)  
+descendTween:Play()  
+descendTween.Completed:Wait()  
 
-    if meleeTool then
-        meleeTool:Activate()
-    end
+if meleeTool then  
+    meleeTool:Activate()  
+end  
 
-    task.wait(0.8)
-    alreadyVisited[targetMob] = true
+task.wait(0.5)  
+alreadyVisited[targetMob] = true  
 
-    if playerModel then
-        local wewlad = playerModel:FindFirstChild("WEWLAD")
-        if wewlad thenrepeat
-    local part = wewlad:FindFirstChild("Part")
-    if part then
-        break
-    end
+if playerModel then  
+    local wewlad = playerModel:FindFirstChild("WEWLAD")  
+    if wewlad then  
+ 
+        repeat  
+            local part = wewlad:FindFirstChild("Part")  
+            if part then  
+                break  
+            else  
+                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, 0)  
+            end  
+            task.wait(0.2)  
+        until wewlad:FindFirstChild("Part")  
+    end  
+end  
 
-    if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
-        break
-    end
-
-    if not targetMob:IsDescendantOf(game) or targetMob.Humanoid.Health > 0 then
-        break
-    end
-
-    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1)
-    task.wait(0.2)
-until false
-        end
-    end
-
-    while targetMob and targetMob:FindFirstChild("Humanoid") and targetMob.Humanoid.Health > 0 do
-        task.wait(0.1)
-    end
+while targetMob.Humanoid.Health > 0 do  
+    task.wait(0.1)  
+end
             else
                 alreadyVisited = {}
                 playerHRP.CFrame = CFrame.new(safePosition)
