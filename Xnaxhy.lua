@@ -3161,12 +3161,11 @@ spawn(function()
             local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
             if not playerHRP then return end
 
-            -- ❌ ถ้า Quests เป็น "None" หรือ MissionRequirement ไม่ใช่ 1 → รอก่อน
             if missionObjective and missionRequirement then
-            if missionObjective.Value == "None" and missionRequirement.Value ~= 1 then
+            if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
             playerHRP.CFrame = CFrame.new(safePosition)
-            return
-                end
+             return
+               end
             end
 
             -- หา Mob
