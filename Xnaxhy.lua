@@ -3124,7 +3124,7 @@ end)
 		
 local AllowedMobs = { "Boar", "Lv2 Angry", "Lv9 Bandit", "Freddy", "Thug", "Lv34 Freddi" }
 
-local waitAnimationTime = 0.3
+local waitAnimationTime = 0.5
 local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
@@ -3196,56 +3196,58 @@ spawn(function()
             end
 
             -- เจอ Mob แล้ว
-            if targetMob then
+       if targetMob then
     local mobRoot = targetMob:FindFirstChild("Torso") or targetMob:FindFirstChild("HumanoidRootPart")
     if not mobRoot then return end
 
-    -- วาปขึ้นไปบนหัวมอนก่อน
     playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
     task.wait(0.1)
 
-    -- ฆ่ามอนด้วยการเซ็ต HP เป็น 0
     repeat
         targetMob.Humanoid.Health = 0
         task.wait(0.05)
     until targetMob.Humanoid.Health <= 0
 
-    -- ค่อยๆ ลงไปชนตัวมัน
     local descendTween = TweenService:Create(
         playerHRP,
         TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
+        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, 0)}
     )
     descendTween:Play()
     descendTween.Completed:Wait()
 
-    -- กดใช้ tool ถ้ามี
     if meleeTool then
         meleeTool:Activate()
     end
 
-    task.wait(0.5)
+    task.wait(0.8)
     alreadyVisited[targetMob] = true
 
     if playerModel then
         local wewlad = playerModel:FindFirstChild("WEWLAD")
         if wewlad then
-            -- ถ้ายังไม่เจอ Part ให้ชนมอนซ้ำจนกว่าจะเจอ
             repeat
-                local part = wewlad:FindFirstChild("Part")
-                if part then
+                -- ถ้าเจอ Part แล้วจบ
+                if wewlad:FindFirstChild("Part") then
                     break
-                else
-                    -- วาร์ปชนซ้ำ
-                    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1)
                 end
+
+                -- ถ้า mob ถูกลบไป หรือ mob กลับมามี HP > 0 แล้ว (เกิดใหม่) ให้ออกจาก loop
+                if not targetMob or not targetMob:FindFirstChild("Humanoid") or targetMob.Humanoid.Health > 0 then
+                    print("Mob ตายและเกิดใหม่แล้ว หยุดชน")
+                    break
+                end
+
+                -- ยังไม่เจอ Part ก็ชนซ้ำ
+                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)
                 task.wait(0.2)
+
             until wewlad:FindFirstChild("Part")
         end
     end
 
-    -- กันพลาด ถ้ามอนยังไม่ตาย
-    while targetMob.Humanoid.Health > 0 do
+    -- กันพลาดอีกชั้น ถ้ามอนยังมี HP
+    while targetMob and targetMob:FindFirstChild("Humanoid") and targetMob.Humanoid.Health > 0 do
         task.wait(0.1)
     end
             else
