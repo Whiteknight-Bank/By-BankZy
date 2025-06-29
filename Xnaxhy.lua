@@ -3089,6 +3089,11 @@ spawn(function()
 
             local objective = missionData:FindFirstChild("MissionObjective")
             local requirement = missionData:FindFirstChild("MissionRequirement")
+
+            local daily1 = missionData:FindFirstChild("QQQ_Daily1")
+            local daily2 = missionData:FindFirstChild("QQQ_Daily2")
+            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            local daily4 = missionData:FindFirstChild("QQQ_Daily4")
             local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
 
             local stats = userFolder:FindFirstChild("Stats")
@@ -3096,11 +3101,14 @@ spawn(function()
 
             if objective and requirement then
                 if objective.Value == "Quests" then
-                    -- ✅ ไม่ว่าจะ requirement เป็นอะไร ต้องรอ QQQ_AllDaily == true ก่อน
-                    if allDaily and allDaily.Value == true then
-                        stats:FireServer()
+                    if daily1 and daily2 and daily3 and daily4 and allDaily then
+                        if daily1.Value == true and daily2.Value == true and daily3.Value == true and daily4.Value == true then
+                            if allDaily.Value == true then
+                                stats:FireServer()
+                            end
+                        end
                     end
-                    return -- ❌ ถ้ายังไม่ true ก็รอ
+                    return -- ❌ ยังไม่ครบก็รอ
                 else
                     -- ✅ objective ไม่ใช่ "Quests" → รีเลย
                     stats:FireServer()
