@@ -3096,13 +3096,17 @@ spawn(function()
 
             if objective and requirement then
                 if objective.Value == "Quests" then
-                    if not allDaily or allDaily.Value ~= true then
-                        return -- ⛔ ยังไม่พร้อม reset
+                    if requirement.Value == 1 then
+                        if not allDaily or allDaily.Value ~= true then
+                            return -- ⛔ ยังไม่พร้อม reset
+                        end
+                        stats:FireServer()
+                        return
                     end
-
-                    stats:FireServer()
-                    return
                 end
+
+                stats:FireServer()
+                return
             end
 
             stats:FireServer()
