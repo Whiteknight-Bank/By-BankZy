@@ -3248,7 +3248,6 @@ spawn(function()
     while targetMob.Humanoid.Health > 0 do
         task.wait(0.1)
     end
-end
             else
                 alreadyVisited = {}
                 playerHRP.CFrame = CFrame.new(safePosition)
