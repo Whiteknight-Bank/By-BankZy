@@ -3060,6 +3060,9 @@ task.spawn(function()
     end
 end)
 
+
+local TweenService = game:GetService("TweenService")
+
 page7:Toggle("Farm Gems", false, function(gms)
     _G.farmgems = gms
 end)
@@ -3130,149 +3133,148 @@ local BoxList = {
     "Rare Box",
     "Ultra Rare Box"
 }
---[[
+
 spawn(function() 
-local alreadyVisited = {} 
-while task.wait(0.1) do 
-pcall(function() 
-if not _G.farmgems then return end
+    local alreadyVisited = {} 
+    while task.wait(0.1) do 
+        pcall(function() 
+            if not _G.farmgems then return end
 
-local player = game.Players.LocalPlayer
-local playerCharacter = player.Character or player.CharacterAdded:Wait()
-local userId = player.UserId
-local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-if not userFolder then return end
+            local player = game.Players.LocalPlayer
+            local playerCharacter = player.Character or player.CharacterAdded:Wait()
+            local userId = player.UserId
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
 
-local missionData = userFolder:FindFirstChild("Data")
-if not missionData then return end
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
 
-local daily3 = missionData:FindFirstChild("QQQ_Daily3")
+            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
 
-local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
+            local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
 
-for _, value in pairs(player.Backpack:GetChildren()) do
-    if table.find(BoxList, value.Name) then
-        playerCharacter.Humanoid:UnequipTools()
-        value.Parent = playerCharacter
-        wait(0.1)
-        value:Activate()
-        wait(0.5)
+            for _, value in pairs(player.Backpack:GetChildren()) do
+                if table.find(BoxList, value.Name) then
+                    playerCharacter.Humanoid:UnequipTools()
+                    value.Parent = playerCharacter
+                    wait(0.1)
+                    value:Activate()
+                    wait(0.5)
 
-        for _, fruitTool in pairs(player.Backpack:GetChildren()) do
-            if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
-                fruitTool.Parent = playerCharacter
-                wait(0.1)
-                fruitTool:Activate()
-                break
-            end
-        end
-        break
-    end
-end
-
-if daily3 and daily3.Value == true then
-    local heldTool = playerCharacter:FindFirstChild("Melee")
-    if heldTool then
-        heldTool.Parent = player.Backpack
-        wait(0.1)
-    end
-
-    for _, t in pairs(player.Backpack:GetChildren()) do
-        if t:IsA("Tool") and string.find(t.Name, "Fruit") then
-            t.Parent = playerCharacter
-            wait(0.1)
-            t:Activate()
-            break
-        end
-    end
-
-    return
-end
-
-if not currentTool then
-    for _, t in pairs(player.Backpack:GetChildren()) do
-        if t:IsA("Tool") and t.Name == "Melee" then
-            t.Parent = playerCharacter
-            wait(0.1)
-            break
-        end
-    end
-end
-
-local meleeTool = playerCharacter:FindFirstChild("Melee")
-if not meleeTool then return end
-
-local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
-if not playerHRP then return end
-
--- หา Mob
-local targetMob = nil
-for _, mob in pairs(workspace.Enemies:GetChildren()) do
-    if mob:FindFirstChild("HumanoidRootPart") and
-       mob:FindFirstChild("Humanoid") and
-       mob.Humanoid.Health > 0 and
-       IsMobAllowed(mob.Name) and
-       not alreadyVisited[mob] then
-        targetMob = mob
-        break
-    end
-end
-
--- เจอ Mob แล้ว
-if targetMob then
-    local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
-    if not mobRoot then return end
-
-    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-    task.wait(0.1)
-
-    repeat
-        targetMob.Humanoid.Health = 0
-        task.wait(0.05)
-    until targetMob.Humanoid.Health <= 0
-
-    local descendTween = TweenService:Create(
-        playerHRP,
-        TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
-    )
-    descendTween:Play()
-    descendTween.Completed:Wait()
-
-    if meleeTool then
-        meleeTool:Activate()
-    end
-
-    task.wait(0.5)
-    alreadyVisited[targetMob] = true
-
-    local wewladFolder = workspace:FindFirstChild("WEWLAD")
-    if wewladFolder then
-        local userWewlad = wewladFolder:FindFirstChild("User_" .. userId)
-        if userWewlad then
-            repeat
-                if userWewlad:FindFirstChildWhichIsA("Part") then
+                    for _, fruitTool in pairs(player.Backpack:GetChildren()) do
+                        if fruitTool:IsA("Tool") and string.find(fruitTool.Name, "Fruit") then
+                            fruitTool.Parent = playerCharacter
+                            wait(0.1)
+                            fruitTool:Activate()
+                            break
+                        end
+                    end
                     break
-                else
-                    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
                 end
-                task.wait(0.2)
-            until userWewlad:FindFirstChildWhichIsA("Part")
-        end
-    end
+            end
 
-    while targetMob.Humanoid.Health > 0 do
-        task.wait(0.1)
+            if daily3 and daily3.Value == true then
+                local heldTool = playerCharacter:FindFirstChild("Melee")
+                if heldTool then
+                    heldTool.Parent = player.Backpack
+                    wait(0.1)
+                end
+
+                for _, t in pairs(player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and string.find(t.Name, "Fruit") then
+                        t.Parent = playerCharacter
+                        wait(0.1)
+                        t:Activate()
+                        break
+                    end
+                end
+
+                return
+            end
+
+            if not currentTool then
+                for _, t in pairs(player.Backpack:GetChildren()) do
+                    if t:IsA("Tool") and t.Name == "Melee" then
+                        t.Parent = playerCharacter
+                        wait(0.1)
+                        break
+                    end
+                end
+            end
+
+            local meleeTool = playerCharacter:FindFirstChild("Melee")
+            if not meleeTool then return end
+
+            local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
+            if not playerHRP then return end
+
+            -- หา Mob
+            local targetMob = nil
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("HumanoidRootPart") and
+                   mob:FindFirstChild("Humanoid") and
+                   mob.Humanoid.Health > 0 and
+                   IsMobAllowed(mob.Name) and
+                   not alreadyVisited[mob] then
+                    targetMob = mob
+                    break
+                end
+            end
+
+            -- เจอ Mob แล้ว
+            if targetMob then
+                local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
+                if not mobRoot then return end
+
+                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+                task.wait(0.1)
+
+                repeat
+                    targetMob.Humanoid.Health = 0
+                    task.wait(0.05)
+                until targetMob.Humanoid.Health <= 0
+
+                local descendTween = TweenService:Create(
+                    playerHRP,
+                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
+                )
+                descendTween:Play()
+                descendTween.Completed:Wait()
+
+                if meleeTool then
+                    meleeTool:Activate()
+                end
+
+                task.wait(0.5)
+                alreadyVisited[targetMob] = true
+
+                local wewladFolder = workspace:FindFirstChild("WEWLAD")
+                if wewladFolder then
+                    local userWewlad = wewladFolder:FindFirstChild("User_" .. userId)
+                    if userWewlad then
+                        repeat
+                            if userWewlad:FindFirstChildWhichIsA("Part") then
+                                break
+                            else
+                                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+                            end
+                            task.wait(0.2)
+                        until userWewlad:FindFirstChildWhichIsA("Part")
+                    end
+                end
+
+                while targetMob.Humanoid.Health > 0 do
+                    task.wait(0.1)
+                end
+            else
+                alreadyVisited = {}
+                playerHRP.CFrame = CFrame.new(safePosition)
+            end
+        end)
     end
-end
-        else
-            alreadyVisited = {}
-            hrp.CFrame = CFrame.new(safePosition)
-        end
-    end)
-end
 end)
-]]
+
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
@@ -3316,7 +3318,7 @@ spawn(function()
         end)
     end
 end)
-
+		
 spawn(function()
     while wait() do
         pcall(function()
