@@ -3060,9 +3060,6 @@ task.spawn(function()
     end
 end)
 
-
-local TweenService = game:GetService("TweenService")
-
 page7:Toggle("Farm Gems", false, function(gms)
     _G.farmgems = gms
 end)
