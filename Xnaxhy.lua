@@ -3096,19 +3096,19 @@ spawn(function()
 
             if objective and requirement then
                 if objective.Value == "Quests" then
-                    if requirement.Value == 1 then
-                        if not allDaily or allDaily.Value ~= true then
-                            return -- ⛔ ยังไม่พร้อม reset
-                        end
+                    -- ✅ ไม่ว่าจะ requirement เป็นอะไร ต้องรอ QQQ_AllDaily == true ก่อน
+                    if allDaily and allDaily.Value == true then
                         stats:FireServer()
-                        return
                     end
+                    return -- ❌ ถ้ายังไม่ true ก็รอ
+                else
+                    -- ✅ objective ไม่ใช่ "Quests" → รีเลย
+                    stats:FireServer()
+                    return
                 end
-
-                stats:FireServer()
-                return
             end
 
+            -- fallback ถ้า objective หรือ requirement ไม่มี
             stats:FireServer()
         end)
     end
