@@ -3143,6 +3143,8 @@ spawn(function()
             if not _G.farmgems then return end
 
             local player = game.Players.LocalPlayer
+	    local playerName = player.Name
+	    local playerModel = workspace:FindFirstChild(playerName)
             local playerCharacter = player.Character or player.CharacterAdded:Wait()
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
@@ -3195,50 +3197,58 @@ spawn(function()
 
             -- เจอ Mob แล้ว
             if targetMob then
-                local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
-                if not mobRoot then return end
+    local mobRoot = targetMob:FindFirstChild("Torso") or targetMob:FindFirstChild("HumanoidRootPart")
+    if not mobRoot then return end
 
-                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                task.wait(0.1)
+    -- วาปขึ้นไปบนหัวมอนก่อน
+    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+    task.wait(0.1)
 
-                repeat
-                    targetMob.Humanoid.Health = 0
-                    task.wait(0.05)
-                until targetMob.Humanoid.Health <= 0
+    -- ฆ่ามอนด้วยการเซ็ต HP เป็น 0
+    repeat
+        targetMob.Humanoid.Health = 0
+        task.wait(0.05)
+    until targetMob.Humanoid.Health <= 0
 
-                local descendTween = TweenService:Create(
-                    playerHRP,
-                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
-                )
-                descendTween:Play()
-                descendTween.Completed:Wait()
+    -- ค่อยๆ ลงไปชนตัวมัน
+    local descendTween = TweenService:Create(
+        playerHRP,
+        TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+        {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}
+    )
+    descendTween:Play()
+    descendTween.Completed:Wait()
 
-                if meleeTool then
-                    meleeTool:Activate()
+    -- กดใช้ tool ถ้ามี
+    if meleeTool then
+        meleeTool:Activate()
+    end
+
+    task.wait(0.5)
+    alreadyVisited[targetMob] = true
+
+    if playerModel then
+        local wewlad = playerModel:FindFirstChild("WEWLAD")
+        if wewlad then
+            -- ถ้ายังไม่เจอ Part ให้ชนมอนซ้ำจนกว่าจะเจอ
+            repeat
+                local part = wewlad:FindFirstChild("Part")
+                if part then
+                    break
+                else
+                    -- วาร์ปชนซ้ำ
+                    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1)
                 end
+                task.wait(0.2)
+            until wewlad:FindFirstChild("Part")
+        end
+    end
 
-                task.wait(0.5)
-                alreadyVisited[targetMob] = true
-
-                local wewladFolder = workspace:FindFirstChild("WEWLAD")
-                if wewladFolder then
-                    local userWewlad = wewladFolder:FindFirstChild("User_" .. userId)
-                    if userWewlad then
-                        repeat
-                            if userWewlad:FindFirstChildWhichIsA("Part") then
-                                break
-                            else
-                                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                            end
-                            task.wait(0.2)
-                        until userWewlad:FindFirstChildWhichIsA("Part")
-                    end
-                end
-
-                while targetMob.Humanoid.Health > 0 do
-                    task.wait(0.1)
-                end
+    -- กันพลาด ถ้ามอนยังไม่ตาย
+    while targetMob.Humanoid.Health > 0 do
+        task.wait(0.1)
+    end
+end
             else
                 alreadyVisited = {}
                 playerHRP.CFrame = CFrame.new(safePosition)
