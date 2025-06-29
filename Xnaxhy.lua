@@ -3225,28 +3225,26 @@ spawn(function()
 
     if playerModel then
         local wewlad = playerModel:FindFirstChild("WEWLAD")
-        if wewlad then
-            repeat
-                -- ถ้าเจอ Part แล้วจบ
-                if wewlad:FindFirstChild("Part") then
-                    break
-                end
+        if wewlad thenrepeat
+    local part = wewlad:FindFirstChild("Part")
+    if part then
+        break
+    end
 
-                -- ถ้า mob ถูกลบไป หรือ mob กลับมามี HP > 0 แล้ว (เกิดใหม่) ให้ออกจาก loop
-                if not targetMob or not targetMob:FindFirstChild("Humanoid") or targetMob.Humanoid.Health > 0 then
-                    print("Mob ตายและเกิดใหม่แล้ว หยุดชน")
-                    break
-                end
+    if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
+        break
+    end
 
-                -- ยังไม่เจอ Part ก็ชนซ้ำ
-                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)
-                task.wait(0.2)
+    if not targetMob:IsDescendantOf(game) or targetMob.Humanoid.Health > 0 then
+        break
+    end
 
-            until wewlad:FindFirstChild("Part")
+    playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1)
+    task.wait(0.2)
+until false
         end
     end
 
-    -- กันพลาดอีกชั้น ถ้ามอนยังมี HP
     while targetMob and targetMob:FindFirstChild("Humanoid") and targetMob.Humanoid.Health > 0 do
         task.wait(0.1)
     end
