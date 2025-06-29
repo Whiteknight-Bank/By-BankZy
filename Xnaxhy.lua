@@ -3162,9 +3162,10 @@ spawn(function()
             if not playerHRP then return end
 
             -- ❌ ถ้า Quests เป็น "None" หรือ MissionRequirement ไม่ใช่ 1 → รอก่อน
-            if (not quest or quest.Value == "None") or (missionRequirement and missionRequirement.Value ~= 1) then
-                playerHRP.CFrame = CFrame.new(safePosition)
-                return
+            -- ถ้า MissionRequirement ไม่ใช่ 1 ให้รอที่ safePosition
+            if missionRequirement and missionRequirement.Value ~= 1 then
+            playerHRP.CFrame = CFrame.new(safePosition)
+            return
             end
 
             -- หา Mob
