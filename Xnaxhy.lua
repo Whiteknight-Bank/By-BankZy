@@ -3139,7 +3139,7 @@ spawn(function()
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
-            local quest = missionData:FindFirstChild("Quests")
+            local missionObjective = missionData:FindFirstChild("MissionObjective")
             local missionRequirement = missionData:FindFirstChild("MissionRequirement")
 
             local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
@@ -3162,10 +3162,11 @@ spawn(function()
             if not playerHRP then return end
 
             -- ❌ ถ้า Quests เป็น "None" หรือ MissionRequirement ไม่ใช่ 1 → รอก่อน
-            -- ถ้า MissionRequirement ไม่ใช่ 1 ให้รอที่ safePosition
-            if missionRequirement and missionRequirement.Value ~= 1 then
+            if missionObjective and missionRequirement then
+            if missionObjective.Value == "None" and missionRequirement.Value ~= 1 then
             playerHRP.CFrame = CFrame.new(safePosition)
             return
+                end
             end
 
             -- หา Mob
