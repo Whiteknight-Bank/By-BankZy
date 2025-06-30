@@ -3369,6 +3369,7 @@ spawn(function()
 		else
 
             stats:FireServer()
+	end
         end)
     end
 end)
