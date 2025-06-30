@@ -3342,7 +3342,7 @@ page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Toggle("Auto Farm Compass", false, function(clmw)
     _G.farmcomp = clmw
 end)
-
+--[[
 spawn(function()
     while wait(2.2) do
         pcall(function()
@@ -3375,44 +3375,6 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmcomp then return end
-
-            local player = game.Players.LocalPlayer
-            local userId = player.UserId
-
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-            if not userFolder then return end
-
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
-
-            local weekly3 = missionData:FindFirstChild("QQQ_Weekly3")
-            if not weekly3 or weekly3.Value ~= true then return end
-
-            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
-            if Compass and Compass:FindFirstChild("Poser") then
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    local oldPos = hrp.Position
-
-                    player.Character.Humanoid:UnequipTools()
-                    Compass.Parent = player.Character
-                    hrp.CFrame = CFrame.new(Compass.Poser.Value)
-                    Compass:Activate()
-
-                    wait(0.2)
-
-                    hrp.CFrame = CFrame.new(109, 268, -37)
-
-                end
-            end
-        end)
-    end
-end)		
-
-spawn(function()
     while task.wait() do
         pcall(function()
             if _G.farmcomp then
@@ -3430,7 +3392,7 @@ spawn(function()
         end)
     end
 end)
-
+]]
 page7:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
