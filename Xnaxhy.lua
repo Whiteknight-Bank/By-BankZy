@@ -3340,18 +3340,91 @@ end)
 
 page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Toggle("Auto Farm Compass", false, function(clmw)
-    _G.claimwek = clmw
+    _G.farmcomp = clmw
+end)
+
+spawn(function()
+    while wait(2.2) do
+        pcall(function()
+            if not _G.farmcomp then return end
+
+            local player = game.Players.LocalPlayer
+            local userId = player.UserId
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local weekly3 = missionData:FindFirstChild("QQQ_weekly3")
+
+            local stats = userFolder:FindFirstChild("Stats")
+            if not stats then return end
+                    if weekly3 then
+                        if weekly3.Value == true then
+                                stats:FireServer()
+                        end
+                    end
+                    return
+		else
+
+            stats:FireServer()
+        end)
+    end
 end)
 
 spawn(function()
     while wait() do
         pcall(function()
-            if _G.claimwek then
-                -- ส่งคำสั่งรับ Weekly3
-                local A_1 = "Claim"
-                local A_2 = "Weekly3"
-                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-                Event:FireServer(A_1, A_2)
+            if not _G.farmcomp then return end
+
+            local player = game.Players.LocalPlayer
+            local userId = player.UserId
+
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            if not userFolder then return end
+
+            local missionData = userFolder:FindFirstChild("Data")
+            if not missionData then return end
+
+            local weekly3 = missionData:FindFirstChild("QQQ_Weekly3")
+            if not weekly3 or weekly3.Value ~= true then return end
+
+            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
+            if Compass and Compass:FindFirstChild("Poser") then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local oldPos = hrp.Position
+
+                    player.Character.Humanoid:UnequipTools()
+                    Compass.Parent = player.Character
+                    hrp.CFrame = CFrame.new(Compass.Poser.Value)
+                    Compass:Activate()
+
+                    wait(0.2)
+
+                    hrp.CFrame = CFrame.new(109, 268, -37)
+
+                end
+            end
+        end)
+    end
+end)		
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.farmcomp then
+                local userId = game.Players.LocalPlayer.UserId
+                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
+                local Event = userFolder:WaitForChild("ChallengesRemote")
+
+                local weeklies = {"Weekly3"}
+
+                for _, weekly in ipairs(weeklies) do
+                    Event:FireServer("Claim", weekly)
+                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+                end
             end
         end)
     end
