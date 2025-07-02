@@ -3140,7 +3140,7 @@ end)
 		
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
 
-local waitAnimationTime = 0.5
+local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
@@ -3225,15 +3225,13 @@ if not _G.farmgems then return end
             local descendTween = TweenService:Create(  
                 playerHRP,  
                 TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),  
-                {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}  
+                {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}  
             )  
             descendTween:Play()  
             descendTween.Completed:Wait()  
 
             if meleeTool then  
-                meleeTool:Activate() 
-		task.wait(0.01)
-	        meleeTool:Activate()
+                meleeTool:Activate()
             end  
 
             task.wait(0.5)  
