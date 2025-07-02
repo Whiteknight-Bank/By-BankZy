@@ -3124,7 +3124,7 @@ end)
 		
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
 
-local waitAnimationTime = 0.3
+local waitAnimationTime = 0.5
 local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
@@ -3210,7 +3210,7 @@ local player = game.Players.LocalPlayer
             local descendTween = TweenService:Create(  
                 playerHRP,  
                 TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),  
-                {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1)}  
+                {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -1.5)}  
             )  
             descendTween:Play()  
             descendTween.Completed:Wait()  
