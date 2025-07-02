@@ -136,6 +136,8 @@ local SafeZoneUnderSea = Instance.new("Part",game.Workspace)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+local player = game.Players.LocalPlayer
+local character = workspace:FindFirstChild(player.Name)
 
 spawn(function() -- autofarm velocity
     while wait(0) do
@@ -3061,15 +3063,14 @@ task.spawn(function()
 end)
 
 spawn(function()
-    while task.wait(1) do
-	if _G.antimob then
+    while task.wait(0.2) do
         pcall(function()
-            local player = game.Players.LocalPlayer
-            local character = player.Character or player.CharacterAdded:Wait()
+            if not _G.antimob then return end
+            if not character then return end
+
             for _, part in ipairs(character:GetDescendants()) do
-                if part:IsA("BasePart") then
+                if part:IsA("BasePart") and part.CanTouch then
                     part.CanTouch = false
-		end
                 end
             end
         end)
@@ -3095,7 +3096,6 @@ spawn(function()
         pcall(function()
             if not _G.farmgems then return end
 
-            local player = game.Players.LocalPlayer
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
             if not userFolder then return end
@@ -3158,7 +3158,6 @@ while task.wait(0.1) do
 pcall(function()
 if not _G.farmgems then return end
 
-local player = game.Players.LocalPlayer  
         local playerCharacter = player.Character or player.CharacterAdded:Wait()  
         local userId = player.UserId  
         local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)  
@@ -3257,7 +3256,6 @@ spawn(function()
         pcall(function()
             if not _G.farmgems then return end
 
-            local player = game.Players.LocalPlayer
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
             if not userFolder then return end
@@ -3295,7 +3293,6 @@ spawn(function()
         pcall(function()
             if not _G.farmgems then return end
 
-            local player = game.Players.LocalPlayer
             local userId = player.UserId
 
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
