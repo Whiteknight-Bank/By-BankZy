@@ -3060,6 +3060,22 @@ task.spawn(function()
     end
 end)
 
+spawn(function()
+    while task.wait(1) do
+	if _G.antimob then
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local character = player.Character or player.CharacterAdded:Wait()
+            for _, part in ipairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanTouch = false
+		end
+                end
+            end
+        end)
+    end
+end)
+		
 page7:Toggle("Farm Gems", false, function(gms)
     _G.farmgems = gms
 end)
