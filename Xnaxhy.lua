@@ -3061,7 +3061,7 @@ task.spawn(function()
         end
     end
 end)
-
+--[[
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
@@ -3076,7 +3076,7 @@ spawn(function()
         end)
     end
 end)
-		
+]]		
 page7:Toggle("Farm Gems", false, function(gms)
     _G.farmgems = gms
 end)
