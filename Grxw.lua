@@ -97,14 +97,13 @@ local plr = game:GetService("Players").LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
 local sellPos = CFrame.new(90.08035, 0.98381, 3.02662, 6e-05, 1e-06, 1, -0.0349, 0.999, 1e-06, -0.999, -0.0349, 6e-05)
 
-local latestBuffer = nil
-
+local buffer = args[1] = nil
 local namecall
 namecall = hookmetamethod(game, "__namecall", function(self, ...)
     local method = getnamecallmethod()
     if self == game.ReplicatedStorage.ByteNetReliable and method == "FireServer" then
         local args = {...}
-        latestBuffer = args[1]
+        buffer
     end
     return namecall(self, ...)
 end)
@@ -129,20 +128,18 @@ end)
 spawn(function()
     while task.wait(0.2) do
         pcall(function()
-            if not _G.autofruit then return end
-
-            local targetModel = getNil("Carrot", "Model")
-            if not targetModel then return end
+            if _G.autofruit then
 
             local args = {
-                [1] = nil,
+                [1] = buffer,
                 [2] = {
-                    [1] = targetModel
+                    [1] = getNil("Carrot", "Model")
                 }
             }
 
             game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-        end)
+        end
+	end)
     end
 end)
 
