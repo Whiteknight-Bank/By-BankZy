@@ -105,21 +105,10 @@ namecall = hookmetamethod(game, "__namecall", function(self, ...)
     if self == game.ReplicatedStorage.ByteNetReliable and method == "FireServer" then
         local args = {...}
         latestBuffer = args[1]
-        print("✅ Hooked buffer:", latestBuffer)
     end
     return namecall(self, ...)
 end)
-		
-local Tab1 = Window:Taps("Auto")
-local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Fruit ┇")
-
-page1:Toggle("Auto Fruit", false, function(frut)
-    _G.autofruit = frut
-end)
-
--- ฟังก์ชันค้นหา Model ที่หายไปจาก workspace (เช่น Coconut)
 function getNil(name, class)
     for _, v in next, getnilinstances() do
         if v.ClassName == class and v.Name == name then
@@ -128,21 +117,13 @@ function getNil(name, class)
     end
 end
 
-_G.selectedFruit = "Strawberry" -- เปลี่ยนเป็น Cacao, Papaya ได้
+local Tab1 = Window:Taps("Auto")
+local page1 = Tab1:newpage()
 
-spawn(function()
-    while task.wait(0.3) do
-        pcall(function()
-            if not _G.autofruit then return end
-            if not latestBuffer then return end
+page1:Label("┇ Function Fruit ┇")
 
-            local fruit = getNil(_G.selectedFruit, "Model")
-            if fruit then
-                game.ReplicatedStorage.ByteNetReliable:FireServer(latestBuffer, {fruit})
-                print("🍍 Harvested:", fruit.Name)
-            end
-        end)
-    end
+page1:Toggle("Auto Fruit", false, function(frut)
+    _G.autofruit = frut
 end)
 
 page1:Toggle("Sell Inventory", false, function(state)
@@ -173,5 +154,9 @@ page1:Toggle("Sell Item In Hand", false, function(state)
     end
 end)
 
+local Tab3 = Window:Taps("Shop")
+local page3 = Tab3:newpage()
+
+page3:Label("┇ Shop ┇")
 
 end)
