@@ -126,6 +126,26 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
+spawn(function()
+    while task.wait(0.2) do
+        pcall(function()
+            if not _G.autofruit then return end
+
+            local targetModel = getNil("Carrot", "Model")
+            if not targetModel then return end
+
+            local args = {
+                [1] = nil,
+                [2] = {
+                    [1] = targetModel
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
+        end)
+    end
+end)
+
 page1:Toggle("Sell Inventory", false, function(state)
     if state then
         local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
