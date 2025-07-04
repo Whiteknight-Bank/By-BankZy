@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading " .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -97,16 +97,10 @@ local plr = game:GetService("Players").LocalPlayer
 local rs = game:GetService("ReplicatedStorage")
 local sellPos = CFrame.new(90.08035, 0.98381, 3.02662, 6e-05, 1e-06, 1, -0.0349, 0.999, 1e-06, -0.999, -0.0349, 6e-05)
 
-local buffer = args[1] = nil
-local namecall
-namecall = hookmetamethod(game, "__namecall", function(self, ...)
-    local method = getnamecallmethod()
-    if self == game.ReplicatedStorage.ByteNetReliable and method == "FireServer" then
-        local args = {...}
-        buffer
-    end
-    return namecall(self, ...)
-end)
+local count = 0
+local player = game.Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+local character = player.Character or player.CharacterAdded:Wait()
 
 function getNil(name, class)
     for _, v in next, getnilinstances() do
@@ -114,6 +108,17 @@ function getNil(name, class)
             return v
         end
     end
+end
+
+local function countItems(container)
+        for _, item in pairs(container:GetChildren()) do
+                if item:IsA("Tool") or item:IsA("Model") then
+                local name = item.Name
+                if string.match(name, "%[(%d+%.?%d*)%s*kg%]$") then
+                        count += 1
+                 end
+                end
+        end
 end
 
 local Tab1 = Window:Taps("Auto")
@@ -125,50 +130,37 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
-spawn(function()
-    while task.wait(0.2) do
-        pcall(function()
-            if _G.autofruit then
-
-            local args = {
-                [1] = buffer,
-                [2] = {
-                    [1] = getNil("Carrot", "Model")
-                }
-            }
-
-            game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
-        end
-	end)
-    end
-end)
-
 page1:Toggle("Sell Inventory", false, function(state)
-    if state then
-        local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            local orig = hrp.CFrame
-            hrp.CFrame = sellPos
-            task.wait(0.1)
-            rs.GameEvents.Sell_Inventory:FireServer()
-            task.wait(0.1)
-            hrp.CFrame = orig
-        end
-    end
-end)
+    _G.autoSell = state
 
-page1:Toggle("Sell Item In Hand", false, function(state)
-    if state then
-        local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            local orig = hrp.CFrame
-            hrp.CFrame = sellPos
-            task.wait(0.1)
-            rs.GameEvents.Sell_Item:FireServer()
-            task.wait(0.1)
-            hrp.CFrame = orig
+    task.spawn(function()
+        while task.wait() do
+            if not _G.autoSell then break end
+
+            for _, container in pairs({backpack, character}) do
+                for _, item in pairs(container:GetChildren()) do
+                    if item:IsA("Tool") or item:IsA("Model") then
+                        local name = item.Name
+                        if string.match(name, "%[(%d+%.?%d*)%s*kg%]$") then
+                            count += 1
+                        end
+                    end
+                end
+            end
+
+            if count >= 200 then
+                local hrp = character:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local orig = hrp.CFrame
+                    hrp.CFrame = sellPos
+                    task.wait(1)
+                    rs.GameEvents.Sell_Inventory:FireServer()
+                    task.wait(0.2)
+                    hrp.CFrame = orig
+                end
+            end
         end
-    end
+    end)
 end)
 
 local Tab3 = Window:Taps("Shop")
