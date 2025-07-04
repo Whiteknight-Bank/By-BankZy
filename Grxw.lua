@@ -134,9 +134,7 @@ page1:Toggle("Sell Inventory", false, function(state)
     _G.autoSell = state
 
     task.spawn(function()
-        while task.wait() do
-            if not _G.autoSell then break end
-
+        while _G.autoSell do
             for _, container in pairs({backpack, character}) do
                 for _, item in pairs(container:GetChildren()) do
                     if item:IsA("Tool") or item:IsA("Model") then
@@ -148,7 +146,7 @@ page1:Toggle("Sell Inventory", false, function(state)
                 end
             end
 
-            if count >= 200 then
+            if count == 200 then
                 local hrp = character:FindFirstChild("HumanoidRootPart")
                 if hrp then
                     local orig = hrp.CFrame
@@ -157,8 +155,9 @@ page1:Toggle("Sell Inventory", false, function(state)
                     rs.GameEvents.Sell_Inventory:FireServer()
                     task.wait(0.2)
                     hrp.CFrame = orig
-                end
+		end
             end
+            task.wait(1)
         end
     end)
 end)
