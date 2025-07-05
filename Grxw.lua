@@ -110,17 +110,6 @@ function getNil(name, class)
     end
 end
 
-local function countItems(container)
-        for _, item in pairs(container:GetChildren()) do
-                if item:IsA("Tool") or item:IsA("Model") then
-                local name = item.Name
-                if string.match(name, "%[(%d+%.?%d*)%s*kg%]$") then
-                        count += 1
-                 end
-                end
-        end
-end
-
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
@@ -134,7 +123,8 @@ page1:Toggle("Sell Inventory", false, function(state)
     _G.autoSell = state
 
     task.spawn(function()
-        while _G.autoSell do
+        while task.wait(1) do
+            if not _G.autoSell then break end
             for _, container in pairs({backpack, character}) do
                 for _, item in pairs(container:GetChildren()) do
                     if item:IsA("Tool") or item:IsA("Model") then
@@ -146,22 +136,23 @@ page1:Toggle("Sell Inventory", false, function(state)
                 end
             end
 
-            if count == 200 then
-                local hrp = character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    local orig = hrp.CFrame
-                    hrp.CFrame = sellPos
-                    task.wait(1)
-                    rs.GameEvents.Sell_Inventory:FireServer()
-                    task.wait(0.2)
-                    hrp.CFrame = orig
-		end
+            if count ~= 200 then
+                continue
             end
-            task.wait(1)
+
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local orig = hrp.CFrame
+                hrp.CFrame = sellPos
+                task.wait(1)
+                rs.GameEvents.Sell_Inventory:FireServer()
+                task.wait(0.2)
+                hrp.CFrame = orig
+            end
         end
     end)
 end)
-
+		
 local Tab3 = Window:Taps("Shop")
 local page3 = Tab3:newpage()
 
