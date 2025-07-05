@@ -110,6 +110,26 @@ function getNil(name, class)
     end
 end
 
+_G.selectedFruit = "Tomato"
+
+getgenv().latestBuffer = nil
+
+local oldNamecall
+oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+
+    if method == "FireServer" and self == game:GetService("ReplicatedStorage"):FindFirstChild("ByteNetReliable") then
+        local buffer = args[1]
+
+        getgenv().latestBuffer = buffer
+
+        return nil -- กันไม่ให้ยิง
+    end
+
+    return oldNamecall(self, ...)
+end)
+
 local Tab1 = Window:Taps("Auto")
 local page1 = Tab1:newpage()
 
@@ -119,6 +139,34 @@ page1:Toggle("Auto Fruit", false, function(frut)
     _G.autofruit = frut
 end)
 
+spawn(function()
+    while task.wait(0.2) do
+        pcall(function()
+            -- ถ้า autofruit ยังไม่เปิด ให้ข้ามไป
+            if not _G.autofruit then return end
+
+            local buffer = getgenv().latestBuffer
+            if not buffer then return end
+
+            local fruitModel = getNil(_G.selectedFruit, "Model")
+            if not fruitModel then
+                warn("❌ ไม่เจอ Model:", _G.selectedFruit)
+                return
+            end
+
+            local args = {
+                [1] = buffer,
+                [2] = {
+                    [1] = fruitModel
+                }
+            }
+
+            game:GetService("ReplicatedStorage"):WaitForChild("ByteNetReliable"):FireServer(unpack(args))
+
+            getgenv().latestBuffer = nil
+        end)
+    end
+end)
 page1:Toggle("Sell Inventory", false, function(state)
     _G.autoSell = state
 
