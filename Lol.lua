@@ -122,21 +122,6 @@ local SafeZoneOuterSpace = Instance.new("Part",game.Workspace)
     SafeZoneOuterSpace.Size = Vector3.new(200,3,200)
     SafeZoneOuterSpace.Position = Vector3.new((math.random(-1000000, 1000000)), (math.random(10000, 50000)), (math.random(-1000000, 1000000)))
     SafeZoneOuterSpace.Anchored = true
-
-game:GetService("CoreGui"):WaitForChild("RobloxPromptGui"):WaitForChild("promptOverlay").ChildAdded:Connect(function(child)
-    if child.Name == "ErrorPrompt" then
-        local TeleportService = game:GetService("TeleportService")
-        local Players = game:GetService("Players")
-
-        if queue_on_teleport then
-            queue_on_teleport('game:GetService("TeleportService"):Teleport('..game.PlaceId..')')
-        elseif syn and syn.queue_on_teleport then
-            syn.queue_on_teleport('game:GetService("TeleportService"):Teleport('..game.PlaceId..')')
-        end
-
-        TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
-    end
-end)
 		
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -144,49 +129,6 @@ local Camera = workspace.CurrentCamera
 
 local lp = game:GetService("Players").LocalPlayer
 local plr = game.Players.LocalPlayer
-
-spawn(function()
-    while true do
-        task.wait(3.5)
-        local showedNotif = false
-        pcall(function()
-            local char = workspace:FindFirstChild(lp.Name)
-            if char then
-                for _, scriptObj in pairs(char:GetChildren()) do
-                    if scriptObj:IsA("Script") then
-                        for _, child in pairs(scriptObj:GetChildren()) do
-                            if child:IsA("LocalScript") and child.Name == "" then
-                                scriptObj:Destroy()
-                                if not showedNotif then
-                                    create:Notifile("", "Protect teleport death", 3)
-                                    showedNotif = true
-                                end
-                                break
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-		
-local function canTeleport()
-    local char = workspace:FindFirstChild(plr.Name)
-    if char then
-        for _, scriptObj in pairs(char:GetChildren()) do
-            if scriptObj:IsA("Script") then
-                for _, child in pairs(scriptObj:GetChildren()) do
-                    if child:IsA("LocalScript") and child.Name == "" then
-                        create:Notifile("", "Please wait protect teleport death not working", 3)
-                        return false
-                    end
-                end
-            end
-        end
-    end
-    return true
-		end
 
 local function leftClick()
     local vim = game:GetService("VirtualUser")
@@ -197,32 +139,8 @@ local function leftClick()
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
-local lp = game:GetService("Players").LocalPlayer
-_G.safezonewarp = false
-
--- ฟังก์ชันเช็คว่ามี LocalScript ชื่อ "" อยู่ในตัวละครไหม (AntiTP)
-local function isAntiTpStillActive()
-    local char = workspace:FindFirstChild(lp.Name)
-    if char then
-        for _, scriptObj in pairs(char:GetChildren()) do
-            if scriptObj:IsA("Script") then
-                for _, child in pairs(scriptObj:GetChildren()) do
-                    if child:IsA("LocalScript") and child.Name == "" then
-                        return true
-                    end
-                end
-            end
-        end
-    end
-    return false
-end
-
 page1:Label("┇ Safe Zone ┇")
 page1:Button("Safe Zone Part", function()
-    if isAntiTpStillActive() then
-        create:Notifile("", "Anti Death Tp Not Enable", 3)
-        return
-    end
     local char = lp.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
@@ -236,7 +154,7 @@ end)
 spawn(function()
     while task.wait(2) do
         pcall(function()
-            if _G.safezonewarp and not isAntiTpStillActive() then
+            if _G.safezonewarp then
                 local char = lp.Character
                 if char and char:FindFirstChild("HumanoidRootPart") then
                     char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
@@ -773,63 +691,43 @@ local page3 = Tab3:newpage()
 
 page3:Label("┇ Island Teleport ┇")
 page3:Button("Thief Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
-    end
 end)
 
 page3:Button("Buggy Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
-    end
 end)
 
 page3:Button("Noob Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
-    end
 end)
 
 page3:Button("Marine Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
-    end
 end)
 
 page3:Button("Fishmen Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
-    end
 end)
 
 page3:Button("Luffy Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
-    end
 end)
 
 page3:Button("Coconut Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
-    end
 end)
 
 page3:Button("BlackLeg Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
-    end
 end)
 
 page3:Button("Ussop Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
-    end
 end)
 
 page3:Button("Fruit Seller Island" , function()
-    if canTeleport() then
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
-    end
 end)
 
 local Tab4 = Window:Taps("Shop")
@@ -1296,7 +1194,6 @@ spawn(function()
     while task.wait(1.5) do
         if _G.tpchest then
             pcall(function()
-                if not canTeleport() then return end
 
                 local character = plr.Character or plr.CharacterAdded:Wait()
                 if not character.PrimaryPart then return end
@@ -1361,12 +1258,7 @@ end)
 local Tab6 = Window:Taps("Credit")
 local page6 = Tab6:newpage()
 
-page6:Label("| Made by BankTH from Thai prople | ทำโดย BankTH จากคนไทย อิอิ|")
-page6:Button("Link Youtube", function()
-    local link = "https://www.youtube.com/@InwBank_zylv"
-
-    setclipboard(link)
-    create:Notifile("", "Copy link youtube now! Pls Subscribe :(", 3)
+page6:Label("| Made by ReaperX from Thai prople | ทำโดย ReaperX จากคนไทย อิอิ|")
 end)		
 	end)
 
