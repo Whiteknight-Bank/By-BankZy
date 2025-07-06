@@ -1259,6 +1259,35 @@ local Tab6 = Window:Taps("Credit")
 local page6 = Tab6:newpage()
 
 page6:Label("| Made by ReaperX from Thai prople | ทำโดย ReaperX จากคนไทย อิอิ|")
-end)		
+
+local oldNamecall
+local oldIndex
+local oldKick
+
+if hookfunction and LocalPlayer and LocalPlayer.Kick then
+    oldKick = hookfunction(LocalPlayer.Kick, function(...) 
+        return 
+    end)
+end
+
+if hookmetamethod then
+    oldIndex = hookmetamethod(game, "__index", function(self, key)
+        if self == LocalPlayer and tostring(key):lower() == "kick" then
+            return function() return end
+        end
+        return oldIndex(self, key)
+    end)
+
+    oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
+        local method = getnamecallmethod and getnamecallmethod():lower()
+        if self == LocalPlayer and method == "kick" then
+            return
+        end
+        return oldNamecall(self, ...)
+    end)
+end
+
+create:Notifile("", "Don't worry, Anti Cheat Now!", 3)
+
 	end)
 
