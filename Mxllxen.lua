@@ -98,7 +98,7 @@ local Cache = { DevConfig = {} };
 Cache.DevConfig["ListOfBuy"] = {"Katana", "SS2 Katana", "SS3 Katana"};
 Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
-Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
+Cache.DevConfig["ListOfGun"] = {"Cannon"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
 local enemyQuestStrg = {
@@ -1264,20 +1264,20 @@ page4:Dropdown("Select Weapon:", Cache.DevConfig["ListOfBuy"], function(buy)
     selectedBuy = buy
 end)
 
-page4:Button("Buy", function()
-if selectedBuy == "" then
+page4:Button("Buy Sword", function()
+if selectedBuy == "Katana" then
 local args = {
     [1] = "Katana"
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
-if else selectedBuy == "SS2 Katana" then
+elseif selectedBuy == "SS2 Katana" then
 local args = {
     [1] = "Dual Katana"
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
-if else selectedBuy == "SS3 Katana" then
+elseif selectedBuy == "SS3 Katana" then
 local args = {
     [1] = "Triple Katana"
 }
