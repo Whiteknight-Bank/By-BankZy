@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading " .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -95,7 +95,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBuy"] = {"Katana", "SS2", "SS3"};
+Cache.DevConfig["ListOfBuy"] = {"Katana", "SS2 Katana", "SS3 Katana"};
 Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
@@ -1265,7 +1265,26 @@ page4:Dropdown("Select Weapon:", Cache.DevConfig["ListOfBuy"], function(buy)
 end)
 
 page4:Button("Buy", function()
+if selectedBuy == "" then
+local args = {
+    [1] = "Katana"
+}
 
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+if else selectedBuy == "SS2 Katana" then
+local args = {
+    [1] = "Dual Katana"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+if else selectedBuy == "SS3 Katana" then
+local args = {
+    [1] = "Triple Katana"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("RemoteEvents"):WaitForChild("ShopPurchaseRemote"):FireServer(unpack(args))
+
+		end
 			end)
 local Tab5 = Window:Taps("Misc")
 local page5 = Tab5:newpage()
@@ -1847,7 +1866,7 @@ button.MouseButton1Click:Connect(function()
     end
 end)
 
-create:Notifile("", "Button For Mobile Ver.6", 3)
+create:Notifile("", "Button For Mobile", 3)
 			end)
 
 wait(1)local Players = game:GetService("Players")
