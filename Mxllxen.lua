@@ -95,7 +95,7 @@ create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX 
 
 local Cache = { DevConfig = {} };
 
-Cache.DevConfig["ListOfBuy"] = {"Katana" "SS2", "SS3"};
+Cache.DevConfig["ListOfBuy"] = {"Katana", "SS2", "SS3"};
 Cache.DevConfig["ListOfJoin"] = {"Pirate", "Marine", "Revolutionary"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
