@@ -3353,57 +3353,41 @@ page7:Label("┇ For Making a Lot Of Compasses ┇")
 page7:Toggle("Auto Farm Compass", false, function(clmw)
     _G.farmcomp = clmw
 end)
---[[
+
 spawn(function()
-    while wait(2.2) do
+    while wait(0.2) do
         pcall(function()
             if not _G.farmcomp then return end
 
-            local player = game.Players.LocalPlayer
             local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
             if not userFolder then return end
 
             local missionData = userFolder:FindFirstChild("Data")
             if not missionData then return end
 
-            local weekly3 = missionData:FindFirstChild("QQQ_weekly3")
-
+            local weekly3 = missionData:FindFirstChild("QQQ_Weekly3")
             local stats = userFolder:FindFirstChild("Stats")
-            if not stats then return end
-                    if weekly3 then
-                        if weekly3.Value == true then
-                                stats:FireServer()
-                        end
-                    end
-                    return
-		else
+            if not (weekly3 and stats) then return end
 
-            stats:FireServer()
-	end
-        end)
-    end
-end)
+            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
+            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+            if not (Compass and Compass:FindFirstChild("Poser") and hrp) then return end
 
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmcomp then
-                local userId = game.Players.LocalPlayer.UserId
-                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
-                local Event = userFolder:WaitForChild("ChallengesRemote")
+            player.Character.Humanoid:UnequipTools()
+            Compass.Parent = player.Character
+            hrp.CFrame = CFrame.new(Compass.Poser.Value)
+            Compass:Activate()
 
-                local weeklies = {"Weekly3"}
-
-                for _, weekly in ipairs(weeklies) do
-                    Event:FireServer("Claim", weekly)
-                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
-                end
+            if weekly3.Value then
+                wait(0.5)
+                stats:FireServer()
+								
             end
         end)
     end
 end)
-]]
+		
 page7:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
@@ -4018,81 +4002,137 @@ page8:Toggle("Anti Stun", false, function(pol)
     _G.anti = pol
 end)
 
-local Players = game:GetService("Players")
-local Workspace = game:GetService("Workspace")
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            local success, err = pcall(function()
+                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
+
+                if ResourceHolder then
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
+                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
+
+                        if playerResourceFolder then
+                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
+
+                            if magmaPool then
+                                for _, item in pairs(magmaPool:GetDescendants()) do
+                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
+                                        item:Destroy()
+                                    end
+				end
+				end
+                        end
+		end
+                end
+            end)
+        end
+    end
+end)
 
 task.spawn(function()
-    while task.wait(0.05) do
-        if not _G.anti then continue end
+	while task.wait(0.01) do
+		if _G.anti then
+			pcall(function()
+				for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
+				local powers = model:FindFirstChild("Powers")
+					if powers then
+						local love = powers:FindFirstChild("Love")
+						if love then
+							local projectiles = love:FindFirstChild("Projectiles")
+							if projectiles then
 
-        local success, err = pcall(function()
-            local localPlayer = Players.LocalPlayer
-            local localChar = Workspace:FindFirstChild(localPlayer.Name)
-            if localChar then
-                local hum = localChar:FindFirstChildOfClass("Humanoid")
-                if hum and hum.PlatformStand then
-                    hum.PlatformStand = false
-                end
-            end
+								-- 💘 LoveHeartTrimFill > TouchInterest
+								local heartTrim = projectiles:FindFirstChild("LoveHeartTrim")
+								if heartTrim then
+									local fill = heartTrim:FindFirstChild("LoveHeartTrimFill")
+									if fill then
+										local touch = fill:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: LoveHeartTrimFill ของ", model.Name)
+										end
+									end
+								end
+								end
+								-- 🏹 LoveArrow > Tip > TouchInterest
+								local arrow = projectiles:FindFirstChild("LoveArrow")
+								if arrow then
+									local tip = arrow:FindFirstChild("Tip")
+									if tip then
+										local touch = tip:FindFirstChild("TouchInterest")
+										if touch then
+											touch:Destroy()
+											print("[ลบแล้ว] TouchInterest: Tip ของ", model.Name)
+										end
+									end
+								end
 
-            local ResourceHolder = Workspace:FindFirstChild("ResourceHolder")
-            if ResourceHolder then
-                for _, player in pairs(Players:GetPlayers()) do
-                    local resourceFolder = ResourceHolder:FindFirstChild("Resources_" .. player.UserId)
-                    if resourceFolder then
-                        local magma = resourceFolder:FindFirstChild("MagmaPool")
-                        if magma then
-                            for _, item in pairs(magma:GetDescendants()) do
-                                if item:IsA("Instance") and item.Name == "TouchInterest" then
-                                    item:Destroy()
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local leftArm = obj:FindFirstChild("Left Arm")
+                        if leftArm then
+                            local weldablePart = leftArm:FindFirstChild("WeldablePart")
+                            if weldablePart then
+                                local bodyVelocity = weldablePart:FindFirstChildOfClass("BodyVelocity")
+                                if bodyVelocity then
+                                    bodyVelocity:Destroy()
                                 end
                             end
                         end
                     end
                 end
-            end
+            end)
+        end
+    end
+end)
 
-            for _, obj in pairs(Workspace:GetChildren()) do
-                local isPlayer = Players:FindFirstChild(obj.Name)
-                local model = obj
-
-                if model:IsA("Model") then
-                    local powers = model:FindFirstChild("Powers")
-
-                    if powers then
-                        -- Love
-                        local love = powers:FindFirstChild("Love")
-                        if love then
-                            local proj = love:FindFirstChild("Projectiles")
-                            if proj then
-                                for _, path in pairs({
-                                    {"LoveHeartTrim", "LoveHeartTrimFill"},
-                                    {"LoveArrow", "Tip"}
-                                }) do
-                                    local p1 = proj:FindFirstChild(path[1])
-                                    if p1 then
-                                        local p2 = p1:FindFirstChild(path[2])
-                                        if p2 then
-                                            local touch = p2:FindFirstChild("TouchInterest")
-                                            if touch then
-                                                touch:Destroy()
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, playerFolder in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerFolder.Name) then
+                        local punchFolder = playerFolder:FindFirstChild("Powers")
+                        if punchFolder then
+                            local chillyFolder = punchFolder:FindFirstChild("Chilly")
+                            if chillyFolder then
+                                local punch = chillyFolder:FindFirstChild("Punch")
+                                if punch then
+                                    local part = punch:FindFirstChild("Part")
+                                    if part then
+                                        for _, desc in pairs(part:GetDescendants()) do
+                                            if desc.Name == "TouchInterest" then
+                                                desc:Destroy()
                                             end
                                         end
                                     end
-                                end
-                            end
-                        end
 
-                        -- Chilly
-                        local chilly = powers:FindFirstChild("Chilly")
-                        if chilly then
-                            local punch = chilly:FindFirstChild("Punch")
-                            if punch then
-                                local parts = {punch:FindFirstChild("Part"), punch:FindFirstChild("Rock1")}
-                                for _, part in pairs(parts) do
-                                    if part then
-                                        for _, desc in pairs(part:GetDescendants()) do
-                                            if desc.Name == "TouchInterest" or desc:IsA("BodyVelocity") then
+                                    local rock1 = punch:FindFirstChild("Rock1")
+                                    if rock1 then
+                                        for _, child in pairs(rock1:GetChildren()) do
+                                            if child:IsA("BodyVelocity") then
+                                                child:Destroy()
+                                            end
+                                        end
+
+                                        for _, desc in pairs(rock1:GetDescendants()) do
+                                            if desc.Name == "TouchInterest" then
                                                 desc:Destroy()
                                             end
                                         end
@@ -4100,64 +4140,149 @@ task.spawn(function()
                                 end
                             end
                         end
+                    end
+                end
+            end)
+        end
+    end
+end)
 
-                        -- String
-                        local string = powers:FindFirstChild("String")
-                        if string then
-                            local strings = string:FindFirstChild("Strings")
-                            if strings then
-                                local weld = strings:FindFirstChild("WeldablePart")
-                                if weld then
-                                    for _, att in ipairs(weld:GetChildren()) do
-                                        if att.Name == "Attachment" then
-                                            att:Destroy()
+task.spawn(function()
+	while task.wait(0.01) do
+		if _G.anti then
+			for _, model in ipairs(workspace:GetChildren()) do
+				if model:IsA("Model") and model:FindFirstChild("Powers") then
+					local powers = model.Powers
+					local smelt = powers:FindFirstChild("String")
+					if smelt then
+						local resources = smelt:FindFirstChild("Strings")
+						if resources then
+							local smeltSpew = resources:FindFirstChild("WeldablePart")
+							if smeltSpew then
+								for _, child in ipairs(smeltSpew:GetChildren()) do
+									if child.Name == "Attachment" then
+										child:Destroy()
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local powers = obj:FindFirstChild("Powers")
+                        if powers then
+                            local dark = powers:FindFirstChild("Dark")
+                            if dark then
+                                local projectiles = dark:FindFirstChild("Projectiles")
+                                if projectiles then
+                                    local darkStarBit = projectiles:FindFirstChild("DarkStarBit")
+                                    if darkStarBit then
+                                        local bodyVelocity = darkStarBit:FindFirstChildOfClass("BodyVelocity")
+                                        if bodyVelocity then
+                                            bodyVelocity:Destroy()
+                                        end
+                                        local attachment = darkStarBit:FindFirstChildOfClass("Attachment")
+                                        if attachment then
+                                            attachment:Destroy()
                                         end
                                     end
                                 end
                             end
                         end
+                    end
+                end
+            end)
+        end
+    end
+end)
 
-                        -- Dark Projectiles
-                        local dark = powers:FindFirstChild("Dark")
-                        if dark then
-                            local proj = dark:FindFirstChild("Projectiles")
-                            if proj then
-                                local dsb = proj:FindFirstChild("DarkStarBit")
-                                if dsb then
-                                    for _, c in pairs(dsb:GetChildren()) do
-                                        if c:IsA("BodyVelocity") or c:IsA("Attachment") then
-                                            c:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-
-                            local darkParts = dark:FindFirstChild("DarkParts")
-                            if darkParts then
-                                for _, part in pairs(darkParts:GetChildren()) do
-                                    local wp = part:FindFirstChild("WeldablePart")
-                                    if wp then
-                                        local att = wp:FindFirstChildOfClass("Attachment")
-                                        if att then
-                                            att:Destroy()
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local powers = obj:FindFirstChild("Powers")
+                        if powers then
+                            local dark = powers:FindFirstChild("Dark")
+                            if dark then
+                                local darkParts = dark:FindFirstChild("DarkParts") -- หา DarkParts ตรงนี้เลย
+                                if darkParts then
+                                    for _, part in pairs(darkParts:GetChildren()) do
+                                        local weldablePart = part:FindFirstChild("WeldablePart")
+                                        if weldablePart then
+                                            local attachment = weldablePart:FindFirstChildOfClass("Attachment")
+                                            if attachment then
+                                                attachment:Destroy()
+                                            end
                                         end
                                     end
                                 end
                             end
                         end
+                    end
+                end
+            end)
+        end
+    end
+end)
 
-                        -- Hollow
-                        local hollow = powers:FindFirstChild("Hollow")
-                        if hollow then
-                            for _, bodyType in pairs({
-                                {"Hollows", "Hollow"},
-                                {"HollowBody", "GhostBody"}
-                            }) do
-                                local folder = hollow:FindFirstChild(bodyType[1])
-                                if folder then
-                                    for _, model in pairs(folder:GetChildren()) do
-                                        if model:IsA("Model") and model.Name == bodyType[2] then
-                                            local hrp = model:FindFirstChild("HumanoidRootPart")
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local returnBall1 = obj:FindFirstChild("ReturnBall1")
+                        if returnBall1 then
+                            for _, child in pairs(returnBall1:GetDescendants()) do
+                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                            end
+			end
+                        local returnBall2 = obj:FindFirstChild("ReturnBall2")
+                        if returnBall2 then
+                            for _, child in pairs(returnBall2:GetDescendants()) do
+                                if child:IsA("Instance") and child.Name == "TouchInterest" then
+                                       child:Destroy()
+                                    end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, playerChar in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerChar.Name) then
+                        local powers = playerChar:FindFirstChild("Powers")
+                        if powers then
+                            local hollow = powers:FindFirstChild("Hollow")
+                            if hollow then
+
+                                -- Hollows → Hollow → HRP → TouchInterest
+                                local hollows = hollow:FindFirstChild("Hollows")
+                                if hollows then
+                                    for _, modelHollow in pairs(hollows:GetChildren()) do
+                                        if modelHollow:IsA("Model") and modelHollow.Name == "Hollow" then
+                                            local hrp = modelHollow:FindFirstChild("HumanoidRootPart")
                                             if hrp then
                                                 local ti = hrp:FindFirstChildOfClass("TouchTransmitter") or hrp:FindFirstChild("TouchInterest")
                                                 if ti then
@@ -4167,38 +4292,46 @@ task.spawn(function()
                                         end
                                     end
                                 end
-                            end
-                        end
-                    end
 
-                    -- Left Arm velocity
-                    if isPlayer then
-                        local left = model:FindFirstChild("Left Arm")
-                        if left then
-                            local wp = left:FindFirstChild("WeldablePart")
-                            if wp then
-                                local bv = wp:FindFirstChildOfClass("BodyVelocity")
-                                if bv then
-                                    bv:Destroy()
+                                -- HollowsMini → HollowMini → HRP → TouchInterest
+                                local hollowsBody = hollow:FindFirstChild("HollowBody")
+                                if hollowsBody then
+                                    for _, modelMini in pairs(hollowsBody:GetChildren()) do
+                                        if modelMini:IsA("Model") and modelMini.Name == "GhostBody" then
+                                            local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
+                                            if hrpMini then
+                                                local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
+                                                if tiMini then
+                                                    tiMini:Destroy()
+                                                end
+                                            end
+                                        end
+                                    end
                                 end
-                            end
-                        end
-                    end
 
-                    -- ReturnBall
-                    for _, ball in pairs({"ReturnBall1", "ReturnBall2"}) do
-                        local returnBall = model:FindFirstChild(ball)
-                        if returnBall then
-                            for _, c in pairs(returnBall:GetDescendants()) do
-                                if c:IsA("Instance") and c.Name == "TouchInterest" then
-                                    c:Destroy()
-                                end
                             end
                         end
                     end
                 end
-            end
-        end)
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                local plr = game:GetService("Players").LocalPlayer
+                local char = workspace:FindFirstChild(plr.Name)
+                if not char then return end
+
+                local hum = char:FindFirstChildOfClass("Humanoid")
+                if hum and hum.PlatformStand then
+                    hum.PlatformStand = false
+                end
+            end)
+        end
     end
 end)
 
