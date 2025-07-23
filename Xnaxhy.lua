@@ -3387,7 +3387,26 @@ spawn(function()
         end)
     end
 end)
-		
+
+spawn(function()
+    while task.wait() do
+        pcall(function()
+            if _G.farmcomp then
+                local userId = game.Players.LocalPlayer.UserId
+                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
+                local Event = userFolder:WaitForChild("ChallengesRemote")
+
+                local dailies = {"Weekly3"}
+
+                for _, daily in ipairs(dailies) do
+                    Event:FireServer("Claim", daily)
+                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+                end
+            end
+        end)
+    end
+end)
+
 page7:Label("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
