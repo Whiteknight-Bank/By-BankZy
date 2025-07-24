@@ -101,6 +101,82 @@ Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfGun"] = {"Cannon"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
+local textColor = Color3.fromRGB(255, 255, 255)
+_G.espEnabled = false
+local allEsp = {}
+
+local camera = workspace.CurrentCamera
+local players = game:GetService("Players")
+local lp = players.LocalPlayer
+
+function createESP(player)
+    if player == lp then return end
+    local head = player.Character and player.Character:FindFirstChild("Head")
+    if not head then return end
+
+    if head:FindFirstChild("ESP") then
+        head.ESP:Destroy()
+    end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "ESP"
+    billboard.Adornee = head
+    billboard.AlwaysOnTop = true
+    billboard.Size = UDim2.new(0, 200, 0, 50)
+    billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+
+    local nameTag = Instance.new("TextLabel", billboard)
+    nameTag.Text = player.Name
+    nameTag.BackgroundTransparency = 1
+    nameTag.TextColor3 = textColor
+    nameTag.TextStrokeTransparency = 0.5
+    nameTag.Font = Enum.Font.SourceSansBold
+    nameTag.Size = UDim2.new(1, 0, 1, 0)
+    nameTag.TextScaled = true
+
+    billboard.Parent = head
+    table.insert(allEsp, billboard)
+
+    task.spawn(function()
+        while billboard.Parent and player.Character and player.Character:FindFirstChild("Head") do
+            local distance = (camera.CFrame.Position - head.Position).Magnitude
+            local scale = math.clamp(1 / (distance / 30), 0.6, 2.5)
+            nameTag.TextSize = 20 * scale
+            billboard.Enabled = _G.espEnabled
+            task.wait(0.1)
+        end
+    end)
+end
+
+function refreshAllESP()
+    for _, esp in pairs(allEsp) do
+        if esp and esp:IsA("BillboardGui") then
+            esp.Enabled = _G.espEnabled
+        end
+    end
+end
+
+function setupPlayer(player)
+    player.CharacterAdded:Connect(function()
+        repeat task.wait() until player.Character:FindFirstChild("Head")
+        task.wait(0.2)
+        createESP(player)
+    end)
+    if player.Character then
+        createESP(player)
+    end
+end
+
+for _, p in pairs(players:GetPlayers()) do
+    setupPlayer(p)
+end
+players.PlayerAdded:Connect(setupPlayer)
+
+function ToggleESP()
+    _G.espEnabled = not _G.espEnabled
+    refreshAllESP()
+		end
+
 local enemyQuestStrg = {
     ["Mountain Bandit"] = {
         questFolder = "SpawnIslandQuests",
@@ -1105,6 +1181,10 @@ end)
 
 page2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
+end)
+
+page2:Button("ESP Player", function()
+ToggleESP()
 end)
 
 local viewing = nil
