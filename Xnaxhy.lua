@@ -3153,14 +3153,18 @@ local function IsMobAllowed(mobName)
 end
 
 spawn(function()
-    local alreadyVisited = {}
+    local currentIndex = 1
+
     while task.wait(0.1) do
         pcall(function()
             if not _G.farmgems then return end
 
             local playerCharacter = player.Character or player.CharacterAdded:Wait()
+            local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
+            if not playerHRP then return end
+
             local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
             if not userFolder then return end
 
             local missionData = userFolder:FindFirstChild("Data")
@@ -3169,23 +3173,6 @@ spawn(function()
             local missionObjective = missionData:FindFirstChild("MissionObjective")
             local missionRequirement = missionData:FindFirstChild("MissionRequirement")
 
-            local currentTool = playerCharacter:FindFirstChildOfClass("Tool")
-            if not currentTool then
-                for _, t in pairs(player.Backpack:GetChildren()) do
-                    if t:IsA("Tool") and t.Name == "Melee" then
-                        t.Parent = playerCharacter
-                        wait(0.1)
-                        break
-                    end
-                end
-            end
-
-            local meleeTool = playerCharacter:FindFirstChild("Melee")
-            if not meleeTool then return end
-
-            local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
-            if not playerHRP then return end
-
             if missionObjective and missionRequirement then
                 if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
                     playerHRP.CFrame = CFrame.new(safePosition)
@@ -3193,31 +3180,43 @@ spawn(function()
                 end
             end
 
-for _, mob in pairs(workspace.Enemies:GetChildren()) do
-    if mob:FindFirstChild("HumanoidRootPart") and
-       mob:FindFirstChild("Humanoid") and
-       IsMobAllowed(mob.Name) and
-       not alreadyVisited[mob] then
-        targetMob = mob
-        break
-    end
-end
+            -- ใส่โค้ดหา mob ตาม AllowedMobs เหมือนเดิม
+            local meleeTool = playerCharacter:FindFirstChild("Melee")
+            if not meleeTool then
+                for _, tool in pairs(player.Backpack:GetChildren()) do
+                    if tool:IsA("Tool") and tool.Name == "Melee" then
+                        tool.Parent = playerCharacter
+                        meleeTool = tool
+                        task.wait(0.1)
+                        break
+                    end
+                end
+            end
+
+            local mobNameToFind = AllowedMobs[currentIndex]
+            local targetMob = nil
+
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                if mob:FindFirstChild("Humanoid") and
+                   mob:FindFirstChild("HumanoidRootPart") and
+                   string.find(mob.Name, mobNameToFind) and
+                   mob.Humanoid.Health > 0 then
+                    targetMob = mob
+                    break
+                end
+            end
 
             if targetMob then
                 local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
-                if not mobRoot then return end
-
                 playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
                 task.wait(0.1)
 
-                -- ฆ่าภายในเวลา 3 วิ ถ้าไม่ตายให้ข้าม
                 local startTime = tick()
                 repeat
                     targetMob.Humanoid.Health = 0
                     task.wait(0.05)
-                until targetMob.Humanoid.Health <= 0 or (tick() - startTime > 1)
+                until targetMob.Humanoid.Health <= 0 or (tick() - startTime) > 3
 
-                -- ลงมาโจมตี
                 local descendTween = TweenService:Create(
                     playerHRP,
                     TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
@@ -3231,12 +3230,17 @@ end
                 end
 
                 task.wait(0.5)
-                alreadyVisited[targetMob] = true  -- ✅ ข้ามแน่ไม่ย้อนกลับ
-
+                currentIndex = currentIndex + 1
+                if currentIndex > #AllowedMobs then
+                    currentIndex = 1
+                end
             else
-                alreadyVisited = {}  -- ❗ไม่มีมอนเหลือ → รีเซ็ต
-                playerHRP.CFrame = CFrame.new(safePosition)
+                currentIndex = currentIndex + 1
+                if currentIndex > #AllowedMobs then
+                    currentIndex = 1
+                end
             end
+
         end)
     end
 end)
