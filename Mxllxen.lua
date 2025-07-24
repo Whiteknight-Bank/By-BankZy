@@ -140,8 +140,8 @@ function createESP(player)
     task.spawn(function()
         while billboard.Parent and player.Character and player.Character:FindFirstChild("Head") do
             local distance = (camera.CFrame.Position - head.Position).Magnitude
-            local scale = math.clamp(1 / (distance / 30), 0.6, 2.5)
-            nameTag.TextSize = 20 * scale
+            local scale = math.clamp(1 / (distance / 30), 0.5, 1.2)
+            nameTag.TextSize = 12 * scale
             billboard.Enabled = _G.espEnabled
             task.wait(0.1)
         end
