@@ -3138,6 +3138,7 @@ spawn(function()
     end
 end)
 
+--[[
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
 local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
@@ -3240,8 +3241,8 @@ spawn(function()
 		end)
 	end
 end)
-		
---[[
+]]
+
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
 
 local waitAnimationTime = 0.3
@@ -3305,7 +3306,6 @@ if not _G.farmgems then return end
         for _, mob in pairs(workspace.Enemies:GetChildren()) do  
             if mob:FindFirstChild("HumanoidRootPart") and  
                mob:FindFirstChild("Humanoid") and  
-               mob.Humanoid.Health > 0 and  
                IsMobAllowed(mob.Name) and  
                not alreadyVisited[mob] then  
                 targetMob = mob  
@@ -3340,10 +3340,6 @@ if not _G.farmgems then return end
 
             task.wait(0.5)  
             alreadyVisited[targetMob] = true  
-
-            while targetMob.Humanoid.Health > 0 do  
-                task.wait(0.1)  
-            end  
         else  
             alreadyVisited = {}  
             playerHRP.CFrame = CFrame.new(safePosition)  
@@ -3351,7 +3347,6 @@ if not _G.farmgems then return end
     end)  
 end
 end)
-]]
 
 spawn(function()
     local claimed = false
