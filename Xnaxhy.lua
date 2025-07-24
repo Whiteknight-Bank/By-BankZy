@@ -3180,7 +3180,6 @@ spawn(function()
                 end
             end
 
-            -- ใส่โค้ดหา mob ตาม AllowedMobs เหมือนเดิม
             local meleeTool = playerCharacter:FindFirstChild("Melee")
             if not meleeTool then
                 for _, tool in pairs(player.Backpack:GetChildren()) do
@@ -3215,7 +3214,7 @@ spawn(function()
                 repeat
                     targetMob.Humanoid.Health = 0
                     task.wait(0.05)
-                until targetMob.Humanoid.Health <= 0 or (tick() - startTime) > 3
+                until targetMob.Humanoid.Health <= 0 or (tick() - startTime) > 1
 
                 local descendTween = TweenService:Create(
                     playerHRP,
