@@ -3193,17 +3193,15 @@ spawn(function()
                 end
             end
 
-            local targetMob = nil
-            for _, mob in pairs(workspace.Enemies:GetChildren()) do
-                if mob:FindFirstChild("HumanoidRootPart") and
-                   mob:FindFirstChild("Humanoid") and
-                   mob.Humanoid.Health > 0 and
-                   IsMobAllowed(mob.Name) and
-                   not alreadyVisited[mob] then
-                    targetMob = mob
-                    break
-                end
-            end
+for _, mob in pairs(workspace.Enemies:GetChildren()) do
+    if mob:FindFirstChild("HumanoidRootPart") and
+       mob:FindFirstChild("Humanoid") and
+       IsMobAllowed(mob.Name) and
+       not alreadyVisited[mob] then
+        targetMob = mob
+        break
+    end
+end
 
             if targetMob then
                 local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
