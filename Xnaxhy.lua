@@ -3154,7 +3154,6 @@ end
 
 spawn(function()
     local currentIndex = 1
-
     while task.wait(0.1) do
         pcall(function()
             if not _G.farmgems then return end
@@ -3192,29 +3191,42 @@ spawn(function()
                 end
             end
 
-            local mobNameToFind = AllowedMobs[currentIndex]
-            local targetMob = nil
+            local searchedAll = false
+            local foundMob = nil
 
-            for _, mob in pairs(workspace.Enemies:GetChildren()) do
-                if mob:FindFirstChild("Humanoid") and
-                   mob:FindFirstChild("HumanoidRootPart") and
-                   string.find(mob.Name, mobNameToFind) and
-                   mob.Humanoid.Health > 0 then
-                    targetMob = mob
+            for i = 1, #AllowedMobs do
+                local mobNameToFind = AllowedMobs[currentIndex]
+                for _, mob in pairs(workspace.Enemies:GetChildren()) do
+                    if mob:FindFirstChild("Humanoid") and
+                        mob:FindFirstChild("HumanoidRootPart") and
+                        string.find(mob.Name, mobNameToFind) and
+                        mob.Humanoid.Health > 0 then
+                        foundMob = mob
+                        break
+                    end
+                end
+
+                if foundMob then
                     break
+                else
+                    currentIndex = currentIndex + 1
+                    if currentIndex > #AllowedMobs then
+                        currentIndex = 1
+                        searchedAll = true
+                    end
                 end
             end
 
-            if targetMob then
-                local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")
+            if foundMob then
+                local mobRoot = foundMob:FindFirstChild("HumanoidRootPart")
                 playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
                 task.wait(0.1)
 
                 local startTime = tick()
                 repeat
-                    targetMob.Humanoid.Health = 0
+                    foundMob.Humanoid.Health = 0
                     task.wait(0.05)
-                until targetMob.Humanoid.Health <= 0 or (tick() - startTime) > 1
+                until foundMob.Humanoid.Health <= 0 or (tick() - startTime) > 1
 
                 local descendTween = TweenService:Create(
                     playerHRP,
@@ -3233,13 +3245,7 @@ spawn(function()
                 if currentIndex > #AllowedMobs then
                     currentIndex = 1
                 end
-            else
-                currentIndex = currentIndex + 1
-                if currentIndex > #AllowedMobs then
-                    currentIndex = 1
-                end
             end
-
         end)
     end
 end)
