@@ -3137,7 +3137,112 @@ spawn(function()
         end)
     end
 end)
-		
+
+local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
+
+local waitAnimationTime = 0.3
+local safePosition = Vector3.new(109, 268, -37)
+
+local function IsMobAllowed(mobName)
+    for _, allowedMob in ipairs(AllowedMobs) do
+        if string.find(mobName, allowedMob) then
+            return true
+        end
+    end
+    return false
+end
+
+spawn(function()
+    local alreadyVisited = {}
+    while task.wait(0.1) do
+        pcall(function()
+            if not _G.farmgems then return end
+
+            local playerCharacter = player.Character or player.CharacterAdded:Wait()  
+            local userId = player.UserId  
+            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)  
+            if not userFolder then return end  
+
+            local missionData = userFolder:FindFirstChild("Data")  
+            if not missionData then return end  
+
+            local missionObjective = missionData:FindFirstChild("MissionObjective")  
+            local missionRequirement = missionData:FindFirstChild("MissionRequirement")  
+
+            local currentTool = playerCharacter:FindFirstChildOfClass("Tool")  
+            if not currentTool then  
+                for _, t in pairs(player.Backpack:GetChildren()) do  
+                    if t:IsA("Tool") and t.Name == "Melee" then  
+                        t.Parent = playerCharacter  
+                        wait(0.1)  
+                        break  
+                    end  
+                end  
+            end  
+
+            local meleeTool = playerCharacter:FindFirstChild("Melee")  
+            if not meleeTool then return end  
+
+            local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")  
+            if not playerHRP then return end  
+
+            if missionObjective and missionRequirement then
+                if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
+                    playerHRP.CFrame = CFrame.new(safePosition)
+                    return
+                end
+            end
+
+            local targetMob = nil  
+            for _, mob in pairs(workspace.Enemies:GetChildren()) do  
+                if mob:FindFirstChild("HumanoidRootPart") and  
+                   mob:FindFirstChild("Humanoid") and  
+                   mob.Humanoid.Health > 0 and  
+                   IsMobAllowed(mob.Name) and  
+                   not alreadyVisited[mob] then  
+                    targetMob = mob  
+                    break  
+                end  
+            end  
+
+            if targetMob then  
+                local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")  
+                if not mobRoot then return end  
+
+                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)  
+                task.wait(0.1)  
+
+                -- วนฆ่า mob ภายในเวลาที่กำหนด
+                local startTime = tick()
+                repeat  
+                    targetMob.Humanoid.Health = 0  
+                    task.wait(0.05)  
+                until targetMob.Humanoid.Health <= 0 or (tick() - startTime) > 1
+
+                local descendTween = TweenService:Create(  
+                    playerHRP,  
+                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),  
+                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}  
+                )  
+                descendTween:Play()  
+                descendTween.Completed:Wait()  
+
+                if meleeTool then  
+                    meleeTool:Activate()
+                end  
+
+                task.wait(0.5)  
+                alreadyVisited[targetMob] = true
+
+            else  
+                alreadyVisited = {}  
+                playerHRP.CFrame = CFrame.new(safePosition)  
+            end  
+        end)
+    end
+end)
+
+--[[
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
 
 local waitAnimationTime = 0.3
@@ -3247,6 +3352,7 @@ if not _G.farmgems then return end
     end)  
 end
 end)
+]]
 
 spawn(function()
     local claimed = false
