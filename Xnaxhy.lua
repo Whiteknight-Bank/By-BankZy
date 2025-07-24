@@ -3139,82 +3139,106 @@ spawn(function()
 end)
 
 local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
-
 local waitAnimationTime = 0.3
 local safePosition = Vector3.new(109, 268, -37)
 
 local function IsMobAllowed(mobName)
-    for _, allowedMob in ipairs(AllowedMobs) do
-        if string.find(mobName, allowedMob) then
-            return true
-        end
-    end
-    return false
+	for _, allowedMob in ipairs(AllowedMobs) do
+		if string.find(mobName, allowedMob) then
+			return true
+		end
+	end
+	return false
 end
 
 spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            if not _G.farmgems then return end
+	local currentIndex = 1
+	while task.wait(0.1) do
+		pcall(function()
+			if not _G.farmgems then return end
 
-            local character = player.Character or player.CharacterAdded:Wait()
-            local hrp = character:FindFirstChild("HumanoidRootPart")
-            if not hrp then return end
+			local char = player.Character or player.CharacterAdded:Wait()
+			local hrp = char:FindFirstChild("HumanoidRootPart")
+			if not hrp then return end
 
-            local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
-            if not userFolder then return end
+			local userId = player.UserId
+			local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
+			if not userFolder then return end
 
-            local data = userFolder:FindFirstChild("Data")
-            if not data then return end
+			local data = userFolder:FindFirstChild("Data")
+			if not data then return end
 
-            local missionObjective = data:FindFirstChild("MissionObjective")
-            local missionRequirement = data:FindFirstChild("MissionRequirement")
-            if not (missionObjective and missionRequirement) then return end
+			local missionObjective = data:FindFirstChild("MissionObjective")
+			local missionRequirement = data:FindFirstChild("MissionRequirement")
 
-            -- หยุดแค่ตอนไม่ได้เควสเท่านั้น
-            if not (missionObjective.Value == "Quests" and missionRequirement.Value == 1) then
-                hrp.CFrame = CFrame.new(safePosition)
-                return
-            end
+			-- ✅ หยุดเฉพาะตอนเควสไม่ใช่ 1
+			if missionObjective and missionRequirement then
+				if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
+					hrp.CFrame = CFrame.new(safePosition)
+					return
+				end
+			end
 
-            local meleeTool = character:FindFirstChild("Melee")
-            if not meleeTool then
-                for _, tool in pairs(player.Backpack:GetChildren()) do
-                    if tool:IsA("Tool") and tool.Name == "Melee" then
-                        tool.Parent = character
-                        meleeTool = tool
-                        break
-                    end
-                end
-            end
+			-- ✅ หาอาวุธ
+			local meleeTool = char:FindFirstChild("Melee")
+			if not meleeTool then
+				for _, tool in pairs(player.Backpack:GetChildren()) do
+					if tool:IsA("Tool") and tool.Name == "Melee" then
+						tool.Parent = char
+						meleeTool = tool
+						break
+					end
+				end
+			end
 
-            local foundTarget = false
+			local targetMob = nil
+			local mobNameToFind = AllowedMobs[currentIndex]
 
-for _, mobName in ipairs(AllowedMobs) do
-    for _, mob in ipairs(workspace.Enemies:GetChildren()) do
-        if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, mobName) then
-            foundTarget = true
-            local mobRoot = mob.HumanoidRootPart
-            hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-            task.wait(0.1)
+			for _, mob in pairs(workspace.Enemies:GetChildren()) do
+				if mob:FindFirstChild("Humanoid") and
+				   mob:FindFirstChild("HumanoidRootPart") and
+				   string.find(mob.Name, mobNameToFind) then
+					targetMob = mob
+					break
+				end
+			end
 
-            local tween = TweenService:Create(hrp, TweenInfo.new(waitAnimationTime), {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)})
-            tween:Play()
-            tween.Completed:Wait()
+			if targetMob then
+				local mobRoot = targetMob.HumanoidRootPart
+				-- ✅ วาร์ปเข้าไปหาทันที
+				hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+				task.wait(0.1)
 
-            if meleeTool then
-                meleeTool:Activate()
-            end
+				-- ✅ ฆ่าทิ้ง
+				targetMob.Humanoid.Health = 0
 
-            task.wait(0.3)
-            break
-        end
-    end
-    if foundTarget then break end
-end
-        end)
-    end
+				-- ✅ ลงมาใกล้ๆ
+				local descendTween = TweenService:Create(
+					hrp,
+					TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
+					{CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}
+				)
+				descendTween:Play()
+				descendTween.Completed:Wait()
+
+				if meleeTool then
+					meleeTool:Activate()
+				end
+
+				task.wait(0.3)
+			else
+				-- ✅ ไม่มีมอน: วาร์ปกลับ safe
+				hrp.CFrame = CFrame.new(safePosition)
+				task.wait(0.3)
+			end
+
+			-- ✅ ไปตัวถัดไปเสมอ
+			currentIndex = currentIndex + 1
+			if currentIndex > #AllowedMobs then
+				currentIndex = 1
+			end
+		end)
+	end
 end)
 		
 --[[
