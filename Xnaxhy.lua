@@ -3153,99 +3153,66 @@ local function IsMobAllowed(mobName)
 end
 
 spawn(function()
-    local currentIndex = 1
     while task.wait(0.1) do
         pcall(function()
             if not _G.farmgems then return end
 
-            local playerCharacter = player.Character or player.CharacterAdded:Wait()
-            local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")
-            if not playerHRP then return end
+            local character = player.Character or player.CharacterAdded:Wait()
+            local hrp = character:FindFirstChild("HumanoidRootPart")
+            if not hrp then return end
 
             local userId = player.UserId
             local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
             if not userFolder then return end
 
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
+            local data = userFolder:FindFirstChild("Data")
+            if not data then return end
 
-            local missionObjective = missionData:FindFirstChild("MissionObjective")
-            local missionRequirement = missionData:FindFirstChild("MissionRequirement")
+            local missionObjective = data:FindFirstChild("MissionObjective")
+            local missionRequirement = data:FindFirstChild("MissionRequirement")
+            if not (missionObjective and missionRequirement) then return end
 
-            if missionObjective and missionRequirement then
-                if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
-                    playerHRP.CFrame = CFrame.new(safePosition)
-                    return
-                end
+            -- หยุดแค่ตอนไม่ได้เควสเท่านั้น
+            if not (missionObjective.Value == "Quests" and missionRequirement.Value == 1) then
+                hrp.CFrame = CFrame.new(safePosition)
+                return
             end
 
-            local meleeTool = playerCharacter:FindFirstChild("Melee")
+            local meleeTool = character:FindFirstChild("Melee")
             if not meleeTool then
                 for _, tool in pairs(player.Backpack:GetChildren()) do
                     if tool:IsA("Tool") and tool.Name == "Melee" then
-                        tool.Parent = playerCharacter
+                        tool.Parent = character
                         meleeTool = tool
-                        task.wait(0.1)
                         break
                     end
                 end
             end
 
-            local searchedAll = false
-            local foundMob = nil
+            local foundTarget = false
 
-            for i = 1, #AllowedMobs do
-                local mobNameToFind = AllowedMobs[currentIndex]
-                for _, mob in pairs(workspace.Enemies:GetChildren()) do
-                    if mob:FindFirstChild("Humanoid") and
-                        mob:FindFirstChild("HumanoidRootPart") and
-                        string.find(mob.Name, mobNameToFind) and
-                        mob.Humanoid.Health > 0 then
-                        foundMob = mob
-                        break
-                    end
-                end
+for _, mobName in ipairs(AllowedMobs) do
+    for _, mob in ipairs(workspace.Enemies:GetChildren()) do
+        if mob:FindFirstChild("Humanoid") and mob:FindFirstChild("HumanoidRootPart") and string.find(mob.Name, mobName) then
+            foundTarget = true
+            local mobRoot = mob.HumanoidRootPart
+            hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
+            task.wait(0.1)
 
-                if foundMob then
-                    break
-                else
-                    currentIndex = currentIndex + 1
-                    if currentIndex > #AllowedMobs then
-                        currentIndex = 1
-                        searchedAll = true
-                    end
-                end
+            local tween = TweenService:Create(hrp, TweenInfo.new(waitAnimationTime), {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)})
+            tween:Play()
+            tween.Completed:Wait()
+
+            if meleeTool then
+                meleeTool:Activate()
             end
 
-            if foundMob then
-                local mobRoot = foundMob:FindFirstChild("HumanoidRootPart")
-                playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-                task.wait(0.1)
-
-                local startTime = tick()
-                repeat
-                    foundMob.Humanoid.Health = 0
-                    task.wait(0.05)
-                until foundMob.Humanoid.Health <= 0 or (tick() - startTime) > 1
-
-                local descendTween = TweenService:Create(
-                    playerHRP,
-                    TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-                    {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}
-                )
-                descendTween:Play()
-                descendTween.Completed:Wait()
-
-                if meleeTool then
-                    meleeTool:Activate()
-                end
-
-                task.wait(0.5)
-                currentIndex = currentIndex + 1
-                if currentIndex > #AllowedMobs then
-                    currentIndex = 1
-                end
-            end
+            task.wait(0.3)
+            break
+        end
+    end
+    if foundTarget then break end
+end
         end)
     end
 end)
