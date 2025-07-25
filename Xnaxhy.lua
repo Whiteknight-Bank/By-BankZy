@@ -4389,26 +4389,27 @@ end)
 
 page8:Label("┇ Function Unbox ┇")
 
+local RunService = game:GetService("RunService")
+
 page8:Toggle("Auto Unbox Common", false, function(bxcm)
     UnboxCM = bxcm
 end)
 
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not UnboxCM then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if Value.Name == "Common Box" then
-                    local char = game.Players.LocalPlayer.Character
-                    if char and char:FindFirstChild("Humanoid") then
-                        char.Humanoid:UnequipTools()
-                        Value.Parent = char
-                        task.wait(0.1)
-                        Value:Activate()
-                    end
-                end
-            end
-        end)
+RunService.Heartbeat:Connect(function()
+    if not UnboxCM then return end
+
+    local char = game.Players.LocalPlayer.Character
+    if not (char and char:FindFirstChild("Humanoid")) then return end
+
+    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if Value.Name == "Common Box" then
+            pcall(function()
+                char.Humanoid:UnequipTools()
+                Value.Parent = char
+                task.wait(0.1)
+                Value:Activate()
+            end)
+        end
     end
 end)
 
