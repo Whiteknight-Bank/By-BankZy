@@ -4398,7 +4398,7 @@ spawn(function()
         pcall(function()
             if not UnboxCM then return end;
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find("Common Box", Value.Name) then
+                if Value.Name == "Common Box" then
                     local char = game.Players.LocalPlayer.Character
                     if char and char:FindFirstChild("Humanoid") then
                         char.Humanoid:UnequipTools()
@@ -4411,7 +4411,7 @@ spawn(function()
         end)
     end
 end)
-		
+
 page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
     UnboxUn = bxun
 end)
