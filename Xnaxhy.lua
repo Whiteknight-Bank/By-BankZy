@@ -4397,10 +4397,8 @@ end)
 
 RunService.Heartbeat:Connect(function()
     if not UnboxCM then return end
-
     local char = game.Players.LocalPlayer.Character
     if not (char and char:FindFirstChild("Humanoid")) then return end
-
     for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if Value.Name == "Common Box" then
             pcall(function()
@@ -4417,18 +4415,19 @@ page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
     UnboxUn = bxun
 end)
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not UnboxUn then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfBox2"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
-                end
-            end
-        end)
+RunService.Heartbeat:Connect(function()
+    if not UnboxUn then return end
+    local char = game.Players.LocalPlayer.Character
+    if not (char and char:FindFirstChild("Humanoid")) then return end
+    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if Value.Name == "Uncommon Box" then
+            pcall(function()
+                char.Humanoid:UnequipTools()
+                Value.Parent = char
+                task.wait(0.1)
+                Value:Activate()
+            end)
+        end
     end
 end)
 
@@ -4436,18 +4435,19 @@ page8:Toggle("Auto Unbox Rare&Ultra", false, function(bxrl)
     UnboxRUL = bxrl
 end)
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not UnboxRUL then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfBox3"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
-                end
-            end
-        end)
+RunService.Heartbeat:Connect(function()
+    if not UnboxRUL then return end
+    local char = game.Players.LocalPlayer.Character
+    if not (char and char:FindFirstChild("Humanoid")) then return end
+    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        if Value.Name == "Rare Box" and Value.Name == "Ultra Rare Box" then
+            pcall(function()
+                char.Humanoid:UnequipTools()
+                Value.Parent = char
+                task.wait(0.1)
+                Value:Activate()
+            end)
+        end
     end
 end)
 
