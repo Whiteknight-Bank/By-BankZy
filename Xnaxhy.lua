@@ -4484,20 +4484,24 @@ page8:Toggle("Auto Unbox Common", false, function(bxcm)
 end)
 
 spawn(function()
-    while wait() do
+    while task.wait(0.5) do
         pcall(function()
             if not UnboxCM then return end;
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                 if table.find(Cache.DevConfig["ListOfBox1"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
+                    local char = game.Players.LocalPlayer.Character
+                    if char and char:FindFirstChild("Humanoid") then
+                        char.Humanoid:UnequipTools()
+                        Value.Parent = char
+                        task.wait(0.1)
+                        Value:Activate()
+                    end
                 end
             end
         end)
     end
 end)
-
+		
 page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
     UnboxUn = bxun
 end)
