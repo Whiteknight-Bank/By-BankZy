@@ -100,6 +100,7 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
+Cache.DevConfig["ListOfSDf"] = {"Quake", "Flare", "Chilly", "Bomb", "Magma", "Candy", "Light", "Gas", "Dark", "Vampire", "Sand", "Rumble"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -1539,7 +1540,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb", "Magma"}, function(spdf)
+page3:Dropdown("Select Spam Fruit", Cach.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
@@ -1788,27 +1789,26 @@ spawn(function()
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Magma" then
                 if selectedSpamSkill == "Skill Z" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "MagmaPower2",
-                        [3] = "StopCharging",
-                        [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-                        [6] = 100
-                    }
+            local args = {
+    [1] = tonumber(serializeTable(remotes)),
+    [2] = "MagmaPower7",
+    [3] = "StopCharging",
+    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
+    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+    [6] = 100
+}
 
-                    game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
+game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
+            local args = {
+    [1] = tonumber(serializeTable(remotes)),
+    [2] = "MagmaPower7",
+    [3] = "StartCharging",
+    [4] = CFrame.new(2157.088623046875, 1193.5758056640625, -9786.4072265625, 0.9772287607192993, -0.020494922995567322, -0.21119679510593414, 1.862645149230957e-09, 0.9953245520591736, -0.09658809006214142, 0.21218889951705933, 0.09438865631818771, 0.9726595878601074),
+    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+    [7] = "Right"
+}
 
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "MagmaPower2",
-                        [3] = "StartCharging",
-                        [4] = CFrame.new(-550.802795, 244, 26.3580341, -0.63954407, 0.15401715, -0.753168106, -0, 0.979725122, 0.200346366, 0.768754423, 0.128130332, -0.626577377),
-                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-                        [7] = "Left"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args2))
+game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
                 end
             end
         end)
