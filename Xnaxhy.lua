@@ -2848,23 +2848,12 @@ page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Toggle("Auto Buy Drinks", false, function(bdy)
-	_G.buydrink = bdy
+page6:Textbox("Amount Drink :", "Enter Number", function(txt)
+    _G.yoruhit = txt
 end)
 
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.buydrink then
-local args = {
-    [1] = selectedDrinks
-}
-
-workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
-
-            end
-        end)
-    end
+page6:Button("Click Buy Drinks", function()
+	
 end)
 
 page6:Toggle("Auto Drop Drink", false, function(dops)
