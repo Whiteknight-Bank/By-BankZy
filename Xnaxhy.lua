@@ -1540,7 +1540,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
+page3:Dropdown("Select Spam Fruit :", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
@@ -2529,7 +2529,7 @@ page6:Dropdown("Select Drink :", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Textbox("Amount Drink :", "1", function(txt)
+page6:Textbox("Amount Drink :", "Enter Number", function(txt)
     AmountDrink = txt
 end)
 
