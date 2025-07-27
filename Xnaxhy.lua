@@ -2848,12 +2848,15 @@ page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Textbox("Amount Drink :", "Enter Number", function(txt)
-    _G.yoruhit = txt
+page6:Textbox("Amount Drink :", "1", function(txt)
+    AmountDrink = txt
 end)
 
 page6:Button("Click Buy Drinks", function()
-	
+if not AmountDrink or not string.match(AmountDrink, "%d+") or tonumber(string.match(AmountDrink, "%d+")) < 0 then return end;
+        for _ = 1, tonumber(string.match(AmountDrink, "%d+")) do
+            game.Workspace.Merchants.BetterDrinkMerchant.Clickable.Retum:FireServer(selectedDrinks)
+				end	
 end)
 
 page6:Toggle("Auto Drop Drink", false, function(dops)
