@@ -1540,7 +1540,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", Cach.DevConfig["ListOfSDf"], function(spdf)
+page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
