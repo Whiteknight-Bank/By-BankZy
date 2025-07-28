@@ -1558,9 +1558,6 @@ end)
 
 local pla = game.Players.LocalPlayer
 local Mouse = pla:GetMouse()
-local X = humanoid.Position.X
-local Y = humanoid.Position.Y
-local Z = humanoid.Position.Z
 
 -- Quake
 spawn(function()
@@ -1568,6 +1565,10 @@ spawn(function()
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Quake" then
                 if selectedSpamSkill == "Skill Z" then
+		    local X = humanoid.Position.X
+                    local Y = humanoid.Position.Y
+                    local Z = humanoid.Position.Z
+									
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower1",
