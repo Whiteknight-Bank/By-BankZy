@@ -1540,7 +1540,7 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit :", Cache.DevConfig["ListOfSDf"], function(spdf)
+page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
@@ -1558,7 +1558,6 @@ end)
 
 local pla = game.Players.LocalPlayer
 local Mouse = pla:GetMouse()
-local humanoid = pla.Character.HumanoidRootPart
 local X = humanoid.Position.X
 local Y = humanoid.Position.Y
 local Z = humanoid.Position.Z
@@ -1581,6 +1580,10 @@ spawn(function()
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
                 elseif selectedSpamSkill == "Skill C" then
+		    local humanoid = pla.Character.HumanoidRootPart
+                    local Xx = humanoid.Position.X
+                    local Yy = humanoid.Position.Y
+                    local Zz = humanoid.Position.Z
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower3",
@@ -1588,7 +1591,7 @@ spawn(function()
                         [4] = Mouse.Target,
                         [5] = Mouse.Hit,
                         [6] = 100,
-                        [7] = Vector3.new(X, Y, Z)
+                        [7] = Vector3.new(Xx, Yy, Zz)
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
@@ -2529,7 +2532,7 @@ page6:Dropdown("Select Drink :", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Textbox("Amount Drink :", "Enter Number", function(txt)
+page6:Textbox("Amount Drink :", "1", function(txt)
     AmountDrink = txt
 end)
 
