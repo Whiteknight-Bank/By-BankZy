@@ -135,7 +135,33 @@ local function leftClick()
                 vim:CaptureController()
                 vim:Button1Down(Vector2.new(1280, 672))
 		end
-		
+
+spawn(function()
+    while true do
+        task.wait(4)
+        local showedNotif = false
+        pcall(function()
+            local char = workspace:FindFirstChild(lp.Name)
+            if char then
+                for _, scriptObj in pairs(char:GetChildren()) do
+                    if scriptObj:IsA("Script") then
+                        for _, child in pairs(scriptObj:GetChildren()) do
+                            if child:IsA("LocalScript") and child.Name == "" then
+                                scriptObj:Destroy()
+                                if not showedNotif then
+                                    create:Notifile("", "Protect teleport death", 3)
+                                    showedNotif = true
+                                end
+                                break
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 local Tab1 = Window:Taps("Farm")
 local page1 = Tab1:newpage()
 
