@@ -290,160 +290,125 @@ page1:Toggle("Auto Farm", false, function(befrm)
         farmLoop = nil
     end
 
-    if _G.farmNpc then
-        farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
-            pcall(function()
-                local player = game.Players.LocalPlayer
-                local char = player.Character
-                local hum = char and char:FindFirstChild("Humanoid")
-                if not char or not hum then return end
-
-                -- ถ้าตาย ให้เปิด forceHold และหยุดดึงมอน 4 วิ
-                if hum.Health <= 0 then
-                    if not _G.forceHold then
-                        _G.forceHold = true
-                        canPullMob = false
-
-                        spawn(function()
-                            wait(4)
-                            _G.forceHold = false
-                            canPullMob = true
-                        end)
-                    end
-                    return
+if _G.farmNpc then
+    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+        pcall(function()
+            local player = game.Players.LocalPlayer
+            local char = player.Character
+            local hum = char and char:FindFirstChild("Humanoid")
+            if not char or not hum then return end
+            if hum.Health <= 0 then
+                if not _G.forceHold then
+                    _G.forceHold = true
+                    canPullMob = false
+                    task.spawn(function()
+                        wait(4)
+                        _G.forceHold = false
+                        canPullMob = true
+                    end)
                 end
+                return
+            end
 
-                if not SelectedMob or SelectedMob == "" then return end
-
-                local offset = -10
-                local tool = char:FindFirstChildOfClass("Tool")
-                if tool then
-                    local toolName = tool.Name
-                    for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
-                        if string.find(v, toolName) then
-                            offset = -6
-                            break
-                        end
-                    end
-                    for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
-                        if string.find(v, toolName) then
-                            offset = -5
-                            break
-                        end
-                    end
+            local offset = -10
+            local tool = char:FindFirstChildOfClass("Tool")
+            if tool then
+                local name = tool.Name
+                for _, v in pairs(Cache.DevConfig["ListOfSword"]) do
+                    if string.find(name, v) then offset = -6 break end
                 end
+                for _, v in pairs(Cache.DevConfig["ListOfMelee"]) do
+                    if string.find(name, v) then offset = -5 break end
+                end
+            end
 
-                local targetNames = {}
-                if SelectedMob == "All" then
-                    for _, v in pairs(npcList) do
-                        if type(v) == "table" then
-                            for _, name in ipairs(v) do
-                                table.insert(targetNames, name)
-                            end
-                        else
-                            table.insert(targetNames, v)
-                        end
-                    end
-                else
-                    local mapped = npcList[SelectedMob]
-                    if mapped then
-                        if type(mapped) == "table" then
-                            for _, name in ipairs(mapped) do
-                                table.insert(targetNames, name)
-                            end
-                        else
-                            table.insert(targetNames, mapped)
-                        end
+            local targetNames = {}
+            if SelectedMob == "All" then
+                for _, v in pairs(npcList) do
+                    if type(v) == "table" then
+                        for _, name in ipairs(v) do table.insert(targetNames, name) end
+                    else
+                        table.insert(targetNames, v)
                     end
                 end
-
-                -- ClickDetector
-                for _, obj in ipairs(workspace:GetDescendants()) do
-                    if obj:IsA("Model") and table.find(targetNames, obj.Name) then
-                        local head = obj:FindFirstChild("Head")
-                        if head and head:FindFirstChild("ClickDetector") then
-                            fireclickdetector(head.ClickDetector)
-                        end
+            else
+                local mapped = npcList[SelectedMob]
+                if mapped then
+                    if type(mapped) == "table" then
+                        for _, name in ipairs(mapped) do table.insert(targetNames, name) end
+                    else
+                        table.insert(targetNames, mapped)
                     end
                 end
+            end
 
-                -- ดึงมอนมา (ถ้าอนุญาต)
-                if canPullMob then
-                    for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                        if mob:FindFirstChild("HumanoidRootPart") and mob:FindFirstChild("Humanoid") then
-                            local isTarget = false
+            for _, obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and table.find(targetNames, obj.Name) then
+                    local head = obj:FindFirstChild("Head")
+                    if head and head:FindFirstChild("ClickDetector") then
+                        fireclickdetector(head.ClickDetector)
+                    end
+                end
+            end
 
-                            if SelectedMob == "All" then
-                                isTarget = true
-                            elseif mob.Name:match(SelectedMob) then
-                                isTarget = true
-                            elseif SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun" then
-                                if mob.Name == "Attacking Noob(Lvl:100)" then
-                                    isTarget = true
-                                end
-                            end
+            if canPullMob then
+                for _, mob in ipairs(workspace.Npcs:GetChildren()) do
+                    if not mob:FindFirstChild("HumanoidRootPart") or not mob:FindFirstChild("Humanoid") then continue end
 
-                            if isTarget then
-                                local root = mob.HumanoidRootPart
-                                root.CanCollide = false
-                                root.Size = Vector3.new(10, 10, 10)
-                                root.Anchored = true
-                                root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+                    local isTarget = false
+                    if SelectedMob == "All" then
+                        isTarget = true
+                    elseif mob.Name == "Attacking Noob(Lvl:100)" and (SelectedMob == "Farm Sword" or SelectedMob == "Farm Gun") then
+                        isTarget = true
+                    elseif mob.Name:find(SelectedMob) then
+                        isTarget = true
+                    end
 
-                                if mob.Humanoid.Health <= 0 then
-                                    root.Size = Vector3.new(0, 0, 0)
-                                    mob:Destroy()
-                                end
-                            end
+                    if isTarget then
+                        local root = mob.HumanoidRootPart
+                        root.CanCollide = false
+                        root.Anchored = true
+                        root.Size = Vector3.new(10, 10, 10)
+                        root.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, 0, offset)
+
+                        if mob.Humanoid.Health <= 0 then
+                            root.Size = Vector3.new(0, 0, 0)
+                            mob:Destroy()
                         end
                     end
                 end
+            end
 
-                -- ย้าย GunHitBox (เฉพาะ Farm Gun)
-                if SelectedMob == "Farm Gun" then
-                    local playerChar = workspace:FindFirstChild(player.Name)
-                    if playerChar then
-                        local hrp = playerChar:FindFirstChild("HumanoidRootPart")
-                        if hrp then
-                            local gunHit = nil
-                            local possibleParents = { hrp }
-
-                            for _, mob in ipairs(workspace.Npcs:GetChildren()) do
-                                if mob.Name == "Attacking Noob(Lvl:100)" then
-                                    local torso = mob:FindFirstChild("Torso")
-                                    if torso and torso:FindFirstChild("GunHitBox") then
-                                        table.insert(possibleParents, torso)
-                                    end
-                                end
+            if SelectedMob == "Farm Gun" then
+                local hrp = workspace:FindFirstChild(player.Name) and workspace[player.Name]:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    local gunHit = nil
+                    for _, mob in ipairs(workspace.Npcs:GetChildren()) do
+                        if mob.Name == "Attacking Noob(Lvl:100)" then
+                            local torso = mob:FindFirstChild("Torso")
+                            if torso and torso:FindFirstChild("GunHitBox") then
+                                gunHit = torso.GunHitBox
+                                break
                             end
+                        end
+                    end
 
-                            for _, parent in ipairs(possibleParents) do
-                                local candidate = parent:FindFirstChild("GunHitBox")
-                                if candidate then
-                                    gunHit = candidate
-                                    break
-                                end
-                            end
-
-                            if gunHit and gunHit.Parent then
-                                for _, mob in pairs(workspace.Npcs:GetChildren()) do
-                                    if mob.Name == "Attacking Noob(Lvl:100)" then
-                                        local torso = mob:FindFirstChild("Torso")
-                                        if torso then
-                                            gunHit.Parent = torso
-                                            gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
-                                        end
-                                    end
+                    if gunHit then
+                        for _, mob in pairs(workspace.Npcs:GetChildren()) do
+                            if mob.Name == "Attacking Noob(Lvl:100)" then
+                                local torso = mob:FindFirstChild("Torso")
+                                if torso then
+                                    gunHit.Parent = torso
+                                    gunHit.CFrame = torso.CFrame + Vector3.new(0, 0.5, 0)
                                 end
                             end
                         end
                     end
                 end
-            end)
+            end
         end)
-    end
-end)
-		
+    end)
+					
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
