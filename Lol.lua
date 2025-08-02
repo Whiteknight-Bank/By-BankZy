@@ -85,7 +85,7 @@ task.spawn(function()
 	updateLoading = false
 	wait(0.5)
 	ScreenGui:Destroy()
-
+	
 local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
 local Window = create:Win("ReaperX Hub | Steve's One Piece ")
 
@@ -1278,5 +1278,5 @@ end
 
 create:Notifile("", "Don't worry, Anti Cheat Now!", 3)
 
-	end)
+			end)
 
