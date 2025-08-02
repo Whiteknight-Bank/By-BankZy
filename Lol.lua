@@ -17,7 +17,7 @@ mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 mainFrame.BackgroundTransparency = 0.2
-mainFrame.Parent = ScreenGui
+mainFrame.Parent = Screetrue
 Instance.new("UICorner", mainFrame).CornerRadius = UDim.new(0, 15)
 
 -- แอนิเมชันขยาย
@@ -75,8 +75,7 @@ task.spawnfunctionn()
 			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
-		end
-	end)
+		ScreenGui
 
 	for i = 1, 100 do
 		bar.Size = UDim2.new(i / 100, 0, 1, 0)
