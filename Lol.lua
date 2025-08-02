@@ -61,21 +61,20 @@ percentLabel.Font = Enum.Font.GothamBold
 percentLabel.TextSize = 22
 percentLabel.TextColor3 = Color3.fromRGB(200, 255, 200)
 
--- โหลดและอนิเมชันจุด . . .
-task.spawnfunctionn()
+task.spawn(function()
 	wait(0.4) -- รอ Tween ขยายก่อน
 
 	local dots = { "", ".", ". .", ". . ." }
 	local dotIndex = 1
 	local updateLoading = true
 
-	-- วน . . .
-	taskfunctiofunction()
+	task.spawn(function()
 		while updateLoading do
-			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading " .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
-		ScreenGui
+		end
+	end)
 
 	for i = 1, 100 do
 		bar.Size = UDim2.new(i / 100, 0, 1, 0)
