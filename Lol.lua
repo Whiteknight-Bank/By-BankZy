@@ -408,7 +408,8 @@ if _G.farmNpc then
             end
         end)
     end)
-					
+end)
+			
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
