@@ -62,7 +62,7 @@ percentLabel.TextSize = 22
 percentLabel.TextColor3 = Color3.fromRGB(200, 255, 200)
 
 -- โหลดและอนิเมชันจุด . . .
-task.spawn(function()
+task.spawnfunctionn()
 	wait(0.4) -- รอ Tween ขยายก่อน
 
 	local dots = { "", ".", ". .", ". . ." }
@@ -70,7 +70,7 @@ task.spawn(function()
 	local updateLoading = true
 
 	-- วน . . .
-	task.spawn(function()
+	taskfunctiofunction()
 		while updateLoading do
 			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
@@ -281,17 +281,17 @@ end)
 
 local farmLoop = nil
 local canPullMob = true
-
-page1:Toggle("Auto Farm", false, function(befrm)
-    _G.farmNpc = befrm
-
+		
     if farmLoop then
         farmLoop:Disconnect()
         farmLoop = nil
-    end
+		end
+		
+page1:Toggle("Auto Farm", false, function(befrm)
+    _G.farmNpc = befrm
 
 if _G.farmNpc then
-    farmLoop = game:GetService("RunService").Heartbeat:Connect(function()
+    game:GetService("RunService").Heartbeat:Connect(function()
         pcall(function()
             local player = game.Players.LocalPlayer
             local char = player.Character
@@ -404,11 +404,10 @@ if _G.farmNpc then
                             end
                         end
                     end
-                end
-            end
-        end)
+                end)
+            end)
+        end
     end)
-end)
 			
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
