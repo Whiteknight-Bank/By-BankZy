@@ -1191,9 +1191,6 @@ spawn(function()
                         end
                     end
                 end
-
-                wait(0.2)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
                 wait(10)
             end
         end)
