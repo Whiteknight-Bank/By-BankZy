@@ -1587,7 +1587,7 @@ page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
-page3:Textbox("Per Second :", "0.1", function(xtx)
+page3:Textbox("Per Second :", "1", function(xtx)
     getgenv().spamtime = tonumber(xtx)
 end)
 
@@ -1601,7 +1601,12 @@ end)
 
 local pla = game.Players.LocalPlayer
 local Mouse = pla:GetMouse()
-getgenv.spamtime = 0.1
+
+task.defer(function()
+    if getgenv().spamtime == nil then
+        getgenv().spamtime = 1
+    end
+end)
 
 -- Quake
 spawn(function()
