@@ -1146,137 +1146,70 @@ spawn(function()--autofruit
             end
         end)
     end
-end)
-spawn(function()--autofruit
-    while wait() do
+end)spawn(function()
     pcall(function()
-        if _G.automixer then
-            local Players = game:GetService("Players")
-            local LocalPlayer = Players.LocalPlayer
-            local PopperClient = LocalPlayer:WaitForChild("PlayerScripts").PlayerModule.CameraModule.ZoomController.Popper
-            
-            for i, v in next, getgc() do
-                if getfenv(v).script == PopperClient and typeof(v) == "function" then
-                    for i2, v2 in next, debug.getconstants(v) do
-                        if tonumber(v2) == 0.25 then
-                            debug.setconstant(v, i2, 0)
-                       -- elseif tonumber(v2) == 0 then
-                           -- debug.setconstant(v, i2, 0.25)
+        while wait() do
+            if _G.automixer then
+                local Players = game:GetService("Players")
+                local LocalPlayer = Players.LocalPlayer
+                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+                local barrelsContainer = workspace:FindFirstChild("Barrels")
+                if not barrelsContainer then return end
+
+                local barrelFolder = barrelsContainer:FindFirstChild("Barrels")
+                local crateFolder = barrelsContainer:FindFirstChild("Crates")
+                if not barrelFolder or not crateFolder then return end
+
+                local safeZone = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+                local safeCFrame = safeZone and safeZone.CFrame * CFrame.new(0, 5, 0) or CFrame.new(0, 10, 0)
+
+                local function teleportAndClick(partList)
+                    for _, part in ipairs(partList) do
+                        character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                        local hrp = character:FindFirstChild("HumanoidRootPart")
+                        if hrp and part and part:IsA("BasePart") then
+                            hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+                            local clickDetector = part:FindFirstChildWhichIsA("ClickDetector", true)
+                            if clickDetector then
+                                fireclickdetector(clickDetector)
+                            end
+                            task.wait(0.2)
                         end
                     end
                 end
-            end
-            --Barrels
-            wait(0.8)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-12, 216, -351)
-            wait(0.3)
 
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(4, 216, -378)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-114, 216, -750)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-133, 216, -710)
-            wait(0.3)
-    
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-204, 224, -206)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 217, -327)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1706, 217, -326)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1754, 216, -217)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1550, 217, -307)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1494, 217, -306)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1493, 217, -290)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1871, 218, 823)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1858, 218, 814)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1882, 219, 838)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 235, 568)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1970, 219, 576)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1989, 218, 561)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1981, 217, 553)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1517, 217, -289)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1186, 217, -285)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1173, 217, -286)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1009, 220, 3342)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2601, 254, 1111)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-2618, 254, 1110)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(989, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(916, 216, 3409)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(882, 218, 3364)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1167, 219, 3228)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(987, 224, -3337)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1072, 224, -3429)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1195, 224, -3372)
-            wait(0.3)
-
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1238, 224, -3231)
-            wait(0.3)
-            for i,v in pairs(game.Workspace:GetChildren()) do 
-                if v.ClassName == "Tool" then
-                    v.Handle.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+                local function getParts(folder, partName)
+                    local list = {}
+                    for _, part in ipairs(folder:GetDescendants()) do
+                        if part:IsA("BasePart") and part.Name == partName then
+                            table.insert(list, part)
+                        end
+                    end
+                    return list
                 end
+
+                local barrels = getParts(barrelFolder, "Barrel")
+                local crates = getParts(crateFolder, "Crate")
+
+                teleportAndClick(barrels)
+                teleportAndClick(crates)
+
+                for _, v in pairs(workspace:GetChildren()) do 
+                    if v:IsA("Tool") and v.Name ~= "Compass" then
+                        local handle = v:FindFirstChild("Handle")
+                        local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if handle and hrp then
+                            handle.CFrame = hrp.CFrame
+                        end
+                    end
+                end
+                wait(0.1)
+		LocalPlayer.Character.CFrame = safeCFrame
+                wait(10)
             end
-            wait(0.2)
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
-            wait(7)
-            end
-        end)
-    end
+        end
+    end)
 end)
 		
 page2:Label("┇ Function Farming ┇")
