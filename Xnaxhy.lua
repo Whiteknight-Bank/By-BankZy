@@ -100,7 +100,6 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
-Cache.DevConfig["ListOfSDf"] = {"Quake", "Flare", "Chilly", "Bomb", "Magma", "Candy", "Light", "Gas", "Dark", "Vampire", "Sand", "Rumble"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -137,8 +136,6 @@ local SafeZoneUnderSea = Instance.new("Part",game.Workspace)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
-local player = game.Players.LocalPlayer
-local character = workspace:FindFirstChild(player.Name)
 
 spawn(function() -- autofarm velocity
     while wait(0) do
@@ -900,7 +897,8 @@ local A_2 = "Challenge8"
 wait(.8)
 local A_1 = "Claim"
 local A_2 = "Challenge9"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemโค้ดเดิมของคุณต่อเลยดิมของคุณต่อเลย   Event:FireServer(A_1,A_2)
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
 wait(.8)
 local A_1 = "Claim"
 local A_2 = "Challenge10"
@@ -1215,7 +1213,7 @@ end)spawn(function()
 end)
 		
 page2:Label("┇ Function Farming ┇")
-page2:Dropdown("Select Weapon :", Wapon, function(wapn)
+page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
@@ -1228,8 +1226,52 @@ page2:Button("Refresh Weapon", function()
 				end
 			end)
 		
-page2:Toggle("Auto Farm [ Not Working ]", false, function(befrm)
+page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
+end)
+
+local MobList = { "Boar", "Crab", "Angry", "Freddy" }
+
+local function IsMobAllowed(mobName)
+    for _, allowedMob in ipairs(MobList) do
+        if string.find(mobName, allowedMob) then
+            return true
+        end
+    end
+    return false
+end
+
+spawn(function()
+    while task.wait(0.1) do
+        pcall(function()
+            if _G.behindFarm then
+                local character = game.Players.LocalPlayer.Character
+                local tool = character and character:FindFirstChildOfClass("Tool")
+
+                -- เช็คว่าอาวุธชื่อ Melee เท่านั้นถึงจะเริ่มทำงาน
+                if not tool or tool.Name ~= "Melee" then
+                    return -- ข้ามรอบนี้ ถ้ายังไม่ได้ถืออาวุธชื่อ Melee
+                end
+
+                for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if mob:FindFirstChild("HumanoidRootPart") and 
+                       mob:FindFirstChild("Humanoid") and 
+                       mob.Humanoid.Health > 0 and 
+                       IsMobAllowed(mob.Name) then
+                        local mobRoot = mob.HumanoidRootPart
+                        local playerRoot = character.HumanoidRootPart
+                        playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 15, 5)
+                        mob.Humanoid.Health = 0
+                        repeat task.wait() until mob.Humanoid.Health <= 0
+                        task.wait(2)
+                        playerRoot.CFrame = mobRoot.CFrame
+                        tool:Activate()
+                        break
+                    end
+                end
+            end
+        end)
+    end
 end)
 		
 page2:Toggle("Auto Click", false, function(state)
@@ -1261,6 +1303,248 @@ spawn(function() -- auto equip
                 until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
                 if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
                     game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
+                end
+            end
+        end)
+    end
+end)
+
+page2:Label("┇ Function Farm with Cannon Ball ┇")
+page2:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
+    _G.autocannonslow = bll
+end)
+
+spawn(function() -- autofarm teleport cannon
+    while wait(0) do
+        pcall(function()
+            if _G.autocannonplr then
+                for i,v in pairs(game.Players:GetChildren()) do
+                    if v.Name ~= game.Players.LocalPlayer.Name then
+                        v.Character.HumanoidRootPart.Transparency = 0.9
+                    	v.Character.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
+                        v.Character.HumanoidRootPart.CanCollide = false
+                        v.Character.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,-15)
+                        if v.Character.Humanoid.Health == 0 then
+                            v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+                            v.Character.HumanoidRootPart.Transparency = 1
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannon or _G.autocannonplr then
+                local toolname = "Cannon Ball"
+                local Plr = game:GetService("Players").LocalPlayer
+                wait(0.75)
+                if Plr.Backpack:FindFirstChild(toolname) and not Plr.Character:FindFirstChild(toolname) and not Plr.Character:FindFirstChildOfClass("Tool") then
+                    local tool = Plr.Backpack:FindFirstChild(toolname)
+                    Plr.Character.Humanoid:EquipTool(tool)
+                    wait(0.75)
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+                end
+            end
+        end)
+    end
+end)
+
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannonslow then
+                local toolname = "Cannon Ball"
+                local Plr = game:GetService("Players").LocalPlayer
+                wait(0.5)
+                if Plr.Backpack:FindFirstChild(toolname) and not Plr.Character:FindFirstChild(toolname) and not Plr.Character:FindFirstChildOfClass("Tool") then
+                    local tool = Plr.Backpack:FindFirstChild(toolname)
+                    Plr.Character.Humanoid:EquipTool(tool)
+                end
+            end
+        end)
+    end
+end)
+
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannon or _G.autocannonplr or _G.autocannonslow then
+                local args = {
+                    [1] = CFrame.new(Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
+                }
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("Cannon Ball").RemoteEvent:FireServer(unpack(args))
+                wait(0)
+                local args = {
+                    [1] = CFrame.new(Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
+                }
+                game:GetService("Players").LocalPlayer.Character:FindFirstChild("Cannon Ball").RemoteEvent:FireServer(unpack(args))
+                wait(0)
+                if game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:FindFirstChild("CannonBall") then
+                    game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:FindFirstChild("CannonBall").CanCollide = false
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannon or _G.autocannonplr or _G.autocannonslow then
+                repeat task.wait(0)
+                    for i, v in pairs(game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:GetChildren()) do
+                        if v.Name == "CannonBall" then
+                            v.CFrame = game.Players.LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
+                            v.CanCollide = false
+                            if not v:FindFirstChild("BodyClip") then
+                                local Noclip = Instance.new("BodyVelocity")
+                                Noclip.Name = "BodyClip"
+                                Noclip.Parent = v
+                                Noclip.MaxForce = Vector3.new(100000,100000,100000)
+                                Noclip.Velocity = Vector3.new(0,20,0)
+                            end
+                        end
+                    end
+                until _G.autocannon == false or _G.autocannonplr == false or game.Players.LocalPlayer.Character.Humanoid.Health == 0
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannon and game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") 
+            or _G.autocannonplr and game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+                task.wait(1)
+                for i=1,2 do
+                    game:GetService("Players").LocalPlayer.Character.Weapons:FireServer()
+                end
+            end
+        end)
+    end
+end)
+
+
+spawn(function()
+    while task.wait(15) do
+        pcall(function()
+            if _G.autocannon or _G.autocannonplr then
+                task.wait(0.1)
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                        if v.Name == "Cannon Ball" then
+                            v:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.autocannon  or _G.autocannonplr or _G.autocannonslow then
+                task.wait(0.1)
+                if game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                        if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
+                            v:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.autocannon or  _G.autocannonplr  or _G.autocannonslow then
+                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
+                task.wait(0)
+                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
+                    wait(0.5)
+                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
+                end
+
+            end
+        end)
+    end
+end)
+spawn(function() -- autofarm cannon
+    while wait(0) do
+        pcall(function()
+            if _G.autocannon or _G.autocannonslow then
+                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if string.find(v.Name, " Boar")
+                    and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CanCollide = false
+                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        v:FindFirstChild("HumanoidRootPart").Anchored = true
+                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                     end
+                end
+                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if string.find(v.Name, "Crab")
+                    and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CanCollide = false
+                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        --v.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
+                        v.HumanoidRootPart.Transparency = 0.9
+                        v:FindFirstChild("HumanoidRootPart").Anchored = true
+                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                     end
+                end
+                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if string.find(v.Name, "Angry ") 
+                    or string.find(v.Name, "Bandit") 
+                    or string.find(v.Name, "Thief")
+                    or string.find(v.Name, "Crab") 
+                    or string.find(v.Name, "Gunner") 
+                    or string.find(v.Name, "Bruno") 
+                    or string.find(v.Name, "Freddy")  
+                    or string.find(v.Name, "Buster") 
+                    or string.find(v.Name, "Thug") 
+                    or string.find(v.Name, "Gunslinger")
+                    or string.find(v.Name, "Cave") 
+                    or string.find(v.Name, "Vokun") 
+                    and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CanCollide = false
+                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        v:FindFirstChild("HumanoidRootPart").Anchored = true
+                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                    end
                 end
             end
         end)
@@ -1503,11 +1787,11 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
+page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb"}, function(spdf)
     selectedSpamFruit = spdf
 end)
 
-page3:Textbox("Per Second :", "Enter Number", function(xtx)
+page3:Textbox("Per Second:", "Enter Number", function(xtx)
     getgenv().spamtime = xtx
 end)
 
@@ -1519,19 +1803,19 @@ page3:Toggle("Auto Spam [ 100% ]", false, function(spam)
     _G.skillspam = spam
 end)
 
-local pla = game.Players.LocalPlayer
-local Mouse = pla:GetMouse()
-
 -- Quake
 spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Quake" then
                 if selectedSpamSkill == "Skill Z" then
-		    local X = humanoid.Position.X
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+                    local humanoid = pla.Character.HumanoidRootPart
+                    local X = humanoid.Position.X
                     local Y = humanoid.Position.Y
                     local Z = humanoid.Position.Z
-									
+
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower1",
@@ -1544,10 +1828,13 @@ spawn(function()
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
                 elseif selectedSpamSkill == "Skill C" then
-		    local humanoid = pla.Character.HumanoidRootPart
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+                    local humanoid = pla.Character.HumanoidRootPart
                     local Xx = humanoid.Position.X
                     local Yy = humanoid.Position.Y
                     local Zz = humanoid.Position.Z
+
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower3",
@@ -1559,6 +1846,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower3",
@@ -1579,6 +1867,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
+
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower4",
@@ -1601,6 +1890,10 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Bomb" then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+
+                -- Skill Z
                 if selectedSpamSkill == "Skill Z" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1612,6 +1905,8 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
+                -- Skill B
                 elseif selectedSpamSkill == "Skill B" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1623,6 +1918,7 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "BombPower5",
@@ -1633,6 +1929,8 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
+
+                -- Skill C
                 elseif selectedSpamSkill == "Skill C" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1644,6 +1942,8 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
+
+                -- Skill V
                 elseif selectedSpamSkill == "Skill V" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1667,6 +1967,9 @@ spawn(function()
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Flare" then
                 if selectedSpamSkill == "Skill X" then
+                    local pla = game.Players.LocalPlayer
+                    local Mouse = pla:GetMouse()
+
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "FlarePower2",
@@ -1724,6 +2027,10 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
+                local pla = game.Players.LocalPlayer
+                local Mouse = pla:GetMouse()
+
+                -- StopCharging
                 local args = {
                     [1] = tonumber(serializeTable(remotes)),
                     [2] = "ChillyPower11",
@@ -1735,6 +2042,7 @@ spawn(function()
 
                 game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
 
+                -- StartCharging
                 local args2 = {
                     [1] = tonumber(serializeTable(remotes)),
                     [2] = "ChillyPower11",
@@ -1750,38 +2058,6 @@ spawn(function()
     end
 end)
 
--- Magma
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Magma" then
-                if selectedSpamSkill == "Skill Z" then
-            local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StopCharging",
-    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [6] = 100
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-            local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StartCharging",
-    [4] = CFrame.new(2157.088623046875, 1193.5758056640625, -9786.4072265625, 0.9772287607192993, -0.020494922995567322, -0.21119679510593414, 1.862645149230957e-09, 0.9953245520591736, -0.09658809006214142, 0.21218889951705933, 0.09438865631818771, 0.9726595878601074),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [7] = "Right"
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-                end
-            end
-        end)
-    end
-end)
-
 page3:Label("┇ Max Charge Skill ┇")
 page3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
 	_G.skillmax = smx
@@ -1791,13 +2067,6 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
-page4:Button("DUPE" , function()
-create:Notifile("", "Start Dupe", 2)
-                
-workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
-game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
-end)
-
 page4:Toggle("Gode Mode [ 36% ]", false, function(gxd)
 	_G.godmode = gxd
 end)
@@ -2122,7 +2391,7 @@ for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-page4:Dropdown("Select Player :", playerNames, function(name)
+page4:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
@@ -2210,9 +2479,12 @@ for i, storage in ipairs(storageValues) do
         print(" Storage " .. i .. ": None")
     end
 end
+
 print("-- =================================== --")
+
    create:Notifile("", "Send Check /console Now!!! ", 6)
 end)
+
 
 page4:Toggle("View", false, function(state)
 	if selectedPlayer then
@@ -2276,26 +2548,12 @@ end
 return index(a, b, c)
 end)
 
-page4:Label("┇ Spam Dash Player ┇")
-page4:Toggle("Spam Dash (Select Player)", false, function(dsh)
-	_G.autodash = dsh
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if _G.autodash then
-	for i,v in pairs(game:GetService("Workspace")[selectedPlayer]:GetChildren()) do
-if string.find(v.Name, "Dash") then
-v:FireServer(CFrame.new(game.Players[selectedPlayer].Character.HumanoidRootPart.Position),workspace.Water)
-end
-end
-            end
-        end)
-    end
-end)
 
 page4:Label("┇ Function Kill Players ┇")
+page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
+    _G.autocannonplr = bplr
+end)
+
 page4:Toggle("Auto Quake Kill", false, function(qkkl)
 	_G.Quakekill = qkkl
 end)
@@ -2428,7 +2686,7 @@ page5:Button("Click to Tp" , function()
 end)
 
 page5:Label("┇ SAFE ZONE ┇")
-page5:Dropdown("Select SafeZone :", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page5:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
@@ -2447,7 +2705,7 @@ page5:Button("Click to Tp" , function()
     end)
 
 page5:Label("┇ NPCs ┇")
-page5:Dropdown("Select NPCs :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
@@ -2492,39 +2750,43 @@ local Tab6 = Window:Taps("NPCs")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ Shop ┇")
-page6:Dropdown("Select Drink :", Cache.DevConfig["ListOfDrink"], function(knrd)
+page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Textbox("Amount Drink :", "1", function(txt)
-    AmountDrink = txt
+page6:Toggle("Auto Buy Drinks", false, function(bdy)
+	_G.buydrink = bdy
 end)
 
-page6:Button("Click Buy Drinks", function()
-if not AmountDrink or not string.match(AmountDrink, "%d+") or tonumber(string.match(AmountDrink, "%d+")) < 0 then return end;
-        for _ = 1, tonumber(string.match(AmountDrink, "%d+")) do
-            game.Workspace.Merchants.BetterDrinkMerchant.Clickable.Retum:FireServer(selectedDrinks)
-				end	
-end)
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.buydrink then
+local args = {
+    [1] = selectedDrinks
+}
 
-page6:Toggle("Auto Drop Drink", false, function(dops)
-	DropDrinks = dops
+workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
+
+            end
+        end)
+    end
 end)
 
 spawn(function()
     while wait() do
         pcall(function()
-            if not DropDrinks then return end;
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value.Parent = game.Workspace;
-                end
+            if _G.buydrink then
+local A_1 = "Claim"
+local A_2 = "Challenge11"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+    Event:FireServer(A_1,A_2)
+wait(.8)
             end
         end)
     end
 end)
+
 
 page6:Toggle("Auto Drinks All", false, function(drks)
 	AutoDrinks = drks
@@ -2673,470 +2935,253 @@ page6:Toggle("Auto Reroll", false, function(rol)
         end)
     end
 end)
-  
-local Tab7 = Window:Taps("Quest Sam")
-local page7 = Tab7:newpage()
 
-
-page7:Label("┇ For Making a lot Gems ┇")
-
-page7:Toggle("No Dmg Enemies", false, function(ndmg)
-    _G.antimob = ndmg
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.antimob then
-            pcall(function()
-                for _, enemie in pairs(workspace.Enemies:GetChildren()) do
-                    if enemie:IsA("Model") then
-                      for _, child in pairs(enemie.Torso:GetChildren()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end  
-                    end
-                end
-            end)
-        end
-    end
-end)
 --[[
-spawn(function()
-    while task.wait(0.2) do
-        pcall(function()
-            if not _G.antimob then return end
-            if not character then return end
+local isRunning1 = false
+local task1Thread
 
-            for _, part in ipairs(character:GetDescendants()) do
-                if part:IsA("BasePart") and part.CanTouch then
-                    part.CanTouch = false
+page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
+    isRunning1 = rol
+
+    if isRunning1 then
+        task1Thread = task.spawn(function()
+            while isRunning1 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT1
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
+                    isRunning1 = false
+                    break
                 end
-            end
-        end)
-    end
-end)
-]]		
-page7:Toggle("Farm Gems", false, function(gms)
-    _G.farmgems = gms
-end)
 
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmgems then return end
+                local args1 = {
+                    [1] = "DFT1",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
 
-            workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
-        end)
-    end
-end)
+                if AffDefense1 == 2 then args1[2] = 0/0 end
+                if AffMelee1 == 2 then args1[3] = 0/0 end
+                if AffSniper1 == 2 then args1[4] = 0/0 end
+                if AffSword1 == 2 then args1[5] = 0/0 end
 
-spawn(function()
-    while wait(2.2) do
-        pcall(function()
-            if not _G.farmgems then return end
-
-            local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
-            if not userFolder then return end
-
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
-
-            local objective = missionData:FindFirstChild("MissionObjective")
-            local requirement = missionData:FindFirstChild("MissionRequirement")
-
-            local daily1 = missionData:FindFirstChild("QQQ_Daily1")
-            local daily2 = missionData:FindFirstChild("QQQ_Daily2")
-            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            local daily4 = missionData:FindFirstChild("QQQ_Daily4")
-            local allDaily = missionData:FindFirstChild("QQQ_AllDaily")
-
-            local stats = userFolder:FindFirstChild("Stats")
-            if not stats then return end
-
-            if objective and requirement then
-                if objective.Value == "Quests" then
-                    if daily1 and daily2 and daily3 and daily4 and allDaily then
-                        if daily1.Value == true and daily2.Value == true and daily3.Value == true and daily4.Value == true then
-                            if allDaily.Value == true then
-                                stats:FireServer()
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
                             end
                         end
                     end
-                    return -- ❌ ยังไม่ครบก็รอ
-                else
-                    -- ✅ objective ไม่ใช่ "Quests" → รีเลย
-                    stats:FireServer()
-                    return
-                end
-            end
-
-            -- fallback ถ้า objective หรือ requirement ไม่มี
-            stats:FireServer()
-        end)
-    end
-end)
-
---[[
-local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
-local waitAnimationTime = 0.3
-local safePosition = Vector3.new(109, 268, -37)
-
-local function IsMobAllowed(mobName)
-	for _, allowedMob in ipairs(AllowedMobs) do
-		if string.find(mobName, allowedMob) then
-			return true
-		end
-	end
-	return false
-end
-
-spawn(function()
-	local currentIndex = 1
-	while task.wait(0.1) do
-		pcall(function()
-			if not _G.farmgems then return end
-
-			local char = player.Character or player.CharacterAdded:Wait()
-			local hrp = char:FindFirstChild("HumanoidRootPart")
-			if not hrp then return end
-
-			local userId = player.UserId
-			local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
-			if not userFolder then return end
-
-			local data = userFolder:FindFirstChild("Data")
-			if not data then return end
-
-			local missionObjective = data:FindFirstChild("MissionObjective")
-			local missionRequirement = data:FindFirstChild("MissionRequirement")
-
-			-- ✅ หยุดเฉพาะตอนเควสไม่ใช่ 1
-			if missionObjective and missionRequirement then
-				if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
-					hrp.CFrame = CFrame.new(safePosition)
-					return
-				end
-			end
-
-			-- ✅ หาอาวุธ
-			local meleeTool = char:FindFirstChild("Melee")
-			if not meleeTool then
-				for _, tool in pairs(player.Backpack:GetChildren()) do
-					if tool:IsA("Tool") and tool.Name == "Melee" then
-						tool.Parent = char
-						meleeTool = tool
-						break
-					end
-				end
-			end
-
-			local targetMob = nil
-			local mobNameToFind = AllowedMobs[currentIndex]
-
-			for _, mob in pairs(workspace.Enemies:GetChildren()) do
-				if mob:FindFirstChild("Humanoid") and
-				   mob:FindFirstChild("HumanoidRootPart") and
-				   string.find(mob.Name, mobNameToFind) then
-					targetMob = mob
-					break
-				end
-			end
-
-			if targetMob then
-				local mobRoot = targetMob.HumanoidRootPart
-				-- ✅ วาร์ปเข้าไปหาทันที
-				hrp.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)
-				task.wait(0.1)
-
-				-- ✅ ฆ่าทิ้ง
-				targetMob.Humanoid.Health = 0
-
-				-- ✅ ลงมาใกล้ๆ
-				local descendTween = TweenService:Create(
-					hrp,
-					TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),
-					{CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}
-				)
-				descendTween:Play()
-				descendTween.Completed:Wait()
-
-				if meleeTool then
-					meleeTool:Activate()
-				end
-
-				task.wait(0.3)
-			else
-				-- ✅ ไม่มีมอน: วาร์ปกลับ safe
-				hrp.CFrame = CFrame.new(safePosition)
-				task.wait(0.3)
-			end
-
-			-- ✅ ไปตัวถัดไปเสมอ
-			currentIndex = currentIndex + 1
-			if currentIndex > #AllowedMobs then
-				currentIndex = 1
-			end
-		end)
-	end
-end)
-]]
-
-local AllowedMobs = { "Boar", "Lv32 Freddric", "Lv24 Fred", "Thug", "Lv34 Freddi" }
-
-local waitAnimationTime = 0.3
-local safePosition = Vector3.new(109, 268, -37)
-
-local function IsMobAllowed(mobName)
-    for _, allowedMob in ipairs(AllowedMobs) do
-        if string.find(mobName, allowedMob) then
-            return true
-        end
-    end
-    return false
-end
-
-spawn(function()
-local alreadyVisited = {}
-while task.wait(0.1) do
-pcall(function()
-if not _G.farmgems then return end
-
-        local playerCharacter = player.Character or player.CharacterAdded:Wait()  
-        local userId = player.UserId  
-        local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)  
-        if not userFolder then return end  
-
-        local missionData = userFolder:FindFirstChild("Data")  
-        if not missionData then return end  
-
-        local missionObjective = missionData:FindFirstChild("MissionObjective")  
-        local missionRequirement = missionData:FindFirstChild("MissionRequirement")  
-
-        local currentTool = playerCharacter:FindFirstChildOfClass("Tool")  
-
-        if not currentTool then  
-            for _, t in pairs(player.Backpack:GetChildren()) do  
-                if t:IsA("Tool") and t.Name == "Melee" then  
-                    t.Parent = playerCharacter  
-                    wait(0.1)  
-                    break  
-                end  
-            end  
-        end  
-
-        local meleeTool = playerCharacter:FindFirstChild("Melee")  
-        if not meleeTool then return end  
-
-        local playerHRP = playerCharacter:FindFirstChild("HumanoidRootPart")  
-        if not playerHRP then return end  
-
-        if missionObjective and missionRequirement then
-       if missionObjective.Value ~= "Quests" or missionRequirement.Value ~= 1 then
-       playerHRP.CFrame = CFrame.new(safePosition)
-       return
-          end
-        end
-
-        local targetMob = nil  
-        for _, mob in pairs(workspace.Enemies:GetChildren()) do  
-            if mob:FindFirstChild("HumanoidRootPart") and  
-               mob:FindFirstChild("Humanoid") and  
-               IsMobAllowed(mob.Name) and  
-               not alreadyVisited[mob] then  
-                targetMob = mob  
-                break  
-            end  
-        end  
-
-        if targetMob then  
-            local mobRoot = targetMob:FindFirstChild("HumanoidRootPart")  
-            if not mobRoot then return end  
-
-            playerHRP.CFrame = mobRoot.CFrame * CFrame.new(0, 10, 5)  
-            task.wait(0.1)  
-
-            repeat  
-                targetMob.Humanoid.Health = 0  
-                task.wait(0.05)  
-            until targetMob.Humanoid.Health <= 0  
-
-            local descendTween = TweenService:Create(  
-                playerHRP,  
-                TweenInfo.new(waitAnimationTime, Enum.EasingStyle.Linear),  
-                {CFrame = mobRoot.CFrame * CFrame.new(0, 0, -2)}  
-            )  
-            descendTween:Play()  
-            descendTween.Completed:Wait()  
-
-            if meleeTool then  
-                meleeTool:Activate()
-            end  
-
-            task.wait(0.5)  
-            alreadyVisited[targetMob] = true  
-        else  
-            alreadyVisited = {}  
-            playerHRP.CFrame = CFrame.new(safePosition)  
-        end  
-    end)  
-end
-end)
-
-spawn(function()
-    local claimed = false
-    while task.wait(0.2) do
-        pcall(function()
-            if not _G.farmgems then return end
-
-            local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-            if not userFolder then return end
-
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
-
-            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            local alldaily = missionData:FindFirstChild("QQQ_AllDaily")
-            local objective = missionData:FindFirstChild("MissionObjective")
-            local retum = workspace.Merchants.QuestMerchant.Clickable:FindFirstChild("Retum")
-            if not daily3 or not alldaily or not objective or not retum then return end
-
-            if not claimed and daily3.Value == true and objective.Value == "Quests" and alldaily.Value == false then
-                retum:FireServer("Claim1")
-                claimed = true
-            end
-
-            if claimed and alldaily.Value == true then
-                repeat task.wait(0.5)
-                until alldaily.Value == false
-                claimed = false
-            end
-        end)
-    end
-end)
-		
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.farmgems then return end
-
-            local userId = player.UserId
-
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-            if not userFolder then return end
-
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
-
-            local daily3 = missionData:FindFirstChild("QQQ_Daily3")
-            if not daily3 or daily3.Value ~= true then return end
-
-            local objective = missionData:FindFirstChild("MissionObjective")
-            if not objective or objective.Value ~= "Quests" then return end
-
-            local missionGui = player:FindFirstChild("PlayerGui"):FindFirstChild("MissionGui")
-            if not missionGui or not missionGui:FindFirstChild("Frame") then return end
-            if not missionGui.Frame.Visible then return end
-
-            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
-            if Compass and Compass:FindFirstChild("Poser") then
-                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
-                if hrp then
-                    local oldPos = hrp.Position
-
-                    player.Character.Humanoid:UnequipTools()
-                    Compass.Parent = player.Character
-                    hrp.CFrame = CFrame.new(Compass.Poser.Value)
-                    Compass:Activate()
-
-                    wait(0.2)
-
-                    hrp.CFrame = CFrame.new(109, 268, -37)
-
                 end
             end
         end)
     end
 end)
 
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmgems then
-                local userId = game.Players.LocalPlayer.UserId
-                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
-                local Event = userFolder:WaitForChild("ChallengesRemote")
+local isRunning2 = false
+local task2Thread
 
-                local dailies = {"Daily1", "Daily2", "Daily3", "Daily4", "AllDaily", "Challenge9"}
+page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
+    isRunning2 = roll
 
-                for _, daily in ipairs(dailies) do
-                    Event:FireServer("Claim", daily)
-                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+    if isRunning2 then
+        task2Thread = task.spawn(function()
+            while isRunning2 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT2
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
+                    isRunning2 = false
+                    break
+                end
+
+                local args2 = {
+                    [1] = "DFT2",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Cash"
+                }
+
+                if AffDefense2 == 2 then args2[2] = 0/0 end
+                if AffMelee2 == 2 then args2[3] = 0/0 end
+                if AffSniper2 == 2 then args2[4] = 0/0 end
+                if AffSword2 == 2 then args2[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args2))
+                            end
+                        end
+                    end
                 end
             end
         end)
     end
 end)
 
-page7:Label("┇ For Making a Lot Of Compasses ┇")
-page7:Toggle("Auto Farm Compass", false, function(clmw)
-    _G.farmcomp = clmw
-end)
+page6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
 
-spawn(function()
-    while wait(0.2) do
-        pcall(function()
-            if not _G.farmcomp then return end
+local isRunning3 = false
+local task3Thread
 
-            local userId = player.UserId
-            local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_"..userId)
-            if not userFolder then return end
+page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
+    isRunning3 = rolg
 
-            local missionData = userFolder:FindFirstChild("Data")
-            if not missionData then return end
+    if isRunning3 then
+        task3Thread = task.spawn(function()
+            while isRunning3 do
+                task.wait(8)
 
-            local weekly3 = missionData:FindFirstChild("QQQ_Weekly3")
-            local stats = userFolder:FindFirstChild("Stats")
-            if not (weekly3 and stats) then return end
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
 
-            local Compass = player.Backpack:FindFirstChild("Compass") or player.Character:FindFirstChild("Compass")
-            local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-            if not (Compass and Compass:FindFirstChild("Poser") and hrp) then return end
+                -- DFT1
+                local AffMelee1 = userDataName.Data.DFT1Melee.Value
+                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
+                local AffDefense1 = userDataName.Data.DFT1Defense.Value
+                local AffSword1 = userDataName.Data.DFT1Sword.Value
 
-            player.Character.Humanoid:UnequipTools()
-            Compass.Parent = player.Character
-            hrp.CFrame = CFrame.new(Compass.Poser.Value)
-            Compass:Activate()
+                -- Stop if all are 2
+                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
+                    isRunning1 = false
+                    break
+                end
 
-            if weekly3.Value then
-                wait(0.5)
-                stats:FireServer()
-								
-            end
-        end)
-    end
-end)
+                local args1 = {
+                    [1] = "DFT1",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Gems"
+                }
 
-spawn(function()
-    while task.wait() do
-        pcall(function()
-            if _G.farmcomp then
-                local userId = game.Players.LocalPlayer.UserId
-                local userFolder = workspace:WaitForChild("UserData"):WaitForChild("User_"..userId)
-                local Event = userFolder:WaitForChild("ChallengesRemote")
+                if AffDefense1 == 2 then args1[2] = 0/0 end
+                if AffMelee1 == 2 then args1[3] = 0/0 end
+                if AffSniper1 == 2 then args1[4] = 0/0 end
+                if AffSword1 == 2 then args1[5] = 0/0 end
 
-                local dailies = {"Weekly3"}
-
-                for _, daily in ipairs(dailies) do
-                    Event:FireServer("Claim", daily)
-                    task.wait(0.2) -- ลดเวลารอเหลือ 0.2 วินาที (ลองปรับต่ำสุดที่ไม่พัง เช่น 0.1 หรือ 0)
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args1))
+                            end
+                        end
+                    end
                 end
             end
         end)
     end
 end)
+
+local isRunning4 = false
+local task4Thread
+
+page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
+    isRunning4 = rollg
+
+    if isRunning4 then
+        task4Thread = task.spawn(function()
+            while isRunning4 do
+                task.wait(8)
+
+                local player = game.Players.LocalPlayer
+                local playerId = player.UserId
+                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
+                if not userDataName then continue end
+
+                -- DFT2
+                local AffMelee2 = userDataName.Data.DFT2Melee.Value
+                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
+                local AffDefense2 = userDataName.Data.DFT2Defense.Value
+                local AffSword2 = userDataName.Data.DFT2Sword.Value
+
+                -- Stop if all are 2
+                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
+                    isRunning2 = false
+                    break
+                end
+
+                local args2 = {
+                    [1] = "DFT2",
+                    [2] = false, -- defense
+                    [3] = false, -- melee
+                    [4] = false, -- sniper
+                    [5] = false, -- sword
+                    [6] = "Gems"
+                }
+
+                if AffDefense2 == 2 then args2[2] = 0/0 end
+                if AffMelee2 == 2 then args2[3] = 0/0 end
+                if AffSniper2 == 2 then args2[4] = 0/0 end
+                if AffSword2 == 2 then args2[5] = 0/0 end
+
+                local merchant = workspace:FindFirstChild("Merchants")
+                if merchant then
+                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
+                    if affinityMerchant then
+                        local clickable = affinityMerchant:FindFirstChild("Clickable")
+                        if clickable then
+                            local retum = clickable:FindFirstChild("Retum")
+                            if retum then
+                                retum:FireServer(unpack(args2))
+                            end
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+]]--
+  
+local Tab7 = Window:Taps("Quest Sam")
+local page7 = Tab7:newpage()
 
 page7:Label("┇ Function Storage ┇")
 local Cache = {
@@ -3284,6 +3329,7 @@ spawn(function()
 						end
 					end
 
+					-- เช็คใน workspace.Character
 					local character = workspace:FindFirstChild(player.Name)
 					if character then
 						local characterItems = character:GetChildren()
@@ -3306,6 +3352,7 @@ end)
 
 local Players = game:GetService("Players")
 
+-- รายการกล่องที่ต้องการเช็ค
 local targetBoxes = {
 	"Rare Box",
 	"Ultra Rare Box"
@@ -3335,6 +3382,7 @@ spawn(function()
 						end
 					end
 
+					-- เช็คใน Character
 					local character = workspace:FindFirstChild(player.Name)
 					if character then
 						local characterItems = character:GetChildren()
@@ -3398,6 +3446,7 @@ spawn(function()
                         local character = player.Character
                         local found = false
 
+                        -- เช็ค Backpack
                         if backpack then
                             for _, item in pairs(backpack:GetChildren()) do
                                 if table.find(rareFruits, item.Name) then
@@ -3407,6 +3456,7 @@ spawn(function()
                             end
                         end
 
+                        -- เช็ค Tool ที่ถืออยู่
                         for _, tool in pairs(character:GetChildren()) do
                             if tool:IsA("Tool") and table.find(rareFruits, tool.Name) then
                                 found = true
@@ -3471,6 +3521,7 @@ spawn(function()
                     local humanoid = target.Character:FindFirstChildOfClass("Humanoid")
                     local hrp = target.Character:FindFirstChild("HumanoidRootPart")
                     if humanoid and humanoid.Health > 0 and hrp then
+                        -- วาปทุกลูปเลย
                         char.HumanoidRootPart.CFrame = hrp.CFrame + Vector3.new(0, 20, 0)
 
                         local vim = game:GetService("VirtualInputManager")
@@ -3499,7 +3550,8 @@ spawn(function()
                             [6] = "Right"
                         }
                         char.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
-		else
+                    else
+                        -- หยุดลูปเมื่อเลือด = 0
                         selectedPlayer = nil
 		        cacacac = nil
                     end
@@ -3683,12 +3735,14 @@ if ToEnable.FullBright then
 local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
+-- สร้าง GUI
 local player = Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "FPSCounter"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+-- สร้าง TextLabel แสดง FPS
 local fpsLabel = Instance.new("TextLabel")
 fpsLabel.Size = UDim2.new(0, 120, 0, 35)                      -- ขนาดใหญ่ขึ้นนิดหน่อย
 fpsLabel.Position = UDim2.new(1, -130, 0, 10)                 -- มุมขวาบน
@@ -3703,6 +3757,7 @@ fpsLabel.Text = "FPS: 0"
 fpsLabel.TextXAlignment = Enum.TextXAlignment.Right          -- ชิดขวา
 fpsLabel.Parent = screenGui
 
+-- อัปเดต FPS ทุกวินาที
 local lastUpdate = tick()
 local frameCount = 0
 
@@ -4016,6 +4071,8 @@ task.spawn(function()
                         if powers then
                             local hollow = powers:FindFirstChild("Hollow")
                             if hollow then
+
+                                -- Hollows → Hollow → HRP → TouchInterest
                                 local hollows = hollow:FindFirstChild("Hollows")
                                 if hollows then
                                     for _, modelHollow in pairs(hollows:GetChildren()) do
@@ -4031,6 +4088,7 @@ task.spawn(function()
                                     end
                                 end
 
+                                -- HollowsMini → HollowMini → HRP → TouchInterest
                                 local hollowsBody = hollow:FindFirstChild("HollowBody")
                                 if hollowsBody then
                                     for _, modelMini in pairs(hollowsBody:GetChildren()) do
@@ -4072,122 +4130,50 @@ task.spawn(function()
     end
 end)
 
-page8:Toggle("Anti Dmg Water", false, function(dmgg)
-    _G.nodmgwater = dmgg
-end)
-		
-spawn(function()
-    while wait() do
-        if _G.nodmgwater then
-            pcall(function()
-                local args = {
-    [1] = "NOPLS"
-}
-
-game:GetService("Players").LocalPlayer.Character.Drown:FireServer(unpack(args))
-if self.Name == 'Drown' and _G.nodmgwater then
-            if args[1] then
-                return nil
-            end
-        end
-            end)
-        end
-    end
-end)
-
-page8:Label("┇ Function Unbox ┇")
-
 local RunService = game:GetService("RunService")
+local followConnection
+local seaPart
 
-page8:Toggle("Auto Unbox Common", false, function(bxcm)
-    UnboxCM = bxcm
-end)
+page8:Toggle("Walk On Water", false, function(walk)
+    if walk then
+        create:Notifile("", "You can walk on water now! :)", 3)
 
-RunService.Heartbeat:Connect(function()
-    if not UnboxCM then return end
-    local char = game.Players.LocalPlayer.Character
-    if not (char and char:FindFirstChild("Humanoid")) then return end
-    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if Value.Name == "Common Box" then
-            pcall(function()
-                char.Humanoid:UnequipTools()
-                Value.Parent = char
-                task.wait(0.1)
-                Value:Activate()
-            end)
+        seaPart = Instance.new("Part")
+        seaPart.Name = "InvisibleSea"
+        seaPart.Anchored = true
+        seaPart.CanCollide = true
+        seaPart.Transparency = 1
+        seaPart.Size = Vector3.new(50, 1, 50)
+        seaPart.Parent = workspace
+
+        followConnection = RunService.RenderStepped:Connect(function()
+            local char = plr.Character or plr.CharacterAdded:Wait()
+            local root = char:FindFirstChild("HumanoidRootPart")
+            if root and seaPart then
+                local goalPos = Vector3.new(root.Position.X, 211, root.Position.Z)
+                seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
+            end
+        end)
+
+    else
+        create:Notifile("", "Off walk on water now! :(", 3)
+
+        if followConnection then
+            followConnection:Disconnect()
+            followConnection = nil
+        end
+        if seaPart then
+            seaPart:Destroy()
+            seaPart = nil
         end
     end
 end)
 
-page8:Toggle("Auto Unbox Uncommon", false, function(bxun)
-    UnboxUn = bxun
-end)
-
-RunService.Heartbeat:Connect(function()
-    if not UnboxUn then return end
-    local char = game.Players.LocalPlayer.Character
-    if not (char and char:FindFirstChild("Humanoid")) then return end
-    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if Value.Name == "Uncommon Box" then
-            pcall(function()
-                char.Humanoid:UnequipTools()
-                Value.Parent = char
-                task.wait(0.1)
-                Value:Activate()
-            end)
-        end
-    end
-end)
-
-page8:Toggle("Auto Unbox Rare", false, function(bxrl)
-    UnboxRUL = bxrl
-end)
-
-RunService.Heartbeat:Connect(function()
-    if not UnboxRUL then return end
-    local char = game.Players.LocalPlayer.Character
-    if not (char and char:FindFirstChild("Humanoid")) then return end
-    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if Value.Name == "Rare Box" then
-            pcall(function()
-                char.Humanoid:UnequipTools()
-                Value.Parent = char
-                task.wait(0.1)
-                Value:Activate()
-            end)
-        end
-    end
-end)
-
-page8:Toggle("Auto Unbox Ultra Rare", false, function(bxul)
-    UnboxUL = bxul
-end)
-
-RunService.Heartbeat:Connect(function()
-    if not UnboxUL then return end
-    local char = game.Players.LocalPlayer.Character
-    if not (char and char:FindFirstChild("Humanoid")) then return end
-    for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-        if Value.Name == "Ultra Rare Box" then
-            pcall(function()
-                char.Humanoid:UnequipTools()
-                Value.Parent = char
-                task.wait(0.1)
-                Value:Activate()
-            end)
-        end
-    end
-end)
-
+page8:Label("┇ Fake Weapon ┇")
 page8:Button("Seastone Cestus [ Need 500 Melee ]" , function()
 local A_1 = "Seastone Cestus"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
     Event:FireServer(A_1)
 end)
 
-local Tab9 = Window:Taps("Credit")
-local page9 = Tab9:newpage()
-		
-page9:Section("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
-	
 	end)
