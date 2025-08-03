@@ -1131,26 +1131,35 @@ spawn(function() -- auto drink mixer
 end)
 
 spawn(function()
-    while wait() do
-        pcall(function()
+    pcall(function()
+        while wait() do
             if _G.automixer then
                 local Players = game:GetService("Players")
                 local LocalPlayer = Players.LocalPlayer
                 local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                local barrelFolder = workspace:WaitForChild("Barrels"):WaitForChild("Barrels")
-                local crateFolder = workspace:WaitForChild("Barrels"):WaitForChild("Crates")
-                local safeCFrame = workspace:FindFirstChild("SafeZoneOuterSpacePart") and workspace.SafeZoneOuterSpacePart.CFrame * CFrame.new(0, 5, 0) or CFrame.new(0,10,0)
+
+                local barrelsContainer = workspace:FindFirstChild("Barrels")
+                if not barrelsContainer then return end
+
+                local barrelFolder = barrelsContainer:FindFirstChild("Barrels")
+                local crateFolder = barrelsContainer:FindFirstChild("Crates")
+                if not barrelFolder or not crateFolder then return end
+
+                local safeZone = workspace:FindFirstChild("SafeZoneOuterSpacePart")
+                local safeCFrame = safeZone and safeZone.CFrame * CFrame.new(0, 5, 0) or CFrame.new(0, 10, 0)
 
                 local function teleportAndClick(partList)
                     for _, part in ipairs(partList) do
                         character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                        local hrp = character:WaitForChild("HumanoidRootPart")
-                        hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
-                        local clickDetector = part:FindFirstChildWhichIsA("ClickDetector", true)
-                        if clickDetector then
-                            fireclickdetector(clickDetector)
+                        local hrp = character:FindFirstChild("HumanoidRootPart")
+                        if hrp and part and part:IsA("BasePart") then
+                            hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+                            local clickDetector = part:FindFirstChildWhichIsA("ClickDetector", true)
+                            if clickDetector then
+                                fireclickdetector(clickDetector)
+                            end
+                            task.wait(0.2)
                         end
-                        task.wait(0.2)
                     end
                 end
 
@@ -1170,17 +1179,20 @@ spawn(function()
                 teleportAndClick(barrels)
                 teleportAndClick(crates)
 
-                for i, v in pairs(game.Workspace:GetChildren()) do 
+                for _, v in pairs(workspace:GetChildren()) do 
                     if v:IsA("Tool") and v.Name ~= "Compass" then
-                        if v:FindFirstChild("Handle") then
-                            v.Handle.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame
+                        local handle = v:FindFirstChild("Handle")
+                        local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                        if handle and hrp then
+                            handle.CFrame = hrp.CFrame
                         end
                     end
                 end
+
                 wait(10)
             end
-        end)
-    end
+        end
+    end)
 end)
 		
 page2:Label("┇ Function Farming ┇")
