@@ -100,6 +100,7 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
+Cache.DevConfig["ListOfSDf"] = {"Quake", "Flare", "Chilly", "Bomb", "Magma", "Candy", "Light", "Gas", "Dark", "Vampire", "Sand", "Rumble"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -413,193 +414,6 @@ end)
 
 page1:Toggle("Auto Complete Mission [ ไม่ทำงาน ]", false, function(miss)
         _G.automission = miss
-end)
-
--- ตรวจสอบ Objective จาก Data
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local userId = LocalPlayer.UserId
-local dataPath = workspace.UserData["User_" .. userId].Data
-local safeCFrame = CFrame.new(-1526, 364, 10510) -- จุดปลอดภัย
-
--- ตั้งค่า _G.automission ตามเงื่อนไข
-spawn(function()
-    while task.wait(1) do
-        pcall(function()
-            local objective = dataPath:FindFirstChild("Objective")
-            local progress = dataPath:FindFirstChild("Progress")
-            local requirement = dataPath:FindFirstChild("Requirement")
-
-            if not objective or not progress or not requirement then return end
-
-            local objValue = objective.Value
-            local progVal = progress.Value
-            local reqVal = requirement.Value
-
-            if (objValue == "Kill" or objValue == "Damage" or objValue == "Money") then
-                if progVal > 0 and reqVal > 0 then
-                    _G.automission = true
-                elseif progVal == 0 and reqVal == 0 then
-                    _G.automission = false
-                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
-                    end
-                end
-            else
-                _G.automission = false
-            end
-        end)
-    end
-end)
-			
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                local toolname = "Cannon Ball"
-                if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
-                    LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
-		end
-            end
-        end)
-    end
-end)
-
--- ยิง Cannon Ball ไปที่ CFrame ปัจจุบัน
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                for i = 1, 2 do
-                    local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
-                    local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
-                    if cannon and cannon:FindFirstChild("RemoteEvent") then
-                        cannon.RemoteEvent:FireServer(unpack(args))
-                    
-                    task.wait(0)
-                end
-	end
-                local ball = workspace.ResourceHolder["Resources_" .. userId]:FindFirstChild("CannonBall")
-                if ball then
-                    ball.CanCollide = false
-                end
-            end
-        end)
-    end
-end)
-
--- ย้าย CannonBall ไปหน้าตัว
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
-                    if v.Name == "CannonBall" then
-                        v.CFrame = LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
-                        v.CanCollide = false
-                        if not v:FindFirstChild("BodyClip") then
-                            local Noclip = Instance.new("BodyVelocity")
-                            Noclip.Name = "BodyClip"
-                            Noclip.MaxForce = Vector3.new(100000,100000,100000)
-                            Noclip.Velocity = Vector3.new(0,20,0)
-                            Noclip.Parent = v
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- ลบ Cannon Ball ถ้าเกิน
-spawn(function()
-    while task.wait(15) do
-        pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
-                    if v.Name == "Cannon Ball" then
-                        v:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- ลบอาวุธอื่นใน Backpack
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
-                    if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
-                        v:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- เปิด Haki อัตโนมัติ
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-           if _G.automission then
-                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
-                task.wait(0)
-                local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
-                if not status:FindFirstChild("BusoHaki") then
-                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-                else
-                    task.wait(0.5)
-                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-	
-		end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.automission then return end
-
-            local targetName = dataPath:FindFirstChild("MissionObjectiveTarget") and dataPath.MissionObjectiveTarget.Value or nil
-            if not targetName then return end
-
-            -- 🔹 กรณี ObjectiveTarget = "None" หรือ "NONE" → ล็อกทุกมอน
-            if targetName == "None" or targetName == "NONE" then
-                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-                    if enemy:FindFirstChild("HumanoidRootPart") then
-                        enemy.HumanoidRootPart.Anchored = true
-                        enemy.HumanoidRootPart.CanCollide = false
-                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
-
-                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
-                            enemy:Destroy()
-                        end
-                    end
-                end
-            -- 🔹 ถ้าไม่ใช่ None → ล็อกเฉพาะเป้าหมาย
-            else
-                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-                    if enemy:FindFirstChild("HumanoidRootPart") and string.find(enemy.Name, targetName) then
-                        enemy.HumanoidRootPart.Anchored = true
-                        enemy.HumanoidRootPart.CanCollide = false
-                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
-
-                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
-                            enemy:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
 end)
 
 page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
@@ -1319,7 +1133,7 @@ end)
 spawn(function() 
 game:GetService("RunService").RenderStepped:Connect(function() 
 pcall(function() 
-if _G.autoclick then 
+if _page3oclick then 
 game:GetService'VirtualUser':CaptureController() 
 game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672)) 
 end 
@@ -1444,6 +1258,30 @@ spawn(function() -- Light farm npcs
 end)
 
 page2:Label("┇ Function Haki ┇")
+
+page2:Toggle("Auto Buso Haki", false, function(bhki)
+    _G.autohaki = bhki
+end)
+
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+           if _G.autobuso then
+                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
+                task.wait(0)
+                local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
+                if not status:FindFirstChild("BusoHaki") then
+                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
+                else
+                    task.wait(0.5)
+                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
+	
+		end
+            end
+        end)
+    end
+end)
+
 page2:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
 end)
@@ -1587,8 +1425,11 @@ page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
-page3:Textbox("Per Second :", "1", function(xtx)
+local spamtimeSet = false
+		
+page3:Textbox("Per Second :", "0.1", function(xtx)
     getgenv().spamtime = tonumber(xtx)
+    spamtimeSet = true
 end)
 
 page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
@@ -1603,11 +1444,12 @@ local pla = game.Players.LocalPlayer
 local Mouse = pla:GetMouse()
 
 task.defer(function()
-    if getgenv().spamtime == nil then
-        getgenv().spamtime = 1
+    wait(1)
+    if not spamtimeSet then
+        getgenv().spamtime = 0.1
     end
 end)
-
+		
 -- Quake
 spawn(function()
     while wait(getgenv().spamtime) do
