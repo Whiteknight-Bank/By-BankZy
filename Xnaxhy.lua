@@ -900,8 +900,7 @@ local A_2 = "Challenge8"
 wait(.8)
 local A_1 = "Claim"
 local A_2 = "Challenge9"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemโค้ดเดิมของคุณต่อเลยดิมของคุณต่อเลย   Event:FireServer(A_1,A_2)
 wait(.8)
 local A_1 = "Claim"
 local A_2 = "Challenge10"
@@ -1194,7 +1193,7 @@ spawn(function()
                 end
 
                 wait(0.2)
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame *โค้ดเดิมของคุณต่อเลย
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace")["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
                 wait(10)
             end
         end)
