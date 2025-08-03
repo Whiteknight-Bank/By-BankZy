@@ -1103,7 +1103,6 @@ spawn(function() -- auto mixer
     end
 end)
 
-
 spawn(function() -- auto drink mixer
     while wait() do
         pcall(function()
