@@ -1008,6 +1008,7 @@ spawn(function()
                 teleportAndClick(barrels)
                 teleportAndClick(crates)
 
+                -- เก็บของที่ตกอยู่
                 for _, v in pairs(workspace:GetChildren()) do 
                     if v:IsA("Tool") and v.Name ~= "Compass" then
                         local handle = v:FindFirstChild("Handle")
@@ -1016,12 +1017,18 @@ spawn(function()
                             handle.CFrame = hrp.CFrame
                         end
                     end
-				end
-             wait(0.1)
+                end
+
+                wait(0.1)
+
+                -- วาร์ปกลับ SafeZoneOuterSpacePart โดยไม่ใช้ตัวแปรย่อ
                 if workspace:FindFirstChild("SafeZoneOuterSpacePart") then
                     LocalPlayer.Character:SetPrimaryPartCFrame(workspace.SafeZoneOuterSpacePart.CFrame + Vector3.new(0, 5, 0))
-								end
-             wait(10)
+                else
+                    warn("ไม่พบ SafeZoneOuterSpacePart — ข้ามการวาร์ป")
+                end
+
+                wait(10)
             end
         end
     end)
