@@ -960,7 +960,9 @@ spawn(function()--autofruit
             end
         end)
     end
-end)spawn(function()
+end)
+    
+spawn(function()
     pcall(function()
         while wait() do
             if _G.automixer then
@@ -974,9 +976,6 @@ end)spawn(function()
                 local barrelFolder = barrelsContainer:FindFirstChild("Barrels")
                 local crateFolder = barrelsContainer:FindFirstChild("Crates")
                 if not barrelFolder or not crateFolder then return end
-
-                local safeZone = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-                local safeCFrame = safeZone and safeZone.CFrame * CFrame.new(0, 5, 0) or CFrame.new(0, 10, 0)
 
                 local function teleportAndClick(partList)
                     for _, part in ipairs(partList) do
@@ -1017,10 +1016,12 @@ end)spawn(function()
                             handle.CFrame = hrp.CFrame
                         end
                     end
-                end
-                wait(0.1)
-		LocalPlayer.Character.CFrame = safeCFrame
-                wait(10)
+				end
+             wait(0.1)
+                if workspace:FindFirstChild("SafeZoneOuterSpacePart") then
+                    LocalPlayer.Character:SetPrimaryPartCFrame(workspace.SafeZoneOuterSpacePart.CFrame + Vector3.new(0, 5, 0))
+								end
+             wait(10)
             end
         end
     end)
@@ -1329,8 +1330,7 @@ game:GetService('RunService').RenderStepped:connect(function()
             }
 
             workspace:WaitForChild("UserData"):WaitForChild("User_" .. game.Players.LocalPlayer.UserId):WaitForChild("III"):FireServer(unpack(args))
-            task.wait(0.1)
-            local args = {
+            task.wait(0.1selectedSpamSkillilllocal args = {
                 [1] = "On",
                 [2] = 1
             }
@@ -1594,7 +1594,7 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Flare" then
-                if selectedSpamSkill == "Skill X" then
+             selectedSpamSkillmSkill == "Skill X" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "FlarePower2",
