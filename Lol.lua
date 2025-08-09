@@ -352,8 +352,7 @@ page1:Toggle("Auto Farm", false, function(state)
                     -- ดึง mob
                     if canPullMob then
                         for _, mob in ipairs(workspace.Npcs:GetChildren()) do
-                            if not mob:FindFirstChild("HumanoidRootPart") or not mob:FindFirstChild("Humanoid") then return end
-
+                            if not mob:FindFirstChild("HumanoidRootPart") or not mob:FindFirstChild("Humanoid") then continue end
                             local isTarget = false
                             if SelectedMob == "All" then
                                 isTarget = true
