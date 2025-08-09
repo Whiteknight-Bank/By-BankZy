@@ -100,7 +100,6 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
-Cache.DevConfig["ListOfSDf"] = {"Quake", "Flare", "Chilly", "Bomb", "Magma", "Candy", "Light", "Gas", "Dark", "Vampire", "Sand", "Rumble"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -282,6 +281,299 @@ local remotes = {}
     elseif type(val) == "boolean" then
         tmp = tmp .. (val and "true" or "false")
     elseif type(val) == "function" then
+        tmp = tmp  .. "func: " .. debug.getinfo(val).name
+    else
+        tmp = tmp .. tostring(val)
+    end
+ 
+    return tmp
+end
+
+local Wapon = {}
+for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+    if v:IsA("Tool") then
+        table.insert(Wapon ,v.Name)
+    end
+end
+
+-- สร้างแท็บชื่อ Autos
+local Tab1 = Window:Taps("Autos")
+local page1 = Tab1:newpage()
+
+page1:Label("┇ Function Spawn ┇")
+
+_G.savedCFrame = nil
+
+function SaveCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+    end
+end
+
+page1:Button("Save Point", function()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+        create:Notifile("Saved Point!", "Your position has been saved.", 3)
+    end
+end)
+		
+page1:Toggle("Auto Spawn With Auto Death", false, function(aspw)
+        _G.respawndie = aspw
+end)
+
+spawn(function()--autorespawn
+while wait() do
+if _G.respawndie then
+pcall(function()
+if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
+for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
+v.Function()
+end
+end
+end)
+end
+end
+end)
+
+page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
+        _G.autorespawn = rspw
+end)
+
+function TeleportToSavedCFrame()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp and _G.savedCFrame then
+        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
+    end
+end
+
+spawn(function()
+    while wait() do
+        if _G.autorespawn then
+            pcall(function()
+                local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
+                if playerGui.Load and playerGui.Load.Frame.Visible == true then
+                    for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
+                        v.Function()
+                    end
+                    -- รอ Character + Health > 0
+                    repeat wait() until game.Players.LocalPlayer.Character 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
+                        and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
+                    
+                    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    
+                    repeat
+                        wait(0.1)
+                        hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    until hrp and hrp.Position.Y < 242
+                    
+                    TeleportToSavedCFrame()
+                end
+            end)
+        end
+    end
+end)
+
+spawn(function()
+    while wait() do
+        if _G.respawndie then
+            local player = game.Players.LocalPlayer
+            local char = workspace:FindFirstChild(player.Name)
+            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                local yPos = char.HumanoidRootPart.Position.Y
+                if yPos < 242 and char.Humanoid.Health > 0 then
+                    wait(3)
+                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
+                        if char.HumanoidRootPart.Position.Y < 242 then
+                            char.Humanoid.Health = 0
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+
+page1:Label("┇ Function Autos ┇")
+page1:Toggle("Auto Claim Mission", false, function(dmmsv)
+        AutoMission = dmmsv
+end)
+
+spawn(function()
+    while wait() do 
+        if AutoMission then 
+            pcall(function() 
+                workspace.Merchants.ExpertiseMerchant.Clickable.Retum:FireServer()
+            end) 
+        end 
+    end 
+end)
+
+page1:Toggle("Auto Complete Mission [ ไม่ทำงาน ]", false, function(miss)
+        _G.automission = miss
+end)
+
+-- ตรวจสอบ Objective จาก Data
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local userId = LocalPlayer.UserId
+local dataPath = workspace.UserData["User_" .. userId].Data
+local safeCFrame = CFrame.new(-1526, 364, 10510) -- จุดปลอดภัย
+
+-- ตั้งค่า _G.automission ตามเงื่อนไข
+spawn(function()
+    while task.wait(1) do
+        pcall(function()
+            local objective = dataPath:FindFirstChild("Objective")
+            local progress = dataPath:FindFirstChild("Progress")
+            local requirement = dataPath:FindFirstChild("Requirement")
+
+            if not objective or not progress or not requirement then return end
+
+            local objValue = objective.Value
+            local progVal = progress.Value
+            local reqVal = requirement.Value
+
+            if (objValue == "Kill" or objValue == "Damage" or objValue == "Money") then
+                if progVal > 0 and reqVal > 0 then
+                    _G.automission = true
+                elseif progVal == 0 and reqVal == 0 then
+                    _G.automission = false
+                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
+                    end
+                end
+            else
+                _G.automission = false
+            end
+        end)
+    end
+end)
+			
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.automission then
+                local toolname = "Cannon Ball"
+                if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
+                    LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
+		end
+            end
+        end)
+    end
+end)
+
+-- ยิง Cannon Ball ไปที่ CFrame ปัจจุบัน
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.automission then
+                for i = 1, 2 do
+                    local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
+                    local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
+                    if cannon and cannon:FindFirstChild("RemoteEvent") then
+                        cannon.RemoteEvent:FireServer(unpack(args))
+                    
+                    task.wait(0)
+                end
+	end
+                local ball = workspace.ResourceHolder["Resources_" .. userId]:FindFirstChild("CannonBall")
+                if ball then
+                    ball.CanCollide = false
+                end
+            end
+        end)
+    end
+end)
+
+-- ย้าย CannonBall ไปหน้าตัว
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.automission then
+                for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
+                    if v.Name == "CannonBall" then
+                        v.CFrame = LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
+                        v.CanCollide = false
+                        if not v:FindFirstChild("BodyClip") then
+                            local Noclip = Instance.new("BodyVelocity")
+                            Noclip.Name = "BodyClip"
+                            Noclip.MaxForce = Vector3.new(100000,100000,100000)
+                            Noclip.Velocity = Vector3.new(0,20,0)
+                            Noclip.Parent = v
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+-- ลบ Cannon Ball ถ้าเกิน
+spawn(function()
+    while task.wait(15) do
+        pcall(function()
+            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
+                    if v.Name == "Cannon Ball" then
+                        v:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+-- ลบอาวุธอื่นใน Backpack
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
+                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
+                    if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
+                        v:Destroy()
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+-- เปิด Haki อัตโนมัติ
+spawn(function()
+    while task.wait(0) do
+        pcall(function()
+           if _G.automission then
+                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
+                task.wait(0)
+                local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
+                if not status:FindFirstChild("BusoHaki") then
+                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
+                else
+                    task.wait(0.5)
+                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
+	
+		end
+            end
+        end)
+    end
+end)
+
+spawn(function()
+    while task.wait(0.5) do
+        pcall(function()
+            if not _G.automission then return end
+
+            local targetName = dataPath:FindFirstChild("MissionObjectiveTarget") and dataPath.MissionObjectiveTarget.Value or nil
+            if not targetName then return end
+
+            -- 🔹 กรณี ObjectiveTarget = "None" หรือ "NONE" → ล็อกทุกมอน
+            if targetName == "None" or targetName == "NONE" then
+                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
+                    if enemy:FindFirstChild("HumanoidRootPart") then
+         elseif type(val) == "function" then
         tmp = tmp  .. "func: " .. debug.getinfo(val).name
     else
         tmp = tmp .. tostring(val)
