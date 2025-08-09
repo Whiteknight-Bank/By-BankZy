@@ -287,6 +287,7 @@ local canPullMob = true
 		
 page1:Toggle("Auto Farm", false, function(befrm)
     _G.farmNpc = befrm
+end)
 
 if _G.farmNpc then
     game:GetService("RunService").Heartbeat:Connect(function()
@@ -351,7 +352,7 @@ if _G.farmNpc then
 
             if canPullMob then
                 for _, mob in ipairs(workspace.Npcs:GetChildren()) do
-                    if not mob:FindFirstChild("HumanoidRootPart") or not mob:FindFirstChild("Humanoid") then continue end
+                    if not mob:FindFirstChild("HumanoidRootPart") or not mob:FindFirstChild("Humanoid") then return end
 
                     local isTarget = false
                     if SelectedMob == "All" then
@@ -402,11 +403,13 @@ if _G.farmNpc then
                             end
                         end
                     end
-                end)
-            end)
-        end
+                end
+            end
+        end)
     end)
-			
+end
+
+
 page1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
@@ -1279,4 +1282,3 @@ end
 create:Notifile("", "Don't worry, Anti Cheat Now!", 3)
 
 			end)
-
