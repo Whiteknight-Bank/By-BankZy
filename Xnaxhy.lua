@@ -1727,6 +1727,12 @@ local Tab4 = Window:Taps("Players")
 local page4 = Tab4:newpage()
 
 page4:Label("┇ Local Player ┇")
+page4:Button("DUPE" , function()
+create:Notifile("", "Dupe now!", 2)
+                
+workspace.UserData["User_"..game.Players.LocalPlayer.UserId].UpdateClothing_Extras:FireServer("A", "\255", 34)
+game:GetService("Players").LocalPlayer.Character.CharacterTrait.ClothingTrigger:FireServer()
+end)
 
 page4:Label("┇ Player ┇")
 local playerNames = {}
