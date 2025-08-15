@@ -1146,7 +1146,9 @@ spawn(function()--autofruit
             end
         end)
     end
-end)spawn(function()
+end)
+
+spawn(function()
     pcall(function()
         while wait() do
             if _G.automixer then
@@ -1211,7 +1213,7 @@ end)spawn(function()
         end
     end)
 end)
-		
+
 page2:Label("┇ Function Farming ┇")
 page2:Dropdown("Select Weapon:", Wapon, function(wapn)
     Wapon = wapn
