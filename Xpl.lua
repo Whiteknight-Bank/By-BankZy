@@ -1163,9 +1163,6 @@ spawn(function()
                 local crateFolder = barrelsContainer:FindFirstChild("Crates")
                 if not barrelFolder or not crateFolder then return end
 
-                local safeZone = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-                local safeCFrame = safeZone and safeZone.CFrame * CFrame.new(0, 5, 0) or CFrame.new(0, 10, 0)
-
                 local function teleportAndClick(partList)
                     for _, part in ipairs(partList) do
                         character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -1206,8 +1203,13 @@ spawn(function()
                         end
                     end
                 end
-                wait(0.1)
-		LocalPlayer.Character.CFrame = safeCFrame
+                wait(0)
+                if workspace:FindFirstChild("SafeZoneOuterSpacePart") then
+                    LocalPlayer.Character:SetPrimaryPartCFrame(workspace.SafeZoneOuterSpacePart.CFrame + Vector3.new(0, 5, 0))
+                else
+                    warn("ไม่พบ SafeZoneOuterSpacePart — ข้ามการวาร์ป")
+                end
+
                 wait(10)
             end
         end
@@ -1789,12 +1791,15 @@ page3:Label("┇ Spam Skill ┇")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", {"Quake", "Flare", "Chilly", "Bomb"}, function(spdf)
+page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
-page3:Textbox("Per Second:", "Enter Number", function(xtx)
-    getgenv().spamtime = xtx
+local spamtimeSet = false
+		
+page3:Textbox("Per Second :", "Enter Number", function(xtx)
+    getgenv().spamtime = tonumber(xtx)
+    spamtimeSet = true
 end)
 
 page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
@@ -1805,19 +1810,26 @@ page3:Toggle("Auto Spam [ 100% ]", false, function(spam)
     _G.skillspam = spam
 end)
 
+local pla = game.Players.LocalPlayer
+local Mouse = pla:GetMouse()
+
+task.defer(function()
+    wait(1)
+    if not spamtimeSet then
+        getgenv().spamtime = 0.1
+    end
+end)
+		
 -- Quake
 spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Quake" then
                 if selectedSpamSkill == "Skill Z" then
-                    local pla = game.Players.LocalPlayer
-                    local Mouse = pla:GetMouse()
-                    local humanoid = pla.Character.HumanoidRootPart
-                    local X = humanoid.Position.X
+		    local X = humanoid.Position.X
                     local Y = humanoid.Position.Y
                     local Z = humanoid.Position.Z
-
+									
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower1",
@@ -1830,13 +1842,10 @@ spawn(function()
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
                 elseif selectedSpamSkill == "Skill C" then
-                    local pla = game.Players.LocalPlayer
-                    local Mouse = pla:GetMouse()
-                    local humanoid = pla.Character.HumanoidRootPart
+		    local humanoid = pla.Character.HumanoidRootPart
                     local Xx = humanoid.Position.X
                     local Yy = humanoid.Position.Y
                     local Zz = humanoid.Position.Z
-
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower3",
@@ -1848,7 +1857,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower3",
@@ -1869,7 +1877,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "QuakePower4",
@@ -1892,10 +1899,6 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Bomb" then
-                local pla = game.Players.LocalPlayer
-                local Mouse = pla:GetMouse()
-
-                -- Skill Z
                 if selectedSpamSkill == "Skill Z" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1907,8 +1910,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-
-                -- Skill B
                 elseif selectedSpamSkill == "Skill B" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1920,7 +1921,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-
                     local args2 = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "BombPower5",
@@ -1931,8 +1931,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
-
-                -- Skill C
                 elseif selectedSpamSkill == "Skill C" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1944,8 +1942,6 @@ spawn(function()
                     }
 
                     game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-
-                -- Skill V
                 elseif selectedSpamSkill == "Skill V" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
@@ -1968,10 +1964,7 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Flare" then
-                if selectedSpamSkill == "Skill X" then
-                    local pla = game.Players.LocalPlayer
-                    local Mouse = pla:GetMouse()
-
+            if selectedSpamSkillmSkill == "Skill X" then
                     local args = {
                         [1] = tonumber(serializeTable(remotes)),
                         [2] = "FlarePower2",
@@ -2029,10 +2022,6 @@ spawn(function()
     while wait(getgenv().spamtime) do
         pcall(function()
             if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
-                local pla = game.Players.LocalPlayer
-                local Mouse = pla:GetMouse()
-
-                -- StopCharging
                 local args = {
                     [1] = tonumber(serializeTable(remotes)),
                     [2] = "ChillyPower11",
@@ -2044,7 +2033,6 @@ spawn(function()
 
                 game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
 
-                -- StartCharging
                 local args2 = {
                     [1] = tonumber(serializeTable(remotes)),
                     [2] = "ChillyPower11",
@@ -2055,6 +2043,38 @@ spawn(function()
                 }
 
                 game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args2))
+            end
+        end)
+    end
+end)
+
+-- Magma
+spawn(function()
+    while wait(getgenv().spamtime) do
+        pcall(function()
+            if _G.skillspam and selectedSpamFruit == "Magma" then
+                if selectedSpamSkill == "Skill Z" then
+            local args = {
+    [1] = tonumber(serializeTable(remotes)),
+    [2] = "MagmaPower7",
+    [3] = "StopCharging",
+    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
+    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+    [6] = 100
+}
+
+game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
+            local args = {
+    [1] = tonumber(serializeTable(remotes)),
+    [2] = "MagmaPower7",
+    [3] = "StartCharging",
+    [4] = CFrame.new(2157.088623046875, 1193.5758056640625, -9786.4072265625, 0.9772287607192993, -0.020494922995567322, -0.21119679510593414, 1.862645149230957e-09, 0.9953245520591736, -0.09658809006214142, 0.21218889951705933, 0.09438865631818771, 0.9726595878601074),
+    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
+    [7] = "Right"
+}
+
+game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
+                end
             end
         end)
     end
