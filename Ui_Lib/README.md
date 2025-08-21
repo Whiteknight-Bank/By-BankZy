@@ -1,2 +1,1 @@
-Create By ChatGPT 
-Lol
+Create By Bankzy
