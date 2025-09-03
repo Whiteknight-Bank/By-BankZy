@@ -1492,23 +1492,31 @@ spawn(function()
 end)]]
 
 spawn(function()
-    while wait(0) do
+    while task.wait() do
         pcall(function()
             if _G.autodef then
                 for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if string.find(v.Name, "Crab")
-                    and v:FindFirstChild("HumanoidRootPart") then
-                        v.HumanoidRootPart.CanCollide = false
-                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        --v.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
-                        v.HumanoidRootPart.Transparency = 0.9
-                        v:FindFirstChild("HumanoidRootPart").Anchored = true
-                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-2.5)
-                        if v.Humanoid.Health == 0 then
-                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                    if string.find(v.Name, "Crab") 
+                    and v:FindFirstChild("HumanoidRootPart") 
+                    and v:FindFirstChild("Humanoid") then
+
+                        local hrp = v.HumanoidRootPart
+                        local char = game.Players.LocalPlayer.Character
+
+                        hrp.CanCollide = false
+                        hrp.Size = Vector3.new(10, 10, 10)
+                        hrp.Transparency = 0.9
+                        hrp.Anchored = true
+
+                        -- สลับขึ้นลงที (สุ่มค่า -2 ถึง 2)
+                        local offsetY = math.random(-2,2)
+                        hrp.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, offsetY, -2)
+
+                        if v.Humanoid.Health <= 0 then
+                            hrp.Size = Vector3.new(0, 0, 0)
                             v:Destroy()
                         end
-                     end
+                    end
                 end
             end
         end)
