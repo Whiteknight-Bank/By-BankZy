@@ -1510,7 +1510,7 @@ spawn(function()
 
                         -- สลับขึ้นลงที (สุ่มค่า -2 ถึง 2)
                         local offsetY = math.random(-2,2)
-                        hrp.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, offsetY, -2)
+                        hrp.CFrame = char.HumanoidRootPart.CFrame * CFrame.new(0, offsetY, 0)
 
                         if v.Humanoid.Health <= 0 then
                             hrp.Size = Vector3.new(0, 0, 0)
