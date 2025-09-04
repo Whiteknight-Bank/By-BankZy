@@ -140,7 +140,7 @@ local Camera = workspace.CurrentCamera
 spawn(function() -- autofarm velocity
     while wait(0) do
         pcall(function()
-            if AutoFish or AutoPack or _G.behindFarm or _G.bombsteal or _G.killbomb then
+            if AutoFish or AutoPack or _G.autodef or _G.bombsteal or _G.killbomb then
                 if not game:GetService("Players").LocalPlayer.Character.HumanoidRootPart:FindFirstChild("BodyClip") then
                     local Noclip = Instance.new("BodyVelocity")
                     Noclip.Name = "BodyClip"
