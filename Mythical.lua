@@ -1101,7 +1101,9 @@ if not data then return end
 
 local fruit1 = data:FindFirstChild("DevilFruit")  
 local fruit2 = data:FindFirstChild("DevilFruit2")
+
 local affinities = data:FindFirstChild("Affinities")
+local storages = data:FindFirstChild("Storages")
 
 local defense = data:FindFirstChild("DefenseLvl")  
 local melee = data:FindFirstChild("MeleeLvl")  
@@ -1140,7 +1142,7 @@ print(" ผลที่2 ขีด ดาบ: " .. (dft2sword and dft2sword.Valu
 local storageValues = {}
 
 for i = 1, 12 do
-local found = data:FindFirstChild("StoredDF" .. i)
+local found = storages:FindFirstChild("Storage" .. i)
 table.insert(storageValues, found)
 end
 print("-- ========== [ผลไม้ ที่จัดเก็บ] ========== --")
