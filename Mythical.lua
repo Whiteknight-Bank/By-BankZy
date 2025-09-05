@@ -1396,7 +1396,6 @@ end)
 
 page6:Label("┇ ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ] ┇")
 
--- สร้าง dropdownDF โดยตรงจาก LocalPlayer
 local dropdownDF = {}
 local dfMap = {}
 
@@ -1414,6 +1413,7 @@ do
             table.insert(dropdownDF, fruit1.Value)
             dfMap[fruit1.Value] = "DFT1"
         end
+				
         if fruit2 and fruit2:IsA("StringValue") and fruit2.Value ~= "" then
             table.insert(dropdownDF, fruit2.Value)
             dfMap[fruit2.Value] = "DFT2"
@@ -1421,9 +1421,11 @@ do
     end
 end
 
-page6:Dropdown("เลือก ผลสุ่ม :", dropdownDF, function(dfs)
-    selectedDF = dfs
-end)
+if #dropdownDF > 0 then
+    page6:Dropdown("เลือก ผลปีศาจ :", dropdownDF, function(dfs)
+        selectedDF = dfs
+    end)
+end
 
 page6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
