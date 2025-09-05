@@ -1612,7 +1612,7 @@ spawn(function()
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-
+			end
         end)
     end
 end)
@@ -1630,7 +1630,7 @@ spawn(function()
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-
+			end
         end)
     end
 end)
