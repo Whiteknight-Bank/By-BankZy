@@ -1399,18 +1399,15 @@ page6:Label("┇ ฝั่งชั่น สุ่มพีรามิด [ 10
 local dropdownDF = {}
 local dfMap = {} -- Map สำหรับเก็บว่าเลือกผลไหนเป็น DFT1 หรือ DFT2
 
-if data then
-    local df1 = data:FindFirstChild("DevilFruit")
-    local df2 = data:FindFirstChild("DevilFruit2")
-
-    if df1 and df1:IsA("StringValue") and df1.Value ~= "" then
-        table.insert(dropdownDF, df1.Value)
-        dfMap[df1.Value] = "DFT1" -- เก็บ mapping
+if not data then return end
+    if fruit1 and fruit1:IsA("StringValue") and fruit1.Value ~= "" then
+        table.insert(dropdownDF, fruit1.Value)
+        dfMap[fruit1.Value] = "DFT1" -- เก็บ mapping
     end
 
-    if df2 and df2:IsA("StringValue") and df2.Value ~= "" then
-        table.insert(dropdownDF, df2.Value)
-        dfMap[df2.Value] = "DFT2"
+    if fruit2 and fruit2:IsA("StringValue") and fruit2.Value ~= "" then
+        table.insert(dropdownDF, fruit2.Value)
+        dfMap[fruit2.Value] = "DFT2"
     end
 end
 
@@ -1425,7 +1422,7 @@ page6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2
     lockvalue = tonumber(lkvs)
 end)
 
-page6:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
+page6:Dropdown("เลือก การสุ่ม :", {"เบรี", "เพชร"}, function(srll)
     selectedrol = srll
 end)
 
