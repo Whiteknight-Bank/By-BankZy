@@ -72,7 +72,7 @@ task.spawn(function()
 	-- วน . . .
 	task.spawn(function()
 		while updateLoading do
-			title.Text = "InW Hub Loading" .. dots[dotIndex]
+			title.Text = "ReaperX Hub Loading" .. dots[dotIndex]
 			dotIndex = dotIndex % #dots + 1
 			wait(0.4)
 		end
@@ -300,7 +300,7 @@ end
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ ฝั่งชั่น เกิด (ใช้งานได้ปกติ) ┇")
+page1:Label("┇ ฝั่งชั่น เกิด ┇")
 		
 page1:Toggle("ออโต้ กดเกิด", false, function(aspw)
         _G.respawn = aspw
@@ -320,7 +320,7 @@ end
 end
 end)
 
-page1:Label("┇ ฝั่งชั่น ออโต้ (ไม่พร้อมใช้งาน) ┇")
+page1:Label("┇ ฝั่งชั่น ออโต้ ┇")
 page1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
         AutoMission = dmmsv
 end)
@@ -353,7 +353,7 @@ spawn(function()
     end
  end)
 
-page1:Toggle("ออโต้ ฟามกล่องไม้ (ไม่ทำงาน)", false, function(apke)
+page1:Toggle("ออโต้ ฟาร์ม Package (ไม่ทำงาน)", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -508,7 +508,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ออโต้ กดรับชาเลนเจอร์ (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
+page1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -699,7 +699,7 @@ local Tab2 = Window:Taps("ฟาร์ม")
 local page2 = Tab2:newpage()
 
 page2:Label("┇ ฝั่งชั่น ฟาร์มผลไม้ ( กำลังแก้ไข ) ┇")
-page2:Toggle("ออโต้ ฟาร์มแสตท", false, function(stts)
+page2:Toggle("ออโต้ ฟาร์มแสตท ( ไม่ทำงาน )", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -838,7 +838,7 @@ page2:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
-page2:Button("รีเฟรช อาวุธ (ไม่ทำงาน)", function()
+page2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำงาน)", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -919,7 +919,7 @@ spawn(function()
     end
 end)
 
-page2:Label("┇ ฝั่งชั่น ฟาร์มด้วยผลไม้ปีศาจ (แก้ไข) ┇")
+page2:Label("┇ ฝั่งชั่น ฟาร์มด้วยผลไม้ปีศาจ ┇")
 page2:Toggle("ยังไม่มา . . . ", false, function(qke)
     _G.farmdf = qke
 end)
@@ -1054,8 +1054,9 @@ while getgenv().haki do
 	end
 end)
 
-page2:Section("↑ คำเตือน: ใช้ ฟาร์มฮาคิ แบบเร็ว ใช้นานอาจโดนเตะ เพราะ ปิงมากควรใช้ไม่นาน ↑")
-		
+page2:Section("↑ คำเตือน: ใช้ฟาร์มฮาคิแบบเร็ว ใช้นานอาจโดนเตะ เพราะ ปิงมาก ↑")
+page2:Section("↑ ต่อ: ไม่ควรใช้นานเกินไป ขาดการเชื่อมต่อไม่ใช่โดนแบนนะจ้ะะ ↑")
+
 local Tab3 = Window:Taps("สกิล")
 local page3 = Tab3:newpage()
 
@@ -1072,22 +1073,18 @@ for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-page4:Dropdown("Select Player:", playerNames, function(name)
+page4:Dropdown("เลือก ผู้เล่น:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-page4:Button("ีเฟรช ชื่อผู้เล่น", function()
+page4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
 				end
 			end)
-		
-page4:Button("Click to Tp", function()
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
-end)
 
-page4:Button("Check Data & Storage Player", function()
+page4:Button("เช็ค ข้อมูลผู้เล่น & เช็คผลในที่เก็บ", function()
 local selectedName = selectedPlayer
 local player = game.Players:FindFirstChild(selectedName)
 if not player then return end
@@ -1163,11 +1160,11 @@ end
 
 print("-- =================================== --")
 
-   create:Notifile("", "Send Check /console Now!!! ", 6)
+   create:Notifile("", "พิมในช่องแชท /console ตอนนี้เลย!!! ", 6)
 end)
 
 
-page4:Toggle("View", false, function(state)
+page4:Toggle("ส่อง", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -1179,126 +1176,18 @@ page4:Toggle("View", false, function(state)
 		end
 	end
 end)
-
-page4:Toggle("Auto Bring Player [ All ]", false, function(plal)
-	_G.BringAllPlayer = plal
-end)
-
-spawn(function() -- bring Plr
-    while wait() do
-        if _G.BringAllPlayer then
-            pcall(function()
-                for i,v in pairs(game.Players:GetChildren()) do
-                    if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-15 or getgenv().disbring)
-                        if v.Character.Humanoid.Health == 0 then
-                        	v.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-		
-page4:Toggle("Aim Silent [ Select Player ]", false, function(value)
-    aimsilent = value
-end)
-
-spawn(function()--aim silent
-pcall(function()
-while true do wait()
-pcall(function()
-local plr1 = game.Players.LocalPlayer.Character
-local plr2 = game.Players:FindFirstChild(selectedPlayer)
-if aimsilent then
-cacacac = plr2.Character.HumanoidRootPart.CFrame
-end
-end)
-end
-end)
-end)
-
-local index = mta.__index
-cf = CFrame.new(1, 2, 3)
-setreadonly(mta, false)
-mta.__index = newcclosure(function(a, b, c)
-if tostring(b):lower() == 'hit' and aimsilent then
-return cacacac
-end
-return index(a, b, c)
-end)
-
-
-page4:Label("┇ Function Kill Players ┇")
-page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
-    _G.autocannonplr = bplr
-end)
-
-page4:Toggle("Auto Quake Kill", false, function(qkkl)
-	_G.Quakekill = qkkl
-end)
-
-page4:Toggle("Auto Bomb Kill", false, function(kbmb)
-    _G.killbomb = kbmb
-end)
-
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if _G.killbomb then
-                local pla = game.Players.LocalPlayer
-                local char = pla.Character or pla.CharacterAdded:Wait()
-
-                for i, targetPlayer in pairs(game.Players:GetPlayers()) do
-                    if targetPlayer ~= pla and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local targetHRP = targetPlayer.Character.HumanoidRootPart
-
-                        -- วาร์ปสูง 20 หน่วย
-                        char:WaitForChild("HumanoidRootPart").CFrame = CFrame.new(targetHRP.Position + Vector3.new(0, 20, 0))
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
-
-			local args = {
-                            [1] = tonumber(serializeTable(remotes)),
-                            [2] = "BombPower5",
-                            [3] = "StopCharging",
-                            [4] = CFrame.new(targetHRP.Position),
-                            [5] = targetHRP,
-                            [6] = 100
-                        }
-
-                        game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower5",
-                        [3] = "StartCharging",
-                        [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
-                        [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                        [6] = "Right"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                        wait(0.5) -- เว้นก่อนยิง player ถัดไป
-                    end
-                end
-            end
-        end)
-    end
-end)
 		
 plr = game.Players.LocalPlayer
 
-local Tab5 = Window:Taps("Island")
+local Tab5 = Window:Taps("เกาะ")
 local page5 = Tab5:newpage()
 
-page5:Label("┇ Islands ┇")
-page5:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+page5:Label("┇ เกาะ ┇")
+page5:Dropdown("เลือก เกาะ", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-page5:Button("Click to Tp" , function()
+page5:Button("คลิก เพื่อ วาป" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -1366,12 +1255,12 @@ page5:Button("Click to Tp" , function()
                 end
 end)
 
-page5:Label("┇ SAFE ZONE ┇")
-page5:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+page5:Label("┇ เซฟโซน ┇")
+page5:Dropdown("เลือก เซฟโซน", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-page5:Button("Click to Tp" , function()
+page5:Button("กด เพื่อ วาป" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -1385,12 +1274,12 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-page5:Label("┇ NPCs ┇")
-page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+page5:Label("┇ เอ็นพีซี ┇")
+page5:Dropdown("เลือก เอ็นพีซี :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-page5:Button("Click to Tp" , function()
+page5:Button("คลิก เพื่อ วาป" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -1427,15 +1316,15 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-local Tab6 = Window:Taps("NPCs")
+local Tab6 = Window:Taps("ร้านค้า")
 local page6 = Tab6:newpage()
 
-page6:Label("┇ Shop ┇")
-page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
+page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
+page6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Toggle("Auto Buy Drinks", false, function(bdy)
+page6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -1469,7 +1358,7 @@ wait(.8)
 end)
 
 
-page6:Toggle("Auto Drinks All", false, function(drks)
+page6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดในตัว ]", false, function(drks)
 	AutoDrinks = drks
 end)
 
@@ -1502,7 +1391,7 @@ wait(.8)
     end
 end)
 
-page6:Label("┇ Function Auto Affinities [ 2.0 ] ┇")
+page6:Label("┇ ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ] ┇")
 
 -- Prepare dropdownDF
 local player = game.Players.LocalPlayer
@@ -1529,22 +1418,22 @@ end
 local selectedDF = nil
 local lockvalue = nil
 
-page6:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
+page6:Dropdown("เลือก ผลสุ่ม :", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
 
-page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+page6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-page6:Dropdown("Select Reroll:", {"Beri", "Gems"}, function(srll)
+page6:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
 local isRunning1 = false
 local task1Thread
 
-page6:Toggle("Auto Reroll", false, function(rol)
+page6:Toggle("ออโต้ สุ่ม", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -1616,255 +1505,11 @@ page6:Toggle("Auto Reroll", false, function(rol)
         end)
     end
 end)
-
---[[
-local isRunning1 = false
-local task1Thread
-
-page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
-    isRunning1 = rol
-
-    if isRunning1 then
-        task1Thread = task.spawn(function()
-            while isRunning1 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isRunning2 = false
-local task2Thread
-
-page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
-    isRunning2 = roll
-
-    if isRunning2 then
-        task2Thread = task.spawn(function()
-            while isRunning2 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-page6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
-
-local isRunning3 = false
-local task3Thread
-
-page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
-    isRunning3 = rolg
-
-    if isRunning3 then
-        task3Thread = task.spawn(function()
-            while isRunning3 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isRunning4 = false
-local task4Thread
-
-page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
-    isRunning4 = rollg
-
-    if isRunning4 then
-        task4Thread = task.spawn(function()
-            while isRunning4 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-]]--
   
-local Tab7 = Window:Taps("Quest Sam")
+local Tab7 = Window:Taps("แซม")
 local page7 = Tab7:newpage()
 
-page7:Label("┇ Function Storage ┇")
+page7:Label("┇ ฝั่งชั่น ที่เก็บผล ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
@@ -1882,11 +1527,11 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
-page7:Toggle("Auto Storage", false, function(value)
+page7:Toggle("ออโต้ กดเก็บผลในกระเป๋า", false, function(value)
     Cache.Boolean.StorageAll = value
 end)
 
-page7:Toggle("Auto Storage [ Aura ]", false, function(shy)
+page7:Toggle("ออโต้ กดเก็บผลในกระเป๋า [ ผล ออร่า ]", false, function(shy)
     Cache.Boolean.StorageKeepShiny = shy
 end)
 
@@ -1926,8 +1571,8 @@ spawn(function()
     end
 end)
 
-page7:Label("┇ Function Quest Sam ┇")
-page7:Toggle("Auto Find", false, function(comp)
+page7:Label("┇ ฝั่งชั่น เควสแซม ┇")
+page7:Toggle("ออโต้ หาเข็ม (ไม่ทำงาน)", false, function(comp)
     AutoComp = comp
 end)
 
@@ -1951,7 +1596,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Claim 1 Compass", false, function(clmp)
+page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
     AutoClaimComp1 = clmp
 end)
 
@@ -1965,7 +1610,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Claim 10 Compass", false, function(clmpp)
+page7:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
     AutoClaimComp2 = clmpp
 end)
 
@@ -1979,8 +1624,8 @@ spawn(function()
     end
 end)
 
-page7:Label("Check Rare and Function Storage")
-page7:Toggle("Check Rare Fruity", false, function(chre)
+page7:Label("ฝั่งชั่น เช็คผลแรร์ในเซิฟเวอร์")
+page7:Toggle("เช็คผลไม้แรร์ & กล่องแรร์กับอัลตร้า", false, function(chre)
     _G.checkrare = chre
 end)
 
@@ -2084,181 +1729,18 @@ spawn(function()
 	end
 end)
 
-page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
-    _G.quakesteal = qkst
-end)
-
-local cacacac = nil
-local selectedPlayer = nil
-
-spawn(function()--aim silent
-pcall(function()
-while true do wait()
-pcall(function()
-if _G.quakesteal then
-    local plr2 = game.Players:FindFirstChild(selectedPlayer)
-    if plr2 and plr2.Character and plr2.Character:FindFirstChild("HumanoidRootPart") then
-        cacacac = plr2.Character.HumanoidRootPart.CFrame
-    end
-end
-end)
-end
-end)
-end)
-
-local index = mta.__index
-cf = CFrame.new(1, 2, 3)
-setreadonly(mta, false)
-mta.__index = newcclosure(function(a, b, c)
-if tostring(b):lower() == 'hit' and _G.quakesteal then
-return cacacac
-end
-return index(a, b, c)
-end)
-
-spawn(function()
-    while wait(0.2) do
-        if _G.quakesteal then
-            pcall(function()
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    if player ~= game.Players.LocalPlayer and player.Character then
-                        local backpack = player:FindFirstChild("Backpack")
-                        local character = player.Character
-                        local found = false
-
-                        -- เช็ค Backpack
-                        if backpack then
-                            for _, item in pairs(backpack:GetChildren()) do
-                                if table.find(rareFruits, item.Name) then
-                                    found = true
-                                    break
-                                end
-                            end
-                        end
-
-                        -- เช็ค Tool ที่ถืออยู่
-                        for _, tool in pairs(character:GetChildren()) do
-                            if tool:IsA("Tool") and table.find(rareFruits, tool.Name) then
-                                found = true
-                                break
-                            end
-                        end
-
-                        if found then
-                            selectedPlayer = player.Name
-                            break
-                        end
-                    end
-                end
-            end)
-        else
-            selectedPlayer = nil
-            cacacac = nil
-        end
-    end
-end)
-
-page7:Toggle("Auto Bomb Steal Rare Fruit", false, function(qkst)
-    _G.bombsteal = qkst
-end)
-
-local cacacac = nil
-local selectedPlayer = nil
-
-spawn(function()--aim silent
-pcall(function()
-while true do wait()
-pcall(function()
-if _G.bombsteal then
-    local plr2 = game.Players:FindFirstChild(selectedPlayer)
-    if plr2 and plr2.Character and plr2.Character:FindFirstChild("HumanoidRootPart") then
-        cacacac = plr2.Character.HumanoidRootPart.CFrame
-    end
-end
-end)
-end
-end)
-end)
-
-local index = mta.__index
-cf = CFrame.new(1, 2, 3)
-setreadonly(mta, false)
-mta.__index = newcclosure(function(a, b, c)
-if tostring(b):lower() == 'hit' and _G.bombsteal then
-return cacacac
-end
-return index(a, b, c)
-end)
-		
-spawn(function()
-    while wait(0.1) do
-        pcall(function()
-            if _G.bombsteal and selectedPlayer then
-                local plr = game.Players.LocalPlayer
-                local char = plr.Character
-                local target = game.Players:FindFirstChild(selectedPlayer)
-                if target and target.Character then
-                    local humanoid = target.Character:FindFirstChildOfClass("Humanoid")
-                    local hrp = target.Character:FindFirstChild("HumanoidRootPart")
-                    if humanoid and humanoid.Health > 0 and hrp then
-                        -- วาปทุกลูปเลย
-                        char.HumanoidRootPart.CFrame = hrp.CFrame + Vector3.new(0, 20, 0)
-
-                        local vim = game:GetService("VirtualInputManager")
-                        vim:SendKeyEvent(true, Enum.KeyCode.X, false, game)
-                        task.wait(0.05)
-                        vim:SendKeyEvent(false, Enum.KeyCode.X, false, game)
-
-                        local Mouse = plr:GetMouse()
-
-                        local args1 = {
-                            [1] = tonumber(serializeTable(remotes)),
-                            [2] = "BombPower5",
-                            [3] = "StopCharging",
-                            [4] = Mouse.Hit,
-                            [5] = Mouse.Target,
-                            [6] = 100
-                        }
-                        char.Powers.Bomb.RemoteEvent:FireServer(unpack(args1))
-
-                        local args2 = {
-                            [1] = tonumber(serializeTable(remotes)),
-                            [2] = "BombPower5",
-                            [3] = "StartCharging",
-                            [4] = char.HumanoidRootPart.CFrame,
-                            [5] = workspace.CurrentCamera,
-                            [6] = "Right"
-                        }
-                        char.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
-                    else
-                        -- หยุดลูปเมื่อเลือด = 0
-                        selectedPlayer = nil
-		        cacacac = nil
-                    end
-                else
-                    selectedPlayer = nil
-		    cacacac = nil
-                end
-            end
-        end)
-    end
-end)
-
-page7:Label("↑ Use Quake to Steal Fruit ↑")
-
-local Tab8 = Window:Taps("Misc")
+local Tab8 = Window:Taps("อื่นๆ")
 local page8 = Tab8:newpage()
 
-page8:Label("┇ Function Sever ┇")
-page8:Button("Rejoin Server", function()
+page8:Label("┇ ฝั่งชั่น เซิฟเวอร์ ┇")
+page8:Button("รีจอย เซิฟเวอร์", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page8:Button("Hop Server", function()
+page8:Button("ย้าย เซิฟเวอร์", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -2337,126 +1819,11 @@ local PlaceID = game.PlaceId
 
 end)
 
-page8:Label("┇ Function Anti ┇")
-page8:Button("Anti Lag", function()
-create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
-wait(2)
-
-local ToDisable = {
- Textures = true,
- VisualEffects = true,
- Parts = true,
- Particles = true,
- Sky = true
-}
- 
-local ToEnable = {
- FullBright = false
-}
- 
-local Stuff = {}
- 
-for _, v in next, game:GetDescendants() do
- if ToDisable.Parts then
-  if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then
-   v.Material = Enum.Material.SmoothPlastic
-   table.insert(Stuff, 1, v)
-  end
- end
- 
- if ToDisable.Particles then
-  if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then
-   v.Enabled = false
-   table.insert(Stuff, 1, v)
-  end
- end
- 
- if ToDisable.VisualEffects then
-  if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then
-   v.Enabled = false
-   table.insert(Stuff, 1, v)
-  end
- end
- 
- if ToDisable.Textures then
-  if v:IsA("Decal") or v:IsA("Texture") then
-   v.Texture = ""
-   table.insert(Stuff, 1, v)
-  end
- end
- 
- if ToDisable.Sky then
-  if v:IsA("Sky") then
-   v.Parent = nil
-   table.insert(Stuff, 1, v)
-  end
- end
-end
- 
-game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled "..#Stuff.." assets / effects. Settings :")
- 
-for i, v in next, ToDisable do
- print(tostring(i)..": "..tostring(v))
-end
- 
-if ToEnable.FullBright then
-    local Lighting = game:GetService("Lighting")
- 
-    Lighting.FogColor = Color3.fromRGB(255, 255, 255)
-    Lighting.FogEnd = math.huge
-    Lighting.FogStart = math.huge
-    Lighting.Ambient = Color3.fromRGB(255, 255, 255)
-    Lighting.Brightness = 5
-    Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)
-    Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)
-    Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)
-    Lighting.Outlines = true
-				end
--- FPS Counter Script (LocalScript)
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
--- สร้าง GUI
-local player = Players.LocalPlayer
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "FPSCounter"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
-
--- สร้าง TextLabel แสดง FPS
-local fpsLabel = Instance.new("TextLabel")
-fpsLabel.Size = UDim2.new(0, 120, 0, 35)                      -- ขนาดใหญ่ขึ้นนิดหน่อย
-fpsLabel.Position = UDim2.new(1, -130, 0, 10)                 -- มุมขวาบน
-fpsLabel.AnchorPoint = Vector2.new(0, 0)
-fpsLabel.BackgroundTransparency = 1                           -- ไม่มีพื้นหลัง
-fpsLabel.BorderSizePixel = 0
-fpsLabel.TextColor3 = Color3.fromRGB(0, 255, 0)               -- สีเขียว
-fpsLabel.TextStrokeTransparency = 0.5                         -- ขอบตัวอักษร
-fpsLabel.Font = Enum.Font.SourceSansBold
-fpsLabel.TextSize = 22                                        -- ตัวอักษรใหญ่ขึ้น
-fpsLabel.Text = "FPS: 0"
-fpsLabel.TextXAlignment = Enum.TextXAlignment.Right          -- ชิดขวา
-fpsLabel.Parent = screenGui
-
--- อัปเดต FPS ทุกวินาที
-local lastUpdate = tick()
-local frameCount = 0
-
-RunService.RenderStepped:Connect(function()
-	frameCount += 1
-	local currentTime = tick()
-	if currentTime - lastUpdate >= 1 then
-		local fps = math.floor(frameCount / (currentTime - lastUpdate))
-		fpsLabel.Text = "FPS: " .. fps
-		lastUpdate = currentTime
-		frameCount = 0
-	end
-end)
-end)
+page8:Label("┇ ฝั่งชั่น คุ้มกัน ┇")
 
 local afkConnection
 
-page8:Toggle("Anti AFK", false, function(state)
+page8:Toggle("คุ้มกัน Afk", false, function(state)
 
     if state then
 	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
@@ -2474,383 +1841,6 @@ page8:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page8:Toggle("Anti Stun", false, function(pol)
-    _G.anti = pol
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            local success, err = pcall(function()
-                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
-
-                if ResourceHolder then
-                    for _, player in pairs(game.Players:GetPlayers()) do
-                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
-                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
-
-                        if playerResourceFolder then
-                            local magmaPool = playerResourceFolder:FindFirstChild("MagmaPool")
-
-                            if magmaPool then
-                                for _, item in pairs(magmaPool:GetDescendants()) do
-                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
-                                        item:Destroy()
-                                    end
-				end
-				end
-                        end
-		end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-	while task.wait(0.01) do
-		if _G.anti then
-			pcall(function()
-				for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
-				local powers = model:FindFirstChild("Powers")
-					if powers then
-						local love = powers:FindFirstChild("Love")
-						if love then
-							local projectiles = love:FindFirstChild("Projectiles")
-							if projectiles then
-
-								-- 💘 LoveHeartTrimFill > TouchInterest
-								local heartTrim = projectiles:FindFirstChild("LoveHeartTrim")
-								if heartTrim then
-									local fill = heartTrim:FindFirstChild("LoveHeartTrimFill")
-									if fill then
-										local touch = fill:FindFirstChild("TouchInterest")
-										if touch then
-											touch:Destroy()
-											print("[ลบแล้ว] TouchInterest: LoveHeartTrimFill ของ", model.Name)
-										end
-									end
-								end
-								end
-								-- 🏹 LoveArrow > Tip > TouchInterest
-								local arrow = projectiles:FindFirstChild("LoveArrow")
-								if arrow then
-									local tip = arrow:FindFirstChild("Tip")
-									if tip then
-										local touch = tip:FindFirstChild("TouchInterest")
-										if touch then
-											touch:Destroy()
-											print("[ลบแล้ว] TouchInterest: Tip ของ", model.Name)
-										end
-									end
-								end
-
-							end
-						end
-					end
-				end
-			end)
-		end
-	end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local leftArm = obj:FindFirstChild("Left Arm")
-                        if leftArm then
-                            local weldablePart = leftArm:FindFirstChild("WeldablePart")
-                            if weldablePart then
-                                local bodyVelocity = weldablePart:FindFirstChildOfClass("BodyVelocity")
-                                if bodyVelocity then
-                                    bodyVelocity:Destroy()
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, playerFolder in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(playerFolder.Name) then
-                        local punchFolder = playerFolder:FindFirstChild("Powers")
-                        if punchFolder then
-                            local chillyFolder = punchFolder:FindFirstChild("Chilly")
-                            if chillyFolder then
-                                local punch = chillyFolder:FindFirstChild("Punch")
-                                if punch then
-                                    local part = punch:FindFirstChild("Part")
-                                    if part then
-                                        for _, desc in pairs(part:GetDescendants()) do
-                                            if desc.Name == "TouchInterest" then
-                                                desc:Destroy()
-                                            end
-                                        end
-                                    end
-
-                                    local rock1 = punch:FindFirstChild("Rock1")
-                                    if rock1 then
-                                        for _, child in pairs(rock1:GetChildren()) do
-                                            if child:IsA("BodyVelocity") then
-                                                child:Destroy()
-                                            end
-                                        end
-
-                                        for _, desc in pairs(rock1:GetDescendants()) do
-                                            if desc.Name == "TouchInterest" then
-                                                desc:Destroy()
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-	while task.wait(0.01) do
-		if _G.anti then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("String")
-					if smelt then
-						local resources = smelt:FindFirstChild("Strings")
-						if resources then
-							local smeltSpew = resources:FindFirstChild("WeldablePart")
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "Attachment" then
-										child:Destroy()
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local powers = obj:FindFirstChild("Powers")
-                        if powers then
-                            local dark = powers:FindFirstChild("Dark")
-                            if dark then
-                                local projectiles = dark:FindFirstChild("Projectiles")
-                                if projectiles then
-                                    local darkStarBit = projectiles:FindFirstChild("DarkStarBit")
-                                    if darkStarBit then
-                                        local bodyVelocity = darkStarBit:FindFirstChildOfClass("BodyVelocity")
-                                        if bodyVelocity then
-                                            bodyVelocity:Destroy()
-                                        end
-                                        local attachment = darkStarBit:FindFirstChildOfClass("Attachment")
-                                        if attachment then
-                                            attachment:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local powers = obj:FindFirstChild("Powers")
-                        if powers then
-                            local dark = powers:FindFirstChild("Dark")
-                            if dark then
-                                local darkParts = dark:FindFirstChild("DarkParts") -- หา DarkParts ตรงนี้เลย
-                                if darkParts then
-                                    for _, part in pairs(darkParts:GetChildren()) do
-                                        local weldablePart = part:FindFirstChild("WeldablePart")
-                                        if weldablePart then
-                                            local attachment = weldablePart:FindFirstChildOfClass("Attachment")
-                                            if attachment then
-                                                attachment:Destroy()
-                                            end
-                                        end
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local returnBall1 = obj:FindFirstChild("ReturnBall1")
-                        if returnBall1 then
-                            for _, child in pairs(returnBall1:GetDescendants()) do
-                                if child:IsA("Instance") and child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                            end
-			end
-                        local returnBall2 = obj:FindFirstChild("ReturnBall2")
-                        if returnBall2 then
-                            for _, child in pairs(returnBall2:GetDescendants()) do
-                                if child:IsA("Instance") and child.Name == "TouchInterest" then
-                                       child:Destroy()
-                                    end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                for _, playerChar in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(playerChar.Name) then
-                        local powers = playerChar:FindFirstChild("Powers")
-                        if powers then
-                            local hollow = powers:FindFirstChild("Hollow")
-                            if hollow then
-
-                                -- Hollows → Hollow → HRP → TouchInterest
-                                local hollows = hollow:FindFirstChild("Hollows")
-                                if hollows then
-                                    for _, modelHollow in pairs(hollows:GetChildren()) do
-                                        if modelHollow:IsA("Model") and modelHollow.Name == "Hollow" then
-                                            local hrp = modelHollow:FindFirstChild("HumanoidRootPart")
-                                            if hrp then
-                                                local ti = hrp:FindFirstChildOfClass("TouchTransmitter") or hrp:FindFirstChild("TouchInterest")
-                                                if ti then
-                                                    ti:Destroy()
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-
-                                -- HollowsMini → HollowMini → HRP → TouchInterest
-                                local hollowsBody = hollow:FindFirstChild("HollowBody")
-                                if hollowsBody then
-                                    for _, modelMini in pairs(hollowsBody:GetChildren()) do
-                                        if modelMini:IsA("Model") and modelMini.Name == "GhostBody" then
-                                            local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
-                                            if hrpMini then
-                                                local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
-                                                if tiMini then
-                                                    tiMini:Destroy()
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.anti then
-            pcall(function()
-                local plr = game:GetService("Players").LocalPlayer
-                local char = workspace:FindFirstChild(plr.Name)
-                if not char then return end
-
-                local hum = char:FindFirstChildOfClass("Humanoid")
-                if hum and hum.PlatformStand then
-                    hum.PlatformStand = false
-                end
-            end)
-        end
-    end
-end)
-
-local RunService = game:GetService("RunService")
-local followConnection
-local seaPart
-
-page8:Toggle("Walk On Water", false, function(walk)
-    if walk then
-        create:Notifile("", "You can walk on water now! :)", 3)
-
-        seaPart = Instance.new("Part")
-        seaPart.Name = "InvisibleSea"
-        seaPart.Anchored = true
-        seaPart.CanCollide = true
-        seaPart.Transparency = 1
-        seaPart.Size = Vector3.new(50, 1, 50)
-        seaPart.Parent = workspace
-
-        followConnection = RunService.RenderStepped:Connect(function()
-            local char = plr.Character or plr.CharacterAdded:Wait()
-            local root = char:FindFirstChild("HumanoidRootPart")
-            if root and seaPart then
-                local goalPos = Vector3.new(root.Position.X, 211, root.Position.Z)
-                seaPart.Position = seaPart.Position:Lerp(goalPos, 0.5)
-            end
-        end)
-
-    else
-        create:Notifile("", "Off walk on water now! :(", 3)
-
-        if followConnection then
-            followConnection:Disconnect()
-            followConnection = nil
-        end
-        if seaPart then
-            seaPart:Destroy()
-            seaPart = nil
-        end
-    end
-end)
-
-
 local Players = game:GetService("Players")
 local localPlayer = Players.LocalPlayer
 
@@ -2863,7 +1853,7 @@ local npcMapping = {
     NPC_Activation_Chef = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 1000000 then
-            return "Aqua Staff: Done!"
+            return "Aqua Staff: สำเร็จ!"
         else
             return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
         end
@@ -2871,7 +1861,7 @@ local npcMapping = {
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 50000000 then
-            return "Scissor Blade: Done!"
+            return "Scissor Blade: สำเร็จ!"
         else
             return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
         end
@@ -2879,7 +1869,7 @@ local npcMapping = {
     NPC_Activation_Expert = function(obj)
     local value = tonumber(obj.Value)
     if value and value >= 1000 then
-        return "NPC_Activation_Expert: Done!"
+        return "NPC_Activation_Expert: สำเร็จ!"
     else
         return "Divine Axe: " .. (value or "Unknown") .. "/1000"
     end
@@ -2887,7 +1877,7 @@ end,
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 100000000 then
-            return "Kanshou and Bakuya: Done!"
+            return "Kanshou and Bakuya: สำเร็จ!"
         else
             return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
         end
@@ -2895,7 +1885,7 @@ end,
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 200 then
-            return "Lightning Sword: Done!"
+            return "Lightning Sword: สำเร็จ!"
         else
             return "Lightning Sword: " .. (value or "Unknown") .. "/200"
         end
@@ -2903,7 +1893,7 @@ end,
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
         if value and value >= 1000 then
-            return "Meteorite Sword: Done!"
+            return "Meteorite Sword: สำเร็จ!"
         else
             return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
         end
@@ -2923,84 +1913,9 @@ for name, transform in pairs(npcMapping) do
     end
 end
 
-page8:Label("┇ The Secret Weapon Progress ┇")
-page8:Dropdown("Check Progress Weapon:", displayOptions, function(select)
+page8:Label("┇ ดาบลับที่มีในแมพ (แมพ Mythical ยังไม่มี) ┇")
+page8:Dropdown("เช็คความคืบหน้า ดาบลับ:", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
-
-page8:Label("┇ Fake Weapon ┇")
-page8:Button("Aqua Staff" , function()
-local A_1 = "Aqua Staff"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
-    Event:FireServer(A_1)
-end)
-
-page8:Button("Seastone Cestus [ Need 500 Melee ]" , function()
-local A_1 = "Seastone Cestus"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
-    Event:FireServer(A_1)
-end)
-
-local Tab9 = Window:Taps("Dupe Gems")
-local page9 = Tab9:newpage()
-
-page9:Button("DUPE GAMES [ WARN: RESET STATS YOU ]" , function()
-create:Notifile("", "Start Dupe Gems: " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3) -- แจ้งเตือนเริ่มรีจอย
-wait(4)
-workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
-wait(20.5)
-game.Players.LocalPlayer:Kick()
-game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId) -- รีจอยกลับเซิร์ฟเวอร์เดิม
-end)
-
-page9:Button("Turn gems into beri", function()
-    local player = game.Players.LocalPlayer
-    local playerId = player.UserId
-    local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-    if not userDataName then return end
-
-    -- ดึงค่า affinity ปัจจุบัน
-    local AffMelee1 = userDataName.Data.DFT1Melee.Value
-    local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-    local AffDefense1 = userDataName.Data.DFT1Defense.Value
-    local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-    -- ถ้าค่าใดอยู่ในช่วง 1.1 ถึง 2 จะถูกล็อค ไม่ให้สุ่ม
-    local function isLocked(value)
-        return value >= 1.1 and value <= 2
-    end
-
-    local d = isLocked(AffDefense1) and nil or false
-    local m = isLocked(AffMelee1) and nil or false
-    local s = isLocked(AffSniper1) and nil or false
-    local sw = isLocked(AffSword1) and nil or false
-
-    -- หาตำแหน่งปุ่ม Retum
-    local merchant = workspace:FindFirstChild("Merchants")
-    if not merchant then return end
-
-    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-    if not affinityMerchant then return end
-
-    local clickable = affinityMerchant:FindFirstChild("Clickable")
-    if not clickable then return end
-
-    local retum = clickable:FindFirstChild("Retum")
-    if not retum then return end
-
-    for i = 1, 50 do
-        local args = {
-            [1] = "DFT1",
-            [2] = d,
-            [3] = m,
-            [4] = s,
-            [5] = sw,
-            [6] = "Gems"
-        }
-        retum:FireServer(unpack(args))
-    end
-end)
-		
-page9:Section("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
 
 	end)
