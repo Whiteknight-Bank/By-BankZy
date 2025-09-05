@@ -97,7 +97,7 @@ local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
 Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
-Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
+Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 
@@ -1604,9 +1604,9 @@ page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
 end)
 
 spawn(function()
-    while wait(3) do
+    while wait() do
         pcall(function()
-            if not AutoClaimComp1 then return end;
+            if not AutoClaimComp1 then
             local args = {
     [1] = "Claim1"
 }
@@ -1624,7 +1624,7 @@ end)
 spawn(function()
     while wait(3) do
         pcall(function()
-            if not AutoClaimComp2 then return end;
+            if not AutoClaimComp2 then
             local args = {
     [1] = "Claim10"
 }
