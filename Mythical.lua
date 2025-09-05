@@ -1118,31 +1118,31 @@ local dft2sniper = data:FindFirstChild("DFT2Sniper")
 local dft2sword = data:FindFirstChild("DFT2Sword")  
 
 print("-- ========== [USER] ========== --")  
-print("Check User: " .. selectedName .. " His Data All")  
-print(" DevilFruit: " .. (fruit1 and fruit1.Value))  
-print(" DevilFruit2: " .. (fruit2 and fruit2.Value))  
+print("เช็ค ผู้เล่น: " .. selectedName .. " ข้อมูลทั้งหมดที่เจอ")  
+print(" ผลช่องที่ 1: " .. (fruit1 and fruit1.Value))  
+print(" ผลช่องที่ 2: " .. (fruit2 and fruit2.Value))  
 print("-- ========== [STATS] ========== --")  
-print(" DefenseLevel: " .. (defense and defense.Value or "N/A"))  
-print(" MeleeLevel: " .. (melee and melee.Value or "N/A"))  
-print(" SniperLevel: " .. (sniper and sniper.Value or "N/A"))  
-print(" SwordLevel: " .. (sword and sword.Value or "N/A"))  
+print(" ป้องกัน Lv.: " .. (defense and defense.Value or "N/A"))  
+print(" เมรี Lv.: " .. (melee and melee.Value or "N/A"))  
+print(" ปืน Lv.: " .. (sniper and sniper.Value or "N/A"))  
+print(" ดาบ Lv.: " .. (sword and sword.Value or "N/A"))  
 print("-- ========== [AFFINITY FRUIT 1] ========== --")  
-print(" DFT1Defense: " .. (dft1defense and dft1defense.Value or "N/A"))  
-print(" DFT1Melee: " .. (dft1melee and dft1melee.Value or "N/A"))  
-print(" DFT1Sniper: " .. (dft1sniper and dft1sniper.Value or "N/A"))  
-print(" DFT1Sword: " .. (dft1sword and dft1sword.Value or "N/A"))  
+print(" ผลที่1 ขีด ป้องกัน: " .. (dft1defense and dft1defense.Value or "N/A"))  
+print(" ผลที่1 ขีด เมรี: " .. (dft1melee and dft1melee.Value or "N/A"))  
+print(" ผลที่1 ขีด ปืน: " .. (dft1sniper and dft1sniper.Value or "N/A"))  
+print(" ผลที่1 ขีด ดาบ: " .. (dft1sword and dft1sword.Value or "N/A"))  
 print("-- ========== [AFFINITY FRUIT 2] ========== --")  
-print(" DFT2Defense: " .. (dft2defense and dft2defense.Value or "N/A"))  
-print(" DFT2Melee: " .. (dft2melee and dft2melee.Value or "N/A"))  
-print(" DFT2Sniper: " .. (dft2sniper and dft2sniper.Value or "N/A"))  
-print(" DFT2Sword: " .. (dft2sword and dft2sword.Value or "N/A"))  
+print(" ผลที่2 ขีด ป้องกัน: " .. (dft2defense and dft2defense.Value or "N/A"))  
+print(" ผลที่2 ขีด เมรี: " .. (dft2melee and dft2melee.Value or "N/A"))  
+print(" ผลที่2 ขีด ปืน: " .. (dft2sniper and dft2sniper.Value or "N/A"))  
+print(" ผลที่2 ขีด ดาบ: " .. (dft2sword and dft2sword.Value or "N/A"))  
 local storageValues = {}
 
 for i = 1, 12 do
 local found = data:FindFirstChild("StoredDF" .. i)
 table.insert(storageValues, found)
 end
-print("-- ========== [DEVIL FRUIT STORAGE] ========== --")
+print("-- ========== [ผลไม้ ที่จัดเก็บ] ========== --")
 
 for i, storage in ipairs(storageValues) do
     local value = storage and storage.Value or "N/A"
@@ -1601,11 +1601,15 @@ page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(3) do
         pcall(function()
             if not AutoClaimComp1 then return end;
-            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim1");
-            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim1");
+            local args = {
+    [1] = "Claim1"
+}
+
+workspace:WaitForChild("GlobalReference"):WaitForChild("SamQuestPrompt"):FireServer(unpack(args))
+
         end)
     end
 end)
@@ -1615,11 +1619,15 @@ page7:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(3) do
         pcall(function()
             if not AutoClaimComp2 then return end;
-            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
-            game.Workspace.Merchants.QuestMerchant.Clickable.Retum:FireServer("Claim10");
+            local args = {
+    [1] = "Claim10"
+}
+
+workspace:WaitForChild("GlobalReference"):WaitForChild("SamQuestPrompt"):FireServer(unpack(args))
+
         end)
     end
 end)
