@@ -1396,23 +1396,30 @@ end)
 
 page6:Label("┇ ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ] ┇")
 
+-- สร้าง dropdownDF โดยตรงจาก LocalPlayer
 local dropdownDF = {}
-local dfMap = {} -- Map สำหรับเก็บว่าเลือกผลไหนเป็น DFT1 หรือ DFT2
+local dfMap = {}
 
-if not data then return end
-    if fruit1 and fruit1:IsA("StringValue") and fruit1.Value ~= "" then
-        table.insert(dropdownDF, fruit1.Value)
-        dfMap[fruit1.Value] = "DFT1" -- เก็บ mapping
-    end
+do
+    local player = game.Players.LocalPlayer
+    local userId = player.UserId
+    local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
 
-    if fruit2 and fruit2:IsA("StringValue") and fruit2.Value ~= "" then
-        table.insert(dropdownDF, fruit2.Value)
-        dfMap[fruit2.Value] = "DFT2"
+    if userFolder and userFolder:FindFirstChild("Data") then
+        local data = userFolder.Data
+        local fruit1 = data:FindFirstChild("DevilFruit")
+        local fruit2 = data:FindFirstChild("DevilFruit2")
+
+        if fruit1 and fruit1:IsA("StringValue") and fruit1.Value ~= "" then
+            table.insert(dropdownDF, fruit1.Value)
+            dfMap[fruit1.Value] = "DFT1"
+        end
+        if fruit2 and fruit2:IsA("StringValue") and fruit2.Value ~= "" then
+            table.insert(dropdownDF, fruit2.Value)
+            dfMap[fruit2.Value] = "DFT2"
+        end
     end
 end
-
-local selectedDF = nil
-local lockvalue = nil
 
 page6:Dropdown("เลือก ผลสุ่ม :", dropdownDF, function(dfs)
     selectedDF = dfs
