@@ -1404,8 +1404,8 @@ local dropdownDF = {}
 local dfMap = {} -- Map สำหรับเก็บว่าเลือกผลไหนเป็น DFT1 หรือ DFT2
 
 if char then
-    local df1 = char:FindFirstChild("DevilFruit")
-    local df2 = char:FindFirstChild("DevilFruit2")
+    local df1 = data:FindFirstChild("DevilFruit")
+    local df2 = data:FindFirstChild("DevilFruit2")
 
     if df1 and df1:IsA("StringValue") and df1.Value ~= "" then
         table.insert(dropdownDF, df1.Value)
@@ -1604,14 +1604,14 @@ page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(3) do
         pcall(function()
-            if not AutoClaimComp1 then
+            if AutoClaimComp1 then
             local args = {
     [1] = "Claim1"
 }
 
-workspace:WaitForChild("GlobalReference"):WaitForChild("SamQuestPrompt"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
 
         end)
     end
@@ -1624,12 +1624,12 @@ end)
 spawn(function()
     while wait(3) do
         pcall(function()
-            if not AutoClaimComp2 then
-            local args = {
+            if AutoClaimComp2 then
+           local args = {
     [1] = "Claim10"
 }
 
-workspace:WaitForChild("GlobalReference"):WaitForChild("SamQuestPrompt"):FireServer(unpack(args))
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
 
         end)
     end
