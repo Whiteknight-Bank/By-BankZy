@@ -1396,14 +1396,10 @@ end)
 
 page6:Label("┇ ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ] ┇")
 
--- Prepare dropdownDF
-local player = game.Players.LocalPlayer
-local char = workspace:FindFirstChild(player.Name)
-
 local dropdownDF = {}
 local dfMap = {} -- Map สำหรับเก็บว่าเลือกผลไหนเป็น DFT1 หรือ DFT2
 
-if char then
+if data then
     local df1 = data:FindFirstChild("DevilFruit")
     local df2 = data:FindFirstChild("DevilFruit2")
 
