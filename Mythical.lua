@@ -300,32 +300,15 @@ end
 local Tab1 = Window:Taps("Autos")
 local page1 = Tab1:newpage()
 
-page1:Label("┇ Function Spawn ┇")
-
-_G.savedCFrame = nil
-
-function SaveCFrame()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        _G.savedCFrame = hrp.CFrame
-    end
-end
-
-page1:Button("Save Point", function()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp then
-        _G.savedCFrame = hrp.CFrame
-        create:Notifile("Saved Point!", "Your position has been saved.", 3)
-    end
-end)
+page1:Label("┇ ฝั่งชั่น เกิด (ใช้งานได้ปกติ) ┇")
 		
-page1:Toggle("Auto Spawn With Auto Death", false, function(aspw)
-        _G.respawndie = aspw
+page1:Toggle("ออโต้ กดเกิด", false, function(aspw)
+        _G.respawn = aspw
 end)
 
 spawn(function()--autorespawn
 while wait() do
-if _G.respawndie then
+if _G.respawn then
 pcall(function()
 if game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Visible == true then
 for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.PlayerGui.Load.Frame.Load.MouseButton1Click)) do
@@ -337,67 +320,8 @@ end
 end
 end)
 
-page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
-        _G.autorespawn = rspw
-end)
-
-function TeleportToSavedCFrame()
-    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-    if hrp and _G.savedCFrame then
-        hrp.CFrame = _G.savedCFrame + Vector3.new(0, 5, 0)
-    end
-end
-
-spawn(function()
-    while wait() do
-        if _G.autorespawn then
-            pcall(function()
-                local playerGui = game:GetService("Players").LocalPlayer.PlayerGui
-                if playerGui.Load and playerGui.Load.Frame.Visible == true then
-                    for i,v in pairs(getconnections(playerGui.Load.Frame.Load.MouseButton1Click)) do
-                        v.Function()
-                    end
-                    -- รอ Character + Health > 0
-                    repeat wait() until game.Players.LocalPlayer.Character 
-                        and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") 
-                        and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid").Health > 0
-                    
-                    local hrp = game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    
-                    repeat
-                        wait(0.1)
-                        hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                    until hrp and hrp.Position.Y < 242
-                    
-                    TeleportToSavedCFrame()
-                end
-            end)
-        end
-    end
-end)
-
-spawn(function()
-    while wait() do
-        if _G.respawndie then
-            local player = game.Players.LocalPlayer
-            local char = workspace:FindFirstChild(player.Name)
-            if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                local yPos = char.HumanoidRootPart.Position.Y
-                if yPos < 242 and char.Humanoid.Health > 0 then
-                    wait(3)
-                    if char and char:FindFirstChild("HumanoidRootPart") and char:FindFirstChild("Humanoid") then
-                        if char.HumanoidRootPart.Position.Y < 242 then
-                            char.Humanoid.Health = 0
-                        end
-                    end
-                end
-            end
-        end
-    end
-end)
-
-page1:Label("┇ Function Autos ┇")
-page1:Toggle("Auto Claim Mission", false, function(dmmsv)
+page1:Label("┇ ฝั่งชั่น ออโต้ (ไม่พร้อมใช้งาน) ┇")
+page1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -411,198 +335,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("Auto Complete Mission [ ไม่ทำงาน ]", false, function(miss)
-        _G.automission = miss
-end)
-
--- ตรวจสอบ Objective จาก Data
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-local userId = LocalPlayer.UserId
-local dataPath = workspace.UserData["User_" .. userId].Data
-local safeCFrame = CFrame.new(-1526, 364, 10510) -- จุดปลอดภัย
-
--- ตั้งค่า _G.automission ตามเงื่อนไข
-spawn(function()
-    while task.wait(1) do
-        pcall(function()
-            local objective = dataPath:FindFirstChild("Objective")
-            local progress = dataPath:FindFirstChild("Progress")
-            local requirement = dataPath:FindFirstChild("Requirement")
-
-            if not objective or not progress or not requirement then return end
-
-            local objValue = objective.Value
-            local progVal = progress.Value
-            local reqVal = requirement.Value
-
-            if (objValue == "Kill" or objValue == "Damage" or objValue == "Money") then
-                if progVal > 0 and reqVal > 0 then
-                    _G.automission = true
-                elseif progVal == 0 and reqVal == 0 then
-                    _G.automission = false
-                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        LocalPlayer.Character.HumanoidRootPart.CFrame = safeCFrame
-                    end
-                end
-            else
-                _G.automission = false
-            end
-        end)
-    end
-end)
-			
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                local toolname = "Cannon Ball"
-                if LocalPlayer.Backpack:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChild(toolname) and not LocalPlayer.Character:FindFirstChildOfClass("Tool") then
-                    LocalPlayer.Character.Humanoid:EquipTool(LocalPlayer.Backpack:FindFirstChild(toolname))
-		end
-            end
-        end)
-    end
-end)
-
--- ยิง Cannon Ball ไปที่ CFrame ปัจจุบัน
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                for i = 1, 2 do
-                    local args = {[1] = LocalPlayer.Character.HumanoidRootPart.CFrame}
-                    local cannon = LocalPlayer.Character:FindFirstChild("Cannon Ball")
-                    if cannon and cannon:FindFirstChild("RemoteEvent") then
-                        cannon.RemoteEvent:FireServer(unpack(args))
-                    
-                    task.wait(0)
-                end
-	end
-                local ball = workspace.ResourceHolder["Resources_" .. userId]:FindFirstChild("CannonBall")
-                if ball then
-                    ball.CanCollide = false
-                end
-            end
-        end)
-    end
-end)
-
--- ย้าย CannonBall ไปหน้าตัว
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission then
-                for _, v in pairs(workspace.ResourceHolder["Resources_" .. userId]:GetChildren()) do
-                    if v.Name == "CannonBall" then
-                        v.CFrame = LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
-                        v.CanCollide = false
-                        if not v:FindFirstChild("BodyClip") then
-                            local Noclip = Instance.new("BodyVelocity")
-                            Noclip.Name = "BodyClip"
-                            Noclip.MaxForce = Vector3.new(100000,100000,100000)
-                            Noclip.Velocity = Vector3.new(0,20,0)
-                            Noclip.Parent = v
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- ลบ Cannon Ball ถ้าเกิน
-spawn(function()
-    while task.wait(15) do
-        pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
-                    if v.Name == "Cannon Ball" then
-                        v:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- ลบอาวุธอื่นใน Backpack
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.automission and LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                for _, v in pairs(LocalPlayer.Backpack:GetChildren()) do
-                    if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
-                        v:Destroy()
-                    end
-                end
-            end
-        end)
-    end
-end)
-
--- เปิด Haki อัตโนมัติ
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-           if _G.automission then
-                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
-                task.wait(0)
-                local status = LocalPlayer.PlayerGui.HealthBar.Frame.Status
-                if not status:FindFirstChild("BusoHaki") then
-                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-                else
-                    task.wait(0.5)
-                    workspace.UserData["User_" .. userId].UpdateHaki:FireServer()
-	
-		end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0.5) do
-        pcall(function()
-            if not _G.automission then return end
-
-            local targetName = dataPath:FindFirstChild("MissionObjectiveTarget") and dataPath.MissionObjectiveTarget.Value or nil
-            if not targetName then return end
-
-            -- 🔹 กรณี ObjectiveTarget = "None" หรือ "NONE" → ล็อกทุกมอน
-            if targetName == "None" or targetName == "NONE" then
-                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-                    if enemy:FindFirstChild("HumanoidRootPart") then
-                        enemy.HumanoidRootPart.Anchored = true
-                        enemy.HumanoidRootPart.CanCollide = false
-                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
-
-                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
-                            enemy:Destroy()
-                        end
-                    end
-                end
-            -- 🔹 ถ้าไม่ใช่ None → ล็อกเฉพาะเป้าหมาย
-            else
-                for _, enemy in pairs(workspace.Enemies:GetChildren()) do
-                    if enemy:FindFirstChild("HumanoidRootPart") and string.find(enemy.Name, targetName) then
-                        enemy.HumanoidRootPart.Anchored = true
-                        enemy.HumanoidRootPart.CanCollide = false
-                        enemy.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        enemy.HumanoidRootPart.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 4, -15)
-
-                        if enemy:FindFirstChild("Humanoid") and enemy.Humanoid.Health == 0 then
-                            enemy:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
+page1:Toggle("ออโต้ ดึงผลไม้ปีศาจ (แก้ไขอยู่)", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -620,7 +353,7 @@ spawn(function()
     end
  end)
 
-page1:Toggle("Auto Package", false, function(apke)
+page1:Toggle("ออโต้ ฟามกล่องไม้ (ไม่ทำงาน)", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -712,7 +445,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Fishing & Cooking", false, function(fsh)
+page1:Toggle("ออโต้ ตกปลา (ไม่ทำงาน)", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -775,7 +508,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Claim Challanges", false, function(chllge)
+page1:Toggle("ออโต้ กดรับชาเลนเจอร์ (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -930,7 +663,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("Auto Claim Gift [ Beri ]", false, function(bri)
+page1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -946,7 +679,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Toggle("Auto Claim Gift  [ Gems ]", false, function(gxm)
+page1:Toggle("ออโต้ กดรับของขวัญ [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -961,128 +694,12 @@ local A_1 = "RewardMark"
         end)
     end
 end)
-
-local attackremote = {}    
-
-local a
-a=hookmetamethod(game,"__namecall",function(self,...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
-            attackremote[self.Name] = args[1]
-            return a(self,unpack(args))
-        elseif self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-            attackremote[self.Name] = ""
-        end
-    end
-      return a(self,...)
-end)
-    
-    function serializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
- 
-    local tmp = string.rep("", depth)
- 
-    if name then tmp = tmp end
- 
-    if type(val) == "table" then
-        tmp = tmp .. (not skipnewlines and "" or "")
- 
-        for k, v in pairs(val) do
-            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. (not skipnewlines and "" or "")
-        end
- 
-        tmp = tmp .. string.rep("", depth) 
-    elseif type(val) == "number" then
-        tmp = tmp .. tostring(val)
-    elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
-    elseif type(val) == "boolean" then
-        tmp = tmp .. (val and "true" or "false")
-    elseif type(val) == "function" then
-        tmp = tmp  .. "func: " .. debug.getinfo(val).name
-    else
-        tmp = tmp .. tostring(val)
-    end
- 
-    return tmp
-end
-
-page1:Label("┇ Spam Yoru ┇")
-page1:Textbox("Hit Yoru", "Enter Number", function(hty)
-    _G.yoruhit = hty
-end)
-
-page1:Toggle("Auto Spam Yoru", false, function(yru)
-_G.yorufast = yru
-end)
-
-spawn(function() -- yoru 
-while wait(0) do 
-pcall(function() 
-if _G.yorufast then 
-if game.Players.LocalPlayer.Character:FindFirstChild("Yoru") and tonumber(serializeTable(attackremote)) ~= nil and tonumber(serializeTable(attackremote)) ~= "" then 
-repeat wait(0.3) 
-for i = 1, _G.yoruhit do 
-local args = { 
-		[1] = tonumber(serializeTable(attackremote)) 
-} 
-											
-game:GetService("Players").LocalPlayer.Character.Yoru.RequestAnimation:FireServer(unpack(args)) 
-end 
-until _G.yorufast == false or game.Players.LocalPlayer.Character.Humanoid.Health == 0 
-end 
-end 
-end) 
-end 
-end)
 		
-local Tab2 = Window:Taps("Farming")
+local Tab2 = Window:Taps("ฟาร์ม")
 local page2 = Tab2:newpage()
 
-page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob [ 100% ]", false, function(dthh)
-    _G.autodie = dthh
-end)
-
-spawn(function()
-   while wait(2) do
-        if _G.autodie then 
-	pcall(function()
-            for _,v in pairs(workspace.Enemies:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
-page2:Toggle("Auto Death Kaizu' Boss [ 100% ]", false, function(zki)
-    _G.autokaizu = zki
-end)
-
-spawn(function()
-    while wait() do
-        if _G.autokaizu then 
-	pcall(function()
-            for _,v in pairs(workspace.IslandKai:GetDescendants()) do
-                if v:IsA("Model") and 
-		v:FindFirstChild("Humanoid") then
-                    v.Humanoid.Health = 0
-                end
-            end
-        end) 
-    end
-    end
-end)
-
-page2:Label("┇ Function Farm Fruity ┇")
-page2:Toggle("Auto Farm Stats", false, function(stts)
+page2:Label("┇ ฝั่งชั่น ฟาร์มผลไม้ ( กำลังแก้ไข ) ┇")
+page2:Toggle("ออโต้ ฟาร์มแสตท", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1216,12 +833,12 @@ spawn(function()
     end)
 end)
 
-page2:Label("┇ Function Farming ┇")
-page2:Dropdown("Select Weapon:", Wapon, function(wapn)
+page2:Label("┇ ฝั่งชั่น อื่นๆ ┇")
+page2:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
     Wapon = wapn
 end)
 
-page2:Button("Refresh Weapon", function()
+page2:Button("รีเฟรช อาวุธ (ไม่ทำงาน)", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1230,55 +847,7 @@ page2:Button("Refresh Weapon", function()
 				end
 			end)
 		
-page2:Toggle("Auto Farm", false, function(befrm)
-    _G.behindFarm = befrm
-end)
-
-local MobList = { "Boar", "Crab", "Angry", "Freddy" }
-
-local function IsMobAllowed(mobName)
-    for _, allowedMob in ipairs(MobList) do
-        if string.find(mobName, allowedMob) then
-            return true
-        end
-    end
-    return false
-end
-
-spawn(function()
-    while task.wait(0.1) do
-        pcall(function()
-            if _G.behindFarm then
-                local character = game.Players.LocalPlayer.Character
-                local tool = character and character:FindFirstChildOfClass("Tool")
-
-                -- เช็คว่าอาวุธชื่อ Melee เท่านั้นถึงจะเริ่มทำงาน
-                if not tool or tool.Name ~= "Melee" then
-                    return -- ข้ามรอบนี้ ถ้ายังไม่ได้ถืออาวุธชื่อ Melee
-                end
-
-                for _, mob in pairs(game.Workspace.Enemies:GetChildren()) do
-                    if mob:FindFirstChild("HumanoidRootPart") and 
-                       mob:FindFirstChild("Humanoid") and 
-                       mob.Humanoid.Health > 0 and 
-                       IsMobAllowed(mob.Name) then
-                        local mobRoot = mob.HumanoidRootPart
-                        local playerRoot = character.HumanoidRootPart
-                        playerRoot.CFrame = mobRoot.CFrame * CFrame.new(0, 15, 5)
-                        mob.Humanoid.Health = 0
-                        repeat task.wait() until mob.Humanoid.Health <= 0
-                        task.wait(2)
-                        playerRoot.CFrame = mobRoot.CFrame
-                        tool:Activate()
-                        break
-                    end
-                end
-            end
-        end)
-    end
-end)
-		
-page2:Toggle("Auto Click", false, function(state)
+page2:Toggle("ออโต้ คลิก", false, function(state)
     _G.autoclick = state
 end)
 
@@ -1293,7 +862,7 @@ end)
 end) 
 end)
 
-page2:Toggle("Auto Equip", false, function(state)
+page2:Toggle("ออโต้ ถือของ", false, function(state)
     _G.autoequip = state
 end)
 
@@ -1313,183 +882,10 @@ spawn(function() -- auto equip
     end
 end)
 
-page2:Label("┇ Function Farm with Cannon Ball ┇")
-page2:Toggle("Auto Farm Def [ Fast ]", false, function(bll)
+page2:Label("┇ ฝั่งชั่น ฟาร์มค่าป้องกัน ┇")
+page2:Toggle("ออโต้ ฟาร์มค่าป้องกัน [ เฉพาะ คนไม่ใช้ผลไม้ปีศาจ โรเกีย ]", false, function(bll)
     _G.autodef = bll
 end)
-
---[[ spawn(function() -- autofarm teleport cannon
-    while wait(0) do
-        pcall(function()
-            if _G.autocannonplr then
-                for i,v in pairs(game.Players:GetChildren()) do
-                    if v.Name ~= game.Players.LocalPlayer.Name then
-                        v.Character.HumanoidRootPart.Transparency = 0.9
-                    	v.Character.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
-                        v.Character.HumanoidRootPart.CanCollide = false
-                        v.Character.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
-                        v.Character.HumanoidRootPart.CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,5,-15)
-                        if v.Character.Humanoid.Health == 0 then
-                            v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
-                            v.Character.HumanoidRootPart.Transparency = 1
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannon or _G.autocannonplr then
-                local toolname = "Cannon Ball"
-                local Plr = game:GetService("Players").LocalPlayer
-                wait(0.75)
-                if Plr.Backpack:FindFirstChild(toolname) and not Plr.Character:FindFirstChild(toolname) and not Plr.Character:FindFirstChildOfClass("Tool") then
-                    local tool = Plr.Backpack:FindFirstChild(toolname)
-                    Plr.Character.Humanoid:EquipTool(tool)
-                    wait(0.75)
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-                end
-            end
-        end)
-    end
-end)
-
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannonslow then
-                local toolname = "Cannon Ball"
-                local Plr = game:GetService("Players").LocalPlayer
-                wait(0.5)
-                if Plr.Backpack:FindFirstChild(toolname) and not Plr.Character:FindFirstChild(toolname) and not Plr.Character:FindFirstChildOfClass("Tool") then
-                    local tool = Plr.Backpack:FindFirstChild(toolname)
-                    Plr.Character.Humanoid:EquipTool(tool)
-                end
-            end
-        end)
-    end
-end)
-
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannon or _G.autocannonplr or _G.autocannonslow then
-                local args = {
-                    [1] = CFrame.new(Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-                }
-                game:GetService("Players").LocalPlayer.Character:FindFirstChild("Cannon Ball").RemoteEvent:FireServer(unpack(args))
-                wait(0)
-                local args = {
-                    [1] = CFrame.new(Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame))
-                }
-                game:GetService("Players").LocalPlayer.Character:FindFirstChild("Cannon Ball").RemoteEvent:FireServer(unpack(args))
-                wait(0)
-                if game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:FindFirstChild("CannonBall") then
-                    game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:FindFirstChild("CannonBall").CanCollide = false
-                end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannon or _G.autocannonplr or _G.autocannonslow then
-                repeat task.wait(0)
-                    for i, v in pairs(game.workspace.ResourceHolder["Resources_" .. game.Players.LocalPlayer.UserId]:GetChildren()) do
-                        if v.Name == "CannonBall" then
-                            v.CFrame = game.Players.LocalPlayer.Character.Head.CFrame * CFrame.new(0, 2, -15)
-                            v.CanCollide = false
-                            if not v:FindFirstChild("BodyClip") then
-                                local Noclip = Instance.new("BodyVelocity")
-                                Noclip.Name = "BodyClip"
-                                Noclip.Parent = v
-                                Noclip.MaxForce = Vector3.new(100000,100000,100000)
-                                Noclip.Velocity = Vector3.new(0,20,0)
-                            end
-                        end
-                    end
-                until _G.autocannon == false or _G.autocannonplr == false or game.Players.LocalPlayer.Character.Humanoid.Health == 0
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannon and game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") 
-            or _G.autocannonplr and game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                task.wait(1)
-                for i=1,2 do
-                    game:GetService("Players").LocalPlayer.Character.Weapons:FireServer()
-                end
-            end
-        end)
-    end
-end)
-
-
-spawn(function()
-    while task.wait(15) do
-        pcall(function()
-            if _G.autocannon or _G.autocannonplr then
-                task.wait(0.1)
-                if game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                        if v.Name == "Cannon Ball" then
-                            v:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while task.wait(0) do
-        pcall(function()
-            if _G.autocannon  or _G.autocannonplr or _G.autocannonslow then
-                task.wait(0.1)
-                if game.Players.LocalPlayer.Backpack:FindFirstChild("Cannon Ball") then
-                    for i, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                        if v.Name ~= "Cannon" and v.Name ~= "Cannon Ball" then
-                            v:Destroy()
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.autocannon or  _G.autocannonplr  or _G.autocannonslow then
-                fireclickdetector(workspace.Island11.CentralBuilding.Doors.Button.Button.ClickDetector)
-                task.wait(0)
-                if not game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-                if game.Players.LocalPlayer.PlayerGui.HealthBar.Frame.Status:FindFirstChild("BusoHaki") then
-                    wait(0.5)
-                    game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].UpdateHaki:FireServer()
-                end
-
-            end
-        end)
-    end
-end)]]
 
 spawn(function()
     while task.wait() do
@@ -1523,104 +919,13 @@ spawn(function()
     end
 end)
 
-page2:Label("┇ Other Farming With Skill DF ┇")
-page2:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
-    _G.quakefarm = qke
+page2:Label("┇ ฝั่งชั่น ฟาร์มด้วยผลไม้ปีศาจ (แก้ไข) ┇")
+page2:Toggle("ยังไม่มา . . . ", false, function(qke)
+    _G.farmdf = qke
 end)
 
-spawn(function() -- Quake farm npcs
-    while wait(0) do
-        pcall(function()
-            if _G.quakefarm then
-                script = game:GetService("Players").LocalPlayer.Character.Powers.Quake;
-                VTQ = script.RemoteEvent.RemoteFunction:InvokeServer();
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-
-                for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health ~= 0 then
-                        if v.Humanoid.Health > 0 and
-                            (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 10000000000000000000000 then
-                            if v.Name ~= "SetInstances" then
-                                -- v.Humanoid:ChangeState(11)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                if v.Humanoid.Health == 0 then
-                                    v:Destroy()
-                                end
-
-                                wait(0.05)
-
-            local args = {
-                [1] = VTQ,
-                [2] = "QuakePower4",
-                [3] = "StopCharging",
-                [4] = Mouse.Target,
-                [5] = v.Head.CFrame * CFrame.new(0, 0, 0),
-                [6] = 100,
-                [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
-            }
-            
-            game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-page2:Toggle("Auto Farm Light", false, function(lth)
-    _G.lightfarm = lth
-end)
-
-spawn(function() -- Light farm npcs
-    while wait(0) do
-        pcall(function()
-            if _G.lightfarm then
-                script = game:GetService("Players").LocalPlayer.Character.Powers.Light;
-                VTC = script.RemoteEvent.RemoteFunction:InvokeServer();
-                local pla = game.Players.LocalPlayer;
-                local Mouse = pla:GetMouse();
-
-                for i, v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-                    if v:FindFirstChild("HumanoidRootPart") and v.Humanoid.Health ~= 0 then
-                        if v.Humanoid.Health > 0 and
-                            (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.HumanoidRootPart.Position).Magnitude < 10000000000000000000000 then
-                            if v.Name ~= "SetInstances" then
-                                -- v.Humanoid:ChangeState(11)
-                                v.HumanoidRootPart.CanCollide = false
-                                v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-                                if v.Humanoid.Health == 0 then
-                                    v:Destroy()
-                                end
-
-                                wait(0.05)
-
-                                local args = {
-                                    [1] = VTC,
-                                    [2] = "LightPower2",
-                                    [3] = "StopCharging",
-                                    [4] = v.Head.CFrame * CFrame.new(0, 0, 0),
-                                    [5] = Mouse.Target,
-                                    [6] = 100
-                                }
-
-                                game:GetService("Players").LocalPlayer.Character.Powers.Light.RemoteEvent:FireServer(unpack(args))
-
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-page2:Label("┇ Function Haki ┇")
-page2:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
+page2:Label("┇ ฝั่งชั่น ฟาร์มฮาคิ ┇")
+page2:Toggle("ออโต้ ฟาร์มฮาคิ แบบเร็ว [ ปิงมาก ]", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -1734,7 +1039,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-page2:Toggle("Auto Get Haki", false, function(gthi)
+page2:Toggle("ออโต้ รับฮาคิ [ เปิดแล้วรอรับทันทีเมื่อ เลเวล 1000 ]", false, function(gthi)
     getgenv().haki = gthi
 while getgenv().haki do
             wait()
@@ -1749,632 +1054,18 @@ while getgenv().haki do
 	end
 end)
 
-page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
+page2:Section("↑ คำเตือน: ใช้ ฟาร์มฮาคิ แบบเร็ว ใช้นานอาจโดนเตะ เพราะ ปิงมากควรใช้ไม่นาน ↑")
 		
-local Tab3 = Window:Taps("Skill")
+local Tab3 = Window:Taps("สกิล")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ Spam Skill ┇")
+page3:Label("┇ ออโต้ สกิล ( ยังไม่มา . . . ) ┇")
 
-local selectedSpamFruit = ""
-local selectedSpamSkill = ""
-
-page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
-    selectedSpamFruit = spdf
-end)
-
-local spamtimeSet = false
-		
-page3:Textbox("Per Second :", "Enter Number", function(xtx)
-    getgenv().spamtime = tonumber(xtx)
-    spamtimeSet = true
-end)
-
-page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
-    selectedSpamSkill = sps
-end)
-
-page3:Toggle("Auto Spam [ 100% ]", false, function(spam)
-    _G.skillspam = spam
-end)
-
-local pla = game.Players.LocalPlayer
-local Mouse = pla:GetMouse()
-
-task.defer(function()
-    wait(1)
-    if not spamtimeSet then
-        getgenv().spamtime = 0.1
-    end
-end)
-		
--- Quake
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Quake" then
-                if selectedSpamSkill == "Skill Z" then
-		    local X = humanoid.Position.X
-                    local Y = humanoid.Position.Y
-                    local Z = humanoid.Position.Z
-									
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "QuakePower1",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Target,
-                        [5] = Mouse.Hit,
-                        [6] = 100,
-                        [7] = Vector3.new(X, Y, Z)
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-                elseif selectedSpamSkill == "Skill C" then
-		    local humanoid = pla.Character.HumanoidRootPart
-                    local Xx = humanoid.Position.X
-                    local Yy = humanoid.Position.Y
-                    local Zz = humanoid.Position.Z
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "QuakePower3",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Target,
-                        [5] = Mouse.Hit,
-                        [6] = 100,
-                        [7] = Vector3.new(Xx, Yy, Zz)
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "QuakePower3",
-                        [3] = "StartCharging",
-                        [5] = "Right"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
-                elseif selectedSpamSkill == "Skill V" then
-                    local pla = game.Players.LocalPlayer
-                    local Mouse = pla:GetMouse()
-
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "QuakePower4",
-                        [3] = "StartCharging",
-                        [5] = "Right"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args))
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "QuakePower4",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Target,
-                        [5] = Mouse.Hit,
-                        [6] = 100,
-                        [7] = Vector3.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position)
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Quake.RemoteEvent:FireServer(unpack(args2))
-                end
-            end
-        end)
-    end
-end)
-
--- Bomb
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Bomb" then
-                if selectedSpamSkill == "Skill Z" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower1",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Hit,
-                        [5] = Mouse.Target,
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                elseif selectedSpamSkill == "Skill B" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower5",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Hit,
-                        [5] = Mouse.Target,
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower5",
-                        [3] = "StartCharging",
-                        [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
-                        [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                        [6] = "Right"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args2))
-                elseif selectedSpamSkill == "Skill C" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower3",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Hit,
-                        [5] = Mouse.Target,
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                elseif selectedSpamSkill == "Skill V" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "BombPower4",
-                        [3] = "StopCharging",
-                        [4] = Mouse.Hit,
-                        [5] = Mouse.Target,
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Bomb.RemoteEvent:FireServer(unpack(args))
-                end
-            end
-        end)
-    end
-end)
-
--- Flare
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Flare" then
-            if selectedSpamSkillmSkill == "Skill X" then
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "FlarePower2",
-                        [3] = "StopCharging",
-                        [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
-
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "FlarePower2",
-                        [3] = "StartCharging",
-                        [4] = CFrame.new(-550.802795, 244, 26.3580341, -0.63954407, 0.15401715, -0.753168106, -0, 0.979725122, 0.200346366, 0.768754423, 0.128130332, -0.626577377),
-                        [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-                        [7] = "Left"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
-                elseif selectedSpamSkill == "Skill B" then
-                    local pla = game.Players.LocalPlayer
-                    local Mouse = pla:GetMouse()
-
-                    local args = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "FlarePower5",
-                        [3] = "StopCharging",
-                        [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-                        [5] = workspace:WaitForChild("IslandTown"):WaitForChild("Grass"):WaitForChild("Grass"),
-                        [6] = 100
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args))
-
-                    local args2 = {
-                        [1] = tonumber(serializeTable(remotes)),
-                        [2] = "FlarePower5",
-                        [3] = "StartCharging",
-                        [4] = CFrame.new(-87.2900391, 213.999969, -985.91748, -0.656417644, 0.341256171, -0.757590711, 1.49011612e-08, 0.911768198, 0.410705268, 0.830902815, 0.228523642, -0.607323861),
-                        [5] = workspace:WaitForChild("IslandTown"):WaitForChild("Grass"):WaitForChild("Grass"),
-                        [7] = "Right"
-                    }
-
-                    game:GetService("Players").LocalPlayer.Character.Powers.Flare.RemoteEvent:FireServer(unpack(args2))
-                end
-            end
-        end)
-    end
-end)
-
--- Chilly Skill B
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Chilly" and selectedSpamSkill == "Skill B" then
-                local args = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "ChillyPower11",
-                    [3] = "StopCharging",
-                    [4] = Mouse.Hit,
-                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                    [6] = 100
-                }
-
-                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args))
-
-                local args2 = {
-                    [1] = tonumber(serializeTable(remotes)),
-                    [2] = "ChillyPower11",
-                    [3] = "StartCharging",
-                    [4] = CFrame.new(Vector3.new(-3.3828134536743164, 213, -366.8262939453125), Vector3.new(0.05879887938499451, -0.29103368520736694, -0.9549042582511902)),
-                    [5] = workspace.IslandWindmill.Dock.Boards.Board,
-                    [6] = "Right"
-                }
-
-                game:GetService("Players").LocalPlayer.Character.Powers.Chilly.RemoteEvent:FireServer(unpack(args2))
-            end
-        end)
-    end
-end)
-
--- Magma
-spawn(function()
-    while wait(getgenv().spamtime) do
-        pcall(function()
-            if _G.skillspam and selectedSpamFruit == "Magma" then
-                if selectedSpamSkill == "Skill Z" then
-            local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StopCharging",
-    [4] = CFrame.new(Vector3.new(Mouse.Hit.X, Mouse.Hit.Y, Mouse.Hit.Z)),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [6] = 100
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-            local args = {
-    [1] = tonumber(serializeTable(remotes)),
-    [2] = "MagmaPower7",
-    [3] = "StartCharging",
-    [4] = CFrame.new(2157.088623046875, 1193.5758056640625, -9786.4072265625, 0.9772287607192993, -0.020494922995567322, -0.21119679510593414, 1.862645149230957e-09, 0.9953245520591736, -0.09658809006214142, 0.21218889951705933, 0.09438865631818771, 0.9726595878601074),
-    [5] = workspace:WaitForChild("IslandWindmill"):WaitForChild("OutterDune"):WaitForChild("Beach"),
-    [7] = "Right"
-}
-
-game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireServer(unpack(args))
-                end
-            end
-        end)
-    end
-end)
-
-page3:Label("┇ Max Charge Skill ┇")
-page3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
-	_G.skillmax = smx
-end)
-
-local Tab4 = Window:Taps("Players")
+local Tab4 = Window:Taps("ผู้เล่น")
 local page4 = Tab4:newpage()
 
-page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode [ 36% ]", false, function(gxd)
-	_G.godmode = gxd
-end)
+page3:Label("┇ ฝั่งชั่น ผู้เล่น ┇")
 
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            local success, err = pcall(function()
-                local ResourceHolder = game.Workspace:FindFirstChild("ResourceHolder")
-
-                if ResourceHolder then
-                    for _, player in pairs(game.Players:GetPlayers()) do
-                        local resourceFolderName = "Resources_" .. tostring(player.UserId)
-                        local playerResourceFolder = ResourceHolder:FindFirstChild(resourceFolderName)
-
-                        if playerResourceFolder then
-                            local magmaPool = playerResourceFolder:FindFirstChild("StringCageBarrier")
-
-                            if magmaPool then
-                                for _, item in pairs(magmaPool:GetDescendants()) do
-                                    if item:IsA("Instance") and item.Name == "TouchInterest" then
-                                        item:Destroy()
-                                    end
-				end
-				end
-                        end
-		end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-	while task.wait(0.01) do
-		if _G.godmode then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Humanoid") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("String")
-					if smelt then
-						local resources = smelt:FindFirstChild("Cones")
-						if resources then
-							local smeltSpew = resources:FindFirstChild("StringCone")
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "TouchInterest" then
-										child:Destroy()
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Attack")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("DPart")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local projects = userFolder:FindFirstChild("Projectiles")
-                            if projects then
-                                local water = projects:FindFirstChild("Water")
-                                if water then
-                                        local touchInterest = water:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            pcall(function()
-                for _, playerChar in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(playerChar.Name) then
-                        local powers = playerChar:FindFirstChild("Powers")
-                        if powers then
-                            local hollow = powers:FindFirstChild("Hollow")
-                            if hollow then
-
-                                -- HollowsMini → HollowMini → HRP → TouchInterest
-                                local hollowsMini = hollow:FindFirstChild("HollowsMini")
-                                if hollowsMini then
-                                    for _, modelMini in pairs(hollowsMini:GetChildren()) do
-                                        if modelMini:IsA("Model") and modelMini.Name == "HollowMini" then
-                                            print("[AntiHollowMini] Found HollowMini model in:", playerChar.Name)
-
-                                            local hrpMini = modelMini:FindFirstChild("HumanoidRootPart")
-                                            if hrpMini then
-                                                local tiMini = hrpMini:FindFirstChildOfClass("TouchTransmitter") or hrpMini:FindFirstChild("TouchInterest")
-                                                if tiMini then
-                                                    print("[AntiHollowMini] Destroying TouchInterest in HollowMini →", playerChar.Name)
-                                                    tiMini:Destroy()
-                                                end
-                                            end
-                                        end
-                                    end
-                                end
-
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-		
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomPool")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
-        end
-    end
-end)
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            pcall(function()
-                for _, enemie in pairs(workspace.Enemies:GetChildren()) do
-                    if enemie:IsA("Model") then
-                      for _, child in pairs(enemie.Torso:GetChildren()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end  
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            pcall(function()
-                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
-                    if modelInWorkspace:IsA("Model") then
-                        -- เจาะจงเฉพาะ 6 ชิ้นส่วนที่ระบุเท่านั้น
-                        local demonPartsToCheck = {
-                            "DemonHead",
-                            "DemonTorso",
-                            "DemonRightArm",
-                            "DemonLeftArm",
-                            "DemonRightWing",
-                            "DemonLeftWing"
-                        }
-
-                        for _, partName in ipairs(demonPartsToCheck) do
-                            local part = modelInWorkspace:FindFirstChild(partName)
-                            if part then
-                                for _, child in pairs(part:GetChildren()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-task.spawn(function()
-	while task.wait(0.01) do
-		if _G.godmode then
-			for _, model in ipairs(workspace:GetChildren()) do
-				if model:IsA("Model") and model:FindFirstChild("Powers") then
-					local powers = model.Powers
-					local smelt = powers:FindFirstChild("Smelt")
-					if smelt then
-						local resources = smelt:FindFirstChild("Resources")
-						if resources then
-							local smeltSpew = resources:FindFirstChild("SmeltSpew")
-							if smeltSpew then
-								for _, child in ipairs(smeltSpew:GetChildren()) do
-									if child.Name == "TouchInterest" then
-										child:Destroy()
-									end
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end)
-
-task.spawn(function()
-    while task.wait(0.1) do
-        if _G.godmode then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local rightArm = obj:FindFirstChild("Right Arm")
-                        if rightArm then
-                            local sword = rightArm:FindFirstChild("Sword")
-                            if sword then
-                                -- หา BasePart ทั้งหมดใน Sword Model แล้วปิด CanTouch
-                                for _, part in pairs(sword:GetDescendants()) do
-                                    if part:IsA("BasePart") then
-                                        part.CanTouch = false
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-		
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            pcall(function()
-                for _, obj in pairs(workspace:GetChildren()) do
-                    if game.Players:FindFirstChild(obj.Name) then
-                        local rightArm = obj:FindFirstChild("Right Arm")
-                        if rightArm then
-                            local rumbleStaff = rightArm:FindFirstChild("RumbleStaff")
-                            if rumbleStaff then
-                                local damagePart = rumbleStaff:FindFirstChild("DamagePart")
-                                if damagePart then
-                                    damagePart:Destroy()
-                                end
-                            end
-                        end
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-page4:Label("┇ Player ┇")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
@@ -2385,7 +1076,7 @@ page4:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-page4:Button("Refresh Player", function()
+page4:Button("ีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
