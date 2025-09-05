@@ -1604,15 +1604,14 @@ page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
 end)
 
 spawn(function()
-    while wait(3) do
+    while wait() do
         pcall(function()
-            if AutoClaimComp1 then
+            if not AutoClaimComp1 then return end;
             local args = {
     [1] = "Claim1"
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-			end
         end)
     end
 end)
@@ -1622,15 +1621,14 @@ page7:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
 end)
 
 spawn(function()
-    while wait(3) do
+    while wait() do
         pcall(function()
-            if AutoClaimComp2 then
-           local args = {
+            if not AutoClaimComp2 then return end;
+            local args = {
     [1] = "Claim10"
 }
 
 game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-			end
         end)
     end
 end)
