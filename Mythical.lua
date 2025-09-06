@@ -300,7 +300,7 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
 end
 
 local Tab10 = Window:Taps("อัพเดต")
-local page10 = Tab1:newpage()
+local page10 = Tab10:newpage()
 
 page10:Label("แก้ไขเมนูเล็กๆน้อยๆ")
 
