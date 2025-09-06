@@ -1404,16 +1404,6 @@ local Tab6 = Window:Taps("ร้านค้า")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
-page6:Dropdown("เลือกซื้อ ดาบ :", Cache.DevConfig["ListOfSwords"], function(knrd)
-    selectedSwords = knrd
-end)
-
-page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
-page6:Dropdown("เลือกซื้อ ปืน :", Cache.DevConfig["ListOfSnipers"], function(knrd)
-    selectedSnipers = knrd
-end)
-
-page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
 page6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
     selectedDrinks = knrd
 end)
