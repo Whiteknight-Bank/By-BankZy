@@ -97,9 +97,11 @@ local Cache = { DevConfig = {} };
 
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
 Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
-Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
-Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
+Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Apple Juice", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
+Cache.DevConfig["ListOfDrink+"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"}
+Cache.DevConfig["ListOfSwords"] = {"Danger", " ", " ", "Katana", "Krizma"};
+Cache.DevConfig["ListOfSnipers"] = {" ", "Star", "Cossbow", "Flintlock"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -296,6 +298,11 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
         table.insert(Wapon ,v.Name)
     end
 end
+
+local Tab10 = Window:Taps("อัพเดต")
+local page10 = Tab1:newpage()
+
+page10:Label("แก้ไขเมนูเล็กๆน้อยๆ")
 
 -- สร้างแท็บชื่อ Autos
 local Tab1 = Window:Taps("Autos")
@@ -1498,7 +1505,17 @@ local Tab6 = Window:Taps("ร้านค้า")
 local page6 = Tab6:newpage()
 
 page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
-page6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink"], function(knrd)
+page6:Dropdown("เลือกซื้อ ดาบ :", Cache.DevConfig["ListOfSwords"], function(knrd)
+    selectedSwords = knrd
+end)
+
+page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
+page6:Dropdown("เลือกซื้อ ปืน :", Cache.DevConfig["ListOfSnipers"], function(knrd)
+    selectedSnipers = knrd
+end)
+
+page6:Label("┇ ซื้อ-ดื่มน้ำ ┇")
+page6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
     selectedDrinks = knrd
 end)
 
@@ -1507,7 +1524,7 @@ page6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)",
 end)
 
 spawn(function()
-    while wait(0) do
+    while wait() do
         pcall(function()
             if _G.buydrink then
 local args = {
@@ -1606,7 +1623,7 @@ page6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2
     lockvalue = tonumber(lkvs)
 end)
 
-page6:Dropdown("เลือก การสุ่ม :", {"เบรี", "เพชร"}, function(srll)
+page6:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
