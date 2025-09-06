@@ -136,6 +136,7 @@ local SafeZoneUnderSea = Instance.new("Part",game.Workspace)
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+local plr = game.Players.LocalPlayer
 
 spawn(function() -- autofarm velocity
     while wait(0) do
@@ -847,7 +848,7 @@ page2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำง
 				end
 			end)
 		
-page2:Toggle("ออโต้ คลิก", false, function(state)
+page2:Toggle("ออโต้คลิก", false, function(state)
     _G.autoclick = state
 end)
 
@@ -862,7 +863,7 @@ end)
 end) 
 end)
 
-page2:Toggle("ออโต้ ถือของ", false, function(state)
+page2:Toggle("ออโต้ถือ", false, function(state)
     _G.autoequip = state
 end)
 
@@ -883,8 +884,8 @@ spawn(function() -- auto equip
 end)
 
 page2:Label("┇ ฝั่งชั่น ฟาร์มค่าป้องกัน ┇")
-page2:Toggle("ออโต้ ฟาร์มค่าป้องกัน [ เฉพาะ คนไม่ใช้ผลไม้ปีศาจ โรเกีย ]", false, function(bll)
-    _G.autodef = bll
+page2:Toggle("ออโต้ ฟาร์มค่าป้องกัน [ เฉพาะ คนไม่ใช้ผลไม้ปีศาจ โรเกีย ]", false, function(def)
+    _G.autodef = def
 end)
 
 spawn(function()
@@ -910,6 +911,55 @@ spawn(function()
 
                         if v.Humanoid.Health <= 0 then
                             hrp.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                    end
+                end
+            end
+        end)
+    end
+end)
+
+page2:Toggle("ออโต้ ฟาร์มค่าป้องกัน [ เฉพาะ คนใช้โรเกีย ]", false, function(deff)
+    _G.autodef2 = deff
+end)
+
+spawn(function() -- autofarm cannon
+    while wait(0) do
+        pcall(function()
+            if _G.autodef2 then
+                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if string.find(v.Name, "Crab")
+                    and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CanCollide = false
+                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        --v.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
+                        v.HumanoidRootPart.Transparency = 0.9
+                        v:FindFirstChild("HumanoidRootPart").Anchored = true
+                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,0,-2.5)
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                     end
+                end
+                for _,v in pairs(game.Workspace.Enemies:GetChildren()) do
+                    if string.find(v.Name, "Angry") 
+                    or string.find(v.Name, "Bandit") 
+                    or string.find(v.Name, "Thief")
+                    or string.find(v.Name, "Freddy")
+                    or string.find(v.Name, "Thug")
+                    and v:FindFirstChild("HumanoidRootPart") then
+                        v.HumanoidRootPart.CanCollide = false
+                    	v.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                        v:FindFirstChild("HumanoidRootPart").Anchored = true
+                        v:FindFirstChild("HumanoidRootPart").CFrame = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame*CFrame.new(0,4,-15)
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                            v:Destroy()
+                        end
+                        if v.Humanoid.Health == 0 then
+                            v.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
                             v:Destroy()
                         end
                     end
@@ -1060,12 +1110,35 @@ page2:Section("↑ ต่อ: ไม่ควรใช้นานเกิน�
 local Tab3 = Window:Taps("สกิล")
 local page3 = Tab3:newpage()
 
-page3:Label("┇ ออโต้ สกิล ( ยังไม่มา . . . ) ┇")
+page3:Label("┇ ออโต้ สกิล ( ไม่ทำงาน ) ┇")
+page3:Toggle("ออโต้สกิล Z", false, function(sklz)
+    _G.skillz = sklz
+end)
+
+page3:Toggle("ออโต้สกิล X", false, function(sklx)
+    _G.skillx = sklx
+end)
+
+page3:Toggle("ออโต้สกิล C", false, function(sklc)
+    _G.skillc = sklc
+end)
+
+page3:Toggle("ออโต้สกิล V", false, function(sklv)
+    _G.skillv = sklv
+end)
+
+page3:Toggle("ออโต้สกิล B", false, function(sklb)
+    _G.skillb = sklb
+end)
+
+page3:Toggle("ออโต้สกิล N", false, function(skln)
+    _G.skilln = skln
+end)
 
 local Tab4 = Window:Taps("ผู้เล่น")
 local page4 = Tab4:newpage()
 
-page3:Label("┇ ฝั่งชั่น ผู้เล่น ┇")
+page4:Label("┇ ฝั่งชั่น ผู้เล่น ┇")
 
 local playerNames = {}
 
@@ -1157,7 +1230,7 @@ for i, storage in ipairs(storageValues) do
 
         print(" Storage " .. i .. ": " .. fruitName .. aura)
     else
-        print(" Storage " .. i .. ": None")
+        print(" Storage " .. i .. ": ไม่มี")
     end
 end
 
@@ -1165,7 +1238,6 @@ print("-- =================================== --")
 
    create:Notifile("", "พิมในช่องแชท /console ตอนนี้เลย!!! ", 6)
 end)
-
 
 page4:Toggle("ส่อง", false, function(state)
 	if selectedPlayer then
@@ -1179,8 +1251,111 @@ page4:Toggle("ส่อง", false, function(state)
 		end
 	end
 end)
-		
-plr = game.Players.LocalPlayer
+
+page4:Label("ฝั่งชั่น เช็คผลแรร์ผู้เล่นทุกคนในเซิฟเวอร์")
+page4:Toggle("เช็คผลไม้แรร์ & กล่องแรร์กับอัลตร้า", false, function(chre)
+    _G.checkrare = chre
+end)
+
+local Players = game:GetService("Players")
+
+spawn(function()
+	while wait(1) do
+		if _G.checkrare then
+			pcall(function()
+				local players = Players:GetPlayers()
+
+				for i = 1, #players do
+					local player = players[i]
+
+					-- เช็คใน Backpack
+					if player:FindFirstChild("Backpack") then
+						local backpackItems = player.Backpack:GetChildren()
+						for j = 1, #backpackItems do
+							local item = backpackItems[j]
+							for k = 1, #rareFruits do
+								if item.Name == rareFruits[k] then
+									local msg = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msg, 3)
+								end
+							end
+						end
+					end
+
+					-- เช็คใน workspace.Character
+					local character = workspace:FindFirstChild(player.Name)
+					if character then
+						local characterItems = character:GetChildren()
+						for j = 1, #characterItems do
+							local item = characterItems[j]
+							for k = 1, #rareFruits do
+								if item.Name == rareFruits[k] then
+									local msg = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msg, 3)
+								end
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+end)
+
+local Players = game:GetService("Players")
+
+-- รายการกล่องที่ต้องการเช็ค
+local targetBoxes = {
+	"Rare Box",
+	"Ultra Rare Box"
+}
+
+spawn(function()
+	while wait(1) do
+		if _G.checkrare then
+			pcall(function()
+				local players = Players:GetPlayers()
+
+				for i = 1, #players do
+					local player = players[i]
+
+					-- เช็คใน Backpack
+					if player:FindFirstChild("Backpack") then
+						local backpackItems = player.Backpack:GetChildren()
+						for j = 1, #backpackItems do
+							local item = backpackItems[j]
+							for k = 1, #targetBoxes do
+								if item.Name == targetBoxes[k] then
+									local msb = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
+									print(msb)
+									create:Notifile("", msb, 3)
+								end
+							end
+						end
+					end
+
+					-- เช็คใน Character
+					local character = workspace:FindFirstChild(player.Name)
+					if character then
+						local characterItems = character:GetChildren()
+						for j = 1, #characterItems do
+							local item = characterItems[j]
+							for k = 1, #targetBoxes do
+								if item.Name == targetBoxes[k] then
+									local msb = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
+									print(msg)
+									create:Notifile("", msb, 3)
+								end
+							end
+						end
+					end
+				end
+			end)
+		end
+	end
+end)
 
 local Tab5 = Window:Taps("เกาะ")
 local page5 = Tab5:newpage()
@@ -1606,7 +1781,7 @@ page7:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(4) do
         pcall(function()
             if not AutoClaimComp1 then return end;
             local args = {
@@ -1623,7 +1798,7 @@ page7:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
 end)
 
 spawn(function()
-    while wait() do
+    while wait(4) do
         pcall(function()
             if not AutoClaimComp2 then return end;
             local args = {
@@ -1633,111 +1808,6 @@ spawn(function()
 game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
         end)
     end
-end)
-
-page7:Label("ฝั่งชั่น เช็คผลแรร์ในเซิฟเวอร์")
-page7:Toggle("เช็คผลไม้แรร์ & กล่องแรร์กับอัลตร้า", false, function(chre)
-    _G.checkrare = chre
-end)
-
-local Players = game:GetService("Players")
-
-spawn(function()
-	while wait(1) do
-		if _G.checkrare then
-			pcall(function()
-				local players = Players:GetPlayers()
-
-				for i = 1, #players do
-					local player = players[i]
-
-					-- เช็คใน Backpack
-					if player:FindFirstChild("Backpack") then
-						local backpackItems = player.Backpack:GetChildren()
-						for j = 1, #backpackItems do
-							local item = backpackItems[j]
-							for k = 1, #rareFruits do
-								if item.Name == rareFruits[k] then
-									local msg = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
-									print(msg)
-									create:Notifile("", msg, 3)
-								end
-							end
-						end
-					end
-
-					-- เช็คใน workspace.Character
-					local character = workspace:FindFirstChild(player.Name)
-					if character then
-						local characterItems = character:GetChildren()
-						for j = 1, #characterItems do
-							local item = characterItems[j]
-							for k = 1, #rareFruits do
-								if item.Name == rareFruits[k] then
-									local msg = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
-									print(msg)
-									create:Notifile("", msg, 3)
-								end
-							end
-						end
-					end
-				end
-			end)
-		end
-	end
-end)
-
-local Players = game:GetService("Players")
-
--- รายการกล่องที่ต้องการเช็ค
-local targetBoxes = {
-	"Rare Box",
-	"Ultra Rare Box"
-}
-
-spawn(function()
-	while wait(1) do
-		if _G.checkrare then
-			pcall(function()
-				local players = Players:GetPlayers()
-
-				for i = 1, #players do
-					local player = players[i]
-
-					-- เช็คใน Backpack
-					if player:FindFirstChild("Backpack") then
-						local backpackItems = player.Backpack:GetChildren()
-						for j = 1, #backpackItems do
-							local item = backpackItems[j]
-							for k = 1, #targetBoxes do
-								if item.Name == targetBoxes[k] then
-									local msb = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
-									print(msb)
-									create:Notifile("", msb, 3)
-								end
-							end
-						end
-					end
-
-					-- เช็คใน Character
-					local character = workspace:FindFirstChild(player.Name)
-					if character then
-						local characterItems = character:GetChildren()
-						for j = 1, #characterItems do
-							local item = characterItems[j]
-							for k = 1, #targetBoxes do
-								if item.Name == targetBoxes[k] then
-									local msb = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
-									print(msg)
-									create:Notifile("", msb, 3)
-								end
-							end
-						end
-					end
-				end
-			end)
-		end
-	end
 end)
 
 local Tab8 = Window:Taps("อื่นๆ")
