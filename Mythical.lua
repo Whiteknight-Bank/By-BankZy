@@ -100,8 +100,8 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Apple Juice", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
 Cache.DevConfig["ListOfDrink+"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"}
-Cache.DevConfig["ListOfSwords"] = {"Danger", " ", " ", "Katana", "Krizma"};
-Cache.DevConfig["ListOfSnipers"] = {" ", "Star", "Cossbow", "Flintlock"};
+Cache.DevConfig["ListOfSwords"] = {"Dagger", "Wakizashi", "Tachi", "Katana", "Krizma"};
+Cache.DevConfig["ListOfSnipers"] = {"Slingshot", "Star", "Cossbow", "Flintlock"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
@@ -188,115 +188,6 @@ local function getPlayerNames()
 			table.insert(names, player.Name)
 	end
 	return names
-end
-
---hook
-local mta = getrawmetatable(game)
-local namecall = mta.__namecall
-local setreadonly = setreadonly or make_writable
-
-
-setreadonly(mta, false)
-
-mta.__namecall = newcclosure(function(self, ...)
-    local args = {...}
-    local arguments = args
-    local a = {}
-    for i = 1, #arguments - 1 do
-        a[i] = arguments[i]
-    end
-    local method = getnamecallmethod() 
-
-    if method == 'FireServer' or method == "InvokeServer" then
-        if self.Name == 'Drown' and _G.nodmgwater then
-            if args[1] then
-                return nil
-            end
-        end
-    end
-    
-    return namecall(self, ...)    
-end)
-
-local attackremote = {}    
-
-local a
-a=hookmetamethod(game,"__namecall",function(self,...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
-            attackremote[self.Name] = args[1]
-            return a(self,unpack(args))
-        elseif self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-            attackremote[self.Name] = ""
-        end
-    end
-      return a(self,...)
-end)
-
-aaxc = hookmetamethod(game, "__namecall", function(self, ...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RemoteEvent" and args[3] == "StopCharging" and _G.skillmax then
-            args[6] = 100
-            return aaxc(self, unpack(args))
-        end
-    end
-    return aaxc(self, ...)
-end)
-
-local remotes = {}
-    local azc
-    azc=hookmetamethod(game,"__namecall",function(self,...)
-        local args = {...}
-        local method = getnamecallmethod()
-        if method == "FireServer" or method == "InvokeServer" then
-            if self.Name == "RemoteEvent" and args[3] == "StopCharging" then
-                remotes[self.Name] = args[1]
-                return azc(self,unpack(args))
-            end
-        end
-          return azc(self,...)
-    end)
-    
-    function serializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
- 
-    local tmp = string.rep("", depth)
- 
-    if name then tmp = tmp end
- 
-    if type(val) == "table" then
-        tmp = tmp .. (not skipnewlines and "" or "")
- 
-        for k, v in pairs(val) do
-            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. (not skipnewlines and "" or "")
-        end
- 
-        tmp = tmp .. string.rep("", depth) 
-    elseif type(val) == "number" then
-        tmp = tmp .. tostring(val)
-    elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
-    elseif type(val) == "boolean" then
-        tmp = tmp .. (val and "true" or "false")
-    elseif type(val) == "function" then
-        tmp = tmp  .. "func: " .. debug.getinfo(val).name
-    else
-        tmp = tmp .. tostring(val)
-    end
- 
-    return tmp
-end
-
-local Wapon = {}
-for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
-    if v:IsA("Tool") then
-        table.insert(Wapon ,v.Name)
-    end
 end
 
 local Tab10 = Window:Taps("อัพเดต")
@@ -841,9 +732,15 @@ spawn(function()
     end)
 end)
 
+local Wapon = {}
+
+for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+        table.insert(Wapon ,v.Name)
+    end
+
 page2:Label("┇ ฝั่งชั่น อื่นๆ ┇")
 page2:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
-    Wapon = wapn
+    selectedWapon = wapn
 end)
 
 page2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำงาน)", function()
@@ -851,6 +748,7 @@ page2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำง
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
             table.insert(Wapon, v.Name)
+			create:Notifile("", "รีเฟรชแล้ว ", 4)
         end
 				end
 			end)
@@ -880,7 +778,7 @@ spawn(function() -- auto equip
             if _G.autoequip then
                 repeat
                     wait(0.05)
-                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
+                    game:GetService 'Players'.LocalPlayer.Backpack[selectedWapon].Parent = game:GetService 'Players'.LocalPlayer.Character
                 until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
                 if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
                     game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
@@ -1161,6 +1059,7 @@ page4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
+		create:Notifile("", "รีเฟรชแล้ว ", 4)
 				end
 			end)
 
