@@ -1622,8 +1622,44 @@ tab6:Toggle("ออโต้ สุ่ม", false, function(rol)
     end
 end)
 
+tab6:Label("┇ ฝั่งชั่น เควสแซม ┇")
+tab6:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
+AutoClaimComp1 = clmp
+end)
+
+spawn(function()
+while wait(4) do
+pcall(function()
+if not AutoClaimComp1 then return end;
+local args = {
+[1] = "Claim1"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
+end)
+end
+end)
+
+tab6:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
+AutoClaimComp2 = clmpp
+end)
+
+spawn(function()
+while wait(4) do
+pcall(function()
+if not AutoClaimComp2 then return end;
+local args = {
+[1] = "Claim10"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
+end)
+end
+end)
+
 -- Tab7 - อื่น ๆ
 local tab7 = win:Taps("อื่นๆ")
+
 tab7:Label("┇ ฝั่งชั่น เซิฟเวอร์ ┇")
 tab7:Button("รีจอย เซิฟเวอร์", function()
     create:Notifile("", "Start Rejoin "..game.Players.LocalPlayer.Name.." Pls Wait", 3)
