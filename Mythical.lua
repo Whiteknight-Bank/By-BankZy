@@ -748,7 +748,7 @@ tab2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำง�
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
             table.insert(Wapon, v.Name)
-			create:Notifile("", "รีเฟรชแล้ว ", 4)
+			lib:Notifile("Alert", "รีเฟรชแล้ว!", 3)
         end
 				end
 			end)
@@ -1041,7 +1041,69 @@ tab3:Toggle("ออโต้สกิล N", false, function(skln)
     _G.skilln = skln
 end)
 
-tab2:Label("ผู้เล่น")
+local tab4 = win:Taps("ผู้เล่น")
+
+tab4:Label("┇ ฝั่งชั่น ที่เก็บผล ┇")
+local Cache = {
+    Player = { Inputfruitlist = {}, Inputfruitname = "" },
+    Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
+}
+
+local function CheckStorage(Number)
+    local storageFrame = game.Players.LocalPlayer.PlayerGui.Storage.Frame["StoredDF" .. Number]
+    return storageFrame and storageFrame.Button.Text == "Store" and storageFrame.Visible
+end
+
+local function StoreFruit(Index, Fruit)
+    local storagePath = game:GetService("Workspace").UserData["User_" .. game.Players.LocalPlayer.UserId].StoredDFRequest
+    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+    Fruit.Parent = game.Players.LocalPlayer.Character
+    storagePath:FireServer("StoredDF" .. Index)
+end
+
+tab4:Toggle("ออโต้ กดเก็บผลในกระเป๋า", false, function(value)
+    Cache.Boolean.StorageAll = value
+end)
+
+tab4:Toggle("ออโต้ กดเก็บผลในกระเป๋า [ ผล ออร่า ]", false, function(shy)
+    Cache.Boolean.StorageKeepShiny = shy
+end)
+
+local function HandleFruits()
+    if Cache.Boolean.StorageAll then
+        for Index = 1, 12 do
+            if CheckStorage(Index) then
+                for _, Fruit in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if Fruit:IsA("Tool") then
+                        local isRare = false
+                        for _, FruitName in pairs(rareFruits) do
+                            if string.lower(Fruit.Name) == string.lower(FruitName) then
+                                isRare = true
+                                break
+                            end
+                        end
+
+                        local hasAura = false
+                        if Cache.Boolean.StorageKeepShiny and Fruit:FindFirstChild("Main") and Fruit.Main:FindFirstChild("AuraAttachment") then
+                            hasAura = true
+                        end
+
+                        if isRare or hasAura then
+                            StoreFruit(Index, Fruit)
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
+spawn(function()
+    while wait(1) do
+        pcall(HandleFruits)
+    end
+end)
 
 tab4:Label("┇ ฝั่งชั่น ผู้เล่น ┇")
 
@@ -1059,7 +1121,7 @@ tab4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
-		create:Notifile("", "รีเฟรชแล้ว ", 4)
+		lib:Notifile("Alert", "รีเฟรชแล้ว!", 3)
 				end
 			end)
 
@@ -1263,7 +1325,8 @@ spawn(function()
 	end
 end)
 
-tab5:Label("เกาะ")
+
+local tab5 = win:Taps("เกาะ")
 tab5:Label("┇ เกาะ ┇")
 
 local section5_1 = tab5:DropdownTab("วาป-เกาะ")
@@ -1404,11 +1467,11 @@ section5_3:Button("คลิก เพื่อ วาป" , function()
         end
     end)
 
-tab6:Label("เอ็นพีซี")
+local tab6 = win:Taps("เอ็นพีซี")
 
 page6:Label("┇ ซื้อน้ำ ┇")
 
-local section2 = tab2:DropdownTab("ซื้อ-น้ำและดื่ม")
+local section6_0 = tab6:DropdownTab("ซื้อ-น้ำและดื่ม")
 section6_0:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
     selectedDrinks = knrd
 end)
@@ -1661,17 +1724,17 @@ game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("C
 end)
 
 
-local tab8 = win:Taps("อื่นๆ")
+local tab7 = win:Taps("อื่นๆ")
 
-tab8:Label("┇ ฝั่งชั่น เซิฟเวอร์ ┇")
-tab8:Button("รีจอย เซิฟเวอร์", function()
+tab7:Label("┇ ฝั่งชั่น เซิฟเวอร์ ┇")
+tab7:Button("รีจอย เซิฟเวอร์", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-tab8:Button("ย้าย เซิฟเวอร์", function()
+tab7:Button("ย้าย เซิฟเวอร์", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -1750,11 +1813,11 @@ local PlaceID = game.PlaceId
 
 end)
 
-tab8:Label("┇ ฝั่งชั่น คุ้มกัน ┇")
+tab7:Label("┇ ฝั่งชั่น คุ้มกัน ┇")
 
 local afkConnection
 
-tab8:Toggle("คุ้มกัน Afk", false, function(state)
+tab7:Toggle("คุ้มกัน Afk", false, function(state)
 
     if state then
 	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
@@ -1844,8 +1907,8 @@ for name, transform in pairs(npcMapping) do
     end
 end
 
-tab8:Label("┇ ดาบลับที่มีในแมพ (แมพ Mythical ยังไม่มี) ┇")
-tab8:Dropdown("เช็คความคืบหน้า ดาบลับ:", displayOptions, function(select)
+tab7:Label("┇ ดาบลับที่มีในแมพ (แมพ Mythical ยังไม่มี) ┇")
+tab7:Dropdown("เช็คความคืบหน้า ดาบลับ:", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
 
