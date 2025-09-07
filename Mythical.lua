@@ -194,7 +194,12 @@ local tab0 = win:Taps("อัพเดตใหม่")
 tab0:Label("แท็ป อัพเดต")
 
 local section0_1 = tab0:DropdownTab("อัพเดต เมนูหลักใหม่")
-section0_1:Label("แก้ไขเมนูหลัก")
+section0_1:Label("- แก้ไขเมนูหลักและแก้ไขบางเมนู")
+
+local section0_2 = tab0:DropdownTab("ฝั่งชั่นอัพเดต")
+section0_2:Label("- แก้ไขดื่มน้ำ")
+section0_2:Label("- เพิ่ม ออโต้ ปั่นน้ำ")
+
 
 -- สร้างแท็บชื่อ Autos
 local tab1 = win:Taps("ออโต้")
@@ -617,7 +622,6 @@ spawn(function() -- auto mixer
     end
 end)
 
-
 spawn(function() -- auto drink mixer
     while wait() do
         pcall(function()
@@ -743,7 +747,7 @@ tab2:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
     selectedWapon = wapn
 end)
 
-tab2:Button("รีเฟรช ชื่ออาวุธ (ไม่ทำงาน)", function()
+tab2:Button("รีเฟรช ชื่ออาวุธ", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1464,35 +1468,26 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 
 local tab6 = win:Taps("เอ็นพีซี")
 
-tab6:Label("┇ ซื้อน้ำ ┇")
-tab6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
+tab6:Label("┇ ฝั่งชั่น น้ำ ┇")
+tab6:Toggle("ออโต้ ปั่นน้ำ", false, function(bdy)
     _G.buydrink = bdy
 end)
 
--- Auto Buy Drink
-spawn(function()
+spawn(function() -- auto mixer
     while wait() do
         pcall(function()
-            if _G.buydrink and selectedDrinks then
-                workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(selectedDrinks)
+            if _G.automixer then
+                wait(1)
+                for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
             end
         end)
     end
 end)
 
--- Auto Claim Challenge 11
-spawn(function()
-    while wait(0.8) do
-        pcall(function()
-            if _G.buydrink then
-                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-                Event:FireServer("Claim","Challenge11")
-            end
-        end)
-    end
-end)
-
--- Auto Drink Toggle
 tab6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดในตัว ]", false, function(drks)
     _G.AutoDrinks = drks
 end)
