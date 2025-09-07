@@ -98,7 +98,7 @@ local Cache = { DevConfig = {} };
 Cache.DevConfig["ListOfBox1"] = {"Common Box"};
 Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
-Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Apple Juice", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
+Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+", "Coconut Milk", "Apple Juice", "Banana Juice", "Fruit Juice", "Sour Juice", "Pumpkin Juice", "Pear Juice", "Cider", "Lemonade", "Juice", "Smoothie", "Golden Apple"};
 Cache.DevConfig["ListOfDrink+"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"}
 Cache.DevConfig["ListOfSwords"] = {"Dagger", "Wakizashi", "Tachi", "Katana", "Krizma"};
 Cache.DevConfig["ListOfSnipers"] = {"Slingshot", "Star", "Cossbow", "Flintlock"};
@@ -1465,7 +1465,6 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ซื้อน้ำ ┇")
-
 local section6_0 = tab6:DropdownTab("ซื้อ-น้ำและดื่ม")
 section6_0:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
     selectedDrinks = knrd
