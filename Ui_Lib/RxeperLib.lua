@@ -295,8 +295,6 @@ function newPage:Toggle(text, default, callback)
     end)
 end
 
-
--- Dropdown Tab (สามารถใส่ element ย่อยได้)
 function newPage:DropdownTab(title)
     local tabFrame = Instance.new("Frame", page)
     tabFrame.Size = UDim2.new(1, -10, 0, 30)
@@ -315,7 +313,7 @@ function newPage:DropdownTab(title)
     header.TextXAlignment = Enum.TextXAlignment.Left
 
     local container = Instance.new("Frame", page)
-    container.Size = UDim2.new(1, -10, 0, 0)
+    container.Size = UDim2.new(1, -10, 0, 0) -- 🔹 เริ่มจากปิดไว้ก่อน
     container.BackgroundTransparency = 1
     container.ClipsDescendants = true
 
@@ -333,23 +331,39 @@ function newPage:DropdownTab(title)
         )
     end)
 
-    -- คืน object ไว้สร้าง element ย่อยในนี้
     local subPage = {}
 
     function subPage:Button(text, callback)
-        return newPage.Button({[0]=container}, text, callback) -- reuse ของเดิม
+        local btn = Instance.new("TextButton", container) -- 🔹 parent = container
+        btn.Size = UDim2.new(1, -10, 0, 30)
+        btn.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.Font = Enum.Font.SourceSans
+        btn.TextSize = 16
+        btn.Text = text
+        Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+        btn.MouseButton1Click:Connect(function()
+            if callback then callback() end
+        end)
     end
 
     function subPage:Toggle(text, default, callback)
-        return newPage.Toggle({[0]=container}, text, default, callback)
+        return newPage.Toggle(container, text, default, callback) -- 🔹 parent = container
     end
 
     function subPage:Label(text)
-        return newPage.Label({[0]=container}, text)
+        local lbl = Instance.new("TextLabel", container) -- 🔹 parent = container
+        lbl.Size = UDim2.new(1, -10, 0, 25)
+        lbl.BackgroundTransparency = 1
+        lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
+        lbl.Font = Enum.Font.SourceSans
+        lbl.TextSize = 15
+        lbl.TextXAlignment = Enum.TextXAlignment.Left
+        lbl.Text = text
     end
 
     function subPage:Dropdown(title, items, callback)
-        return newPage.Dropdown({[0]=container}, title, items, callback)
+        return newPage.Dropdown(container, title, items, callback) -- 🔹 parent = container
     end
 
     return subPage
