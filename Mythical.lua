@@ -194,20 +194,19 @@ local tab0 = win:Taps("อัพเดตใหม่")
 tab0:Label("แท็ป อัพเดต")
 
 local section0_1 = tab0:DropdownTab("อัพเดต เมนูหลักใหม่")
-section0_1:Label("- แก้ไขเมนูหลักและแก้ไขบางเมนู")
+section0_1:Label("- แก้ไขเมนูบางส่วน")
+section0_1:Label("- ปรับเมนูให้ดูง่ายขึ้น")
 
 local section0_2 = tab0:DropdownTab("ฝั่งชั่นอัพเดต")
-section0_2:Label("- แก้ไขดื่มน้ำ")
-section0_2:Label("- เพิ่ม ออโต้ ปั่นน้ำ")
+section0_2:Label("- แก้ไข ออโต้ปั่น ให้ใช้งานได้")
+section0_2:Label("- เพิ่ม ออโต้ กดกล่องผลไม้")
 
 
 -- สร้างแท็บชื่อ Autos
 local tab1 = win:Taps("ออโต้")
-tab1:Label("เมนู ออโต้")
 
-local section1_1 = tab1:DropdownTab("ฝั่งชั่น ออโต้ต่างๆ")
-section1_1:Label("ฝั่งชั่น เกิด")
-section1_1:Toggle("ออโต้ กดเกิด", false, function(aspw)
+tab1:Label("ฝั่งชั่น เกิด")
+tab1:Toggle("ออโต้ กดเกิด", false, function(aspw)
         _G.respawn = aspw
 end)
 
@@ -225,8 +224,8 @@ end
 end
 end)
 
-section1_1:Label("┇ ฝั่งชั่น ออโต้ ┇")
-section1_1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
+tab1:Label("┇ ฝั่งชั่น ออโต้ ┇")
+tab1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -240,7 +239,7 @@ spawn(function()
     end 
 end)
 
-section1_1:Toggle("ออโต้ ดึงผลไม้ปีศาจ (แก้ไขอยู่)", false, function(bdf)
+tab1:Toggle("ออโต้ ดึงผลไม้ปีศาจ (แก้ไขอยู่)", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -258,7 +257,7 @@ spawn(function()
     end
  end)
 
-section1_1:Toggle("ออโต้ ฟาร์ม Package (ไม่ทำงาน)", false, function(apke)
+tab1:Toggle("ออโต้ ฟาร์ม Package (ไม่ทำงาน)", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -350,7 +349,7 @@ spawn(function()
     end
 end)
 
-section1_1:Toggle("ออโต้ ตกปลา (ไม่ทำงาน)", false, function(fsh)
+tab1:Toggle("ออโต้ ตกปลา (ไม่ทำงาน)", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -413,7 +412,7 @@ spawn(function()
     end
 end)
 
-section1_1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
+tab1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -568,7 +567,7 @@ wait(.8)
     end
 end)
 
-section1_1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
+tab1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -584,7 +583,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-section1_1:Toggle("ออโต้ กดรับของขวัญ [ เพชร ]", false, function(gxm)
+tab1:Toggle("ออโต้ กดรับของขวัญ [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -1075,6 +1074,8 @@ end)
 local tab4 = win:Taps("ผู้เล่น")
 
 tab4:Label("┇ ฝั่งชั่น ที่เก็บผล ┇")
+local section4_1 = tab4:DropdownTab("┇ ช่องที่เก็บผลไม้ 1-12 ช่อง ( ไม่พร้อมใช้งาน ) ┇")
+
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
@@ -1092,11 +1093,11 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
-tab4:Toggle("ออโต้ กดเก็บผลในกระเป๋า", false, function(value)
+section4_1:Toggle("ออโต้ กดเก็บผลในกระเป๋า", false, function(value)
     Cache.Boolean.StorageAll = value
 end)
 
-tab4:Toggle("ออโต้ กดเก็บผลในกระเป๋า [ ผล ออร่า ]", false, function(shy)
+section4_1:Toggle("ออโต้ กดเก็บผลในกระเป๋า [ ผล ออร่า ]", false, function(shy)
     Cache.Boolean.StorageKeepShiny = shy
 end)
 
@@ -1329,7 +1330,7 @@ spawn(function()
 								if item.Name == targetBoxes[k] then
 									local msb = "พบ " .. item.Name .. " ใน Backpack ของ " .. player.Name
 									print(msb)
-									create:Notifile("", msb, 3)
+									lib:Notifile("Alert", msb, 3)
 								end
 							end
 						end
@@ -1345,7 +1346,7 @@ spawn(function()
 								if item.Name == targetBoxes[k] then
 									local msb = "พบ " .. item.Name .. " ใน Character ของ " .. player.Name
 									print(msg)
-									create:Notifile("", msb, 3)
+									lib:Notifile("Alert", msb, 3)
 								end
 							end
 						end
