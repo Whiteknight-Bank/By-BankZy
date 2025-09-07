@@ -88,10 +88,10 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("InW Hub : For Map [ One Piece: Legendary ]")
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
+local win = lib:Win("ReaperX Hub | Map: [ Alpha ]One Piece: Mythical")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
+lib:Notifile("Alert", "เมนูใหม่เทส!", 3)
 
 local Cache = { DevConfig = {} };
 
@@ -196,10 +196,7 @@ local page10 = Tab10:newpage()
 page10:Label("แก้ไขเมนูเล็กๆน้อยๆ")
 
 -- สร้างแท็บชื่อ Autos
-local Tab1 = Window:Taps("Autos")
-local page1 = Tab1:newpage()
-
-page1:Label("┇ ฝั่งชั่น เกิด ┇")
+local tab1 = win:Taps("ออโต้")
 		
 page1:Toggle("ออโต้ กดเกิด", false, function(aspw)
         _G.respawn = aspw
