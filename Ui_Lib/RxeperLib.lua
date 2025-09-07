@@ -197,22 +197,25 @@ function newPage:Label(text)
     lbl.Text = text
 end
 
-function newPage:Dropdown(parent, title, items, callback)
+function newPage:Dropdown(parent, title, items, callback, subtext)
     if typeof(parent) ~= "Instance" then
+        subtext = callback
         callback = items
         items = title
         title = parent
         parent = page
     end
 
+    -- 🔹 ขยายความสูงถ้ามี subtext
     local dropFrame = Instance.new("Frame", parent)
-    dropFrame.Size = UDim2.new(1, -10, 0, 35)
+    dropFrame.Size = subtext and UDim2.new(1, -10, 0, 55) or UDim2.new(1, -10, 0, 35)
     dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropFrame.BackgroundTransparency = 0.5
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ปุ่มหัว Dropdown
     local btn = Instance.new("TextButton", dropFrame)
-    btn.Size = UDim2.new(1, -10, 1, 0)
+    btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
     btn.BackgroundTransparency = 1
     btn.Text = title .. " ▼"
@@ -221,6 +224,21 @@ function newPage:Dropdown(parent, title, items, callback)
     btn.TextSize = 16
     btn.TextXAlignment = Enum.TextXAlignment.Left
 
+    -- 🔹 Subtext (คำอธิบายใต้หัวข้อ)
+    if subtext then
+        local sub = Instance.new("TextLabel", dropFrame)
+        sub.Size = UDim2.new(1, -20, 0, 20)
+        sub.Position = UDim2.new(0, 10, 0, 32)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    -- กล่อง options
     local listFrame = Instance.new("Frame", parent)
     listFrame.Size = UDim2.new(1, -10, 0, 0)
     listFrame.BackgroundTransparency = 1
@@ -238,6 +256,7 @@ function newPage:Dropdown(parent, title, items, callback)
         )
     end)
 
+    -- options
     for _, v in ipairs(items) do
         local opt = Instance.new("TextButton", listFrame)
         opt.Size = UDim2.new(1, -10, 0, 30)
@@ -255,37 +274,38 @@ function newPage:Dropdown(parent, title, items, callback)
 end
 
 -- Toggle
-function newPage:Toggle(parent, text, default, callback)
-    -- ถ้าไม่ได้ส่ง parent มา จะใช้ page ปกติ
+function newPage:Toggle(parent, text, default, callback, subtext)
     if typeof(parent) ~= "Instance" then
+        subtext = callback
         callback = default
         default = text
         text = parent
         parent = page
     end
 
+    -- กล่องหลัก
     local toggleFrame = Instance.new("Frame", parent)
-    toggleFrame.Size = UDim2.new(1, -10, 0, 45)
+    toggleFrame.Size = subtext and UDim2.new(1, -10, 0, 65) or UDim2.new(1, -10, 0, 45) -- ถ้ามี subtext ขยายสูงขึ้น
     toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     toggleFrame.BackgroundTransparency = 0.6
     toggleFrame.BorderSizePixel = 0
     Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ข้อความหลัก
     local label = Instance.new("TextLabel", toggleFrame)
-    label.Size = UDim2.new(1, -60, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Size = UDim2.new(1, -60, 0, 20)
+    label.Position = UDim2.new(0, 10, 0, 5)
     label.BackgroundTransparency = 1
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 16
-    label.TextWrapped = true
-    label.TextYAlignment = Enum.TextYAlignment.Top
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Text = text
 
+    -- ปุ่ม Toggle
     local toggleBtn = Instance.new("TextButton", toggleFrame)
     toggleBtn.Size = UDim2.new(0, 40, 0, 20)
-    toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
+    toggleBtn.Position = UDim2.new(1, -45, 0, 10)
     toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     toggleBtn.BackgroundTransparency = 0.6
     toggleBtn.Text = ""
@@ -300,6 +320,21 @@ function newPage:Toggle(parent, text, default, callback)
     circle.BorderSizePixel = 0
     Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
 
+    -- 🔹 คำอธิบาย (Subtext)
+    if subtext then
+        local sub = Instance.new("TextLabel", toggleFrame)
+        sub.Size = UDim2.new(1, -20, 0, 30)
+        sub.Position = UDim2.new(0, 10, 0, 30)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    -- สถานะ toggle
     local toggled = default
     toggleBtn.MouseButton1Click:Connect(function()
         toggled = not toggled
@@ -363,37 +398,38 @@ function newPage:DropdownTab(title)
         end)
     end
 
-    function subPage:Toggle(parent, text, default, callback)
-    -- ถ้าไม่ได้ส่ง parent มา จะใช้ page ปกติ
+    function subPage:Toggle(parent, text, default, callback, subtext)
     if typeof(parent) ~= "Instance" then
+        subtext = callback
         callback = default
         default = text
         text = parent
         parent = page
     end
 
+    -- กล่องหลัก
     local toggleFrame = Instance.new("Frame", parent)
-    toggleFrame.Size = UDim2.new(1, -10, 0, 45)
+    toggleFrame.Size = subtext and UDim2.new(1, -10, 0, 65) or UDim2.new(1, -10, 0, 45) -- ถ้ามี subtext ขยายสูงขึ้น
     toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     toggleFrame.BackgroundTransparency = 0.6
     toggleFrame.BorderSizePixel = 0
     Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ข้อความหลัก
     local label = Instance.new("TextLabel", toggleFrame)
-    label.Size = UDim2.new(1, -60, 1, 0)
-    label.Position = UDim2.new(0, 10, 0, 0)
+    label.Size = UDim2.new(1, -60, 0, 20)
+    label.Position = UDim2.new(0, 10, 0, 5)
     label.BackgroundTransparency = 1
     label.TextColor3 = Color3.fromRGB(255, 255, 255)
     label.Font = Enum.Font.SourceSans
     label.TextSize = 16
-    label.TextWrapped = true
-    label.TextYAlignment = Enum.TextYAlignment.Top
     label.TextXAlignment = Enum.TextXAlignment.Left
     label.Text = text
 
+    -- ปุ่ม Toggle
     local toggleBtn = Instance.new("TextButton", toggleFrame)
     toggleBtn.Size = UDim2.new(0, 40, 0, 20)
-    toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
+    toggleBtn.Position = UDim2.new(1, -45, 0, 10)
     toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
     toggleBtn.BackgroundTransparency = 0.6
     toggleBtn.Text = ""
@@ -408,6 +444,21 @@ function newPage:DropdownTab(title)
     circle.BorderSizePixel = 0
     Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
 
+    -- 🔹 คำอธิบาย (Subtext)
+    if subtext then
+        local sub = Instance.new("TextLabel", toggleFrame)
+        sub.Size = UDim2.new(1, -20, 0, 30)
+        sub.Position = UDim2.new(0, 10, 0, 30)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    -- สถานะ toggle
     local toggled = default
     toggleBtn.MouseButton1Click:Connect(function()
         toggled = not toggled
@@ -415,7 +466,7 @@ function newPage:DropdownTab(title)
         circle.BackgroundColor3 = toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
         if callback then callback(toggled) end
     end)
-            end
+end
             
    function subPage:Toggle(text, default, callback)
     return newPage:Toggle(container, text, default, callback)
@@ -432,22 +483,25 @@ end
         lbl.Text = text
     end
 
-function subPage:Dropdown(parent, title, items, callback)
+function subPage:Dropdown(parent, title, items, callback, subtext)
     if typeof(parent) ~= "Instance" then
+        subtext = callback
         callback = items
         items = title
         title = parent
         parent = page
     end
 
+    -- 🔹 ขยายความสูงถ้ามี subtext
     local dropFrame = Instance.new("Frame", parent)
-    dropFrame.Size = UDim2.new(1, -10, 0, 35)
+    dropFrame.Size = subtext and UDim2.new(1, -10, 0, 55) or UDim2.new(1, -10, 0, 35)
     dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropFrame.BackgroundTransparency = 0.5
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ปุ่มหัว Dropdown
     local btn = Instance.new("TextButton", dropFrame)
-    btn.Size = UDim2.new(1, -10, 1, 0)
+    btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
     btn.BackgroundTransparency = 1
     btn.Text = title .. " ▼"
@@ -456,6 +510,21 @@ function subPage:Dropdown(parent, title, items, callback)
     btn.TextSize = 16
     btn.TextXAlignment = Enum.TextXAlignment.Left
 
+    -- 🔹 Subtext (คำอธิบายใต้หัวข้อ)
+    if subtext then
+        local sub = Instance.new("TextLabel", dropFrame)
+        sub.Size = UDim2.new(1, -20, 0, 20)
+        sub.Position = UDim2.new(0, 10, 0, 32)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    -- กล่อง options
     local listFrame = Instance.new("Frame", parent)
     listFrame.Size = UDim2.new(1, -10, 0, 0)
     listFrame.BackgroundTransparency = 1
@@ -473,6 +542,7 @@ function subPage:Dropdown(parent, title, items, callback)
         )
     end)
 
+    -- options
     for _, v in ipairs(items) do
         local opt = Instance.new("TextButton", listFrame)
         opt.Size = UDim2.new(1, -10, 0, 30)
@@ -487,7 +557,7 @@ function subPage:Dropdown(parent, title, items, callback)
             if callback then callback(v) end
         end)
     end
-            end
+end
             
 function subPage:Dropdown(title, items, callback)
     return newPage:Dropdown(container, title, items, callback)
