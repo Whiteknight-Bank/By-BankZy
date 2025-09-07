@@ -1402,10 +1402,8 @@ section5_1:Button("คลิก เพื่อ วาป" , function()
                 end
 end)
 
-section5_2:Label("┇ เซฟโซน ┇")
-
-local section5_2 = tab5:DropdownTab("วาป-เซฟโซน")
-section5_2:Dropdown("เลือก เซฟโซน", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+tab5:Label("┇ เซฟโซน ┇")
+tab5:Dropdown("เลือก เซฟโซน", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
@@ -1423,14 +1421,12 @@ section5_2:Button("กด เพื่อ วาป" , function()
         end
     end)
 
-section5_3:Label("┇ เอ็นพีซี ┇")
-
-local section5_3 = tab5:DropdownTab("วาป-เอ็นพีซี")
-section5_3:Dropdown("เลือก เอ็นพีซี :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+tab5:Label("┇ เอ็นพีซี ┇")
+tab5:Dropdown("เลือก เอ็นพีซี :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-section5_3:Button("คลิก เพื่อ วาป" , function()
+tab5:Button("คลิก เพื่อ วาป" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
