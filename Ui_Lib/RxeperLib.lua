@@ -197,9 +197,15 @@ function newPage:Label(text)
     lbl.Text = text
 end
 
--- Dropdown
-function newPage:Dropdown(title, items, callback)
-    local dropFrame = Instance.new("Frame", page)
+function newPage:Dropdown(parent, title, items, callback)
+    if typeof(parent) ~= "Instance" then
+        callback = items
+        items = title
+        title = parent
+        parent = page
+    end
+
+    local dropFrame = Instance.new("Frame", parent)
     dropFrame.Size = UDim2.new(1, -10, 0, 35)
     dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropFrame.BackgroundTransparency = 0.5
@@ -215,7 +221,7 @@ function newPage:Dropdown(title, items, callback)
     btn.TextSize = 16
     btn.TextXAlignment = Enum.TextXAlignment.Left
 
-    local listFrame = Instance.new("Frame", page)
+    local listFrame = Instance.new("Frame", parent)
     listFrame.Size = UDim2.new(1, -10, 0, 0)
     listFrame.BackgroundTransparency = 1
     listFrame.ClipsDescendants = true
@@ -246,11 +252,19 @@ function newPage:Dropdown(title, items, callback)
             if callback then callback(v) end
         end)
     end
-        end
+end
 
--- ปรับ Toggle ให้รองรับคำอธิบายหลายบรรทัด
-function newPage:Toggle(text, default, callback)
-    local toggleFrame = Instance.new("Frame", page)
+-- Toggle
+function newPage:Toggle(parent, text, default, callback)
+    -- ถ้าไม่ได้ส่ง parent มา จะใช้ page ปกติ
+    if typeof(parent) ~= "Instance" then
+        callback = default
+        default = text
+        text = parent
+        parent = page
+    end
+
+    local toggleFrame = Instance.new("Frame", parent)
     toggleFrame.Size = UDim2.new(1, -10, 0, 45)
     toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     toggleFrame.BackgroundTransparency = 0.6
