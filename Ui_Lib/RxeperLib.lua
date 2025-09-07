@@ -285,6 +285,7 @@ function newPage:Dropdown(parent, title, items, callback, subtext, multi)
     local layout = Instance.new("UIListLayout", listFrame)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
 
+    local searchBox
     local selected = {}
     local opened = false
 
@@ -293,7 +294,12 @@ function newPage:Dropdown(parent, title, items, callback, subtext, multi)
             if #selected == 0 then
                 valueLabel.Text = "▼"
             else
-                valueLabel.Text = table.concat(selected, ", ") .. " ▼"
+                if #selected <= 3 then
+                    valueLabel.Text = table.concat(selected, ", ") .. " ▼"
+                else
+                    local shown = {selected[1], selected[2], selected[3]}
+                    valueLabel.Text = table.concat(shown, ", ") .. " ... ("..#selected..") ▼"
+                end
             end
         else
             if #selected == 0 then
@@ -304,21 +310,16 @@ function newPage:Dropdown(parent, title, items, callback, subtext, multi)
         end
     end
 
-    btn.MouseButton1Click:Connect(function()
-        opened = not opened
-        listFrame:TweenSize(
-            opened and UDim2.new(1, -10, 0, math.min(#items, 8) * 30) or UDim2.new(1, -10, 0, 0),
-            "Out", "Quad", 0.25, true
-        )
-        if opened then
-            for _, child in ipairs(listFrame:GetChildren()) do
-                if child:IsA("TextButton") then child:Destroy() end
-            end
-            for i, v in ipairs(items) do
+    local function buildOptions(filter)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
+        end
+        for i, v in ipairs(items) do
+            if not filter or string.find(string.lower(v), string.lower(filter)) then
                 local opt = Instance.new("TextButton", listFrame)
                 opt.Size = UDim2.new(1, -10, 0, 30)
                 opt.Position = UDim2.new(0, 5, 0, 0)
-                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                opt.BackgroundColor3 = table.find(selected, v) and Color3.fromRGB(0,150,0) or Color3.fromRGB(60, 60, 60)
                 opt.Text = v
                 opt.TextColor3 = Color3.fromRGB(255, 255, 255)
                 opt.Font = Enum.Font.SourceSans
@@ -333,7 +334,7 @@ function newPage:Dropdown(parent, title, items, callback, subtext, multi)
                             opt.BackgroundColor3 = Color3.fromRGB(60,60,60)
                         else
                             table.insert(selected, v)
-                            opt.BackgroundColor3 = Color3.fromRGB(100,100,100)
+                            opt.BackgroundColor3 = Color3.fromRGB(0,150,0)
                         end
                         updateButtonText()
                         if callback then callback(selected) end
@@ -346,11 +347,38 @@ function newPage:Dropdown(parent, title, items, callback, subtext, multi)
                     end
                 end)
             end
-            listFrame.CanvasSize = UDim2.new(0,0,0,#items*30)
+        end
+        listFrame.CanvasSize = UDim2.new(0,0,0,#items*30 + 35)
+    end
+
+    btn.MouseButton1Click:Connect(function()
+        opened = not opened
+        listFrame:TweenSize(
+            opened and UDim2.new(1, -10, 0, math.min(#items+1, 8) * 30) or UDim2.new(1, -10, 0, 0),
+            "Out", "Quad", 0.25, true
+        )
+        if opened then
+            if not searchBox then
+                searchBox = Instance.new("TextBox", listFrame)
+                searchBox.Size = UDim2.new(1, -10, 0, 25)
+                searchBox.Position = UDim2.new(0, 5, 0, 0)
+                searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                searchBox.Text = ""
+                searchBox.PlaceholderText = "ค้นหา..."
+                searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+                searchBox.Font = Enum.Font.SourceSans
+                searchBox.TextSize = 14
+                Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+
+                searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+                    buildOptions(searchBox.Text)
+                end)
+            end
+            buildOptions(searchBox.Text)
         end
     end)
 end
-        
+
 function newPage:Toggle(parent, text, default, callback, subtext)
     if typeof(parent) ~= "Instance" then
         subtext = callback
@@ -624,6 +652,7 @@ function subPage:Dropdown(parent, title, items, callback, subtext, multi)
     local layout = Instance.new("UIListLayout", listFrame)
     layout.SortOrder = Enum.SortOrder.LayoutOrder
 
+    local searchBox
     local selected = {}
     local opened = false
 
@@ -632,7 +661,12 @@ function subPage:Dropdown(parent, title, items, callback, subtext, multi)
             if #selected == 0 then
                 valueLabel.Text = "▼"
             else
-                valueLabel.Text = table.concat(selected, ", ") .. " ▼"
+                if #selected <= 3 then
+                    valueLabel.Text = table.concat(selected, ", ") .. " ▼"
+                else
+                    local shown = {selected[1], selected[2], selected[3]}
+                    valueLabel.Text = table.concat(shown, ", ") .. " ... ("..#selected..") ▼"
+                end
             end
         else
             if #selected == 0 then
@@ -643,21 +677,16 @@ function subPage:Dropdown(parent, title, items, callback, subtext, multi)
         end
     end
 
-    btn.MouseButton1Click:Connect(function()
-        opened = not opened
-        listFrame:TweenSize(
-            opened and UDim2.new(1, -10, 0, math.min(#items, 8) * 30) or UDim2.new(1, -10, 0, 0),
-            "Out", "Quad", 0.25, true
-        )
-        if opened then
-            for _, child in ipairs(listFrame:GetChildren()) do
-                if child:IsA("TextButton") then child:Destroy() end
-            end
-            for i, v in ipairs(items) do
+    local function buildOptions(filter)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
+        end
+        for i, v in ipairs(items) do
+            if not filter or string.find(string.lower(v), string.lower(filter)) then
                 local opt = Instance.new("TextButton", listFrame)
                 opt.Size = UDim2.new(1, -10, 0, 30)
                 opt.Position = UDim2.new(0, 5, 0, 0)
-                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                opt.BackgroundColor3 = table.find(selected, v) and Color3.fromRGB(0,150,0) or Color3.fromRGB(60, 60, 60)
                 opt.Text = v
                 opt.TextColor3 = Color3.fromRGB(255, 255, 255)
                 opt.Font = Enum.Font.SourceSans
@@ -672,7 +701,7 @@ function subPage:Dropdown(parent, title, items, callback, subtext, multi)
                             opt.BackgroundColor3 = Color3.fromRGB(60,60,60)
                         else
                             table.insert(selected, v)
-                            opt.BackgroundColor3 = Color3.fromRGB(100,100,100)
+                            opt.BackgroundColor3 = Color3.fromRGB(0,150,0)
                         end
                         updateButtonText()
                         if callback then callback(selected) end
@@ -685,13 +714,40 @@ function subPage:Dropdown(parent, title, items, callback, subtext, multi)
                     end
                 end)
             end
-            listFrame.CanvasSize = UDim2.new(0,0,0,#items*30)
+        end
+        listFrame.CanvasSize = UDim2.new(0,0,0,#items*30 + 35)
+    end
+
+    btn.MouseButton1Click:Connect(function()
+        opened = not opened
+        listFrame:TweenSize(
+            opened and UDim2.new(1, -10, 0, math.min(#items+1, 8) * 30) or UDim2.new(1, -10, 0, 0),
+            "Out", "Quad", 0.25, true
+        )
+        if opened then
+            if not searchBox then
+                searchBox = Instance.new("TextBox", listFrame)
+                searchBox.Size = UDim2.new(1, -10, 0, 25)
+                searchBox.Position = UDim2.new(0, 5, 0, 0)
+                searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                searchBox.Text = ""
+                searchBox.PlaceholderText = "ค้นหา..."
+                searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+                searchBox.Font = Enum.Font.SourceSans
+                searchBox.TextSize = 14
+                Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+
+                searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+                    buildOptions(searchBox.Text)
+                end)
+            end
+            buildOptions(searchBox.Text)
         end
     end)
 end
             
-function subPage:Dropdown(title, items, callback)
-    return newPage:Dropdown(container, title, items, callback)
+function subPage:Dropdown(title, items, callback, subtext, multi)
+    return newPage:Dropdown(container, title, items, callback, subtext, multi)
 end
 
     return subPage
