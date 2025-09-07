@@ -342,7 +342,7 @@ function newPage:DropdownTab(title)
     local tabFrame = Instance.new("Frame", page)
     tabFrame.Size = UDim2.new(1, -10, 0, 30)
     tabFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    tabFrame.BackgroundTransparency = 0.6
+    tabFrame.BackgroundTransparency = 0.8
     Instance.new("UICorner", tabFrame).CornerRadius = UDim.new(0, 6)
 
     local header = Instance.new("TextButton", tabFrame)
