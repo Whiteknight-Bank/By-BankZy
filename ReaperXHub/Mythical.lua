@@ -1,15 +1,9 @@
 -- โหลด Library
 local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
-
--- สร้าง Window
 local win = lib:Win("ReaperX Hub | Map: [ Alpha ]One Piece: Mythical")
 
--- แจ้งเตือนตัวอย่าง
 lib:Notifile("Alert", "This is a test message!", 3)
 
---===============================
--- 🔹 TAB 1 : MAIN
---===============================
 local tab1 = win:Taps("Main")
 
 tab1:Label("Status: Waiting...")
@@ -27,19 +21,16 @@ end)
 
 local tab2 = win:Taps("Settings")
 
-local section = tab2:DropdownTab("Extra Settings")
-section:Button("Sub Button", function()
+local section2 = tab2:DropdownTab("Extra Settings")
+section2:Button("Sub Button", function()
     print("Sub button pressed!")
 end)
 
-section:Toggle("Sub Toggle", true, function(val)
+section2:Toggle("Sub Toggle", true, function(val)
     print("Sub toggle:", val)
 end)
 
-section:Label("Sub Label: Info here")
-section:Dropdown("Choose Mode", {"Easy", "Normal", "Hard"}, function(mode)
-    print("Selected mode:", mode)
-end)
+section2:Label("Sub Label: Info here")
 
 local tab3 = win:Taps("Info")
 
