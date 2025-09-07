@@ -1465,10 +1465,6 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ซื้อน้ำ ┇")
-tab6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
-    selectedDrinks = knrd
-end)
-
 tab6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
 	_G.buydrink = bdy
 end)
