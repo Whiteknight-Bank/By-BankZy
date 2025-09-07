@@ -27,13 +27,13 @@ section2:Button("Sub Button", function()
     print("Sub button pressed!")
 end)
 
-section2:Toggle("Sub Toggle", true, function(val)
-    print("Sub toggle:", val)
-end)
+section2:Toggle("Enable Feature", false, function(state)
+    print("Toggle is:", state)
+end, "เปิดแล้วจะเปิดใช้งานฟีเจอร์พิเศษ")
 
-section2:Dropdown("Sub Dropdown", {"A", "B", "C"}, function(opt)
-    print("Picked:", opt)
-end)
+section2:Dropdown("Select Item", {"Apple","Banana","Orange"}, function(selected)
+    print("Picked:", selected)
+end, "เลือกผลไม้ที่คุณชื่นชอบ")
 
 local tab3 = win:Taps("Info")
 
