@@ -7,11 +7,19 @@
 Toggle/Button รองรับคำอธิบายหลายบรรทัด --]]
 
 
-local library = {} local TweenService = game:GetService("TweenService") local CoreGui = game:GetService("CoreGui") local Players = game:GetService("Players") local player = Players.LocalPlayer
+local library = {} 
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui") 
+local Players = game:GetService("Players") 
+local player = Players.LocalPlayer
 
-if CoreGui:FindFirstChild("redui") then CoreGui:FindFirstChild("redui"):Destroy() end
+if CoreGui:FindFirstChild("redui") then 
+    CoreGui:FindFirstChild("redui"):Destroy() 
+end
 
-function library:Win(title) local UserInputService = game:GetService("UserInputService") local RunService = game:GetService("RunService")
+function library:Win(title) 
+local UserInputService = game:GetService("UserInputService") 
+local RunService = game:GetService("RunService")
 
 if CoreGui:FindFirstChild("redui") then
     CoreGui:FindFirstChild("redui"):Destroy()
@@ -271,7 +279,6 @@ return newPage
   end
 
 return tabs
-
 end
 
 -- Notification system
