@@ -69,7 +69,30 @@ titleBar.Font = Enum.Font.GothamBold
 titleBar.TextSize = 20
 titleBar.Parent = main
 titleBar.Active = true
+main.Active = true
+main.Selectable = true
 
+titleBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = main.Position
+    end
+end)
+
+titleBar.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+    
 local tabButtons = Instance.new("Frame", main)
 tabButtons.Size = UDim2.new(0, 120, 1, -35)
 tabButtons.Position = UDim2.new(0, 0, 0, 35)
