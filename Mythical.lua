@@ -1466,52 +1466,46 @@ local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ซื้อน้ำ ┇")
 tab6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
-	_G.buydrink = bdy
+    _G.buydrink = bdy
 end)
 
+-- Auto Buy Drink
 spawn(function()
     while wait() do
         pcall(function()
-            if _G.buydrink then
-local args = {
-    [1] = selectedDrinks
-}
-
-workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(unpack(args))
-
+            if _G.buydrink and selectedDrinks then
+                workspace:WaitForChild("Merchants"):WaitForChild("BetterDrinkMerchant"):WaitForChild("Clickable"):WaitForChild("Retum"):FireServer(selectedDrinks)
             end
         end)
     end
 end)
 
+-- Auto Claim Challenge 11
 spawn(function()
-    while wait() do
+    while wait(0.8) do
         pcall(function()
             if _G.buydrink then
-local A_1 = "Claim"
-local A_2 = "Challenge11"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
+                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+                Event:FireServer("Claim","Challenge11")
             end
         end)
     end
 end)
 
-
+-- Auto Drink Toggle
 tab6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดในตัว ]", false, function(drks)
-	AutoDrinks = drks
+    _G.AutoDrinks = drks
 end)
 
 spawn(function()
     while wait() do
         pcall(function()
-            if not AutoDrinks then return end;
+            if not _G.AutoDrinks then return end
             for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                 if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                    Value.Parent = game.Players.LocalPlayer.Character;
-                    Value:Activate();
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+                    Value.Parent = game.Players.LocalPlayer.Character
+                    Value:Activate()
                 end
             end
         end)
@@ -1519,119 +1513,90 @@ spawn(function()
 end)
 
 spawn(function()
-    while wait() do
+    while wait(0.8) do
         pcall(function()
-            if AutoDrinks then
-local A_1 = "Claim"
-local A_2 = "Challenge13"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
-    Event:FireServer(A_1,A_2)
-wait(.8)
+            if _G.AutoDrinks then
+                local Event = workspace.UserData["User_"..game.Players.LocalPlayer.UserId].ChallengesRemote
+                Event:FireServer("Claim","Challenge13")
             end
         end)
     end
 end)
 
+-- Random Pyramid Section
 tab6:Label("┇ สุ่มพีรามิด ┇")
-tab6:Dropdown("ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ]")
 
+-- สร้าง Dropdown สำหรับ Devil Fruits
 local dropdownDF = {}
 local dfMap = {}
+local player = game.Players.LocalPlayer
+local userId = player.UserId
+local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
 
-do
-    local player = game.Players.LocalPlayer
-    local userId = player.UserId
-    local userFolder = workspace:FindFirstChild("UserData"):FindFirstChild("User_" .. userId)
-
-    if userFolder and userFolder:FindFirstChild("Data") then
-        local data = userFolder.Data
-        local fruit1 = data:FindFirstChild("DevilFruit")
-        local fruit2 = data:FindFirstChild("DevilFruit2")
-
-        if fruit1 and fruit1:IsA("StringValue") and fruit1.Value ~= "" then
-            table.insert(dropdownDF, fruit1.Value)
-            dfMap[fruit1.Value] = "DFT1"
-        end
-				
-        if fruit2 and fruit2:IsA("StringValue") and fruit2.Value ~= "" then
-            table.insert(dropdownDF, fruit2.Value)
-            dfMap[fruit2.Value] = "DFT2"
+if userFolder and userFolder:FindFirstChild("Data") then
+    local data = userFolder.Data
+    for i, fruitName in pairs({"DevilFruit","DevilFruit2"}) do
+        local fruit = data:FindFirstChild(fruitName)
+        if fruit and fruit:IsA("StringValue") and fruit.Value ~= "" then
+            table.insert(dropdownDF, fruit.Value)
+            dfMap[fruit.Value] = "DFT"..i
         end
     end
 end
 
-if #dropdownDF > 0 then
-    page6:Dropdown("เลือก ผลปีศาจ :", dropdownDF, function(dfs)
-        selectedDF = dfs
-    end)
+-- ตรวจสอบว่ามี item
+if #dropdownDF == 0 then
+    dropdownDF = {"ไม่มีข้อมูล"}
 end
 
-tab6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+tab6:Dropdown("เลือก ผลปีศาจ :", dropdownDF, function(dfs)
+    selectedDF = dfs
+end)
+
+-- Dropdown Lock Value
+tab6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-tab6:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
+-- Dropdown Random Type
+tab6:Dropdown("เลือก การสุ่ม :", {"Beri","Gems"}, function(srll)
     selectedrol = srll
 end)
 
+-- Auto Random Toggle
 local isRunning1 = false
-local task1Thread
-
 tab6:Toggle("ออโต้ สุ่ม", false, function(rol)
     isRunning1 = rol
-
     if isRunning1 then
-        task1Thread = task.spawn(function()
+        task.spawn(function()
             while isRunning1 do
                 task.wait(8)
+                if not selectedDF or not lockvalue then continue end
+                local playerData = workspace.UserData:FindFirstChild("User_"..game.Players.LocalPlayer.UserId)
+                if not playerData then continue end
 
-                -- Check selections
-                if not selectedDF or not lockvalue then
-                    warn("Please select Fruit Reroll and Lock Value first.")
-                    continue
-                end
-
-                -- Get UserData
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- Determine DFT name from dfMap
                 local dftName = dfMap[selectedDF]
-                if not dftName then
-                    warn("Invalid fruit selection!")
-                    continue
-                end
+                if not dftName then continue end
 
-                -- Read affinities
-                local AffMelee = userDataName.Data[dftName .. "Melee"].Value
-                local AffSniper = userDataName.Data[dftName .. "Sniper"].Value
-                local AffDefense = userDataName.Data[dftName .. "Defense"].Value
-                local AffSword = userDataName.Data[dftName .. "Sword"].Value
+                local AffMelee = playerData.Data[dftName.."Melee"].Value
+                local AffSniper = playerData.Data[dftName.."Sniper"].Value
+                local AffDefense = playerData.Data[dftName.."Defense"].Value
+                local AffSword = playerData.Data[dftName.."Sword"].Value
 
-                -- Stop if all affinities >= lockvalue
-                if AffSniper == lockvalue and AffSword == lockvalue and AffMelee == lockvalue and AffDefense == lockvalue then
+                if AffSniper >= lockvalue and AffSword >= lockvalue and AffMelee >= lockvalue and AffDefense >= lockvalue then
                     isRunning1 = false
                     break
                 end
 
-                -- Prepare args
                 local args1 = {
                     [1] = dftName,
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
+                    [2] = AffDefense >= lockvalue and 0/0 or false,
+                    [3] = AffMelee >= lockvalue and 0/0 or false,
+                    [4] = AffSniper >= lockvalue and 0/0 or false,
+                    [5] = AffSword >= lockvalue and 0/0 or false,
                     [6] = (selectedrol == "Beri" and "Cash") or (selectedrol == "Gems" and "Gems") or "Cash"
                 }
 
-                if AffDefense >= lockvalue then args1[2] = 0/0 end
-                if AffMelee >= lockvalue then args1[3] = 0/0 end
-                if AffSniper >= lockvalue then args1[4] = 0/0 end
-                if AffSword >= lockvalue then args1[5] = 0/0 end
-
-                -- Fire Retum
                 local merchant = workspace:FindFirstChild("Merchants")
                 if merchant then
                     local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
@@ -1650,169 +1615,58 @@ tab6:Toggle("ออโต้ สุ่ม", false, function(rol)
     end
 end)
 
-tab6:Label("┇ ฝั่งชั่น เควสแซม ┇")
-
-tab6:DropdownTab("เควสแซม")
-tab6:Toggle("ออโต้ หาเข็ม (ไม่ทำงาน)", false, function(comp)
-    AutoComp = comp
-end)
-
-spawn(function()
-    while wait() do
-        pcall(function()
-            if not AutoComp then return end;
-            local Compass = game.Players.LocalPlayer.Backpack:FindFirstChild("Compass");
-            local Compass2 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
-	    local Compass3 = game.Players.LocalPlayer.Character:FindFirstChild("Compass");
-            if Compass or Compass2 or Compass3 then
-                local OldPostiton = game.Players.LocalPlayer.Character.HumanoidRootPart.Position;
-                game.Players.LocalPlayer.Character.Humanoid:UnequipTools();
-                Compass.Parent = game.Players.LocalPlayer.Character;
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(Compass.Poser.Value);
-                Compass:Activate();
-                wait(0.2);
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(OldPostiton);
-            end
-        end)
-    end
-end)
-
-tab6:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
-    AutoClaimComp1 = clmp
-end)
-
-spawn(function()
-    while wait(4) do
-        pcall(function()
-            if not AutoClaimComp1 then return end;
-            local args = {
-    [1] = "Claim1"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-        end)
-    end
-end)
-
-tab6:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
-    AutoClaimComp2 = clmpp
-end)
-
-spawn(function()
-    while wait(4) do
-        pcall(function()
-            if not AutoClaimComp2 then return end;
-            local args = {
-    [1] = "Claim10"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-        end)
-    end
-end)
-
+-- Tab7 - อื่น ๆ
 local tab7 = win:Taps("อื่นๆ")
-
 tab7:Label("┇ ฝั่งชั่น เซิฟเวอร์ ┇")
 tab7:Button("รีจอย เซิฟเวอร์", function()
-create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
-wait(3)
-		   game.Players.LocalPlayer:Kick()
-game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
+    create:Notifile("", "Start Rejoin "..game.Players.LocalPlayer.Name.." Pls Wait", 3)
+    wait(3)
+    game.Players.LocalPlayer:Kick()
+    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
 tab7:Button("ย้าย เซิฟเวอร์", function()
-create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
-wait(3)
-
-local PlaceID = game.PlaceId
-          local AllIDs = {}
-          local foundAnything = ""
-          local actualHour = os.date("!*t").hour
-          local Deleted = false
-          --[[
-          local File = pcall(function()
-              AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
-          end)
-          if not File then
-              table.insert(AllIDs, actualHour)
-              writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
-          end
-          ]]
-          function TPReturner()
-              local Site;
-              if foundAnything == "" then
-                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
-              else
-                  Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
-              end
-              local ID = ""
-              if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
-                  foundAnything = Site.nextPageCursor
-              end
-              local num = 0;
-              for i,v in pairs(Site.data) do
-                  local Possible = true
-                  ID = tostring(v.id)
-                  if tonumber(v.maxPlayers) > tonumber(v.playing) then
-                      for _,Existing in pairs(AllIDs) do
-                          if num ~= 0 then
-                              if ID == tostring(Existing) then
-                                  Possible = false
-                              end
-                          else
-                              if tonumber(actualHour) ~= tonumber(Existing) then
-                                  local delFile = pcall(function()
-                                      -- delfile("NotSameServers.json")
-                                      AllIDs = {}
-                                      table.insert(AllIDs, actualHour)
-                                  end)
-                              end
-                          end
-                          num = num + 1
-                      end
-                      if Possible == true then
-                          table.insert(AllIDs, ID)
-                          wait()
-                          pcall(function()
-                              -- writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
-                              wait()
-                              game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
-                          end)
-                          wait(4)
-                      end
-                  end
-              end
-          end
-
-          function Teleport()
-              while wait() do
-                  pcall(function()
-                      TPReturner()
-                      if foundAnything ~= "" then
-                          TPReturner()
-                      end
-                  end)
-              end
-          end
-
-          Teleport()
-
+    create:Notifile("", "Start Hop Sever "..game.Players.LocalPlayer.Name.." Pls Wait", 3)
+    wait(3)
+    local PlaceID = game.PlaceId
+    local AllIDs = {}
+    local foundAnything = ""
+    local actualHour = os.date("!*t").hour
+    function TPReturner()
+        local Site
+        if foundAnything == "" then
+            Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/'..PlaceID..'/servers/Public?sortOrder=Asc&limit=100'))
+        else
+            Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/'..PlaceID..'/servers/Public?sortOrder=Asc&limit=100&cursor='..foundAnything))
+        end
+        local ID = ""
+        if Site.nextPageCursor and Site.nextPageCursor ~= "null" then
+            foundAnything = Site.nextPageCursor
+        end
+        for i,v in pairs(Site.data) do
+            ID = tostring(v.id)
+            if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                wait()
+                pcall(function()
+                    game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+                end)
+                wait(4)
+            end
+        end
+    end
+    TPReturner()
 end)
 
 tab7:Label("┇ ฝั่งชั่น คุ้มกัน ┇")
-
 local afkConnection
-
 tab7:Toggle("คุ้มกัน Afk", false, function(state)
-
     if state then
-	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
+        create:Notifile("", "Protect Kick AFK "..game.Players.LocalPlayer.Name.." Can AFK Now :)", 3)
         local vu = game:GetService("VirtualUser")
-        afkConnection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
-            vu:Button2Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+        afkConnection = game.Players.LocalPlayer.Idled:Connect(function()
+            vu:Button2Down(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
             wait(1)
-            vu:Button2Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+            vu:Button2Up(Vector2.new(0,0), workspace.CurrentCamera.CFrame)
         end)
     else
         if afkConnection then
@@ -1822,69 +1676,36 @@ tab7:Toggle("คุ้มกัน Afk", false, function(state)
     end
 end)
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-local UserDataFolder = workspace:WaitForChild("UserData")
-local myUserFolder = UserDataFolder:WaitForChild("User_" .. localPlayer.UserId)
-local myData = myUserFolder:WaitForChild("Data")
-
--- Mapping: ชื่อใน Data -> วิธีแสดงผลใน Dropdown
+-- Dropdown ดาบลับ
+local myData = workspace:WaitForChild("UserData"):WaitForChild("User_"..game.Players.LocalPlayer.UserId):WaitForChild("Data")
 local npcMapping = {
     NPC_Activation_Chef = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 1000000 then
-            return "Aqua Staff: สำเร็จ!"
-        else
-            return "Aqua Staff: " .. (value or "Unknown") .. "/1000000"
-        end
+        if value and value >= 1000000 then return "Aqua Staff: สำเร็จ!" else return "Aqua Staff: "..(value or "Unknown").."/1000000" end
     end,
     NPC_Activation_Drinks = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 50000000 then
-            return "Scissor Blade: สำเร็จ!"
-        else
-            return "Scissor Blade: " .. (value or "Unknown") .. "/50000000"
-        end
+        if value and value >= 50000000 then return "Scissor Blade: สำเร็จ!" else return "Scissor Blade: "..(value or "Unknown").."/50000000" end
     end,
     NPC_Activation_Expert = function(obj)
-    local value = tonumber(obj.Value)
-    if value and value >= 1000 then
-        return "NPC_Activation_Expert: สำเร็จ!"
-    else
-        return "Divine Axe: " .. (value or "Unknown") .. "/1000"
-    end
-end,
+        local value = tonumber(obj.Value)
+        if value and value >= 1000 then return "Divine Axe: สำเร็จ!" else return "Divine Axe: "..(value or "Unknown").."/1000" end
+    end,
     NPC_Activation_Lucy = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 100000000 then
-            return "Kanshou and Bakuya: สำเร็จ!"
-        else
-            return "Kanshou and Bakuya: " .. (value or "Unknown") .. "/100000000"
-        end
+        if value and value >= 100000000 then return "Kanshou and Bakuya: สำเร็จ!" else return "Kanshou and Bakuya: "..(value or "Unknown").."/100000000" end
     end,
     NPC_Activation_Merlin = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 200 then
-            return "Lightning Sword: สำเร็จ!"
-        else
-            return "Lightning Sword: " .. (value or "Unknown") .. "/200"
-        end
+        if value and value >= 200 then return "Lightning Sword: สำเร็จ!" else return "Lightning Sword: "..(value or "Unknown").."/200" end
     end,
     NPC_Activation_Sam = function(obj)
         local value = tonumber(obj.Value)
-        if value and value >= 1000 then
-            return "Meteorite Sword: สำเร็จ!"
-        else
-            return "Meteorite Sword: " .. (value or "Unknown") .. "/1000"
-        end
+        if value and value >= 1000 then return "Meteorite Sword: สำเร็จ!" else return "Meteorite Sword: "..(value or "Unknown").."/1000" end
     end
 }
 
--- รวมรายการที่มีอยู่ใน Data
-local displayOptions = {}
-local reverseLookup = {}
-
+local displayOptions, reverseLookup = {}, {}
 for name, transform in pairs(npcMapping) do
     local found = myData:FindFirstChild(name)
     if found then
@@ -1895,8 +1716,13 @@ for name, transform in pairs(npcMapping) do
 end
 
 tab7:Label("┇ ดาบลับที่มีในแมพ (แมพ Mythical ยังไม่มี) ┇")
+if #displayOptions == 0 then
+    displayOptions = {"ไม่มีข้อมูล"}
+end
+
 tab7:Dropdown("เช็คความคืบหน้า ดาบลับ:", displayOptions, function(select)
     local originalName = reverseLookup[select]
+    print("เลือก:", originalName)
 end)
 
 	end)
