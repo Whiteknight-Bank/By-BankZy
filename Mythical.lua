@@ -190,15 +190,17 @@ local function getPlayerNames()
 	return names
 end
 
-local Tab10 = Window:Taps("อัพเดต")
-local page10 = Tab10:newpage()
+local tab0 = win:Taps("อัพเดตใหม่")
+tab0:Label("แท็ป อัพเดต")
 
-page10:Label("แก้ไขเมนูเล็กๆน้อยๆ")
+local section0_1 = tab0:DropdownTab("อัพเดต เมนูหลักใหม่")
+section0_1:Label("แก้ไขเมนูหลัก")
 
 -- สร้างแท็บชื่อ Autos
 local tab1 = win:Taps("ออโต้")
-		
-page1:Toggle("ออโต้ กดเกิด", false, function(aspw)
+tab1:Label("เมนู ออโต้")
+
+section1_1:Toggle("ออโต้ กดเกิด", false, function(aspw)
         _G.respawn = aspw
 end)
 
@@ -216,8 +218,8 @@ end
 end
 end)
 
-page1:Label("┇ ฝั่งชั่น ออโต้ ┇")
-page1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
+section1_1:Label("┇ ฝั่งชั่น ออโต้ ┇")
+section1_1:Toggle("ออโต้ รับเควส Expertise (ไม่ทำงาน)", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -231,7 +233,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("ออโต้ ดึงผลไม้ปีศาจ (แก้ไขอยู่)", false, function(bdf)
+section1_1:Toggle("ออโต้ ดึงผลไม้ปีศาจ (แก้ไขอยู่)", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -249,7 +251,7 @@ spawn(function()
     end
  end)
 
-page1:Toggle("ออโต้ ฟาร์ม Package (ไม่ทำงาน)", false, function(apke)
+section1_1:Toggle("ออโต้ ฟาร์ม Package (ไม่ทำงาน)", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -341,7 +343,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ออโต้ ตกปลา (ไม่ทำงาน)", false, function(fsh)
+section1_1:Toggle("ออโต้ ตกปลา (ไม่ทำงาน)", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -404,7 +406,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
+section1_1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -559,7 +561,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
+section1_1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -575,7 +577,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Toggle("ออโต้ กดรับของขวัญ [ เพชร ]", false, function(gxm)
+section1_1:Toggle("ออโต้ กดรับของขวัญ [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -591,8 +593,7 @@ local A_1 = "RewardMark"
     end
 end)
 		
-local Tab2 = Window:Taps("ฟาร์ม")
-local page2 = Tab2:newpage()
+local tab2 = win:Taps("ฟาร์ม")
 
 page2:Label("┇ ฝั่งชั่น ฟาร์มผลไม้ ( กำลังแก้ไข ) ┇")
 page2:Toggle("ออโต้ ฟาร์มแสตท ( ไม่ทำงาน )", false, function(stts)
