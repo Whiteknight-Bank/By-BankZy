@@ -20,19 +20,20 @@ tab1:Toggle("Enable Feature", false, function(state)
 end)
 
 local tab2 = win:Taps("Settings")
+tab2:Label("Tab Farming")
 
-local section2 = tab2:DropdownTab("Extra Settings")
+local section2 = tab2:DropdownTab("Function Farming")
 section2:Button("Sub Button", function()
     print("Sub button pressed!")
 end)
 
 section2:Toggle("Sub Toggle", true, function(val)
     print("Sub toggle:", val)
-end, "Click Toggle")
+end)
 
 section2:Dropdown("Sub Dropdown", {"A", "B", "C"}, function(opt)
     print("Picked:", opt)
-end, "Choose Dropdown")
+end)
 
 local tab3 = win:Taps("Info")
 
