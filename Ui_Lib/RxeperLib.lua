@@ -362,14 +362,22 @@ function newPage:DropdownTab(title)
     header.TextXAlignment = Enum.TextXAlignment.Left
 
     -- container สำหรับใส่ element ย่อย
-    local container = Instance.new("Frame", page)
-    container.Size = UDim2.new(1, -10, 0, 0) -- 🔹 เริ่มจากปิดไว้ก่อน
-    container.BackgroundTransparency = 1
-    container.ClipsDescendants = true
+    -- container ใช้ ScrollingFrame แทน Frame
+local container = Instance.new("ScrollingFrame", page)
+container.Size = UDim2.new(1, -10, 0, 0)
+container.BackgroundTransparency = 1
+container.ClipsDescendants = true
+container.ScrollBarThickness = 4  -- เพิ่ม scrollbar บาง ๆ
+container.CanvasSize = UDim2.new(0,0,0,0) -- เริ่มเป็น 0
 
-    local layout = Instance.new("UIListLayout", container)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Padding = UDim.new(0, 4)
+local layout = Instance.new("UIListLayout", container)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Padding = UDim.new(0, 4)
+
+-- ทำให้ container ปรับ canvas ตาม element ข้างใน
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    container.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+end)
 
     local opened = false
     header.MouseButton1Click:Connect(function()
