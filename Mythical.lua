@@ -194,7 +194,7 @@ local tab0 = win:Taps("อัพเดตใหม่")
 tab0:Label("แท็ป อัพเดต")
 
 local section0_1 = tab0:DropdownTab("อัพเดต เมนูหลักใหม่")
-section0_1:Label("- แก้ไขเมนูบางส่วน")
+section0_1:Label("- แก้ไข Dropdown ใหม่ให้ดีขึ้น")
 section0_1:Label("- ปรับเมนูให้ดูง่ายขึ้น")
 
 local section0_2 = tab0:DropdownTab("ฝั่งชั่นอัพเดต")
