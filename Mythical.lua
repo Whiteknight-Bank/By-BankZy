@@ -1018,31 +1018,58 @@ tab2:Label("↑ ต่อ: ไม่ควรใช้นานเกินไ�
 
 local tab3 = win:Taps("สกิล")
 
-tab3:Label("สกิล")
-
-tab3:Label("┇ ออโต้ สกิล ( ไม่ทำงาน ) ┇")
-tab3:Toggle("ออโต้สกิล Z", false, function(sklz)
+tab3:Label("ปุ่มสกิลผลช่องที่ 1")
+local section3_1 = tab3:DropdownTab("┇ ออโต้ สกิล ( ไม่พร้อมงาน ) ┇")
+section3_1:Label("┇ ออโต้ สกิล ┇")
+section3_1:Toggle("ออโต้สกิล Z", false, function(sklz)
     _G.skillz = sklz
 end)
 
-tab3:Toggle("ออโต้สกิล X", false, function(sklx)
+section3_1:Toggle("ออโต้สกิล X", false, function(sklx)
     _G.skillx = sklx
 end)
 
-tab3:Toggle("ออโต้สกิล C", false, function(sklc)
+section3_1:Toggle("ออโต้สกิล C", false, function(sklc)
     _G.skillc = sklc
 end)
 
-tab3:Toggle("ออโต้สกิล V", false, function(sklv)
+section3_1:Toggle("ออโต้สกิล V", false, function(sklv)
     _G.skillv = sklv
 end)
 
-tab3:Toggle("ออโต้สกิล B", false, function(sklb)
+section3_1:Toggle("ออโต้สกิล B", false, function(sklb)
     _G.skillb = sklb
 end)
 
-tab3:Toggle("ออโต้สกิล N", false, function(skln)
+section3_1:Toggle("ออโต้สกิล N", false, function(skln)
     _G.skilln = skln
+end)
+
+tab3:Label("ปุ่มสกิลผลช่องที่ 2")
+local section3_2 = tab3:DropdownTab("┇ ออโต้ สกิล ( ไม่พร้อมใช้งาน ) ┇")
+section3_2:Label("┇ ออโต้ สกิล ┇")
+section3_2:Toggle("ออโต้สกิล F", false, function(sklf)
+    _G.skillf = sklf
+end)
+
+section3_2:Toggle("ออโต้สกิล G", false, function(sklg)
+    _G.skillg = sklg
+end)
+
+section3_2:Toggle("ออโต้สกิล H", false, function(sklh)
+    _G.skillh = sklh
+end)
+
+section3_2:Toggle("ออโต้สกิล J", false, function(sklj)
+    _G.skillj = sklj
+end)
+
+section3_2:Toggle("ออโต้สกิล K", false, function(sklk)
+    _G.skillk = sklk
+end)
+
+section3_2:Toggle("ออโต้สกิล L", false, function(skll)
+    _G.skilll = skll
 end)
 
 local tab4 = win:Taps("ผู้เล่น")
@@ -1469,6 +1496,30 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ฝั่งชั่น น้ำ ┇")
+tab6:Toggle("ออโต้ กดกล่องผลไม้", false, function(brf)
+    _G.boxfruity = brf
+end)
+
+spawn(function()--autofruit
+    while wait() do
+        pcall(function()
+            if _G.boxfruity then
+                wait(1.5)
+                for i,v in pairs(game:GetService("Workspace").Barrels.Crates:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
+                for i,v in pairs(game:GetService("Workspace").Barrels.Barrels:GetDescendants()) do
+                    if v:IsA("ClickDetector") then
+                        fireclickdetector(v)
+                    end
+                end
+            end
+        end)
+    end
+end)
+
 tab6:Toggle("ออโต้ ปั่นน้ำ", false, function(mxf)
     _G.mixerfruit = mxf
 end)
@@ -1476,7 +1527,7 @@ end)
 spawn(function() -- auto mixer
     while wait() do
         pcall(function()
-            if _G.mixerfruiy then
+            if _G.mixerfruit then
                 wait(1)
                 for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
                     if v:IsA("ClickDetector") then
@@ -1530,10 +1581,8 @@ spawn(function()
     end
 end)
 
--- Random Pyramid Section
 tab6:Label("┇ สุ่มพีรามิด ┇")
 
--- สร้าง Dropdown สำหรับ Devil Fruits
 local dropdownDF = {}
 local dfMap = {}
 local player = game.Players.LocalPlayer
