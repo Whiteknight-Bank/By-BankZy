@@ -213,6 +213,7 @@ function newPage:Dropdown(parent, title, items, callback, subtext)
     dropFrame.BackgroundTransparency = 0.5
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ปุ่มหลัก
     local btn = Instance.new("TextButton", dropFrame)
     btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
@@ -237,6 +238,7 @@ function newPage:Dropdown(parent, title, items, callback, subtext)
         sub.Text = subtext
     end
 
+    -- ตัวเลือก dropdown
     local listFrame = Instance.new("Frame", parent)
     listFrame.Size = UDim2.new(1, -10, 0, 0)
     listFrame.BackgroundTransparency = 1
@@ -248,28 +250,40 @@ function newPage:Dropdown(parent, title, items, callback, subtext)
     local opened = false
     btn.MouseButton1Click:Connect(function()
         opened = not opened
+        btn.Text = opened and (title .. " ↑") or (title .. " ▼")
         listFrame:TweenSize(
             opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
             "Out", "Quad", 0.25, true
         )
+
+        -- ทำให้สร้างปุ่มใหม่ทุกครั้งเมื่อเปิด
+        if opened then
+            for _, child in ipairs(listFrame:GetChildren()) do
+                if child:IsA("TextButton") then child:Destroy() end
+            end
+            for i, v in ipairs(items) do
+                local opt = Instance.new("TextButton", listFrame)
+                opt.Size = UDim2.new(1, -10, 0, 30)
+                opt.Position = UDim2.new(0, 5, 0, (i-1)*30)
+                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                opt.Text = v
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.Font = Enum.Font.SourceSans
+                opt.TextSize = 16
+                Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
+
+                opt.MouseButton1Click:Connect(function()
+                    btn.Text = v
+                    if callback then callback(v) end
+                    opened = false
+                    btn.Text = title .. " ▼"
+                    listFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.25, true)
+                end)
+            end
+        end
     end)
-
-    for _, v in ipairs(items) do
-        local opt = Instance.new("TextButton", listFrame)
-        opt.Size = UDim2.new(1, -10, 0, 30)
-        opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        opt.Text = v
-        opt.TextColor3 = Color3.fromRGB(255, 255, 255)
-        opt.Font = Enum.Font.SourceSans
-        opt.TextSize = 16
-        Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
-
-        opt.MouseButton1Click:Connect(function()
-            if callback then callback(v) end
-        end)
-    end
 end
-
+        
 -- Toggle
 function newPage:Toggle(parent, text, default, callback, subtext)
     if typeof(parent) ~= "Instance" then
@@ -498,6 +512,7 @@ function subPage:Dropdown(parent, title, items, callback, subtext)
     dropFrame.BackgroundTransparency = 0.5
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
+    -- ปุ่มหลัก
     local btn = Instance.new("TextButton", dropFrame)
     btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
@@ -522,6 +537,7 @@ function subPage:Dropdown(parent, title, items, callback, subtext)
         sub.Text = subtext
     end
 
+    -- ตัวเลือก dropdown
     local listFrame = Instance.new("Frame", parent)
     listFrame.Size = UDim2.new(1, -10, 0, 0)
     listFrame.BackgroundTransparency = 1
@@ -533,28 +549,40 @@ function subPage:Dropdown(parent, title, items, callback, subtext)
     local opened = false
     btn.MouseButton1Click:Connect(function()
         opened = not opened
+        btn.Text = opened and (title .. " ↑") or (title .. " ▼")
         listFrame:TweenSize(
             opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
             "Out", "Quad", 0.25, true
         )
+
+        -- ทำให้สร้างปุ่มใหม่ทุกครั้งเมื่อเปิด
+        if opened then
+            for _, child in ipairs(listFrame:GetChildren()) do
+                if child:IsA("TextButton") then child:Destroy() end
+            end
+            for i, v in ipairs(items) do
+                local opt = Instance.new("TextButton", listFrame)
+                opt.Size = UDim2.new(1, -10, 0, 30)
+                opt.Position = UDim2.new(0, 5, 0, (i-1)*30)
+                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                opt.Text = v
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.Font = Enum.Font.SourceSans
+                opt.TextSize = 16
+                Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
+
+                opt.MouseButton1Click:Connect(function()
+                    btn.Text = v
+                    if callback then callback(v) end
+                    opened = false
+                    btn.Text = title .. " ▼"
+                    listFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.25, true)
+                end)
+            end
+        end
     end)
-
-    for _, v in ipairs(items) do
-        local opt = Instance.new("TextButton", listFrame)
-        opt.Size = UDim2.new(1, -10, 0, 30)
-        opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        opt.Text = v
-        opt.TextColor3 = Color3.fromRGB(255, 255, 255)
-        opt.Font = Enum.Font.SourceSans
-        opt.TextSize = 16
-        Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
-
-        opt.MouseButton1Click:Connect(function()
-            if callback then callback(v) end
-        end)
-    end
 end
-            
+
 function subPage:Dropdown(title, items, callback)
     return newPage:Dropdown(container, title, items, callback)
 end
