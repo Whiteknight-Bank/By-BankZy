@@ -1538,7 +1538,6 @@ wait(.8)
 end)
 
 page6:Label("┇ สุ่มพีรามิด ┇")
-
 local section6_1 = tab6:DropdownTab("ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ]")
 
 local dropdownDF = {}
