@@ -1204,7 +1204,7 @@ end
 
 print("-- =================================== --")
 
-   create:Notifile("", "พิมในช่องแชท /console ตอนนี้เลย!!! ", 6)
+   lib:Notifile("Alert", "พิม /console ในช่องแชทเพื่อเช็ค!", 3)
 end)
 
 tab4:Toggle("ส่อง", false, function(state)
@@ -1464,7 +1464,7 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 
 local tab6 = win:Taps("เอ็นพีซี")
 
-page6:Label("┇ ซื้อน้ำ ┇")
+tab6:Label("┇ ซื้อน้ำ ┇")
 
 local section6_0 = tab6:DropdownTab("ซื้อ-น้ำและดื่ม")
 section6_0:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
