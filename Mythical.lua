@@ -1496,6 +1496,41 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 
 local tab6 = win:Taps("เอ็นพีซี")
 
+tab6:Label("┇ ฝั่งชั่น เควสแซม ┇")
+tab6:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
+AutoClaimComp1 = clmp
+end)
+
+spawn(function()
+while wait(4) do
+pcall(function()
+if not AutoClaimComp1 then return end;
+local args = {
+[1] = "Claim1"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
+end)
+end
+end)
+
+tab6:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
+AutoClaimComp2 = clmpp
+end)
+
+spawn(function()
+while wait(4) do
+pcall(function()
+if not AutoClaimComp2 then return end;
+local args = {
+[1] = "Claim10"
+}
+
+game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
+end)
+end
+end)
+
 tab6:Label("┇ ฝั่งชั่น น้ำ ┇")
 tab6:Toggle("ออโต้ กดกล่องผลไม้", false, function(brf)
     _G.boxfruity = brf
@@ -1670,41 +1705,6 @@ tab6:Toggle("ออโต้ สุ่ม", false, function(rol)
             end
         end)
     end
-end)
-
-tab6:Label("┇ ฝั่งชั่น เควสแซม ┇")
-tab6:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
-AutoClaimComp1 = clmp
-end)
-
-spawn(function()
-while wait(4) do
-pcall(function()
-if not AutoClaimComp1 then return end;
-local args = {
-[1] = "Claim1"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-end)
-end
-end)
-
-tab6:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
-AutoClaimComp2 = clmpp
-end)
-
-spawn(function()
-while wait(4) do
-pcall(function()
-if not AutoClaimComp2 then return end;
-local args = {
-[1] = "Claim10"
-}
-
-game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("Claim_Sam"):FireServer(unpack(args))
-end)
-end
 end)
 
 -- Tab7 - อื่น ๆ
