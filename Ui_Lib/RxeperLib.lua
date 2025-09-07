@@ -168,6 +168,86 @@ function tabs:Taps(name)
     end)
 
     local newPage = {}
+    -- ปุ่ม (Button)
+function newPage:Button(text, callback)
+    local btn = Instance.new("TextButton", page)
+    btn.Size = UDim2.new(1, -10, 0, 35)
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.BackgroundTransparency = 0.4
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSansBold
+    btn.TextSize = 16
+    btn.Text = text
+    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
+
+    btn.MouseButton1Click:Connect(function()
+        if callback then callback() end
+    end)
+end
+
+-- Label (ข้อความ)
+function newPage:Label(text)
+    local lbl = Instance.new("TextLabel", page)
+    lbl.Size = UDim2.new(1, -10, 0, 30)
+    lbl.BackgroundTransparency = 1
+    lbl.TextColor3 = Color3.fromRGB(200, 200, 200)
+    lbl.Font = Enum.Font.SourceSans
+    lbl.TextSize = 16
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+    lbl.Text = text
+end
+
+-- Dropdown
+function newPage:Dropdown(title, items, callback)
+    local dropFrame = Instance.new("Frame", page)
+    dropFrame.Size = UDim2.new(1, -10, 0, 35)
+    dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    dropFrame.BackgroundTransparency = 0.5
+    Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
+
+    local btn = Instance.new("TextButton", dropFrame)
+    btn.Size = UDim2.new(1, -10, 1, 0)
+    btn.Position = UDim2.new(0, 5, 0, 0)
+    btn.BackgroundTransparency = 1
+    btn.Text = title .. " ▼"
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSansBold
+    btn.TextSize = 16
+    btn.TextXAlignment = Enum.TextXAlignment.Left
+
+    local listFrame = Instance.new("Frame", page)
+    listFrame.Size = UDim2.new(1, -10, 0, 0)
+    listFrame.BackgroundTransparency = 1
+    listFrame.ClipsDescendants = true
+
+    local layout = Instance.new("UIListLayout", listFrame)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+
+    local opened = false
+    btn.MouseButton1Click:Connect(function()
+        opened = not opened
+        listFrame:TweenSize(
+            opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
+            "Out", "Quad", 0.25, true
+        )
+    end)
+
+    for _, v in ipairs(items) do
+        local opt = Instance.new("TextButton", listFrame)
+        opt.Size = UDim2.new(1, -10, 0, 30)
+        opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        opt.Text = v
+        opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        opt.Font = Enum.Font.SourceSans
+        opt.TextSize = 16
+        Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
+
+        opt.MouseButton1Click:Connect(function()
+            if callback then callback(v) end
+        end)
+    end
+        end
+
 -- ปรับ Toggle ให้รองรับคำอธิบายหลายบรรทัด
 function newPage:Toggle(text, default, callback)
     local toggleFrame = Instance.new("Frame", page)
