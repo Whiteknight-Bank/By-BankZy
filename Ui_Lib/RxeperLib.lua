@@ -348,8 +348,50 @@ function newPage:DropdownTab(title)
     end
 
     function subPage:Toggle(text, default, callback)
-        return newPage.Toggle(container, text, default, callback) -- 🔹 parent = container
-    end
+    local toggleFrame = Instance.new("Frame", page)
+    toggleFrame.Size = UDim2.new(1, -10, 0, 45)
+    toggleFrame.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    toggleFrame.BackgroundTransparency = 0.6
+    toggleFrame.BorderSizePixel = 0
+    Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
+
+    local label = Instance.new("TextLabel", toggleFrame)
+    label.Size = UDim2.new(1, -60, 1, 0)
+    label.Position = UDim2.new(0, 10, 0, 0)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.SourceSans
+    label.TextSize = 16
+    label.TextWrapped = true
+    label.TextYAlignment = Enum.TextYAlignment.Top
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Text = text
+
+    local toggleBtn = Instance.new("TextButton", toggleFrame)
+    toggleBtn.Size = UDim2.new(0, 40, 0, 20)
+    toggleBtn.Position = UDim2.new(1, -45, 0.5, -10)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+    toggleBtn.BackgroundTransparency = 0.6
+    toggleBtn.Text = ""
+    toggleBtn.BorderSizePixel = 0
+    toggleBtn.AutoButtonColor = false
+    Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(1, 0)
+
+    local circle = Instance.new("Frame", toggleBtn)
+    circle.Size = UDim2.new(0, 18, 0, 18)
+    circle.Position = default and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1)
+    circle.BackgroundColor3 = default and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+    circle.BorderSizePixel = 0
+    Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
+
+    local toggled = default
+    toggleBtn.MouseButton1Click:Connect(function()
+        toggled = not toggled
+        circle:TweenPosition(toggled and UDim2.new(1, -19, 0, 1) or UDim2.new(0, 1, 0, 1), "Out", "Quad", 0.15, true)
+        circle.BackgroundColor3 = toggled and Color3.fromRGB(0, 170, 255) or Color3.fromRGB(150, 150, 150)
+        if callback then callback(toggled) end
+    end)
+end
 
     function subPage:Label(text)
         local lbl = Instance.new("TextLabel", container) -- 🔹 parent = container
@@ -362,9 +404,41 @@ function newPage:DropdownTab(title)
         lbl.Text = text
     end
 
-    function subPage:Dropdown(title, items, callback)
-        return newPage.Dropdown(container, title, items, callback) -- 🔹 parent = container
-    end
+    function subPage:DropdownTab(title)
+    local tabFrame = Instance.new("Frame", page)
+    tabFrame.Size = UDim2.new(1, -10, 0, 30)
+    tabFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    tabFrame.BackgroundTransparency = 0.6
+    Instance.new("UICorner", tabFrame).CornerRadius = UDim.new(0, 6)
+
+    local header = Instance.new("TextButton", tabFrame)
+    header.Size = UDim2.new(1, -10, 1, 0)
+    header.Position = UDim2.new(0, 5, 0, 0)
+    header.BackgroundTransparency = 1
+    header.Text = "▶ " .. title
+    header.TextColor3 = Color3.fromRGB(255, 255, 255)
+    header.Font = Enum.Font.SourceSansBold
+    header.TextSize = 16
+    header.TextXAlignment = Enum.TextXAlignment.Left
+
+    local container = Instance.new("Frame", page)
+    container.Size = UDim2.new(1, -10, 0, 0) -- 🔹 เริ่มจากปิดไว้ก่อน
+    container.BackgroundTransparency = 1
+    container.ClipsDescendants = true
+
+    local layout = Instance.new("UIListLayout", container)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0, 4)
+
+    local opened = false
+    header.MouseButton1Click:Connect(function()
+        opened = not opened
+        header.Text = opened and "▼ " .. title or "▶ " .. title
+        container:TweenSize(
+            opened and UDim2.new(1, -10, 0, layout.AbsoluteContentSize.Y + 10) or UDim2.new(1, -10, 0, 0),
+            "Out", "Quad", 0.25, true
+        )
+    end)
 
     return subPage
 end
