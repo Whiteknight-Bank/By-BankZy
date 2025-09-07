@@ -1465,12 +1465,11 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ซื้อน้ำ ┇")
-local section6_0 = tab6:DropdownTab("ซื้อ-น้ำและดื่ม")
-section6_0:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
+tab6:Dropdown("เลือก น้ำ :", Cache.DevConfig["ListOfDrink+"], function(knrd)
     selectedDrinks = knrd
 end)
 
-section6_0:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
+tab6:Toggle("ออโต้ ซื้อน้ำ (ไม่ทำงาน)", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -1504,7 +1503,7 @@ wait(.8)
 end)
 
 
-section6_0:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดในตัว ]", false, function(drks)
+tab6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดในตัว ]", false, function(drks)
 	AutoDrinks = drks
 end)
 
@@ -1537,8 +1536,8 @@ wait(.8)
     end
 end)
 
-page6:Label("┇ สุ่มพีรามิด ┇")
-local section6_1 = tab6:DropdownTab("ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ]")
+tab6:Label("┇ สุ่มพีรามิด ┇")
+tab6:Dropdown("ฝั่งชั่น สุ่มพีรามิด [ 10 ขีด ]")
 
 local dropdownDF = {}
 local dfMap = {}
@@ -1571,18 +1570,18 @@ if #dropdownDF > 0 then
     end)
 end
 
-section6_1:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+tab6:Dropdown("เลือก ล็อค ค่าขีด :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-section6_1:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
+tab6:Dropdown("เลือก การสุ่ม :", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
 local isRunning1 = false
 local task1Thread
 
-section6_1:Toggle("ออโต้ สุ่ม", false, function(rol)
+tab6:Toggle("ออโต้ สุ่ม", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -1657,8 +1656,8 @@ end)
 
 tab6:Label("┇ ฝั่งชั่น เควสแซม ┇")
 
-local section6_2 = tab6:DropdownTab("เควสแซม")
-section6_2:Toggle("ออโต้ หาเข็ม (ไม่ทำงาน)", false, function(comp)
+tab6:DropdownTab("เควสแซม")
+tab6:Toggle("ออโต้ หาเข็ม (ไม่ทำงาน)", false, function(comp)
     AutoComp = comp
 end)
 
@@ -1682,7 +1681,7 @@ spawn(function()
     end
 end)
 
-section6_2:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
+tab6:Toggle("ออโต้ รับ 1 เข็ม", false, function(clmp)
     AutoClaimComp1 = clmp
 end)
 
@@ -1699,7 +1698,7 @@ game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("C
     end
 end)
 
-section6_2:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
+tab6:Toggle("ออโต้ รับ 10 เข็ม", false, function(clmpp)
     AutoClaimComp2 = clmpp
 end)
 
@@ -1715,7 +1714,6 @@ game:GetService("ReplicatedStorage"):WaitForChild("Connections"):WaitForChild("C
         end)
     end
 end)
-
 
 local tab7 = win:Taps("อื่นๆ")
 
