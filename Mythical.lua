@@ -200,6 +200,8 @@ section0_1:Label("แก้ไขเมนูหลัก")
 local tab1 = win:Taps("ออโต้")
 tab1:Label("เมนู ออโต้")
 
+local section1_1 = tab1:DropdownTab("ฝั่งชั่น ออโต้ต่างๆ")
+section1_1:Label("ฝั่งชั่น เกิด")
 section1_1:Toggle("ออโต้ กดเกิด", false, function(aspw)
         _G.respawn = aspw
 end)
