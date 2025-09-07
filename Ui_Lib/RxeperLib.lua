@@ -273,7 +273,7 @@ function newPage:Dropdown(parent, title, items, callback, subtext)
     local opened = false
     btn.MouseButton1Click:Connect(function()
         opened = not opened
-        btn.Text = opened and (title .. " ↑") or (title .. " ▼")
+        btn.Text = opened and (title .. " ▶") or (title .. " ▼")
         listFrame:TweenSize(
             opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
             "Out", "Quad", 0.25, true
