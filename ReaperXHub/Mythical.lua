@@ -28,9 +28,11 @@ end)
 
 section2:Toggle("Sub Toggle", true, function(val)
     print("Sub toggle:", val)
-end)
+end, "Click Toggle")
 
-section2:Label("Sub Label: Info here")
+section:Dropdown("Sub Dropdown", {"A", "B", "C"}, function(opt)
+    print("Picked:", opt)
+end, "Choose Dropdown")
 
 local tab3 = win:Taps("Info")
 
