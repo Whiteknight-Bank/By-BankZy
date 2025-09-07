@@ -30,7 +30,7 @@ section2:Toggle("Sub Toggle", true, function(val)
     print("Sub toggle:", val)
 end, "Click Toggle")
 
-section:Dropdown("Sub Dropdown", {"A", "B", "C"}, function(opt)
+section2:Dropdown("Sub Dropdown", {"A", "B", "C"}, function(opt)
     print("Picked:", opt)
 end, "Choose Dropdown")
 
