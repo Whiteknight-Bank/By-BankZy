@@ -1492,8 +1492,6 @@ tab6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดใน
     _G.AutoDrinks = drks
 end)
 
-_G.AutoDrinks = true  -- เปิดระบบกินน้ำ
-
 spawn(function()
     while wait(0.5) do
         if not _G.AutoDrinks then continue end
