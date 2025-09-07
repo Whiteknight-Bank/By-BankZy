@@ -1329,12 +1329,11 @@ end)
 local tab5 = win:Taps("เกาะ")
 tab5:Label("┇ เกาะ ┇")
 
-local section5_1 = tab5:DropdownTab("วาป-เกาะ")
-section5_1:Dropdown("เลือก เกาะ", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+tab5:Dropdown("เลือก เกาะ", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-section5_1:Button("คลิก เพื่อ วาป" , function()
+tab5:Button("คลิก เพื่อ วาป" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -1407,7 +1406,7 @@ tab5:Dropdown("เลือก เซฟโซน", {"Safe Zone (Sky)", "Safe Zo
     getgenv().tpsafezone = s
 end)
 
-section5_2:Button("กด เพื่อ วาป" , function()
+tab5:Button("กด เพื่อ วาป" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
