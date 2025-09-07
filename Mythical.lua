@@ -1469,14 +1469,14 @@ tab5:Button("คลิก เพื่อ วาป" , function()
 local tab6 = win:Taps("เอ็นพีซี")
 
 tab6:Label("┇ ฝั่งชั่น น้ำ ┇")
-tab6:Toggle("ออโต้ ปั่นน้ำ", false, function(bdy)
-    _G.buydrink = bdy
+tab6:Toggle("ออโต้ ปั่นน้ำ", false, function(mxf)
+    _G.mixerfruit = mxf
 end)
 
 spawn(function() -- auto mixer
     while wait() do
         pcall(function()
-            if _G.automixer then
+            if _G.mixerfruiy then
                 wait(1)
                 for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
                     if v:IsA("ClickDetector") then
@@ -1492,18 +1492,32 @@ tab6:Toggle("ออโต้ ดื่มน้ำ [ ทั้งหมดใน
     _G.AutoDrinks = drks
 end)
 
+_G.AutoDrinks = true  -- เปิดระบบกินน้ำ
+
 spawn(function()
-    while wait() do
-        pcall(function()
-            if not _G.AutoDrinks then return end
-            for _, Value in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                if table.find(Cache.DevConfig["ListOfDrink"], Value.Name) then
-                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
-                    Value.Parent = game.Players.LocalPlayer.Character
-                    Value:Activate()
+    while wait(0.5) do
+        if not _G.AutoDrinks then continue end
+        local player = game.Players.LocalPlayer
+        local backpack = player:WaitForChild("Backpack")
+        local character = player.Character
+        if not character then continue end
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then continue end
+
+        for _, item in pairs(backpack:GetChildren()) do
+            if item:IsA("Tool") then
+                -- ตรวจชื่อไอเทมว่าเป็นน้ำ (ถ้ามีคำว่า "Juice", "Cider", "Smoothie" ฯลฯ)
+                if string.find(item.Name, "Juice") or string.find(item.Name, "Cider") or 
+                   string.find(item.Name, "Smoothie") or string.find(item.Name, "Milk") or 
+                   string.find(item.Name, "Apple") or string.find(item.Name, "Golden") then
+                    -- Equip และ Activate
+                    humanoid:EquipTool(item)
+                    wait(0.1)
+                    pcall(function() item:Activate() end)
+                    wait(0.2)  -- รอให้กินน้ำเสร็จ
                 end
             end
-        end)
+        end
     end
 end)
 
