@@ -191,7 +191,7 @@ function tabs:Taps(name)
     end)
 
     local newPage = {}
-    -- ปุ่ม (Button)
+    
 function newPage:Button(text, callback)
     local btn = Instance.new("TextButton", page)
     btn.Size = UDim2.new(1, -10, 0, 35)
@@ -208,7 +208,6 @@ function newPage:Button(text, callback)
     end)
 end
 
--- Label (ข้อความ)
 function newPage:Label(text)
     local lbl = Instance.new("TextLabel", page)
     lbl.Size = UDim2.new(1, -10, 0, 30)
@@ -220,94 +219,251 @@ function newPage:Label(text)
     lbl.Text = text
 end
 
-function newPage:Dropdown(parent, title, items, callback, subtext)
-    if typeof(parent) ~= "Instance" then
-        subtext = callback
-        callback = items
-        items = title
-        title = parent
-        parent = page
+function newPage:Dropdown(a1, a2, a3, a4, a5, a6)
+    local parent, title, items, callback, subtext, multi, opts = nil, nil, nil, nil, nil, false, {}
+
+    if typeof(a1) == "Instance" then
+        parent   = a1
+        title    = a2
+        items    = a3 or {}
+        callback = a4
+        subtext  = a5
+        multi    = a6
+    else
+        parent   = page -- assumes `page` exists in your scope likeก่อน
+        title    = a1
+        items    = a2 or {}
+        callback = a3
+        subtext  = a4
+        multi    = a5
     end
 
-    local height = subtext and 55 or 35
-    local dropFrame = Instance.new("Frame", parent)
-    dropFrame.Size = UDim2.new(1, -10, 0, height)
+    if typeof(subtext) == "table" then
+        opts = subtext
+        subtext = opts.subtext or opts.label or nil
+        if type(opts.multi) == "boolean" then multi = opts.multi end
+        if opts.showNames ~= nil then opts.showNames = opts.showNames else opts.showNames = true end
+        if opts.maxNames then opts.maxNames = tonumber(opts.maxNames) or 3 else opts.maxNames = 3 end
+        if opts.placeholder then opts.placeholder = tostring(opts.placeholder) else opts.placeholder = "🔍 ค้นหา..." end
+    else
+        if type(subtext) == "string" then opts.subtext = subtext end
+        if type(multi) ~= "boolean" then multi = false end
+        opts.showNames = (opts.showNames ~= nil) and opts.showNames or true
+        opts.maxNames = opts.maxNames or 3
+        opts.placeholder = opts.placeholder or "🔍 ค้นหา..."
+    end
+
+    items = items or {}
+    callback = callback or function() end
+
+    local baseHeight = (opts.subtext and #tostring(opts.subtext) > 0) and 55 or 35
+    local dropFrame = Instance.new("Frame")
+    dropFrame.Name = "DropdownFrame"
+    dropFrame.Parent = parent
+    dropFrame.Size = UDim2.new(1, -10, 0, baseHeight)
     dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropFrame.BackgroundTransparency = 0.5
+    dropFrame.ClipsDescendants = false -- important: ให้ children (listFrame) โผล่ออกมาได้
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
-    -- ปุ่มหลัก
-    local btn = Instance.new("TextButton", dropFrame)
+    local btn = Instance.new("TextButton")
+    btn.Parent = dropFrame
     btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
     btn.BackgroundTransparency = 1
-    btn.Text = title .. " ▼"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.SourceSansBold
     btn.TextSize = 16
     btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Text = title .. " ▼"
 
-    -- Subtext
-    if subtext then
-        local sub = Instance.new("TextLabel", dropFrame)
+    if opts.subtext and typeof(opts.subtext) == "string" and opts.subtext ~= "" then
+        local sub = Instance.new("TextLabel")
+        sub.Parent = dropFrame
         sub.Size = UDim2.new(1, -20, 0, 20)
         sub.Position = UDim2.new(0, 10, 0, 32)
         sub.BackgroundTransparency = 1
-        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.TextColor3 = Color3.fromRGB(200,200,200)
         sub.Font = Enum.Font.SourceSansItalic
         sub.TextSize = 14
         sub.TextXAlignment = Enum.TextXAlignment.Left
         sub.TextWrapped = true
-        sub.Text = subtext
+        sub.Text = opts.subtext
+    elseif opts.subtext and typeof(opts.subtext) ~= "string" and typeof(opts.subtext) == "Instance" then
+        opts.subtext.Parent = dropFrame
     end
 
-    -- ตัวเลือก dropdown
-    local listFrame = Instance.new("Frame", parent)
-    listFrame.Size = UDim2.new(1, -10, 0, 0)
+    local listFrame = Instance.new("Frame")
+    listFrame.Name = "DropdownList"
+    listFrame.Parent = dropFrame
+    listFrame.Position = UDim2.new(0, 5, 1, 5) -- อยู่ด้านล่างของ dropFrame (offset 5px)
+    listFrame.Size = UDim2.new(1, -10, 0, 0) -- เริ่มด้วยสูง 0 แล้วค่อย Tween
     listFrame.BackgroundTransparency = 1
     listFrame.ClipsDescendants = true
+    listFrame.ZIndex = dropFrame.ZIndex + 50
 
-    local layout = Instance.new("UIListLayout", listFrame)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    local searchBox = Instance.new("TextBox")
+    searchBox.Parent = listFrame
+    searchBox.Size = UDim2.new(1, 0, 0, 30)
+    searchBox.Position = UDim2.new(0, 0, 0, 0)
+    searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    searchBox.Text = ""
+    searchBox.PlaceholderText = opts.placeholder or "🔍 ค้นหา..."
+    searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+    searchBox.Font = Enum.Font.SourceSans
+    searchBox.TextSize = 14
+    Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+    searchBox.ZIndex = listFrame.ZIndex + 1
 
     local opened = false
-    btn.MouseButton1Click:Connect(function()
-        opened = not opened
-        btn.Text = opened and (title .. " ▶") or (title .. " ▼")
-        listFrame:TweenSize(
-            opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
-            "Out", "Quad", 0.25, true
-        )
+    local selected = {} -- เก็บค่าที่เลือก (table)
+    local function isSelected(val) return table.find(selected, val) ~= nil end
 
-        -- ทำให้สร้างปุ่มใหม่ทุกครั้งเมื่อเปิด
-        if opened then
-            for _, child in ipairs(listFrame:GetChildren()) do
-                if child:IsA("TextButton") then child:Destroy() end
+    local function updateButtonText()
+        if multi then
+            if #selected == 0 then
+                btn.Text = title .. " ▼"
+            else
+                if opts.showNames then
+                    if #selected <= opts.maxNames then
+                        btn.Text = table.concat(selected, ", ") .. " ▼"
+                    else
+                        local t = {}
+                        for i=1, opts.maxNames do table.insert(t, selected[i]) end
+                        btn.Text = table.concat(t, ", ") .. " ..." .. " ("..#selected..") ▼"
+                    end
+                else
+                    btn.Text = title .. " (" .. #selected .. " เลือกแล้ว) ▼"
+                end
             end
-            for i, v in ipairs(items) do
-                local opt = Instance.new("TextButton", listFrame)
-                opt.Size = UDim2.new(1, -10, 0, 30)
-                opt.Position = UDim2.new(0, 5, 0, (i-1)*30)
-                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-                opt.Text = v
-                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            if #selected == 0 then
+                btn.Text = title .. " ▼"
+            else
+                btn.Text = selected[1] .. " ▼"
+            end
+        end
+    end
+
+    local function refreshOptions(filterText)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
+        end
+
+        local y = 30 -- เริ่มที่ใต้ searchBox (height = 30)
+        local visibleCount = 0
+        local lowerFilter = (filterText and #filterText>0) and string.lower(filterText) or nil
+
+        for _, v in ipairs(items) do
+            if (not lowerFilter) or (string.find(string.lower(tostring(v)), lowerFilter, 1, true)) then
+                local opt = Instance.new("TextButton")
+                opt.Parent = listFrame
+                opt.Size = UDim2.new(1, 0, 0, 30)
+                opt.Position = UDim2.new(0, 0, 0, y)
+                opt.Text = tostring(v)
+                opt.TextColor3 = Color3.fromRGB(255,255,255)
                 opt.Font = Enum.Font.SourceSans
                 opt.TextSize = 16
+                opt.BackgroundColor3 = isSelected(v) and Color3.fromRGB(80,120,80) or Color3.fromRGB(60,60,60)
                 Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
+                opt.ZIndex = listFrame.ZIndex + 1
 
                 opt.MouseButton1Click:Connect(function()
-                    btn.Text = v
-                    if callback then callback(v) end
-                    opened = false
-                    btn.Text = title .. " ▼"
-                    listFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.25, true)
+                    if multi then
+                        if isSelected(v) then
+                            for i,val in ipairs(selected) do
+                                if val == v then table.remove(selected, i); break end
+                            end
+                        else
+                            table.insert(selected, v)
+                     end
+                        refreshOptions(searchBox.Text)
+                        updateButtonText()
+                        if callback then
+                            local copy = {}
+                            for i,val in ipairs(selected) do copy[i] = val end
+                            callback(copy)
+                        end
+                    else
+                        selected = {v}
+                        updateButtonText()
+                        if callback then callback(v) end
+                        opened = false
+                        listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.15, true)
+                    end
                 end)
+
+                y = y + 30
+                visibleCount = visibleCount + 1
+            end
+        end
+
+        local finalHeight = (visibleCount > 0) and (y + 5) or 30 -- ถ้าไม่มี option, ให้โชว์แค่ searchBox
+        if opened then
+            listFrame:TweenSize(UDim2.new(1, 0, 0, finalHeight), "Out", "Quad", 0.18, true)
+        else
+            listFrame.Size = UDim2.new(1, 0, 0, 0)
+        end
+    end
+
+    btn.MouseButton1Click:Connect(function()
+        opened = not opened
+        if opened then
+            btn.Text = btn.Text:gsub("▼", "▶")
+            refreshOptions(searchBox.Text)
+        else
+            updateButtonText()
+            listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.15, true)
+        end
+    end)
+
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        if opened then refreshOptions(searchBox.Text) end
+    end)
+
+    local UserInputService = game:GetService("UserInputService")
+    local function pointInGui(point, gui)
+        local ap = gui.AbsolutePosition
+        local asz = gui.AbsoluteSize
+        return point.X >= ap.X and point.X <= ap.X + asz.X and point.Y >= ap.Y and point.Y <= ap.Y + asz.Y
+    end
+    local conn
+    conn = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if not opened then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local loc = UserInputService:GetMouseLocation()
+            -- ตรวจว่า click อยู่ใน dropFrame หรือ listFrame หรือไม่, ถ้าไม่ ให้ปิด
+            if not (pointInGui(loc, dropFrame) or pointInGui(loc, listFrame)) then
+                opened = false
+                updateButtonText()
+                listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.12, true)
             end
         end
     end)
+
+    updateButtonText()
+
+    return {
+        Frame = dropFrame,
+        Button = btn,
+        List = listFrame,
+        GetSelected = function() local c = {}; for i,v in ipairs(selected) do c[i]=v end; return c end,
+        SetSelected = function(t)
+            selected = {}
+            if type(t) == "table" then
+                for _,v in ipairs(t) do table.insert(selected, v) end
+            elseif t ~= nil then
+                table.insert(selected, t)
+            end
+            updateButtonText()
+        end,
+        Destroy = function()
+            if conn then conn:Disconnect() end
+            dropFrame:Destroy()
+        end
+    }
 end
         
--- Toggle
 function newPage:Toggle(parent, text, default, callback, subtext)
     if typeof(parent) ~= "Instance" then
         subtext = callback
@@ -392,8 +548,6 @@ function newPage:DropdownTab(title)
     header.TextSize = 16
     header.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- container สำหรับใส่ element ย่อย
-    -- container ใช้ ScrollingFrame แทน Frame
 local container = Instance.new("ScrollingFrame", page)
 container.Size = UDim2.new(1, -10, 0, 0)
 container.BackgroundTransparency = 1
@@ -405,7 +559,6 @@ local layout = Instance.new("UIListLayout", container)
 layout.SortOrder = Enum.SortOrder.LayoutOrder
 layout.Padding = UDim.new(0, 4)
 
--- ทำให้ container ปรับ canvas ตาม element ข้างใน
 layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
     container.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
 end)
@@ -420,7 +573,6 @@ end)
         )
     end)
 
-    -- subPage object สำหรับสร้าง element ย่อย
     local subPage = {}
 
     function subPage:Button(text, callback)
@@ -519,91 +671,249 @@ end
         lbl.Text = text
     end
 
-function subPage:Dropdown(parent, title, items, callback, subtext)
-    if typeof(parent) ~= "Instance" then
-        subtext = callback
-        callback = items
-        items = title
-        title = parent
-        parent = page
+function subPage:Dropdown(a1, a2, a3, a4, a5, a6)
+    local parent, title, items, callback, subtext, multi, opts = nil, nil, nil, nil, nil, false, {}
+
+    if typeof(a1) == "Instance" then
+        parent   = a1
+        title    = a2
+        items    = a3 or {}
+        callback = a4
+        subtext  = a5
+        multi    = a6
+    else
+        parent   = page -- assumes `page` exists in your scope likeก่อน
+        title    = a1
+        items    = a2 or {}
+        callback = a3
+        subtext  = a4
+        multi    = a5
     end
 
-    local height = subtext and 55 or 35
-    local dropFrame = Instance.new("Frame", parent)
-    dropFrame.Size = UDim2.new(1, -10, 0, height)
+    if typeof(subtext) == "table" then
+        opts = subtext
+        subtext = opts.subtext or opts.label or nil
+        if type(opts.multi) == "boolean" then multi = opts.multi end
+        if opts.showNames ~= nil then opts.showNames = opts.showNames else opts.showNames = true end
+        if opts.maxNames then opts.maxNames = tonumber(opts.maxNames) or 3 else opts.maxNames = 3 end
+        if opts.placeholder then opts.placeholder = tostring(opts.placeholder) else opts.placeholder = "🔍 ค้นหา..." end
+    else
+        if type(subtext) == "string" then opts.subtext = subtext end
+        if type(multi) ~= "boolean" then multi = false end
+        opts.showNames = (opts.showNames ~= nil) and opts.showNames or true
+        opts.maxNames = opts.maxNames or 3
+        opts.placeholder = opts.placeholder or "🔍 ค้นหา..."
+    end
+
+    items = items or {}
+    callback = callback or function() end
+
+    local baseHeight = (opts.subtext and #tostring(opts.subtext) > 0) and 55 or 35
+    local dropFrame = Instance.new("Frame")
+    dropFrame.Name = "DropdownFrame"
+    dropFrame.Parent = parent
+    dropFrame.Size = UDim2.new(1, -10, 0, baseHeight)
     dropFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     dropFrame.BackgroundTransparency = 0.5
+    dropFrame.ClipsDescendants = false -- important: ให้ children (listFrame) โผล่ออกมาได้
     Instance.new("UICorner", dropFrame).CornerRadius = UDim.new(0, 6)
 
-    -- ปุ่มหลัก
-    local btn = Instance.new("TextButton", dropFrame)
+    local btn = Instance.new("TextButton")
+    btn.Parent = dropFrame
     btn.Size = UDim2.new(1, -10, 0, 30)
     btn.Position = UDim2.new(0, 5, 0, 0)
     btn.BackgroundTransparency = 1
-    btn.Text = title .. " ▼"
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
     btn.Font = Enum.Font.SourceSansBold
     btn.TextSize = 16
     btn.TextXAlignment = Enum.TextXAlignment.Left
+    btn.Text = title .. " ▼"
 
-    -- Subtext
-    if subtext then
-        local sub = Instance.new("TextLabel", dropFrame)
+    if opts.subtext and typeof(opts.subtext) == "string" and opts.subtext ~= "" then
+        local sub = Instance.new("TextLabel")
+        sub.Parent = dropFrame
         sub.Size = UDim2.new(1, -20, 0, 20)
         sub.Position = UDim2.new(0, 10, 0, 32)
         sub.BackgroundTransparency = 1
-        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.TextColor3 = Color3.fromRGB(200,200,200)
         sub.Font = Enum.Font.SourceSansItalic
         sub.TextSize = 14
         sub.TextXAlignment = Enum.TextXAlignment.Left
         sub.TextWrapped = true
-        sub.Text = subtext
+        sub.Text = opts.subtext
+    elseif opts.subtext and typeof(opts.subtext) ~= "string" and typeof(opts.subtext) == "Instance" then
+        opts.subtext.Parent = dropFrame
     end
 
-    -- ตัวเลือก dropdown
-    local listFrame = Instance.new("Frame", parent)
-    listFrame.Size = UDim2.new(1, -10, 0, 0)
+    local listFrame = Instance.new("Frame")
+    listFrame.Name = "DropdownList"
+    listFrame.Parent = dropFrame
+    listFrame.Position = UDim2.new(0, 5, 1, 5) -- อยู่ด้านล่างของ dropFrame (offset 5px)
+    listFrame.Size = UDim2.new(1, -10, 0, 0) -- เริ่มด้วยสูง 0 แล้วค่อย Tween
     listFrame.BackgroundTransparency = 1
     listFrame.ClipsDescendants = true
+    listFrame.ZIndex = dropFrame.ZIndex + 50
 
-    local layout = Instance.new("UIListLayout", listFrame)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    local searchBox = Instance.new("TextBox")
+    searchBox.Parent = listFrame
+    searchBox.Size = UDim2.new(1, 0, 0, 30)
+    searchBox.Position = UDim2.new(0, 0, 0, 0)
+    searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    searchBox.Text = ""
+    searchBox.PlaceholderText = opts.placeholder or "🔍 ค้นหา..."
+    searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+    searchBox.Font = Enum.Font.SourceSans
+    searchBox.TextSize = 14
+    Instance.new("UICorner", searchBox).CornerRadius = UDim.new(0, 6)
+    searchBox.ZIndex = listFrame.ZIndex + 1
 
     local opened = false
-    btn.MouseButton1Click:Connect(function()
-        opened = not opened
-        btn.Text = opened and (title .. " ↑") or (title .. " ▼")
-        listFrame:TweenSize(
-            opened and UDim2.new(1, -10, 0, #items * 30) or UDim2.new(1, -10, 0, 0),
-            "Out", "Quad", 0.25, true
-        )
+    local selected = {} -- เก็บค่าที่เลือก (table)
+    local function isSelected(val) return table.find(selected, val) ~= nil end
 
-        -- ทำให้สร้างปุ่มใหม่ทุกครั้งเมื่อเปิด
-        if opened then
-            for _, child in ipairs(listFrame:GetChildren()) do
-                if child:IsA("TextButton") then child:Destroy() end
+    local function updateButtonText()
+        if multi then
+            if #selected == 0 then
+                btn.Text = title .. " ▼"
+            else
+                if opts.showNames then
+                    if #selected <= opts.maxNames then
+                        btn.Text = table.concat(selected, ", ") .. " ▼"
+                    else
+                        local t = {}
+                        for i=1, opts.maxNames do table.insert(t, selected[i]) end
+                        btn.Text = table.concat(t, ", ") .. " ..." .. " ("..#selected..") ▼"
+                    end
+                else
+                    btn.Text = title .. " (" .. #selected .. " เลือกแล้ว) ▼"
+                end
             end
-            for i, v in ipairs(items) do
-                local opt = Instance.new("TextButton", listFrame)
-                opt.Size = UDim2.new(1, -10, 0, 30)
-                opt.Position = UDim2.new(0, 5, 0, (i-1)*30)
-                opt.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-                opt.Text = v
-                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            if #selected == 0 then
+                btn.Text = title .. " ▼"
+            else
+                btn.Text = selected[1] .. " ▼"
+            end
+        end
+    end
+
+    local function refreshOptions(filterText)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
+        end
+
+        local y = 30 -- เริ่มที่ใต้ searchBox (height = 30)
+        local visibleCount = 0
+        local lowerFilter = (filterText and #filterText>0) and string.lower(filterText) or nil
+
+        for _, v in ipairs(items) do
+            if (not lowerFilter) or (string.find(string.lower(tostring(v)), lowerFilter, 1, true)) then
+                local opt = Instance.new("TextButton")
+                opt.Parent = listFrame
+                opt.Size = UDim2.new(1, 0, 0, 30)
+                opt.Position = UDim2.new(0, 0, 0, y)
+                opt.Text = tostring(v)
+                opt.TextColor3 = Color3.fromRGB(255,255,255)
                 opt.Font = Enum.Font.SourceSans
                 opt.TextSize = 16
+                opt.BackgroundColor3 = isSelected(v) and Color3.fromRGB(80,120,80) or Color3.fromRGB(60,60,60)
                 Instance.new("UICorner", opt).CornerRadius = UDim.new(0, 6)
+                opt.ZIndex = listFrame.ZIndex + 1
 
                 opt.MouseButton1Click:Connect(function()
-                    btn.Text = v
-                    if callback then callback(v) end
-                    opened = false
-                    btn.Text = title .. " ▼"
-                    listFrame:TweenSize(UDim2.new(1, -10, 0, 0), "Out", "Quad", 0.25, true)
+                    if multi then
+                        if isSelected(v) then
+                            for i,val in ipairs(selected) do
+                                if val == v then table.remove(selected, i); break end
+                            end
+                        else
+                            table.insert(selected, v)
+                     end
+                        refreshOptions(searchBox.Text)
+                        updateButtonText()
+                        if callback then
+                            local copy = {}
+                            for i,val in ipairs(selected) do copy[i] = val end
+                            callback(copy)
+                        end
+                    else
+                        selected = {v}
+                        updateButtonText()
+                        if callback then callback(v) end
+                        opened = false
+                        listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.15, true)
+                    end
                 end)
+
+                y = y + 30
+                visibleCount = visibleCount + 1
+            end
+        end
+
+        local finalHeight = (visibleCount > 0) and (y + 5) or 30 -- ถ้าไม่มี option, ให้โชว์แค่ searchBox
+        if opened then
+            listFrame:TweenSize(UDim2.new(1, 0, 0, finalHeight), "Out", "Quad", 0.18, true)
+        else
+            listFrame.Size = UDim2.new(1, 0, 0, 0)
+        end
+    end
+
+    btn.MouseButton1Click:Connect(function()
+        opened = not opened
+        if opened then
+            btn.Text = btn.Text:gsub("▼", "▶")
+            refreshOptions(searchBox.Text)
+        else
+            updateButtonText()
+            listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.15, true)
+        end
+    end)
+
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        if opened then refreshOptions(searchBox.Text) end
+    end)
+
+    local UserInputService = game:GetService("UserInputService")
+    local function pointInGui(point, gui)
+        local ap = gui.AbsolutePosition
+        local asz = gui.AbsoluteSize
+        return point.X >= ap.X and point.X <= ap.X + asz.X and point.Y >= ap.Y and point.Y <= ap.Y + asz.Y
+    end
+    local conn
+    conn = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if not opened then return end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            local loc = UserInputService:GetMouseLocation()
+            -- ตรวจว่า click อยู่ใน dropFrame หรือ listFrame หรือไม่, ถ้าไม่ ให้ปิด
+            if not (pointInGui(loc, dropFrame) or pointInGui(loc, listFrame)) then
+                opened = false
+                updateButtonText()
+                listFrame:TweenSize(UDim2.new(1, 0, 0, 0), "Out", "Quad", 0.12, true)
             end
         end
     end)
+
+    updateButtonText()
+
+    return {
+        Frame = dropFrame,
+        Button = btn,
+        List = listFrame,
+        GetSelected = function() local c = {}; for i,v in ipairs(selected) do c[i]=v end; return c end,
+        SetSelected = function(t)
+            selected = {}
+            if type(t) == "table" then
+                for _,v in ipairs(t) do table.insert(selected, v) end
+            elseif t ~= nil then
+                table.insert(selected, t)
+            end
+            updateButtonText()
+        end,
+        Destroy = function()
+            if conn then conn:Disconnect() end
+            dropFrame:Destroy()
+        end
+    }
 end
 
 function subPage:Dropdown(title, items, callback)
