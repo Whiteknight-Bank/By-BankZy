@@ -1,4 +1,4 @@
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperXLib.lua"))()
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
 local win = lib:Win("ReaperX Hub")
 
 lib:Notifile("Alert", "This is a test message!", 3)
