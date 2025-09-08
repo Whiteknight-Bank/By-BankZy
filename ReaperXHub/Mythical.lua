@@ -1,47 +1,39 @@
--- โหลด Library
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
-local win = lib:Win("ReaperX Hub | Map: [ Alpha ]One Piece: Mythical")
+local create = loadfile("Libinw_final.lua")()
+local Window = create:Win("Bank Hub")
 
-lib:Notifile("Alert", "This is a test message!", 3)
+local Tab1 = Window:Taps("ออโต้")
+local page1 = Tab1:newpage()
 
-local tab1 = win:Taps("Main")
+page1:Label(" ฝั่งชั่น การเกิด ")
 
-tab1:Label("Status: Waiting...")
-tab1:Dropdown("Select Item", {"Apple", "Banana", "Orange"}, function(selected)
-    print("You picked:", selected)
+page1:Button("เซฟจุดเกิด", function()
+    local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if hrp then
+        _G.savedCFrame = hrp.CFrame
+        create:Notify("เซฟแล้ว!", 3)
+    end
 end)
 
-tab1:Button("Click Me", function()
-    print("Button Clicked!")
+page1:Toggle("ออโต้ เกิดและกดตาย", false, function(state)
+    _G.respawndie = state
+end, "ถ้าเปิด จะบังคับเกิดใหม่และกดตายอัตโนมัติ")
+
+page1:Dropdown("เลือกผลไม้", {"แอปเปิ้ล","กล้วย","ส้ม"}, function(value)
+    print("เลือก:", value)
+end, "เลือกได้เพียงผลไม้เดียว")
+
+page1:Dropdown("เลือกสกิล", {"สกิล A","สกิล B","สกิล C"}, function(values)
+    print("เลือกหลาย:", table.concat(values,", "))
+end, "เลือกได้หลายสกิลพร้อมกัน", true)
+
+page1:Textbox("ตั้งชื่อ", "พิมพ์ชื่อของคุณ", function(text)
+    print("ชื่อที่กรอก:", text)
 end)
 
-tab1:Toggle("Enable Feature", false, function(state)
-    print("Toggle is:", state)
-end)
+local Tab2 = Window:Taps("ตั้งค่า")
+local page2 = Tab2:newpage()
 
-local tab2 = win:Taps("Settings")
-tab2:Label("Tab Farming")
-
-local section2 = tab2:DropdownTab("Function Farming")
-section2:Button("Sub Button", function()
-    print("Sub button pressed!")
-end)
-
-section2:Toggle("Enable Feature", false, function(state)
-    print("Toggle is:", state)
-end, "เปิดแล้วจะเปิดใช้งานฟีเจอร์พิเศษ")
-
-section2:Dropdown("Select Item", {"Apple","Banana","Orange"}, function(selected)
-    print("Picked:", selected)
-end, "เลือกผลไม้ที่คุณชื่นชอบ")
-
-local tab3 = win:Taps("Info")
-
-tab3:Label("👋 Welcome to ReaperX Hub")
-tab3:Button("Discord Invite", function()
-    setclipboard("https://discord.gg/xxxxxxx") -- เปลี่ยนลิงก์ได้
-    print("Copied Discord link!")
-end)
-tab3:Toggle("Show Tips", true, function(v)
-    print("Show Tips:", v)
+page2:Label(" ตัวอย่างหน้า 2 ")
+page2:Button("ทดสอบ", function() 
+print("ok") 
 end)
