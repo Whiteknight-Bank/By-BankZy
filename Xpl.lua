@@ -931,22 +931,6 @@ wait(.8)
     end
 end)
 
-sectiontab1_2:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
-_G.berigift = bri
-end)
-
-spawn(function()
-    while wait(0) do
-        pcall(function()
-            if _G.berigift then
-local A_1 = "RewardMark"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardHourly
-    Event:FireServer(A_1)
-            end
-        end)
-    end
-end)
-
 section1_2:Toggle("ออโต้ กดรับของขวัญ  [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
@@ -981,10 +965,6 @@ end)
 
 tab1:Label("การตีโยรุ")
 local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
-section1_3:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
-    _G.yoruhit = hty
-end)
-
 section1_3:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
 end)
@@ -995,7 +975,7 @@ pcall(function()
 if _G.yorufast then 
 if game.Players.LocalPlayer.Character:FindFirstChild("Yoru") and tonumber(serializeTable(attackremote)) ~= nil and tonumber(serializeTable(attackremote)) ~= "" then 
 repeat wait(0.3) 
-for i = 1, _G.yoruhit do 
+for i = 1, 200 do 
 local args = { 
 		[1] = tonumber(serializeTable(attackremote)) 
 } 
