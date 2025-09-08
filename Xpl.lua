@@ -297,8 +297,8 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
--- เธชเธฃเนเธฒเธเนเธ—เนเธเธเธทเนเธญ Autos
-local tab1 = win:Taps("ออโต้")
+local Tab1 = Window:Taps("ออโต้")
+local page1 = Tab1:newpage()
 
 page1:Label(" ฝั่งชั่น การเกิด ")
 
