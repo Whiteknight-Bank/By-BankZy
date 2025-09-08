@@ -297,11 +297,9 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
 end
 
 -- เธชเธฃเนเธฒเธเนเธ—เนเธเธเธทเนเธญ Autos
-local tab1 = win:Taps("เน€เธกเธเธนเธซเธฅเธฑเธ")
+local tab1 = win:Taps("ออโต้")
 
-tab1:Label(" โ€ข เธเธฒเธฃเน€เธเธดเธ”")
-
-local section1_1 = tab1:DropdownTab("โ” เธเธฑเนเธเธเธฑเนเธ เธเธฒเธฃเน€เธเธดเธ” โ”")
+page1:Label(" ฝั่งชั่น การเกิด ")
 
 _G.savedCFrame = nil
 
@@ -312,15 +310,15 @@ function SaveCFrame()
     end
 end
 
-section1_1:Button("เธเธ”เน€เธเธเธเธธเธ”เน€เธเธดเธ”", function()
+section1_1:Button("เซฟจุดเกิด”", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
-        lib:Notifile("Alert", "เธเธ”เน€เธเธเนเธฅเนเธง!", 3)
+        create:Notifile("", "เซฟแล้ว!", 3)
     end
 end)
 		
-section1_1:Toggle("เธญเธญเนเธ•เนเน€เธเธดเธ”เนเธฅเธฐเธเธ”เธ•เธฒเธขเธญเธญเนเธ•เน", false, function(aspw)
+page1:Toggle("ออโต้ เกิดและกดตาย", false, function(aspw)
         _G.respawndie = aspw
 end)
 
@@ -338,7 +336,7 @@ end
 end
 end)
 
-section1_1:Toggle("เธญเธญเนเธ•เน เธเธ”เน€เธเธดเธ” & เนเธเธเน€เธเธเธเธธเธ”เน€เธเธดเธ”", false, function(rspw)
+page1:Toggle("ออโต้ เกิด & เกิดแบบเซฟจุด”", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
@@ -397,9 +395,8 @@ spawn(function()
     end
 end)
 
-tab1:Label(" โ€ข เธเธฑเนเธเธเธฑเนเธเธญเธญเนเธ•เน")
-local section1_2 = tab1:DropdownTab("โ” เธเธฑเนเธเธเธฑเนเธ เธญเธญเนเธ•เนเธ•เนเธฒเธเน โ”")
-section1_2:Toggle("เธญเธญเนเธ•เน เธฃเธฑเธเธ เธฒเธฃเธเธดเธ", false, function(dmmsv)
+page1:Label(" ฝั่งชั่น ออโต้ต่างๆ ")
+page1:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -413,7 +410,7 @@ spawn(function()
     end 
 end)
 
-section1_2:Toggle("เธ—เธณเธ เธฒเธฃเธเธดเธเธญเธฑเธ•เนเธเธกเธฑเธ•เธด [ เนเธกเนเธ—เธณเธเธฒเธ ]", false, function(miss)
+page1:Toggle("ออโต้ ทำภารกิจ [ ไม่พร้อมใช้งาน ]", false, function(miss)
         _G.automission = miss
 end)
 
@@ -604,7 +601,7 @@ spawn(function()
     end
 end)
 
-section1_2:Toggle("เธ”เธถเธเธเธฅเนเธกเนเธเธตเธจเธฒเธ", false, function(bdf)
+page1:Toggle("ดึงผลไม้ปีศาจ", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -622,7 +619,7 @@ spawn(function()
     end
  end)
 
-section1_2:Toggle("เธญเธญเนเธ•เน เนเธเนเธเน€เธเธ", false, function(apke)
+page1:Toggle("ออโต้ แพ็คเกจ", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -714,7 +711,7 @@ spawn(function()
     end
 end)
 
-section1_2:Toggle("เธญเธญเนเธ•เน เธ•เธเธเธฅเธฒเนเธฅเธฐเน€เธเธฒเธเธฅเธฒ", false, function(fsh)
+page1:Toggle("ออโต้ ตกปลาและเผาปลา", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -777,7 +774,7 @@ spawn(function()
     end
 end)
 
-section1_2:Toggle("เธญเธญเนเธ•เน เธฃเธฑเธเธฃเธฒเธเธงเธฑเธฅ (เธฃเธฒเธขเธงเธฑเธ/เธฃเธฒเธขเธชเธฑเธเธ”เธฒเธซเน/เธฃเธฒเธขเน€เธ”เธทเธญเธ/เธเธฒเน€เธฅเธเน€เธเธญเธฃเน)", false, function(chllge)
+page1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -932,7 +929,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("เธญเธญเนเธ•เน เธเธ”เธฃเธฑเธเธเธญเธเธเธงเธฑเธ [ เน€เธเธฃเธต ]", false, function(bri)
+page1:Toggle("ออโต้ กดรับของขวัญ  [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -948,7 +945,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-section1_2:Toggle("เธญเธญเนเธ•เน เธเน€เธฃเธฑเธเธเธญเธเธเธงเธฑเธ  [ เน€เธเธเธฃ ]", false, function(gxm)
+page1:Toggle("ออโต้ กดรับของขวัญ  [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -1012,13 +1009,12 @@ end)
     return tmp
 end
 
-tab1:Label("เธเธฒเธฃเธ•เธตเนเธขเธฃเธธ")
-local section1_3 = tab1:DropdownTab("โ” เนเธชเธเธกเธเธฒเธฃเธ•เธต เนเธขเธฃเธธ โ”")
-section1_3:Textbox("เธเธฒเธฃเธ•เธต เนเธขเธฃเธธ:", "เนเธชเนเน€เธฅเธ", function(hty)
+page1:Label("แสปมโยรุ")
+page1:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
-end, "เนเธชเธเธกเธ•เธตเนเธขเธฃเธธเธฃเธฑเนเธงเน")
+end)
 
-section1_3:Toggle("เนเธเนเธเธฒเธ", false, function(yru)
+page1:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
 end)
 
@@ -1042,11 +1038,12 @@ end)
 end 
 end)
 		
-local tab2 = win:Taps("เธเธฒเธฃเนเธก")
+local Tab2 = Window:Taps("ฟาร์ม")
+local page2 = Tab2:newpage()
+
 		
-tab3:Label("โ€ข เธกเธญเธเนเธเนเธกเธ")
-local section1_3 = tab2:DropdownTab("โ” เธเธฑเนเธเธเธฑเนเธ เธเธฑเธเธเธฑเธเธกเธญเธเธ•เธฒเธข โ”")
-section1_3:Toggle("เธญเธญเนเธ•เนเธ•เธฒเธข เธกเธญเธเธ—เธฑเนเธเนเธกเธ [ 100% ]", false, function(dthh)
+page2:Label("ฝั่งชั่น มอนตาย")
+page2:Toggle("เธญเธญเนเธ•เนเธ•เธฒเธข เธกเธญเธเธ—เธฑเนเธเนเธกเธ [ 100% ]", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -1065,7 +1062,7 @@ spawn(function()
     end
 end)
 
-section1_3:Toggle("เธญเธญเนเธ•เนเธ•เธฒเธข เธเธญเธชเธซเธกเธฑเธ” [ 100% ]", false, function(zki)
+page2:Toggle("เธญเธญเนเธ•เนเธ•เธฒเธข เธเธญเธชเธซเธกเธฑเธ” [ 100% ]", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -1084,8 +1081,8 @@ spawn(function()
     end
 end)
 
-tab2:Label("โ” เธเธฒเธฃเนเธกเธเธฅเนเธกเนเนเธชเธ•เธ— โ”")
-tab2:Toggle("เธญเธญเนเธ•เนเธเธฒเธฃเนเธก เนเธชเธ•เธ—", false, function(stts)
+page2:Label("โ” เธเธฒเธฃเนเธกเธเธฅเนเธกเนเนเธชเธ•เธ— โ”")
+page2:Toggle("เธญเธญเนเธ•เนเธเธฒเธฃเนเธก เนเธชเธ•เธ—", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1219,13 +1216,12 @@ spawn(function()
     end)
 end)
 
-tab3:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธเธฒเธฃเนเธกเธกเธญเธ")
-local section2_3 = tab2:DropdownTab("โ” เธเธฒเธฃเนเธกเธกเธญเธ โ”")
-section2_3:Dropdown("เน€เธฅเธทเธญเธ เธญเธฒเธงเธธเธ:", Wapon, function(wapn)
+page2:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธเธฒเธฃเนเธกเธกเธญเธ")
+page2:Dropdown("เน€เธฅเธทเธญเธ เธญเธฒเธงเธธเธ:", Wapon, function(wapn)
     selectedWapon = wapn
 end)
 
-section2_3:Button("Refresh Weapon", function()
+page2:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1234,7 +1230,7 @@ section2_3:Button("Refresh Weapon", function()
 				end
 			end)
 		
-section2_3:Toggle("Auto Farm", false, function(befrm)
+page2:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
 
@@ -1282,7 +1278,7 @@ spawn(function()
     end
 end)
 		
-section2_3:Toggle("Auto Click", false, function(state)
+page2:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
 
@@ -1297,7 +1293,7 @@ end)
 end) 
 end)
 
-section2_3:Toggle("Auto Equip", false, function(state)
+page2:Toggle("Auto Equip", false, function(state)
     _G.autoequip = state
 end)
 
@@ -1317,8 +1313,8 @@ spawn(function() -- auto equip
     end
 end)
 
-section2_3:Label("โ” Function Farm with Cannon Ball โ”")
-section2_3:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
+page2:Label(" Function Farm with Cannon Ball ")
+page2:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
     _G.autocannonslow = bll
 end)
 
@@ -1559,9 +1555,8 @@ spawn(function() -- autofarm cannon
     end
 end)
 
-tab2:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธเธฒเธฃเนเธกเธ”เนเธงเธขเธเธฅเนเธกเน")
-local section2_4 = tab2:DropdownTab("โ” เธญเธญเนเธ•เน เธเธฒเธฃเนเธกเธ”เนเธงเธขเธเธฅเนเธกเน โ”")
-section2_4:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
+page2:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธเธฒเธฃเนเธกเธ”เนเธงเธขเธเธฅเนเธกเน")
+page2:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
     _G.quakefarm = qke
 end)
 
@@ -1609,7 +1604,7 @@ spawn(function() -- Quake farm npcs
     end
 end)
 
-section2_4:Toggle("Auto Farm Light", false, function(lth)
+page2:Toggle("Auto Farm Light", false, function(lth)
     _G.lightfarm = lth
 end)
 
@@ -1656,9 +1651,8 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-tab2:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธฎเธฒเธเธด")
-local section2_5 = tab2:DropdownTab("โ” เธญเธญเนเธ•เน เธเธฒเธฃเนเธกเธฎเธฒเธเธด โ”")
-section2_5:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
+page2:Label("โ€ข เธเธฑเนเธเธเธฑเนเธ เธฎเธฒเธเธด")
+page2:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -1772,7 +1766,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-section2_5:Toggle("เธญเธญเนเธ•เน เนเธ”เนเธฎเธฒเธเธด [ เน€เธกเธทเนเธญ เน€เธฅเธงเธฅ 1,000 ]", false, function(gthi)
+page2:Toggle("เธญเธญเนเธ•เน เนเธ”เนเธฎเธฒเธเธด [ เน€เธกเธทเนเธญ เน€เธฅเธงเธฅ 1,000 ]", false, function(gthi)
     getgenv().haki = gthi
 while getgenv().haki do
             wait()
@@ -1787,7 +1781,7 @@ while getgenv().haki do
 	end
 end)
 
-section2_5:Label("โ‘ เธเธณเน€เธ•เธทเธญเธ: เธญเธฒเธเนเธ”เธเน€เธ”เนเธเธญเธญเธเน€เธเธดเธ เธ–เนเธฒเนเธเนเธเธฒเธเน€เธเธดเธเนเธ โ‘")
+page2:Label("โ‘ เธเธณเน€เธ•เธทเธญเธ: เธญเธฒเธเนเธ”เธเน€เธ”เนเธเธญเธญเธเน€เธเธดเธ เธ–เนเธฒเนเธเนเธเธฒเธเน€เธเธดเธเนเธ โ‘")
 		
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
