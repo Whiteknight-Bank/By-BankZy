@@ -311,7 +311,7 @@ function SaveCFrame()
     end
 end
 
-section1_1:Button("เซฟจุดเกิด”", function()
+page1:Button("เซฟจุดเกิด”", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
