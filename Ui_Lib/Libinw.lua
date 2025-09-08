@@ -58,13 +58,11 @@ local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
 corner.Parent = toggleButton
 
-local title = "ReaperX Hub"
 local titleBar = Instance.new("TextLabel")
 titleBar.Size = UDim2.new(1, 0, 0, 35)
-titleBar.Position = UDim2.new(0, 0, 0, 0)
 titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 titleBar.BackgroundTransparency = 0.2
-titleBar.Text = title
+titleBar.Text = title or "Bank Hub"
 titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleBar.Font = Enum.Font.GothamBold
 titleBar.TextSize = 20
