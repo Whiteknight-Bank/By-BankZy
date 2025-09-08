@@ -94,6 +94,7 @@ Cache.DevConfig["ListOfBox2"] = {"Uncommon Box"};
 Cache.DevConfig["ListOfDrink"] = {"Cider+", "Lemonade+", "Juice+", "Smoothie+"};
 Cache.DevConfig["ListOfDropCompass"] = {"Compass"};
 Cache.DevConfig["ListOfBox3"] = {"Rare Box", "Ultra Rare Box"};
+Cache.DevConfig["ListOfSDf"] = {"Bomb", "Chilly", "Quake", "Flare", "Magma", "Candy(ไม่พร้อม)", "Plassma(ไม่พร้อม)", "Vampire(ไม่พร้อม)", "Rumble(ไม่พร้อม)", "Gas(ไม่พร้อม)", "Light(ไม่พร้อม)", "Snow(ไม่พร้อม)", "Sand(ไม่พร้อม)"};
 
 local rareFruits = {
     "Vampire Fruit", "Quake Fruit", "Phoenix Fruit", "Dark Fruit",
