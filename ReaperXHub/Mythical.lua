@@ -1,4 +1,4 @@
-local create = loadfile("Libinw_final.lua")()
+local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
 local Window = create:Win("Bank Hub")
 
 local Tab1 = Window:Taps("ออโต้")
