@@ -972,60 +972,12 @@ spawn(function()
         pcall(function()
             if _G.berigift then
 local A_1 = "RewardMark"
-    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardHourly
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardDaily
     Event:FireServer(A_1)
             end
         end)
     end
 end)
-
-local attackremote = {}    
-
-local a
-a=hookmetamethod(game,"__namecall",function(self,...)
-    local args = {...}
-    local method = getnamecallmethod()
-    if method == "FireServer" or method == "InvokeServer" then
-        if self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health ~= 0 then
-            attackremote[self.Name] = args[1]
-            return a(self,unpack(args))
-        elseif self.Name == "RequestAnimation" and game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
-            attackremote[self.Name] = ""
-        end
-    end
-      return a(self,...)
-end)
-    
-    function serializeTable(val, name, skipnewlines, depth)
-    skipnewlines = skipnewlines or false
-    depth = depth or 0
- 
-    local tmp = string.rep("", depth)
- 
-    if name then tmp = tmp end
- 
-    if type(val) == "table" then
-        tmp = tmp .. (not skipnewlines and "" or "")
- 
-        for k, v in pairs(val) do
-            tmp =  tmp .. serializeTable(v, k, skipnewlines, depth + 1) .. (not skipnewlines and "" or "")
-        end
- 
-        tmp = tmp .. string.rep("", depth) 
-    elseif type(val) == "number" then
-        tmp = tmp .. tostring(val)
-    elseif type(val) == "string" then
-        tmp = tmp .. string.format("%q", val)
-    elseif type(val) == "boolean" then
-        tmp = tmp .. (val and "true" or "false")
-    elseif type(val) == "function" then
-        tmp = tmp  .. "func: " .. debug.getinfo(val).name
-    else
-        tmp = tmp .. tostring(val)
-    end
- 
-    return tmp
-end
 
 tab1:Label("การตีโยรุ")
 local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
