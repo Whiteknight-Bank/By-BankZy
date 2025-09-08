@@ -88,10 +88,10 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 
-local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/Libinw.lua"))()
-local Window = create:Win("InW Hub : For Map [ One Piece: Legendary ]")
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
+local win = lib:Win("ReaperX Hub | Map: One Piece: Legendary")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to OPL:Anarchy", 5)
+lib:Notifile("Alert", "ช่วงทดลอง!", 3)
 
 local Cache = { DevConfig = {} };
 
@@ -297,10 +297,11 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
 end
 
 -- สร้างแท็บชื่อ Autos
-local Tab1 = Window:Taps("Autos")
-local page1 = Tab1:newpage()
+local tab1 = win:Taps("เมนูหลัก")
 
-page1:Label("┇ Function Spawn ┇")
+tab1:Label(" • การเกิด")
+
+local section1_1 = tab1:DropdownTab("┇ ฝั่งชั่น การเกิด ┇")
 
 _G.savedCFrame = nil
 
@@ -311,15 +312,15 @@ function SaveCFrame()
     end
 end
 
-page1:Button("Save Point", function()
+section1_1:Button("กดเซฟจุดเกิด", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
-        create:Notifile("Saved Point!", "Your position has been saved.", 3)
+        lib:Notifile("Alert", "กดเซฟแล้ว!", 3)
     end
 end)
 		
-page1:Toggle("Auto Spawn With Auto Death", false, function(aspw)
+section1_1:Toggle("ออโต้เกิดและกดตายออโต้", false, function(aspw)
         _G.respawndie = aspw
 end)
 
@@ -337,7 +338,7 @@ end
 end
 end)
 
-page1:Toggle("Auto Spawn With Save Point", false, function(rspw)
+section1_1:Toggle("ออโต้ กดเกิด & แบบเซฟจุดเกิด", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
@@ -396,8 +397,9 @@ spawn(function()
     end
 end)
 
-page1:Label("┇ Function Autos ┇")
-page1:Toggle("Auto Claim Mission", false, function(dmmsv)
+tab1:Label(" • ฝั่งชั่นออโต้")
+local section1_2 = tab1:DropdownTab("┇ ฝั่งชั่น ออโต้ต่างๆ ┇")
+section1_2:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -411,7 +413,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("Auto Complete Mission [ ไม่ทำงาน ]", false, function(miss)
+section1_2:Toggle("ทำภารกิจอัตโนมัติ [ ไม่ทำงาน ]", false, function(miss)
         _G.automission = miss
 end)
 
@@ -602,7 +604,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Bring Devil Fruit", false, function(bdf)
+section1_2:Toggle("ดึงผลไม้ปีศาจ", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -620,7 +622,7 @@ spawn(function()
     end
  end)
 
-page1:Toggle("Auto Package", false, function(apke)
+section1_2:Toggle("ออโต้ แพ็คเกจ", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
@@ -712,7 +714,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Fishing & Cooking", false, function(fsh)
+section1_2:Toggle("ออโต้ ตกปลาและเผาปลา", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -775,7 +777,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("Auto Claim Challanges", false, function(chllge)
+section1_2:Toggle("ออโต้ รับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -930,7 +932,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("Auto Claim Gift [ Beri ]", false, function(bri)
+page1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -946,7 +948,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Toggle("Auto Claim Gift  [ Gems ]", false, function(gxm)
+section1_2:Toggle("ออโต้ กเรับของขวัญ  [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -1010,12 +1012,13 @@ end)
     return tmp
 end
 
-page1:Label("┇ Spam Yoru ┇")
-page1:Textbox("Hit Yoru", "Enter Number", function(hty)
+tab1:Label("การตีโยรุ")
+local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
+section1_3:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
 end)
 
-page1:Toggle("Auto Spam Yoru", false, function(yru)
+section1_3:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
 end)
 
