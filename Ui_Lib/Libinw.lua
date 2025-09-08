@@ -119,29 +119,28 @@ function library:Win(title)
         end
     end
 
-    function tabs:Taps(name)
-        local tabBtn = Instance.new("TextButton", tabFrame)
-        tabBtn.Size = UDim2.new(1,-12,0,36)
-        tabBtn.BackgroundColor3 = Color3.fromRGB(38,38,38)
-        tabBtn.TextColor3 = Color3.fromRGB(255,255,255)
-        tabBtn.Font = Enum.Font.SourceSans
-        tabBtn.TextSize = 16
-        tabBtn.Text = name
-        tabBtn.BorderSizePixel = 0
-        uicorner(tabBtn, UDim.new(0,6))
+function tabs:Taps(name)
+    local tabBtn = Instance.new("TextButton", tabFrame)
+    tabBtn.Size = UDim2.new(1,-12,0,36)
+    tabBtn.BackgroundColor3 = Color3.fromRGB(38,38,38)
+    tabBtn.Text = name
+    tabBtn.TextColor3 = Color3.fromRGB(255,255,255)
 
-        local page = Instance.new("ScrollingFrame", pagesHolder)
-        page.Name = name.."_Page"
-        page.Size = UDim2.new(1,0,1,0)
-        page.BackgroundTransparency = 1
-        page.ScrollBarThickness = 6
-        page.Visible = false
-        page.AutomaticCanvasSize = Enum.AutomaticSize.Y
-        page.CanvasSize = UDim2.new(0,0,0,0)
+    local page = Instance.new("ScrollingFrame", pagesHolder)
+    page.Name = name.."_Page"
+    page.Size = UDim2.new(1,0,1,0)
+    page.BackgroundTransparency = 1
+    page.ScrollBarThickness = 6
+    page.Visible = false
 
-        local pageLayout = Instance.new("UIListLayout", page)
-        pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        pageLayout.Padding = UDim.new(0,8)
+    local layout = Instance.new("UIListLayout", page)
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0,8)
+
+    -- ✅ เปิด Tab แรกโดยอัตโนมัติ
+    if #tabFrame:GetChildren() == 1 then
+        page.Visible = true
+        end
 
         local tabAPI = {}
 
