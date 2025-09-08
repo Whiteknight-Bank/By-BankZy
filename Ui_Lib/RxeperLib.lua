@@ -869,7 +869,7 @@ function subPage:TextBox(parent, title, default, callback, subtext)
 end
 
 function subPage:TextBox(parent, title, , default, callback, subtext)
-    return newPage:Dropdown(container, parent, title, default, callback, subtext)
+    return newPage:TextBox(container, parent, title, default, callback, subtext)
             end
 
     return subPage
