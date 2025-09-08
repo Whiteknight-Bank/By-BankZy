@@ -300,9 +300,6 @@ end
 local tab1 = win:Taps("เมนูหลัก")
 
 tab1:Label(" • การเกิด")
-tab1:Label("┇  • การเกิด ┇")
-local sectiontab1_1 = tab1:DropdownTab("┇  • การเกิด ┇")
-
 local section1_1 = tab1:DropdownTab("┇ ฝั่งชั่น การเกิด ┇")
 
 _G.savedCFrame = nil
@@ -400,8 +397,6 @@ spawn(function()
 end)
 
 tab1:Label(" • ฝั่งชั่นออโต้")
-tab1:Label("┇  • ฝั่งชั่นออโต้ ┇")
-local sectiontab1_2 = tab1:DropdownTab("┇  • ฝั่งชั่นออโต้ ┇")
 local section1_2 = tab1:DropdownTab("┇ ฝั่งชั่น ออโต้ต่างๆ ┇")
 section1_2:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
         AutoMission = dmmsv
@@ -952,7 +947,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-section1_2:Toggle("ออโต้ กเรับของขวัญ  [ เพชร ]", false, function(gxm)
+section1_2:Toggle("ออโต้ กดรับของขวัญ  [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -962,6 +957,22 @@ spawn(function()
             if _G.gemsgift then
 local A_1 = "RewardMark"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardDaily
+    Event:FireServer(A_1)
+            end
+        end)
+    end
+end)
+
+section1_2:Toggle("ออโต้ กดรับของขวัญ  [ เบรี ]", false, function(bxri)
+_G.berigift = bxri
+end)
+
+spawn(function()
+    while wait(0) do
+        pcall(function()
+            if _G.berigift then
+local A_1 = "RewardMark"
+    local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].ClaimRewardHourly
     Event:FireServer(A_1)
             end
         end)
@@ -1017,12 +1028,10 @@ end)
 end
 
 tab1:Label("การตีโยรุ")
-tab1:Label("┇ การตีโยรุ ┇")
-local sectiontab1_3 = tab1:DropdownTab("┇ การตีโยรุ ┇")
 local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
 section1_3:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
-end, "แสปมตีโยรุรั่วๆ")
+end)
 
 section1_3:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
@@ -1051,8 +1060,6 @@ end)
 local tab2 = win:Taps("ฟาร์ม")
 		
 tab2:Label("• มอนในแมพ")
-tab2:Label("┇ • มอนในแมพ ┇")
-local sectiontab3_1 = tab2:DropdownTab("┇ • มอนในแมพ ┇")
 local section1_3 = tab2:DropdownTab("┇ ฝั่งชั่น บังคับมอนตาย ┇")
 section1_3:Toggle("ออโต้ตาย มอนทั้งแมพ [ 100% ]", false, function(dthh)
     _G.autodie = dthh
@@ -1092,9 +1099,8 @@ spawn(function()
     end
 end)
 
-tab2:Label("┇ ฟาร์มผลไม้แสตท ┇")
-tab2:Label("┇ ┇ ฟาร์มผลไม้แสตท ┇ ┇")
-local sectiontab2_1 = tab2:DropdownTab("┇ ┇ ฟาร์มผลไม้แสตท ┇ ┇")
+tab2:Label("• ฟาร์มผลไม้แสตท")
+local sectiontab2_1 = tab2:DropdownTab("┇ ฟาร์มผลไม้แสตท ┇")
 tab2:Toggle("ออโต้ฟาร์ม แสตท", false, function(stts)
     _G.automixer = stts
 end)
@@ -1230,8 +1236,6 @@ spawn(function()
 end)
 
 tab2:Label("• ฝั่งชั่น ฟาร์มมอน")
-tab2:Label("┇ • ฝั่งชั่น ฟาร์มมอน ┇")
-local sectiontab3_2 = tab2:DropdownTab("┇ • ฝั่งชั่น ฟาร์มมอน ┇")
 local section2_3 = tab2:DropdownTab("┇ ฟาร์มมอน ┇")
 section2_3:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
     selectedWapon = wapn
@@ -1573,8 +1577,6 @@ spawn(function() -- autofarm cannon
 end)
 
 tab2:Label("• ฝั่งชั่น ฟาร์มด้วยผลไม้")
-tab2:Label("┇ • ฝั่งชั่น ฟาร์มด้วยผลไม้ ┇")
-local sectiontab2_2 = tab2:DropdownTab("┇ • ฝั่งชั่น ฟาร์มด้วยผลไม้ ┇")
 local section2_4 = tab2:DropdownTab("┇ ออโต้ ฟาร์มด้วยผลไม้ ┇")
 section2_4:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
     _G.quakefarm = qke
@@ -1672,8 +1674,6 @@ spawn(function() -- Light farm npcs
 end)
 
 tab2:Label("• ฝั่งชั่น ฮาคิ")
-tab2:Label("┇ • ฝั่งชั่น ฮาคิ ┇")
-local sectiontab2_3 = tab2:DropdownTab("┇ • ฝั่งชั่น ฮาคิ ┇")
 local section2_5 = tab2:DropdownTab("┇ ออโต้ ฟาร์มฮาคิ ┇")
 section2_5:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
@@ -1806,12 +1806,9 @@ end)
 
 section2_5:Label("↑ คำเตือน: อาจโดนเด้งออกเซิฟ ถ้าใช้นานเกินไป ↑")
 		
-local tab3 = win:Taps("Skill")
-tab3:Label("สกิล")
-local section3_1 = tab3:DropdownTab("┇ ออโต้ สกิลผลช่อง 1 ( ไม่ทำงาน ) ┇")
-
-tab3:Label("┇ Spam Skill ┇")
-local sectiontab3_2 = tab3:DropdownTab("┇ Spam Skill ┇")
+local tab3 = win:Taps("สกิล")
+tab3:Label("แสปมสกิล")
+local sectiontab3_2 = tab3:DropdownTab("┇ แสปมสกิลผลไม้ ┇")
 
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
@@ -2105,17 +2102,17 @@ game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireSe
     end
 end)
 
-tab3:Label("┇ Max Charge Skill ┇")
-local sectiontab3_3 = tab3:DropdownTab("┇ Max Charge Skill ┇")
-sectiontab3_3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
+tab3:Label("• สกิล 100%")
+local sectiontab3_3 = tab3:DropdownTab("┇ ฝั่งชั่น สกิล 100% ┇")
+sectiontab3_3:Toggle("สกิลชาร์จเต็ม [ 100% ]", false, function(smx)
 	_G.skillmax = smx
 end)
 
-local tab4 = win:Taps("Players")
+local tab4 = win:Taps("ผู้เล่น")
 
-tab4:Label("┇ Local Player ┇")
+tab4:Label("┇ ตัวผู้เล่น ┇")
 local sectiontab4_1 = tab4:DropdownTab("┇ Local Player ┇")
-sectiontab4_1:Toggle("Gode Mode [ 36% ]", false, function(gxd)
+sectiontab4_1:Toggle("อมตะ [ 36% ]", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2432,19 +2429,19 @@ task.spawn(function()
     end
 end)
 
-tab4:Label("┇ Player ┇")
-local sectiontab4_2 = tab4:DropdownTab("┇ Player ┇")
+tab4:Label("• ผู้เล่นทั้งหมด")
+local sectiontab4_2 = tab4:DropdownTab("┇ ผู้เล่น ┇")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-sectiontab4_2:Dropdown("Select Player:", playerNames, function(name)
+sectiontab4_2:Dropdown("เลือก ผู้เล่น:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-sectiontab4_2:Button("Refresh Player", function()
+sectiontab4_2:Button("รีเฟรช ชื่อผู้เล่น", function()
     lib:Notifile("Alert", "รีเฟรชแล้ว!", 3)
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
@@ -2452,11 +2449,11 @@ sectiontab4_2:Button("Refresh Player", function()
 				end
 			end)
 		
-sectiontab4_2:Button("Click to Tp", function()
+sectiontab4_2:Button("วาปไปหา ผู้เล่น", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-sectiontab4_2:Button("Check Data & Storage Player", function()
+sectiontab4_2:Button("เช็คดาต้าข้อมูล และ เช็คช่องเก็บผล 1-12", function()
 local selectedName = selectedPlayer
 local player = game.Players:FindFirstChild(selectedName)
 if not player then return end
@@ -2536,7 +2533,7 @@ print("-- =================================== --")
 end)
 
 
-sectiontab4_2:Toggle("View", false, function(state)
+sectiontab4_2:Toggle("ส่อง", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -2549,7 +2546,7 @@ sectiontab4_2:Toggle("View", false, function(state)
 	end
 end)
 
-sectiontab4_2:Toggle("Auto Bring Player [ All ]", false, function(plal)
+sectiontab4_2:Toggle("ดึงผู้เล่นทั้งหมด", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -2570,7 +2567,7 @@ spawn(function() -- bring Plr
     end
 end)
 		
-sectiontab4_2:Toggle("Aim Silent [ Select Player ]", false, function(value)
+sectiontab4_2:Toggle("ล็อคเป้า [ เลือกผู้เล่นก่อนใช้ ]", false, function(value)
     aimsilent = value
 end)
 
@@ -2599,17 +2596,17 @@ return index(a, b, c)
 end)
 
 
-tab4:Label("┇ Function Kill Players ┇")
-local sectiontab4_3 = tab4:DropdownTab("┇ Function Kill Players ┇")
-sectiontab4_3:Toggle("Auto Cannon Ball Kill", false, function(bplr)
+tab4:Label("• ฆ่าผู้เล่น")
+local sectiontab4_3 = tab4:DropdownTab("┇ ฝั่งชั่นฆ่าผู้เล่น ┇")
+sectiontab4_3:Toggle("ออโต้ลูกปืนฆ่าผู้เล่น", false, function(bplr)
     _G.autocannonplr = bplr
 end)
 
-sectiontab4_3:Toggle("Auto Quake Kill", false, function(qkkl)
+sectiontab4_3:Toggle("ออโต้ กุระฆ่าผู้เล่น", false, function(qkkl)
 	_G.Quakekill = qkkl
 end)
 
-sectiontab4_3:Toggle("Auto Bomb Kill", false, function(kbmb)
+sectiontab4_3:Toggle("ออโต้ ระเบิดฆ่าผู้เล่น", false, function(kbmb)
     _G.killbomb = kbmb
 end)
 
@@ -2660,15 +2657,15 @@ end)
 		
 plr = game.Players.LocalPlayer
 
-local tab5 = win:Taps("Island")
+local tab5 = win:Taps("เกาะ")
 
-tab5:Label("┇ Islands ┇")
-local sectiontab5_1 = tab5:DropdownTab("┇ Islands ┇")
-sectiontab5_1:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+tab5:Label("• เกาะ")
+local sectiontab5_1 = tab5:DropdownTab("┇ เกาะ ┇")
+sectiontab5_1:Dropdown("เลือก เกาะ:", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-sectiontab5_1:Button("Click to Tp" , function()
+sectiontab5_1:Button("วาปไปที่" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -2736,13 +2733,13 @@ sectiontab5_1:Button("Click to Tp" , function()
                 end
 end)
 
-tab5:Label("┇ SAFE ZONE ┇")
-local sectiontab5_2 = tab5:DropdownTab("┇ SAFE ZONE ┇")
-sectiontab5_2:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+tab5:Label("┇ เซฟโซน ┇")
+local sectiontab5_2 = tab5:DropdownTab("┇ เกาะเซฟโซน ┇")
+sectiontab5_2:Dropdown("เลือก เซฟโซน:", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-sectiontab5_2:Button("Click to Tp" , function()
+sectiontab5_2:Button("วาปไปที่" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -2756,13 +2753,13 @@ sectiontab5_2:Button("Click to Tp" , function()
         end
     end)
 
-tab5:Label("┇ NPCs ┇")
-local sectiontab5_3 = tab5:DropdownTab("┇ NPCs ┇")
-sectiontab5_3:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+tab5:Label("┇ เอ็นพีซี ┇")
+local sectiontab5_3 = tab5:DropdownTab("┇ เอ็นพีซี ┇")
+sectiontab5_3:Dropdown("เลือก เอ็นพีซี", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-sectiontab5_3:Button("Click to Tp" , function()
+sectiontab5_3:Button("วาปไปที่" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -2799,15 +2796,15 @@ sectiontab5_3:Button("Click to Tp" , function()
         end
     end)
 
-local tab6 = win:Taps("NPCs")
+local tab6 = win:Taps("เอ็นพีซี")
 
-tab6:Label("┇ Shop ┇")
-local sectiontab6_1 = tab6:DropdownTab("┇ Shop ┇")
-sectiontab6_1:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
+tab6:Label("┇ ช็อป ┇")
+local sectiontab6_1 = tab6:DropdownTab("┇ ซื้อน้ำ-ดื่ม ┇")
+sectiontab6_1:Dropdown("เลือก น้ำ:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-sectiontab6_1:Toggle("Auto Buy Drinks", false, function(bdy)
+sectiontab6_1:Toggle("ออโต้ ซื้อน้ำ", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -2841,7 +2838,7 @@ wait(.8)
 end)
 
 
-sectiontab6_1:Toggle("Auto Drinks All", false, function(drks)
+sectiontab6_1:Toggle("ออโต้ดื่มทั้งหมด", false, function(drks)
 	AutoDrinks = drks
 end)
 
@@ -2874,8 +2871,8 @@ wait(.8)
     end
 end)
 
-tab6:Label("┇ Function Auto Affinities [ 2.0 ] ┇")
-local sectiontab6_2 = tab6:DropdownTab("┇ Function Auto Affinities [ 2.0 ] ┇")
+tab6:Label("• สุ่มพลังผลพีรามิด [ 10 ขีด ]")
+local sectiontab6_2 = tab6:DropdownTab("┇ ฝั่งชั่น ออโต้สุ่มขีด [ 10 ขีด ] ┇")
 
 -- Prepare dropdownDF
 local player = game.Players.LocalPlayer
@@ -2902,22 +2899,22 @@ end
 local selectedDF = nil
 local lockvalue = nil
 
-sectiontab6_2:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
+sectiontab6_2:Dropdown("เลือก ผลไม้สุ่ม:", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
 
-sectiontab6_2:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+sectiontab6_2:Dropdown("เลือก ล็อคค่า:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-sectiontab6_2:Dropdown("Select Reroll:", {"Beri", "Gems"}, function(srll)
+sectiontab6_2:Dropdown("เลือก แบบสุ่ม:", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
 local isRunning1 = false
 local task1Thread
 
-sectiontab6_2:Toggle("Auto Reroll", false, function(rol)
+sectiontab6_2:Toggle("ออโต้ สุ่ม", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -2989,256 +2986,11 @@ sectiontab6_2:Toggle("Auto Reroll", false, function(rol)
         end)
     end
 end)
-
---[[
-local isRunning1 = false
-local task1Thread
-
-sectiontab6_2:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
-    isRunning1 = rol
-
-    if isRunning1 then
-        task1Thread = task.spawn(function()
-            while isRunning1 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isRunning2 = false
-local task2Thread
-
-sectiontab6_2:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
-    isRunning2 = roll
-
-    if isRunning2 then
-        task2Thread = task.spawn(function()
-            while isRunning2 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Cash"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-tab6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
-local sectiontab6_3 = tab6:DropdownTab("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
-
-local isRunning3 = false
-local task3Thread
-
-sectiontab6_3:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
-    isRunning3 = rolg
-
-    if isRunning3 then
-        task3Thread = task.spawn(function()
-            while isRunning3 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT1
-                local AffMelee1 = userDataName.Data.DFT1Melee.Value
-                local AffSniper1 = userDataName.Data.DFT1Sniper.Value
-                local AffDefense1 = userDataName.Data.DFT1Defense.Value
-                local AffSword1 = userDataName.Data.DFT1Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper1 == 2 and AffSword1 == 2 and AffMelee1 == 2 and AffDefense1 == 2 then
-                    isRunning1 = false
-                    break
-                end
-
-                local args1 = {
-                    [1] = "DFT1",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense1 == 2 then args1[2] = 0/0 end
-                if AffMelee1 == 2 then args1[3] = 0/0 end
-                if AffSniper1 == 2 then args1[4] = 0/0 end
-                if AffSword1 == 2 then args1[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args1))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-
-local isRunning4 = false
-local task4Thread
-
-sectiontab6_3:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
-    isRunning4 = rollg
-
-    if isRunning4 then
-        task4Thread = task.spawn(function()
-            while isRunning4 do
-                task.wait(8)
-
-                local player = game.Players.LocalPlayer
-                local playerId = player.UserId
-                local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
-                if not userDataName then continue end
-
-                -- DFT2
-                local AffMelee2 = userDataName.Data.DFT2Melee.Value
-                local AffSniper2 = userDataName.Data.DFT2Sniper.Value
-                local AffDefense2 = userDataName.Data.DFT2Defense.Value
-                local AffSword2 = userDataName.Data.DFT2Sword.Value
-
-                -- Stop if all are 2
-                if AffSniper2 == 2 and AffSword2 == 2 and AffMelee2 == 2 and AffDefense2 == 2 then
-                    isRunning2 = false
-                    break
-                end
-
-                local args2 = {
-                    [1] = "DFT2",
-                    [2] = false, -- defense
-                    [3] = false, -- melee
-                    [4] = false, -- sniper
-                    [5] = false, -- sword
-                    [6] = "Gems"
-                }
-
-                if AffDefense2 == 2 then args2[2] = 0/0 end
-                if AffMelee2 == 2 then args2[3] = 0/0 end
-                if AffSniper2 == 2 then args2[4] = 0/0 end
-                if AffSword2 == 2 then args2[5] = 0/0 end
-
-                local merchant = workspace:FindFirstChild("Merchants")
-                if merchant then
-                    local affinityMerchant = merchant:FindFirstChild("AffinityMerchant")
-                    if affinityMerchant then
-                        local clickable = affinityMerchant:FindFirstChild("Clickable")
-                        if clickable then
-                            local retum = clickable:FindFirstChild("Retum")
-                            if retum then
-                                retum:FireServer(unpack(args2))
-                            end
-                        end
-                    end
-                end
-            end
-        end)
-    end
-end)
-]]--
   
-local tab7 = win:Taps("Quest Sam")
+local tab7 = win:Taps("เควสแซม")
 
-tab7:Label("┇ Function Storage ┇")
-local sectiontab7_1 = tab7:DropdownTab("┇ Function Storage ┇")
+tab7:Label("┇ ที่เก็บ ┇")
+local sectiontab7_1 = tab7:DropdownTab("┇ ฝั่งชั่น ที่เก็บ ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
