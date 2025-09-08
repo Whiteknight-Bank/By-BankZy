@@ -446,6 +446,65 @@ function newPage:Toggle(parent, text, default, callback, subtext)
     end)
 end
 
+function newPage:TextBox(parent, title, default, callback, subtext)
+    if typeof(parent) ~= "Instance" then
+        subtext = callback
+        callback = default
+        default = title
+        title = parent
+        parent = page
+    end
+
+    local height = (subtext and #tostring(subtext) > 0) and 55 or 35
+
+    local boxFrame = Instance.new("Frame", parent)
+    boxFrame.Size = UDim2.new(1, -10, 0, height)
+    boxFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    boxFrame.BackgroundTransparency = 0.5
+    Instance.new("UICorner", boxFrame).CornerRadius = UDim.new(0, 6)
+
+    local titleLabel = Instance.new("TextLabel", boxFrame)
+    titleLabel.Size = UDim2.new(0.5, -10, 0, 30)
+    titleLabel.Position = UDim2.new(0, 10, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 16
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Text = title
+
+    local input = Instance.new("TextBox", boxFrame)
+    input.Size = UDim2.new(0.5, -15, 0, 25)
+    input.Position = UDim2.new(0.5, 5, 0, 3)
+    input.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    input.TextColor3 = Color3.fromRGB(255, 255, 255)
+    input.Font = Enum.Font.SourceSans
+    input.TextSize = 16
+    input.TextXAlignment = Enum.TextXAlignment.Left
+    input.ClearTextOnFocus = false
+    input.Text = default or ""
+    Instance.new("UICorner", input).CornerRadius = UDim.new(0, 6)
+
+    if subtext and typeof(subtext) == "string" and subtext ~= "" then
+        local sub = Instance.new("TextLabel", boxFrame)
+        sub.Size = UDim2.new(1, -20, 0, 20)
+        sub.Position = UDim2.new(0, 10, 0, 32)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    input.FocusLost:Connect(function(enterPressed)
+        if callback then
+            callback(input.Text)
+        end
+    end)
+        end
+
 function newPage:DropdownTab(title)
     local tabFrame = Instance.new("Frame", page)
     tabFrame.Size = UDim2.new(1, -10, 0, 30)
@@ -749,6 +808,69 @@ end
 function subPage:Dropdown(title, items, callback, subtext, multi)
     return newPage:Dropdown(container, title, items, callback, subtext, multi)
 end
+
+function subPage:TextBox(parent, title, default, callback, subtext)
+    if typeof(parent) ~= "Instance" then
+        subtext = callback
+        callback = default
+        default = title
+        title = parent
+        parent = page
+    end
+
+    local height = (subtext and #tostring(subtext) > 0) and 55 or 35
+
+    local boxFrame = Instance.new("Frame", parent)
+    boxFrame.Size = UDim2.new(1, -10, 0, height)
+    boxFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    boxFrame.BackgroundTransparency = 0.5
+    Instance.new("UICorner", boxFrame).CornerRadius = UDim.new(0, 6)
+
+    local titleLabel = Instance.new("TextLabel", boxFrame)
+    titleLabel.Size = UDim2.new(0.5, -10, 0, 30)
+    titleLabel.Position = UDim2.new(0, 10, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSansBold
+    titleLabel.TextSize = 16
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Text = title
+
+    local input = Instance.new("TextBox", boxFrame)
+    input.Size = UDim2.new(0.5, -15, 0, 25)
+    input.Position = UDim2.new(0.5, 5, 0, 3)
+    input.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    input.TextColor3 = Color3.fromRGB(255, 255, 255)
+    input.Font = Enum.Font.SourceSans
+    input.TextSize = 16
+    input.TextXAlignment = Enum.TextXAlignment.Left
+    input.ClearTextOnFocus = false
+    input.Text = default or ""
+    Instance.new("UICorner", input).CornerRadius = UDim.new(0, 6)
+
+    if subtext and typeof(subtext) == "string" and subtext ~= "" then
+        local sub = Instance.new("TextLabel", boxFrame)
+        sub.Size = UDim2.new(1, -20, 0, 20)
+        sub.Position = UDim2.new(0, 10, 0, 32)
+        sub.BackgroundTransparency = 1
+        sub.TextColor3 = Color3.fromRGB(200, 200, 200)
+        sub.Font = Enum.Font.SourceSansItalic
+        sub.TextSize = 14
+        sub.TextXAlignment = Enum.TextXAlignment.Left
+        sub.TextWrapped = true
+        sub.Text = subtext
+    end
+
+    input.FocusLost:Connect(function(enterPressed)
+        if callback then
+            callback(input.Text)
+        end
+    end)
+end
+
+function subPage:TextBox(parent, title, , default, callback, subtext)
+    return newPage:Dropdown(container, parent, title, default, callback, subtext)
+            end
 
     return subPage
 end
