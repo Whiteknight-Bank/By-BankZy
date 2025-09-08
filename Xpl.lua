@@ -300,6 +300,8 @@ end
 local tab1 = win:Taps("เมนูหลัก")
 
 tab1:Label(" • การเกิด")
+tab1:Label("┇  • การเกิด ┇")
+local sectiontab1_1 = tab1:DropdownTab("┇  • การเกิด ┇")
 
 local section1_1 = tab1:DropdownTab("┇ ฝั่งชั่น การเกิด ┇")
 
@@ -398,6 +400,8 @@ spawn(function()
 end)
 
 tab1:Label(" • ฝั่งชั่นออโต้")
+tab1:Label("┇  • ฝั่งชั่นออโต้ ┇")
+local sectiontab1_2 = tab1:DropdownTab("┇  • ฝั่งชั่นออโต้ ┇")
 local section1_2 = tab1:DropdownTab("┇ ฝั่งชั่น ออโต้ต่างๆ ┇")
 section1_2:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
         AutoMission = dmmsv
@@ -932,7 +936,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
+sectiontab1_2:Toggle("ออโต้ กดรับของขวัญ [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -1013,6 +1017,8 @@ end)
 end
 
 tab1:Label("การตีโยรุ")
+tab1:Label("┇ การตีโยรุ ┇")
+local sectiontab1_3 = tab1:DropdownTab("┇ การตีโยรุ ┇")
 local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
 section1_3:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
@@ -1044,7 +1050,9 @@ end)
 		
 local tab2 = win:Taps("ฟาร์ม")
 		
-tab3:Label("• มอนในแมพ")
+tab2:Label("• มอนในแมพ")
+tab2:Label("┇ • มอนในแมพ ┇")
+local sectiontab3_1 = tab2:DropdownTab("┇ • มอนในแมพ ┇")
 local section1_3 = tab2:DropdownTab("┇ ฝั่งชั่น บังคับมอนตาย ┇")
 section1_3:Toggle("ออโต้ตาย มอนทั้งแมพ [ 100% ]", false, function(dthh)
     _G.autodie = dthh
@@ -1085,6 +1093,8 @@ spawn(function()
 end)
 
 tab2:Label("┇ ฟาร์มผลไม้แสตท ┇")
+tab2:Label("┇ ┇ ฟาร์มผลไม้แสตท ┇ ┇")
+local sectiontab2_1 = tab2:DropdownTab("┇ ┇ ฟาร์มผลไม้แสตท ┇ ┇")
 tab2:Toggle("ออโต้ฟาร์ม แสตท", false, function(stts)
     _G.automixer = stts
 end)
@@ -1219,13 +1229,16 @@ spawn(function()
     end)
 end)
 
-tab3:Label("• ฝั่งชั่น ฟาร์มมอน")
+tab2:Label("• ฝั่งชั่น ฟาร์มมอน")
+tab2:Label("┇ • ฝั่งชั่น ฟาร์มมอน ┇")
+local sectiontab3_2 = tab2:DropdownTab("┇ • ฝั่งชั่น ฟาร์มมอน ┇")
 local section2_3 = tab2:DropdownTab("┇ ฟาร์มมอน ┇")
 section2_3:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
     selectedWapon = wapn
 end)
 
 section2_3:Button("Refresh Weapon", function()
+    lib:Notifile("Alert", "รีเฟรชแล้ว!", 3)
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1560,6 +1573,8 @@ spawn(function() -- autofarm cannon
 end)
 
 tab2:Label("• ฝั่งชั่น ฟาร์มด้วยผลไม้")
+tab2:Label("┇ • ฝั่งชั่น ฟาร์มด้วยผลไม้ ┇")
+local sectiontab2_2 = tab2:DropdownTab("┇ • ฝั่งชั่น ฟาร์มด้วยผลไม้ ┇")
 local section2_4 = tab2:DropdownTab("┇ ออโต้ ฟาร์มด้วยผลไม้ ┇")
 section2_4:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
     _G.quakefarm = qke
@@ -1657,6 +1672,8 @@ spawn(function() -- Light farm npcs
 end)
 
 tab2:Label("• ฝั่งชั่น ฮาคิ")
+tab2:Label("┇ • ฝั่งชั่น ฮาคิ ┇")
+local sectiontab2_3 = tab2:DropdownTab("┇ • ฝั่งชั่น ฮาคิ ┇")
 local section2_5 = tab2:DropdownTab("┇ ออโต้ ฟาร์มฮาคิ ┇")
 section2_5:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
@@ -1789,30 +1806,32 @@ end)
 
 section2_5:Label("↑ คำเตือน: อาจโดนเด้งออกเซิฟ ถ้าใช้นานเกินไป ↑")
 		
-local Tab3 = Window:Taps("Skill")
-local page3 = Tab3:newpage()
+local tab3 = win:Taps("Skill")
+tab3:Label("สกิล")
+local section3_1 = tab3:DropdownTab("┇ ออโต้ สกิลผลช่อง 1 ( ไม่ทำงาน ) ┇")
 
-page3:Label("┇ Spam Skill ┇")
+tab3:Label("┇ Spam Skill ┇")
+local sectiontab3_2 = tab3:DropdownTab("┇ Spam Skill ┇")
 
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
+sectiontab3_2:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
 local spamtimeSet = false
 		
-page3:Textbox("Per Second :", "Enter Number", function(xtx)
+sectiontab3_2:Textbox("Per Second :", "Enter Number", function(xtx)
     getgenv().spamtime = tonumber(xtx)
     spamtimeSet = true
 end)
 
-page3:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
+sectiontab3_2:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
     selectedSpamSkill = sps
 end)
 
-page3:Toggle("Auto Spam [ 100% ]", false, function(spam)
+sectiontab3_2:Toggle("Auto Spam [ 100% ]", false, function(spam)
     _G.skillspam = spam
 end)
 
@@ -2086,16 +2105,17 @@ game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireSe
     end
 end)
 
-page3:Label("┇ Max Charge Skill ┇")
-page3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
+tab3:Label("┇ Max Charge Skill ┇")
+local sectiontab3_3 = tab3:DropdownTab("┇ Max Charge Skill ┇")
+sectiontab3_3:Toggle("Max Charge Skill [ 100% ]", false, function(smx)
 	_G.skillmax = smx
 end)
 
-local Tab4 = Window:Taps("Players")
-local page4 = Tab4:newpage()
+local tab4 = win:Taps("Players")
 
-page4:Label("┇ Local Player ┇")
-page4:Toggle("Gode Mode [ 36% ]", false, function(gxd)
+tab4:Label("┇ Local Player ┇")
+local sectiontab4_1 = tab4:DropdownTab("┇ Local Player ┇")
+sectiontab4_1:Toggle("Gode Mode [ 36% ]", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2412,29 +2432,31 @@ task.spawn(function()
     end
 end)
 
-page4:Label("┇ Player ┇")
+tab4:Label("┇ Player ┇")
+local sectiontab4_2 = tab4:DropdownTab("┇ Player ┇")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-page4:Dropdown("Select Player:", playerNames, function(name)
+sectiontab4_2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-page4:Button("Refresh Player", function()
+sectiontab4_2:Button("Refresh Player", function()
+    lib:Notifile("Alert", "รีเฟรชแล้ว!", 3)
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
 				end
 			end)
 		
-page4:Button("Click to Tp", function()
+sectiontab4_2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("Check Data & Storage Player", function()
+sectiontab4_2:Button("Check Data & Storage Player", function()
 local selectedName = selectedPlayer
 local player = game.Players:FindFirstChild(selectedName)
 if not player then return end
@@ -2514,7 +2536,7 @@ print("-- =================================== --")
 end)
 
 
-page4:Toggle("View", false, function(state)
+sectiontab4_2:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -2527,7 +2549,7 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Toggle("Auto Bring Player [ All ]", false, function(plal)
+sectiontab4_2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -2548,7 +2570,7 @@ spawn(function() -- bring Plr
     end
 end)
 		
-page4:Toggle("Aim Silent [ Select Player ]", false, function(value)
+sectiontab4_2:Toggle("Aim Silent [ Select Player ]", false, function(value)
     aimsilent = value
 end)
 
@@ -2577,16 +2599,17 @@ return index(a, b, c)
 end)
 
 
-page4:Label("┇ Function Kill Players ┇")
-page4:Toggle("Auto Cannon Ball Kill", false, function(bplr)
+tab4:Label("┇ Function Kill Players ┇")
+local sectiontab4_3 = tab4:DropdownTab("┇ Function Kill Players ┇")
+sectiontab4_3:Toggle("Auto Cannon Ball Kill", false, function(bplr)
     _G.autocannonplr = bplr
 end)
 
-page4:Toggle("Auto Quake Kill", false, function(qkkl)
+sectiontab4_3:Toggle("Auto Quake Kill", false, function(qkkl)
 	_G.Quakekill = qkkl
 end)
 
-page4:Toggle("Auto Bomb Kill", false, function(kbmb)
+sectiontab4_3:Toggle("Auto Bomb Kill", false, function(kbmb)
     _G.killbomb = kbmb
 end)
 
@@ -2637,15 +2660,15 @@ end)
 		
 plr = game.Players.LocalPlayer
 
-local Tab5 = Window:Taps("Island")
-local page5 = Tab5:newpage()
+local tab5 = win:Taps("Island")
 
-page5:Label("┇ Islands ┇")
-page5:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+tab5:Label("┇ Islands ┇")
+local sectiontab5_1 = tab5:DropdownTab("┇ Islands ┇")
+sectiontab5_1:Dropdown("Select Islands", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-page5:Button("Click to Tp" , function()
+sectiontab5_1:Button("Click to Tp" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -2713,12 +2736,13 @@ page5:Button("Click to Tp" , function()
                 end
 end)
 
-page5:Label("┇ SAFE ZONE ┇")
-page5:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+tab5:Label("┇ SAFE ZONE ┇")
+local sectiontab5_2 = tab5:DropdownTab("┇ SAFE ZONE ┇")
+sectiontab5_2:Dropdown("Select SafeZone", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-page5:Button("Click to Tp" , function()
+sectiontab5_2:Button("Click to Tp" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -2732,12 +2756,13 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-page5:Label("┇ NPCs ┇")
-page5:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+tab5:Label("┇ NPCs ┇")
+local sectiontab5_3 = tab5:DropdownTab("┇ NPCs ┇")
+sectiontab5_3:Dropdown("Select NPCs", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-page5:Button("Click to Tp" , function()
+sectiontab5_3:Button("Click to Tp" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -2774,15 +2799,15 @@ page5:Button("Click to Tp" , function()
         end
     end)
 
-local Tab6 = Window:Taps("NPCs")
-local page6 = Tab6:newpage()
+local tab6 = win:Taps("NPCs")
 
-page6:Label("┇ Shop ┇")
-page6:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
+tab6:Label("┇ Shop ┇")
+local sectiontab6_1 = tab6:DropdownTab("┇ Shop ┇")
+sectiontab6_1:Dropdown("Select Drink:", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Toggle("Auto Buy Drinks", false, function(bdy)
+sectiontab6_1:Toggle("Auto Buy Drinks", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -2816,7 +2841,7 @@ wait(.8)
 end)
 
 
-page6:Toggle("Auto Drinks All", false, function(drks)
+sectiontab6_1:Toggle("Auto Drinks All", false, function(drks)
 	AutoDrinks = drks
 end)
 
@@ -2849,7 +2874,8 @@ wait(.8)
     end
 end)
 
-page6:Label("┇ Function Auto Affinities [ 2.0 ] ┇")
+tab6:Label("┇ Function Auto Affinities [ 2.0 ] ┇")
+local sectiontab6_2 = tab6:DropdownTab("┇ Function Auto Affinities [ 2.0 ] ┇")
 
 -- Prepare dropdownDF
 local player = game.Players.LocalPlayer
@@ -2876,22 +2902,22 @@ end
 local selectedDF = nil
 local lockvalue = nil
 
-page6:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
+sectiontab6_2:Dropdown("Select Fruit Reroll:", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
 
-page6:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+sectiontab6_2:Dropdown("Select Lock Value:", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-page6:Dropdown("Select Reroll:", {"Beri", "Gems"}, function(srll)
+sectiontab6_2:Dropdown("Select Reroll:", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
 local isRunning1 = false
 local task1Thread
 
-page6:Toggle("Auto Reroll", false, function(rol)
+sectiontab6_2:Toggle("Auto Reroll", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -2968,7 +2994,7 @@ end)
 local isRunning1 = false
 local task1Thread
 
-page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
+sectiontab6_2:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -3028,7 +3054,7 @@ end)
 local isRunning2 = false
 local task2Thread
 
-page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
+sectiontab6_2:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
     isRunning2 = roll
 
     if isRunning2 then
@@ -3085,12 +3111,13 @@ page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(roll)
     end
 end)
 
-page6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
+tab6:Label("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
+local sectiontab6_3 = tab6:DropdownTab("┇ Function Auto Affinities 2.0 ( Gems ) ┇")
 
 local isRunning3 = false
 local task3Thread
 
-page6:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
+sectiontab6_3:Toggle("Auto Reroll Affinity 2.0 (Left/ซ้าย)", false, function(rolg)
     isRunning3 = rolg
 
     if isRunning3 then
@@ -3150,7 +3177,7 @@ end)
 local isRunning4 = false
 local task4Thread
 
-page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
+sectiontab6_3:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg)
     isRunning4 = rollg
 
     if isRunning4 then
@@ -3208,10 +3235,10 @@ page6:Toggle("Auto Reroll Affinity 2.0 (Right/ขวา)", false, function(rollg
 end)
 ]]--
   
-local Tab7 = Window:Taps("Quest Sam")
-local page7 = Tab7:newpage()
+local tab7 = win:Taps("Quest Sam")
 
-page7:Label("┇ Function Storage ┇")
+tab7:Label("┇ Function Storage ┇")
+local sectiontab7_1 = tab7:DropdownTab("┇ Function Storage ┇")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
@@ -3229,11 +3256,11 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
-page7:Toggle("Auto Storage", false, function(value)
+sectiontab7_1:Toggle("Auto Storage", false, function(value)
     Cache.Boolean.StorageAll = value
 end)
 
-page7:Toggle("Auto Storage [ Aura ]", false, function(shy)
+sectiontab7_1:Toggle("Auto Storage [ Aura ]", false, function(shy)
     Cache.Boolean.StorageKeepShiny = shy
 end)
 
@@ -3273,8 +3300,9 @@ spawn(function()
     end
 end)
 
-page7:Label("┇ Function Quest Sam ┇")
-page7:Toggle("Auto Find", false, function(comp)
+tab7:Label("┇ Function Quest Sam ┇")
+local sectiontab7_2 = tab7:DropdownTab("┇ Function Quest Sam ┇")
+sectiontab7_2:Toggle("Auto Find", false, function(comp)
     AutoComp = comp
 end)
 
@@ -3298,7 +3326,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Claim 1 Compass", false, function(clmp)
+sectiontab7_2:Toggle("Auto Claim 1 Compass", false, function(clmp)
     AutoClaimComp1 = clmp
 end)
 
@@ -3312,7 +3340,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Claim 10 Compass", false, function(clmpp)
+sectiontab7_2:Toggle("Auto Claim 10 Compass", false, function(clmpp)
     AutoClaimComp2 = clmpp
 end)
 
@@ -3326,8 +3354,9 @@ spawn(function()
     end
 end)
 
-page7:Label("Check Rare and Function Storage")
-page7:Toggle("Check Rare Fruity", false, function(chre)
+tab7:Label("Check Rare and Function Storage")
+local sectiontab7_3 = tab7:DropdownTab("Check Rare and Function Storage")
+sectiontab7_3:Toggle("Check Rare Fruity", false, function(chre)
     _G.checkrare = chre
 end)
 
@@ -3431,8 +3460,9 @@ spawn(function()
 	end
 end)
 
-page7:Label("┇ Function Steal Fruity ┇")
-page7:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
+tab7:Label("┇ Function Steal Fruity ┇")
+local sectiontab7_4 = tab7:DropdownTab("┇ Function Steal Fruity ┇")
+sectiontab7_4:Toggle("Auto Quake Steal Rare Fruit", false, function(qkst)
     _G.quakesteal = qkst
 end)
 
@@ -3506,7 +3536,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("Auto Bomb Steal Rare Fruit", false, function(qkst)
+sectiontab7_4:Toggle("Auto Bomb Steal Rare Fruit", false, function(qkst)
     _G.bombsteal = qkst
 end)
 
@@ -3592,20 +3622,21 @@ spawn(function()
     end
 end)
 
-page7:Label("↑ Use Quake to Steal Fruit ↑")
+tab7:Label("↑ Use Quake to Steal Fruit ↑")
+local sectiontab7_5 = tab7:DropdownTab("↑ Use Quake to Steal Fruit ↑")
 
-local Tab8 = Window:Taps("Misc")
-local page8 = Tab8:newpage()
+local tab8 = win:Taps("Misc")
 
-page8:Label("┇ Function Sever ┇")
-page8:Button("Rejoin Server", function()
+tab8:Label("┇ Function Sever ┇")
+local sectiontab8_1 = tab8:DropdownTab("┇ Function Sever ┇")
+sectiontab8_1:Button("Rejoin Server", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page8:Button("Hop Server", function()
+sectiontab8_1:Button("Hop Server", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -3684,8 +3715,9 @@ local PlaceID = game.PlaceId
 
 end)
 
-page8:Label("┇ Function Anti ┇")
-page8:Button("Anti Lag", function()
+tab8:Label("┇ Function Anti ┇")
+local sectiontab8_2 = tab8:DropdownTab("┇ Function Anti ┇")
+sectiontab8_2:Button("Anti Lag", function()
 create:Notifile("", "Pls Wait Start Anti Lag & Show FPS", 3)
 wait(2)
 
@@ -3803,7 +3835,7 @@ end)
 
 local afkConnection
 
-page8:Toggle("Anti AFK", false, function(state)
+sectiontab8_2:Toggle("Anti AFK", false, function(state)
 
     if state then
 	create:Notifile("", "Protect Kick AFK " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
@@ -3821,7 +3853,7 @@ page8:Toggle("Anti AFK", false, function(state)
     end
 end)
 
-page8:Toggle("Anti Stun", false, function(pol)
+sectiontab8_2:Toggle("Anti Stun", false, function(pol)
     _G.anti = pol
 end)
 
@@ -4162,7 +4194,7 @@ local RunService = game:GetService("RunService")
 local followConnection
 local seaPart
 
-page8:Toggle("Walk On Water", false, function(walk)
+sectiontab8_2:Toggle("Walk On Water", false, function(walk)
     if walk then
         create:Notifile("", "You can walk on water now! :)", 3)
 
@@ -4270,28 +4302,31 @@ for name, transform in pairs(npcMapping) do
     end
 end
 
-page8:Label("┇ The Secret Weapon Progress ┇")
-page8:Dropdown("Check Progress Weapon:", displayOptions, function(select)
+tab8:Label("┇ The Secret Weapon Progress ┇")
+local sectiontab8_3 = tab8:DropdownTab("┇ The Secret Weapon Progress ┇")
+sectiontab8_3:Dropdown("Check Progress Weapon:", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
 
-page8:Label("┇ Fake Weapon ┇")
-page8:Button("Aqua Staff" , function()
+tab8:Label("┇ Fake Weapon ┇")
+local sectiontab8_4 = tab8:DropdownTab("┇ Fake Weapon ┇")
+sectiontab8_4:Button("Aqua Staff" , function()
 local A_1 = "Aqua Staff"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
     Event:FireServer(A_1)
 end)
 
-page8:Button("Seastone Cestus [ Need 500 Melee ]" , function()
+sectiontab8_4:Button("Seastone Cestus [ Need 500 Melee ]" , function()
 local A_1 = "Seastone Cestus"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
     Event:FireServer(A_1)
 end)
 
-local Tab9 = Window:Taps("Dupe Gems")
-local page9 = Tab9:newpage()
+local tab9 = win:Taps("Dupe Gems")
 
-page9:Button("DUPE GAMES [ WARN: RESET STATS YOU ]" , function()
+tab9:Label("┇ หมวดหมู่ ┇")
+local sectiontab9_1 = tab9:DropdownTab("┇ หมวดหมู่ ┇")
+sectiontab9_1:Button("DUPE GAMES [ WARN: RESET STATS YOU ]" , function()
 create:Notifile("", "Start Dupe Gems: " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3) -- แจ้งเตือนเริ่มรีจอย
 wait(4)
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
@@ -4300,7 +4335,7 @@ game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId) -- รีจอยกลับเซิร์ฟเวอร์เดิม
 end)
 
-page9:Button("Turn gems into beri", function()
+sectiontab9_1:Button("Turn gems into beri", function()
     local player = game.Players.LocalPlayer
     local playerId = player.UserId
     local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
@@ -4348,6 +4383,7 @@ page9:Button("Turn gems into beri", function()
     end
 end)
 		
-page9:Section("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
+tab9:Label("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
+local sectiontab9_1 = tab9:DropdownTab("โปรดติดตามช่อง Youtube by @InwBank_zylv คนทำสคริป")
 
 	end)
