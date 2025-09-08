@@ -1033,7 +1033,7 @@ end)
 
 tab2:Label("• ฟาร์มผลไม้แสตท")
 local sectiontab2_1 = tab2:DropdownTab("┇ ฟาร์มผลไม้แสตท ┇")
-tab2:Toggle("ออโต้ฟาร์ม แสตท", false, function(stts)
+section2_1:Toggle("ออโต้ฟาร์ม แสตท", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1737,23 +1737,15 @@ while getgenv().haki do
 end)
 
 section2_5:Label("↑ คำเตือน: อาจโดนเด้งออกเซิฟ ถ้าใช้นานเกินไป ↑")
-		
-local tab3 = win:Taps("สกิล")
-tab3:Label("แสปมสกิล")
-local sectiontab3_2 = tab3:DropdownTab("┇ แสปมสกิลผลไม้ ┇")
 
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
+local tab3 = win:Taps("สกิล")
+tab3:Label("แสปมสกิล")
+local sectiontab3_2 = tab3:DropdownTab("┇ แสปมสกิลผลไม้ ┇")
 sectiontab3_2:Dropdown("Select Spam Fruit", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
-end)
-
-local spamtimeSet = false
-		
-sectiontab3_2:Textbox("Per Second :", "Enter Number", function(xtx)
-    getgenv().spamtime = tonumber(xtx)
-    spamtimeSet = true
 end)
 
 sectiontab3_2:Dropdown("Select Spam Skill", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
@@ -1766,13 +1758,7 @@ end)
 
 local pla = game.Players.LocalPlayer
 local Mouse = pla:GetMouse()
-
-task.defer(function()
-    wait(1)
-    if not spamtimeSet then
-        getgenv().spamtime = 0.1
-    end
-end)
+local getgenv().spamtime = 0.1
 		
 -- Quake
 spawn(function()
