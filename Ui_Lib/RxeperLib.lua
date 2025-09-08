@@ -1,11 +1,10 @@
--- Libinw_final.lua
--- UI Library with Tabs:newpage() structure and toggle open/close button
+-- RxeperLib_fixed.lua
+-- Fixed and enhanced UI Library (Dropdown overlap, search, multi-select, subtext, visual feedback)
 
 local library = {}
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
 local Players = game:GetService("Players")
 
 -- destroy old
@@ -57,13 +56,13 @@ function library:Win(title)
     titleLabel.TextSize = 18
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Toggle small button (always on screen)
+    -- Toggle small button
     local toggleBtn = Instance.new("TextButton", gui)
     toggleBtn.Name = "ToggleMenu"
     toggleBtn.Size = UDim2.new(0,30,0,30)
     toggleBtn.Position = UDim2.new(0,10,0,10)
     toggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-    toggleBtn.Text = "โก"
+    toggleBtn.Text = "≡"
     toggleBtn.TextColor3 = Color3.fromRGB(255,255,255)
     toggleBtn.Font = Enum.Font.GothamBold
     toggleBtn.TextSize = 18
@@ -119,34 +118,38 @@ function library:Win(title)
         end
     end
 
-function tabs:Taps(name)
-    local tabBtn = Instance.new("TextButton", tabFrame)
-    tabBtn.Size = UDim2.new(1,-12,0,36)
-    tabBtn.BackgroundColor3 = Color3.fromRGB(38,38,38)
-    tabBtn.Text = name
-    tabBtn.TextColor3 = Color3.fromRGB(255,255,255)
+    function tabs:Taps(name)
+        local tabBtn = Instance.new("TextButton", tabFrame)
+        tabBtn.Size = UDim2.new(1,-12,0,36)
+        tabBtn.BackgroundColor3 = Color3.fromRGB(38,38,38)
+        tabBtn.Text = name
+        tabBtn.TextColor3 = Color3.fromRGB(255,255,255)
+        tabBtn.Font = Enum.Font.SourceSans
+        tabBtn.TextSize = 16
+        uicorner(tabBtn, UDim.new(0,6))
+        tabBtn.TextXAlignment = Enum.TextXAlignment.Left
 
-    local page = Instance.new("ScrollingFrame", pagesHolder)
-    page.Name = name.."_Page"
-    page.Size = UDim2.new(1,0,1,0)
-    page.BackgroundTransparency = 1
-    page.ScrollBarThickness = 6
-    page.Visible = false
+        local page = Instance.new("ScrollingFrame", pagesHolder)
+        page.Name = name.."_Page"
+        page.Size = UDim2.new(1,0,1,0)
+        page.BackgroundTransparency = 1
+        page.ScrollBarThickness = 6
+        page.Visible = false
+        page.AutomaticCanvasSize = Enum.AutomaticSize.Y
 
-    local layout = Instance.new("UIListLayout", page)
-    layout.SortOrder = Enum.SortOrder.LayoutOrder
-    layout.Padding = UDim.new(0,8)
+        local layout = Instance.new("UIListLayout", page)
+        layout.SortOrder = Enum.SortOrder.LayoutOrder
+        layout.Padding = UDim.new(0,8)
 
-    -- โ… เน€เธเธดเธ” Tab เนเธฃเธเนเธ”เธขเธญเธฑเธ•เนเธเธกเธฑเธ•เธด
-    if #tabFrame:GetChildren() == 1 then
-        page.Visible = true
+        if #tabFrame:GetChildren() == 1 then
+            page.Visible = true
         end
 
         local tabAPI = {}
-
         function tabAPI:newpage()
             local pageAPI = {}
 
+            -- Label
             function pageAPI:Label(text)
                 local lbl = Instance.new("TextLabel", page)
                 lbl.Size = UDim2.new(1,-12,0,26)
@@ -156,65 +159,94 @@ function tabs:Taps(name)
                 lbl.TextSize = 16
                 lbl.TextXAlignment = Enum.TextXAlignment.Left
                 lbl.Text = text or ""
+                lbl.TextWrapped = true
                 return lbl
             end
 
-            function pageAPI:Button(text, callback)
+            -- Button
+            function pageAPI:Button(text, callback, subtext)
                 local btn = Instance.new("TextButton", page)
-                btn.Size = UDim2.new(1,-12,0,36)
+                btn.Size = UDim2.new(1,-12,0,44)
                 btn.BackgroundColor3 = Color3.fromRGB(60,60,60)
                 btn.TextColor3 = Color3.fromRGB(255,255,255)
                 btn.Font = Enum.Font.SourceSansBold
                 btn.TextSize = 16
-                btn.Text = text
+                btn.Text = text or "Button"
                 uicorner(btn, UDim.new(0,6))
+
+                if subtext and subtext ~= "" then
+                    local sub = Instance.new("TextLabel", btn)
+                    sub.Size = UDim2.new(1,-12,0,16)
+                    sub.Position = UDim2.new(0,6,1,-18)
+                    sub.BackgroundTransparency = 1
+                    sub.Text = subtext
+                    sub.TextColor3 = Color3.fromRGB(200,200,200)
+                    sub.Font = Enum.Font.SourceSans
+                    sub.TextSize = 13
+                    sub.TextXAlignment = Enum.TextXAlignment.Left
+                end
+
                 btn.MouseButton1Click:Connect(function()
                     if callback then pcall(callback) end
                 end)
+
                 return btn
             end
 
-            function pageAPI:Toggle(text, default, callback)
+            -- Toggle
+            function pageAPI:Toggle(text, default, callback, subtext)
                 local frame = Instance.new("Frame", page)
-                frame.Size = UDim2.new(1,-12,0,40)
+                frame.Size = UDim2.new(1,-12,0,48)
                 frame.BackgroundTransparency = 1
 
                 local label = Instance.new("TextLabel", frame)
-                label.Size = UDim2.new(1,-60,0,24)
-                label.Position = UDim2.new(0,6,0,8)
+                label.Size = UDim2.new(1,-80,0,24)
+                label.Position = UDim2.new(0,6,0,6)
                 label.BackgroundTransparency = 1
                 label.Text = text or ""
                 label.TextColor3 = Color3.fromRGB(255,255,255)
                 label.Font = Enum.Font.SourceSans
                 label.TextSize = 16
                 label.TextXAlignment = Enum.TextXAlignment.Left
+                label.TextWrapped = true
+
+                if subtext and subtext ~= "" then
+                    local sub = Instance.new("TextLabel", frame)
+                    sub.Size = UDim2.new(1,-80,0,16)
+                    sub.Position = UDim2.new(0,6,0,26)
+                    sub.BackgroundTransparency = 1
+                    sub.Text = subtext
+                    sub.TextColor3 = Color3.fromRGB(190,190,190)
+                    sub.Font = Enum.Font.SourceSans
+                    sub.TextSize = 13
+                    sub.TextXAlignment = Enum.TextXAlignment.Left
+                end
 
                 local toggleBtn = Instance.new("TextButton", frame)
-                toggleBtn.Size = UDim2.new(0,46,0,24)
-                toggleBtn.Position = UDim2.new(1,-56,0,8)
-                toggleBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-                toggleBtn.BorderSizePixel = 0
-                toggleBtn.AutoButtonColor = false
+                toggleBtn.Size = UDim2.new(0,56,0,28)
+                toggleBtn.Position = UDim2.new(1,-66,0,10)
+                toggleBtn.BackgroundColor3 = Color3.fromRGB(60,60,60)
+                toggleBtn.Text = ""
                 uicorner(toggleBtn, UDim.new(0,12))
 
-                local circle = Instance.new("Frame", toggleBtn)
-                circle.Size = UDim2.new(0,18,0,18)
-                circle.Position = default and UDim2.new(1,-20,0,3) or UDim2.new(0,4,0,3)
-                circle.BackgroundColor3 = default and Color3.fromRGB(0,170,255) or Color3.fromRGB(140,140,140)
-                circle.BorderSizePixel = 0
-                uicorner(circle, UDim.new(0,18))
+                local knob = Instance.new("Frame", toggleBtn)
+                knob.Size = UDim2.new(0,22,0,22)
+                knob.Position = default and UDim2.new(1,-26,0,3) or UDim2.new(0,4,0,3)
+                knob.BackgroundColor3 = default and Color3.fromRGB(45,200,80) or Color3.fromRGB(150,150,150)
+                uicorner(knob, UDim.new(0,10))
 
-                local state = default
+                local state = default or false
                 toggleBtn.MouseButton1Click:Connect(function()
                     state = not state
-                    circle:TweenPosition(state and UDim2.new(1,-20,0,3) or UDim2.new(0,4,0,3), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.12, true)
-                    circle.BackgroundColor3 = state and Color3.fromRGB(0,170,255) or Color3.fromRGB(140,140,140)
+                    knob.Position = state and UDim2.new(1,-26,0,3) or UDim2.new(0,4,0,3)
+                    knob.BackgroundColor3 = state and Color3.fromRGB(45,200,80) or Color3.fromRGB(150,150,150)
                     if callback then pcall(callback, state) end
                 end)
 
                 return frame
             end
 
+            -- Textbox
             function pageAPI:Textbox(title, placeholder, callback)
                 local container = Instance.new("Frame", page)
                 container.Size = UDim2.new(1,-12,0,40)
@@ -247,20 +279,36 @@ function tabs:Taps(name)
                 return box
             end
 
-            function pageAPI:Dropdown(title, items, callback)
+            -- Dropdown
+            function pageAPI:Dropdown(title, items, callback, multi, subtext)
+                multi = multi or false
+                items = items or {}
+
                 local container = Instance.new("Frame", page)
-                container.Size = UDim2.new(1,-12,0,40)
+                container.Size = UDim2.new(1,-12,0,(subtext and 56 or 40))
                 container.BackgroundTransparency = 1
 
                 local lbl = Instance.new("TextLabel", container)
-                lbl.Size = UDim2.new(0.4,0,1,0)
-                lbl.Position = UDim2.new(0,6,0,0)
+                lbl.Size = UDim2.new(0.4,0,0,20)
+                lbl.Position = UDim2.new(0,6,0,6)
                 lbl.BackgroundTransparency = 1
                 lbl.Text = title or ""
                 lbl.TextColor3 = Color3.fromRGB(255,255,255)
                 lbl.Font = Enum.Font.SourceSans
                 lbl.TextSize = 16
                 lbl.TextXAlignment = Enum.TextXAlignment.Left
+
+                if subtext and subtext ~= "" then
+                    local sub = Instance.new("TextLabel", container)
+                    sub.Size = UDim2.new(1,-12,0,16)
+                    sub.Position = UDim2.new(0,6,0,28)
+                    sub.BackgroundTransparency = 1
+                    sub.Text = subtext
+                    sub.TextColor3 = Color3.fromRGB(180,180,180)
+                    sub.Font = Enum.Font.SourceSans
+                    sub.TextSize = 13
+                    sub.TextXAlignment = Enum.TextXAlignment.Left
+                end
 
                 local btn = Instance.new("TextButton", container)
                 btn.Size = UDim2.new(0.56,-12,0,28)
@@ -272,36 +320,89 @@ function tabs:Taps(name)
                 btn.TextSize = 14
                 uicorner(btn, UDim.new(0,6))
 
-                local listFrame = Instance.new("Frame", container)
-                listFrame.Size = UDim2.new(1,0,0,0)
-                listFrame.Position = UDim2.new(0,0,1,0)
+                local listFrame = Instance.new("ScrollingFrame", page)
+                listFrame.Size = UDim2.new(1,-12,0,0)
                 listFrame.BackgroundColor3 = Color3.fromRGB(32,32,32)
+                listFrame.Position = UDim2.new(0,6,0,0)
                 listFrame.Visible = false
+                listFrame.ScrollBarThickness = 6
+                listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
                 uicorner(listFrame, UDim.new(0,6))
 
-                local layout = Instance.new("UIListLayout", listFrame)
-                layout.SortOrder = Enum.SortOrder.LayoutOrder
+                local listLayout = Instance.new("UIListLayout", listFrame)
+                listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+                listLayout.Padding = UDim.new(0,4)
 
-                btn.MouseButton1Click:Connect(function()
-                    listFrame.Visible = not listFrame.Visible
-                    listFrame.Size = listFrame.Visible and UDim2.new(1,0,0,#items*28) or UDim2.new(1,0,0,0)
-                    if listFrame.Visible then
-                        for _,c in ipairs(listFrame:GetChildren()) do if c:IsA("TextButton") then c:Destroy() end end
-                        for _,v in ipairs(items) do
+                local searchBox = Instance.new("TextBox", listFrame)
+                searchBox.Size = UDim2.new(1,-12,0,28)
+                searchBox.Position = UDim2.new(0,6,0,0)
+                searchBox.PlaceholderText = "Search..."
+                searchBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+                searchBox.Text = ""
+                uicorner(searchBox, UDim.new(0,6))
+
+                local selected = {}
+                local singleSelected = nil
+
+                local function buildOptions(filter)
+                    for _,child in ipairs(listFrame:GetChildren()) do
+                        if child:IsA("TextButton") then child:Destroy() end
+                    end
+
+                    for _,v in ipairs(items) do
+                        local textV = tostring(v)
+                        if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
                             local opt = Instance.new("TextButton", listFrame)
                             opt.Size = UDim2.new(1,-12,0,28)
-                            opt.Text = v
                             opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
                             opt.TextColor3 = Color3.fromRGB(255,255,255)
+                            opt.Text = textV
+                            opt.AutoButtonColor = false
                             uicorner(opt, UDim.new(0,6))
+
+                            if multi then
+                                if selected[textV] then
+                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                end
+                            else
+                                if singleSelected == textV then
+                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                end
+                            end
+
                             opt.MouseButton1Click:Connect(function()
-                                btn.Text = v
-                                listFrame.Visible = false
-                                listFrame.Size = UDim2.new(1,0,0,0)
-                                if callback then pcall(callback, v) end
+                                if multi then
+                                    if selected[textV] then
+                                        selected[textV] = nil
+                                        opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                                    else
+                                        selected[textV] = true
+                                        opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                    end
+                                    local result = {}
+                                    for k,_ in pairs(selected) do table.insert(result, k) end
+                                    btn.Text = (#result>0) and table.concat(result, ", ") or "Select..."
+                                    if callback then pcall(callback, result) end
+                                else
+                                    singleSelected = textV
+                                    btn.Text = textV
+                                    if callback then pcall(callback, textV) end
+                                    buildOptions(searchBox.Text)
+                                    listFrame.Visible = false
+                                    listFrame.Size = UDim2.new(1,-12,0,0)
+                                end
                             end)
                         end
                     end
+                end
+
+                searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+                    buildOptions(searchBox.Text)
+                    task.wait(0.03)
+                    local contentY = listLayout.AbsoluteContentSize.Y
+                    local target = math.min(220, contentY + 8)
+                    listFrame.Size = UDim2.new(1,-12,0,target)
                 end)
 
                 return container
