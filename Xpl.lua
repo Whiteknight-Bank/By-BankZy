@@ -1042,11 +1042,11 @@ end)
 end 
 end)
 		
-local Tab2 = Window:Taps("Farming")
-local page2 = Tab2:newpage()
-
-page2:Label("┇ Function Enemies ┇")
-page2:Toggle("Auto Death Mob [ 100% ]", false, function(dthh)
+local tab2 = win:Taps("ฟาร์ม")
+		
+tab3:Label("• มอนในแมพ")
+local section1_3 = tab2:DropdownTab("┇ ฝั่งชั่น บังคับมอนตาย ┇")
+section1_3:Toggle("ออโต้ตาย มอนทั้งแมพ [ 100% ]", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -1065,7 +1065,7 @@ spawn(function()
     end
 end)
 
-page2:Toggle("Auto Death Kaizu' Boss [ 100% ]", false, function(zki)
+section1_3:Toggle("ออโต้ตาย บอสหมัด [ 100% ]", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -1084,8 +1084,8 @@ spawn(function()
     end
 end)
 
-page2:Label("┇ Function Farm Fruity ┇")
-page2:Toggle("Auto Farm Stats", false, function(stts)
+tab2:Label("┇ ฟาร์มผลไม้แสตท ┇")
+tab2:Toggle("ออโต้ฟาร์ม แสตท", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1219,12 +1219,13 @@ spawn(function()
     end)
 end)
 
-page2:Label("┇ Function Farming ┇")
-page2:Dropdown("Select Weapon:", Wapon, function(wapn)
-    Wapon = wapn
+tab3:Label("• ฝั่งชั่น ฟาร์มมอน")
+local section2_3 = tab2:DropdownTab("┇ ฟาร์มมอน ┇")
+section2_3:Dropdown("เลือก อาวุธ:", Wapon, function(wapn)
+    selectedWapon = wapn
 end)
 
-page2:Button("Refresh Weapon", function()
+section2_3:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1233,7 +1234,7 @@ page2:Button("Refresh Weapon", function()
 				end
 			end)
 		
-page2:Toggle("Auto Farm", false, function(befrm)
+section2_3:Toggle("Auto Farm", false, function(befrm)
     _G.behindFarm = befrm
 end)
 
@@ -1281,7 +1282,7 @@ spawn(function()
     end
 end)
 		
-page2:Toggle("Auto Click", false, function(state)
+section2_3:Toggle("Auto Click", false, function(state)
     _G.autoclick = state
 end)
 
@@ -1296,7 +1297,7 @@ end)
 end) 
 end)
 
-page2:Toggle("Auto Equip", false, function(state)
+section2_3:Toggle("Auto Equip", false, function(state)
     _G.autoequip = state
 end)
 
@@ -1306,7 +1307,7 @@ spawn(function() -- auto equip
             if _G.autoequip then
                 repeat
                     wait(0.05)
-                    game:GetService 'Players'.LocalPlayer.Backpack[Wapon].Parent = game:GetService 'Players'.LocalPlayer.Character
+                    game:GetService 'Players'.LocalPlayer.Backpack[selectedWapon].Parent = game:GetService 'Players'.LocalPlayer.Character
                 until game.Players.LocalPlayer.Character.Humanoid.Health == 0 or _G.autoequip == false
                 if game.Players.LocalPlayer.Character.Humanoid.Health == 0 then
                     game:GetService 'Players'.LocalPlayer.Character:FindFirstChildOfClass 'Humanoid':UnequipTools()
@@ -1316,8 +1317,8 @@ spawn(function() -- auto equip
     end
 end)
 
-page2:Label("┇ Function Farm with Cannon Ball ┇")
-page2:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
+section2_3:Label("┇ Function Farm with Cannon Ball ┇")
+section2_3:Toggle("Auto Farm Cannon Ball [ Slow ]", false, function(bll)
     _G.autocannonslow = bll
 end)
 
@@ -1558,8 +1559,9 @@ spawn(function() -- autofarm cannon
     end
 end)
 
-page2:Label("┇ Other Farming With Skill DF ┇")
-page2:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
+tab2:Label("• ฝั่งชั่น ฟาร์มด้วยผลไม้")
+local section2_4 = tab2:DropdownTab("┇ ออโต้ ฟาร์มด้วยผลไม้ ┇")
+section2_4:Toggle("Auto Farm Quake [ Very Lag ]", false, function(qke)
     _G.quakefarm = qke
 end)
 
@@ -1607,7 +1609,7 @@ spawn(function() -- Quake farm npcs
     end
 end)
 
-page2:Toggle("Auto Farm Light", false, function(lth)
+section2_4:Toggle("Auto Farm Light", false, function(lth)
     _G.lightfarm = lth
 end)
 
@@ -1654,8 +1656,9 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-page2:Label("┇ Function Haki ┇")
-page2:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
+tab2:Label("• ฝั่งชั่น ฮาคิ")
+local section2_5 = tab2:DropdownTab("┇ ออโต้ ฟาร์มฮาคิ ┇")
+section2_5:Toggle("Auto Farm Haki [ Very Ping ]", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -1769,7 +1772,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-page2:Toggle("Auto Get Haki", false, function(gthi)
+section2_5:Toggle("ออโต้ ได้ฮาคิ [ เมื่อ เลวล 1,000 ]", false, function(gthi)
     getgenv().haki = gthi
 while getgenv().haki do
             wait()
@@ -1784,7 +1787,7 @@ while getgenv().haki do
 	end
 end)
 
-page2:Section("↑ Warning: You Maybe Kicked Out Of The Map ↑")
+section2_5:Label("↑ คำเตือน: อาจโดนเด้งออกเซิฟ ถ้าใช้นานเกินไป ↑")
 		
 local Tab3 = Window:Taps("Skill")
 local page3 = Tab3:newpage()
