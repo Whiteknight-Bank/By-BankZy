@@ -1016,7 +1016,7 @@ tab1:Label("การตีโยรุ")
 local section1_3 = tab1:DropdownTab("┇ แสปมการตี โยรุ ┇")
 section1_3:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
-end)
+end, "แสปมตีโยรุรั่วๆ")
 
 section1_3:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
