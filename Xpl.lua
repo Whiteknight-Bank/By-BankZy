@@ -1736,11 +1736,6 @@ while getgenv().haki do
 	end
 end)
 
-section2_5:Label("↑ คำเตือน: อาจโดนเด้งออกเซิฟ ถ้าใช้นานเกินไป ↑")
-
-local selectedSpamFruit = ""
-local selectedSpamSkill = ""
-
 local tab3 = win:Taps("สกิล")
 tab3:Label("แสปมสกิล")
 local sectiontab3_2 = tab3:DropdownTab("┇ แสปมสกิลผลไม้ ┇")
