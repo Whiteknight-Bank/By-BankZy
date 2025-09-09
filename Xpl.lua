@@ -3749,20 +3749,19 @@ task.spawn(function()
             pcall(function()
                 for _, playerFolder in pairs(workspace:GetChildren()) do
                     if game.Players:FindFirstChild(playerFolder.Name) then
-                        local punchFolder = playerFolder:FindFirstChild("Powers")
-                        if punchFolder then
-                            local chillyFolder = punchFolder:FindFirstChild("Smoke")
-                            if chillyFolder then
-                                local punch = chillyFolder:FindFirstChild("Projesctiles")
+                        local powersFolder = playerFolder:FindFirstChild("Powers")
+                        if powersFolder then
+                            local smokeFolder = powersFolder:FindFirstChild("Smoke")
+                            if smokeFolder then
+                                local projectiles = smokeFolder:FindFirstChild("Projectiles") -- แก้สะกดตรงนี้
                                 if projectiles then
-                                    local part = projestiles:FindFirstChild("Part")
+                                    local part = projectiles:FindFirstChild("Part")
                                     if part then
                                         for _, desc in pairs(part:GetDescendants()) do
-                                            if desc.Name == "TouchInterest" then
+                                            if desc:IsA("TouchTransmitter") or desc.Name == "TouchInterest" then
                                                 desc:Destroy()
                                             end
                                         end
-                                    end
                                     end
                                 end
                             end
