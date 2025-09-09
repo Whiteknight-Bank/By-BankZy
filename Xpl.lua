@@ -2400,6 +2400,38 @@ task.spawn(function()
     end
 end)
 
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.godmode then
+            pcall(function()
+                for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local leftArm = obj:FindFirstChild("Left Arm")
+                            if leftArm then
+                                local lefttouch = leftArm:FindFirstChildOfClass("TouchInterest")
+                                if lefttoch then
+                                    lefttoch:Destroy()
+                                end
+                            end
+                        end
+                    end
+
+				for _, obj in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(obj.Name) then
+                        local rightArm = obj:FindFirstChild("Right Arm")
+                            if rightArm then
+                                local righttouch = rightArm:FindFirstChildOfClass("TouchInterest")
+                                if righttoch then
+                                    righttoch:Destroy()
+                                end
+                            end
+                        end
+				end
+            end)
+        end
+    end
+end)
+		
 page4:Label("ผู้เล่น")
 local playerNames = {}
 
@@ -3700,6 +3732,37 @@ task.spawn(function()
                                                 desc:Destroy()
                                             end
                                         end
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, playerFolder in pairs(workspace:GetChildren()) do
+                    if game.Players:FindFirstChild(playerFolder.Name) then
+                        local punchFolder = playerFolder:FindFirstChild("Powers")
+                        if punchFolder then
+                            local chillyFolder = punchFolder:FindFirstChild("Smoke")
+                            if chillyFolder then
+                                local punch = chillyFolder:FindFirstChild("Projesctiles")
+                                if projectiles then
+                                    local part = projestiles:FindFirstChild("Part")
+                                    if part then
+                                        for _, desc in pairs(part:GetDescendants()) do
+                                            if desc.Name == "TouchInterest" then
+                                                desc:Destroy()
+                                            end
+                                        end
+                                    end
                                     end
                                 end
                             end
