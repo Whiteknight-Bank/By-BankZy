@@ -1080,115 +1080,134 @@ page2:Toggle("ออโต้ ฟาร์มและปั่นผลไม�
     _G.automixer = stts
 end)
 
--- Auto Mixer
-task.spawn(function()
-    while task.wait(0.05) do
-        pcall(function()
-            if _G.automixer then
-                for _, v in ipairs(workspace.Island8.Kitchen:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-            end
-        end)
-    end
+spawn(function() -- auto mixer
+while wait() do
+pcall(function()
+if _G.automixer then
+wait(1)
+for i, v in pairs(game:GetService("Workspace").Island8.Kitchen:GetDescendants()) do
+if v:IsA("ClickDetector") then
+fireclickdetector(v)
+end
+end
+end
+end)
+end
 end)
 
--- Auto Drink Mixer
-task.spawn(function()
-    while task.wait(0.05) do
-        pcall(function()
-            if _G.automixer then
-                local args = { "Claim", "Challenge13" }
-                workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
+spawn(function() -- auto drink mixer
+while wait() do
+pcall(function()
+if G.automixer then
+wait(1)
+local args = {
+[1] = "Claim",
+[2] = "Challenge13"
+}
+game.workspace.UserData["User" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
 
-                for _, h in ipairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                    if h:IsA("Tool") and (h.Name:find("Juice") or h.Name:find("Milk") or
-                        h.Name:find("Cider") or h.Name:find("Lemonade") or
-                        h.Name:find("Smoothie") or h.Name:find("Golden")) then
-                        game.Players.LocalPlayer.Character.Humanoid:EquipTool(h)
-                        game:GetService("VirtualUser"):CaptureController()
-                        game:GetService("VirtualUser"):Button1Down(Vector2.new(1280, 672))
-                        task.wait(0.05)
-                    end
-                end
-            end
-        end)
-    end
+wait(1)  
+            for a, h in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do  
+                if h:IsA("Tool") and string.find(h.Name, "Juice") or string.find(h.Name, "Milk") or  
+                string.find(h.Name, "Cider") or string.find(h.Name, "Lemonade") or  
+                string.find(h.Name, "Smoothie") or string.find(h.Name, "Golden") then  
+                    game.Players.LocalPlayer.Character.Humanoid:EquipTool(h)  
+                    game:GetService 'VirtualUser':CaptureController()  
+                    game:GetService 'VirtualUser':Button1Down(Vector2.new(1280, 672))  
+                end  
+            end  
+        end  
+    end)  
+end
+
 end)
 
--- Auto Fruit (Barrels / Crates)
-task.spawn(function()
-    while task.wait(0.05) do
-        pcall(function()
-            if _G.automixer then
-                for _, v in ipairs(workspace.Barrels.Crates:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-                for _, v in ipairs(workspace.Barrels.Barrels:GetDescendants()) do
-                    if v:IsA("ClickDetector") then
-                        fireclickdetector(v)
-                    end
-                end
-            end
-        end)
-    end
+spawn(function()--autofruit
+while wait() do
+pcall(function()
+if _G.automixer then
+wait(1)
+for i,v in pairs(game:GetService("Workspace").Barrels.Crates:GetDescendants()) do
+if v:IsA("ClickDetector") then
+fireclickdetector(v)
+end
+end
+for i,v in pairs(game:GetService("Workspace").Barrels.Barrels:GetDescendants()) do
+if v:IsA("ClickDetector") then
+fireclickdetector(v)
+end
+end
+end
+end)
+end
 end)
 
--- Super Fast Teleport + Pickup
-task.spawn(function()
-    local Players = game:GetService("Players")
-    local LocalPlayer = Players.LocalPlayer
-    local hrp = nil
+spawn(function()
+pcall(function()
+while wait() do
+if _G.automixer then
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 
-    while task.wait(0.05) do
-        pcall(function()
-            if _G.automixer then
-                local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-                hrp = character:FindFirstChild("HumanoidRootPart")
+local barrelsContainer = workspace:FindFirstChild("Barrels")  
+            if not barrelsContainer then return end  
 
-                local barrelsContainer = workspace:FindFirstChild("Barrels")
-                if not barrelsContainer then return end
+            local barrelFolder = barrelsContainer:FindFirstChild("Barrels")  
+            local crateFolder = barrelsContainer:FindFirstChild("Crates")  
+            if not barrelFolder or not crateFolder then return end  
 
-                local barrelFolder = barrelsContainer:FindFirstChild("Barrels")
-                local crateFolder = barrelsContainer:FindFirstChild("Crates")
-                if not barrelFolder or not crateFolder then return end
+            local function teleportAndClick(partList)  
+                for _, part in ipairs(partList) do  
+                    character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()  
+                    local hrp = character:FindFirstChild("HumanoidRootPart")  
+                    if hrp and part and part:IsA("BasePart") then  
+                        hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)  
+                        local clickDetector = part:FindFirstChildWhichIsA("ClickDetector", true)  
+                        if clickDetector then  
+                            fireclickdetector(clickDetector)  
+                        end  
+                        task.wait(0.1)  
+                    end  
+                end  
+            end  
 
-                local function tpClick(folder, name)
-                    for _, part in ipairs(folder:GetDescendants()) do
-                        if part:IsA("BasePart") and part.Name == name then
-                            if hrp then hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0) end
-                            local clickDetector = part:FindFirstChildWhichIsA("ClickDetector", true)
-                            if clickDetector then fireclickdetector(clickDetector) end
-                            task.wait(0.05) -- เร็วสุดแต่ยังให้ทันกด
-                        end
-                    end
-                end
+            local function getParts(folder, partName)  
+                local list = {}  
+                for _, part in ipairs(folder:GetDescendants()) do  
+                    if part:IsA("BasePart") and part.Name == partName then  
+                        table.insert(list, part)  
+                    end  
+                end  
+                return list  
+            end  
 
-                tpClick(barrelFolder, "Barrel")
-                tpClick(crateFolder, "Crate")
+            local barrels = getParts(barrelFolder, "Barrel")  
+            local crates = getParts(crateFolder, "Crate")  
 
-                -- เก็บไอเทมตกพื้น
-                for _, v in ipairs(workspace:GetChildren()) do 
-                    if v:IsA("Tool") and v.Name ~= "Compass" then
-                        local handle = v:FindFirstChild("Handle")
-                        if handle and hrp then
-                            handle.CFrame = hrp.CFrame
-                        end
-                    end
-                end
+            teleportAndClick(barrels)  
+            teleportAndClick(crates)  
 
-                -- วาปไป SafeZone
-                local safe = workspace:FindFirstChild("SafeZoneOuterSpacePart")
-                if safe and hrp then
-                    hrp.CFrame = safe.CFrame + Vector3.new(0, 5, 0)
-                end
-            end
-        end)
-    end
+            for _, v in pairs(workspace:GetChildren()) do   
+                if v:IsA("Tool") and v.Name ~= "Compass" then  
+                    local handle = v:FindFirstChild("Handle")  
+                    local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")  
+                    if handle and hrp then  
+                        handle.CFrame = hrp.CFrame  
+                    end  
+                end  
+            end  
+            wait(0)  
+            if workspace:FindFirstChild("SafeZoneOuterSpacePart") then  
+                LocalPlayer.Character:SetPrimaryPartCFrame(workspace.SafeZoneOuterSpacePart.CFrame + Vector3.new(0, 5, 0))  
+            else  
+                warn("เนเธกเนเธเธ SafeZoneOuterSpacePart โ€” เธเนเธฒเธกเธเธฒเธฃเธงเธฒเธฃเนเธ")  
+            end  
+
+            wait(5)  
+        end  
+    end  
+end)
 end)
 
 page2:Label("ฝั่งชั่น ฟาร์มอื่นๆ")
