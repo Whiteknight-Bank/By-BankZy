@@ -1118,10 +1118,11 @@ spawn(function()
 end)
 
 spawn(function()
-    while task.wait(0.1) do -- เช็คถี่ขึ้น
+    local player = game.Players.LocalPlayer
+
+    while task.wait(0.1) do
         if not _G.automixer then continue end
 
-        local player = game.Players.LocalPlayer
         local backpack = player:FindFirstChild("Backpack")
         local character = player.Character
         if not character or not backpack then continue end
@@ -1129,7 +1130,6 @@ spawn(function()
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if not humanoid then continue end
 
-        -- รายชื่อเครื่องดื่มที่กินได้
         local drinkNames = {
             "Fruit Juice",
             "Apple Juice",
@@ -1142,7 +1142,7 @@ spawn(function()
 			"Smoothie",
 			"Lemonade",
 			"Juice"
-        }
+					}
 
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
@@ -1150,14 +1150,14 @@ spawn(function()
                     if item.Name == drinkName then
                         -- กินทุกครั้งที่เจอ
                         humanoid:EquipTool(item)
-                        task.wait(0.15) -- เวลาถือ Tool
+                        task.wait(0.05) -- ถือ Tool ไว้
                         if item.Parent == character then
+                            -- Activate ตรงนี้ทุกรอบไม่พลาด
                             pcall(function()
                                 item:Activate()
                             end)
-                            task.wait(0.8) -- รอกิน animation
+                            task.wait(0.2) -- รอ animation กินจบเบื้องต้น
                         end
-                        -- ไม่มี break ให้กินทุกชิ้นและทุกชื่อ
                     end
                 end
             end
