@@ -1118,7 +1118,7 @@ spawn(function()
 end)
 
 spawn(function()
-    while task.wait(0.1) do -- เช็คถี่ขึ้นทุก 0.1 วิ
+    while task.wait(0.1) do -- เช็คถี่ขึ้น
         if not _G.automixer then continue end
 
         local player = game.Players.LocalPlayer
@@ -1129,26 +1129,22 @@ spawn(function()
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if not humanoid then continue end
 
-        local drinkSuffixes = {
-            "juice", "milk", "smoothie", "cider", "lemonade"
-        }
+        -- น้ำปั่นเท่านั้น
+        local drinkSuffixes = {"juice", "milk", "smoothie", "cider", "lemonade"}
 
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
                 local nameLower = item.Name:lower()
-
                 for _, suffix in ipairs(drinkSuffixes) do
-                    -- ถ้าชื่อลงท้ายตรงกับ suffix ที่กำหนด
                     if string.sub(nameLower, -#suffix) == suffix then
-                        -- ถือแล้วกดกินทุกครั้งที่เจอ
+                        -- กินทุกครั้งที่เจอ
                         humanoid:EquipTool(item)
-                        task.wait(0.2)
-
+                        task.wait(0.15) -- เวลาถือ Tool
                         if item.Parent == character then
                             pcall(function()
                                 item:Activate()
                             end)
-                            task.wait(0.8) -- เวลากิน animation
+                            task.wait(0.8) -- รอกิน animation
                         end
                         break
                     end
