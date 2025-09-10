@@ -1118,9 +1118,6 @@ spawn(function()
         local backpack = player:FindFirstChild("Backpack")
         local character = player.Character
         if not character or not backpack then continue end
-        
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if not humanoid then continue end
 
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
@@ -1129,18 +1126,22 @@ spawn(function()
                 or string.find(item.Name, "Smoothie") 
                 or string.find(item.Name, "Milk") 
                 or string.find(item.Name, "Apple") 
-                or string.find(item.Name, "Golden") then
+                or string.find(item.Name, "Golden")
+				or string.find(item.Name, "Lemonade") then
                     
-                    -- Equip ก่อน
-                    humanoid:EquipTool(item)
+                    -- ย้าย Tool จาก Backpack ไป Character (ถือทันที)
+                    item.Parent = character
                     task.wait(0.2)
 
-                    -- ต้องตรวจว่า Tool ถูกย้ายมา Character แล้ว
+                    -- ถ้าอยู่ใน Character แล้วกดใช้
                     if item.Parent == character then
                         pcall(function()
                             item:Activate()
                         end)
-                        task.wait(1) -- เวลาหน่วงเผื่อ animation การกิน
+                        task.wait(1) -- หน่วงให้เวลากินเสร็จ
+                        
+                        -- เอากลับเข้า Backpack เผื่อ loop รอบต่อไป
+                        item.Parent = backpack
                     end
                 end
             end
