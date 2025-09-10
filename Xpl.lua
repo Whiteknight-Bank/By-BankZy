@@ -1149,15 +1149,16 @@ spawn(function()
                 for _, drinkName in ipairs(drinkNames) do
                     if item.Name == drinkName then
                         -- กินทุกครั้งที่เจอ
-                        humanoid:EquipTool(item)
-                        task.wait(0.05) -- ถือ Tool ไว้
-                        if item.Parent == character then
-                            -- Activate ตรงนี้ทุกรอบไม่พลาด
+                        repeat
+                            humanoid:EquipTool(item)
+                            -- รอจน Tool อยู่ในมือจริง ๆ
+                            repeat task.wait(0.05) until item.Parent == character
                             pcall(function()
                                 item:Activate()
                             end)
-                            task.wait(0.2) -- รอ animation กินจบเบื้องต้น
-                        end
+                            -- รอกิน animation
+                            task.wait(0.8)
+                        until not item or not item.Parent or item.Parent ~= backpack
                     end
                 end
             end
