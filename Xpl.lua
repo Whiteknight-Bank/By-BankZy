@@ -2256,38 +2256,6 @@ task.spawn(function()
         end
     end
 end)
-		
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            local resourceHolder = workspace:FindFirstChild("UserData")
-            if resourceHolder then
-                for _, player in ipairs(game.Players:GetPlayers()) do
-                    local folderName = "User_" .. tostring(player.UserId)
-                    local userFolder = resourceHolder:FindFirstChild(folderName)
-
-                    if userFolder then
-                        local success, err = pcall(function()
-                            local specials = userFolder:FindFirstChild("Specials")
-                            if specials then
-                                local venom = specials:FindFirstChild("Venom")
-                                if venom then
-                                    local venomPool = venom:FindFirstChild("VenomPool")
-                                    if venomPool then
-                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
-                                        if touchInterest then
-                                            touchInterest:Destroy()
-                                        end
-                                    end
-                                end
-                            end
-                        end)
-                    end
-		end
-            end
-        end
-    end
-end)
 
 task.spawn(function()
     while task.wait(0.01) do
@@ -2300,40 +2268,6 @@ task.spawn(function()
                                         child:Destroy()
                                     end
                                 end  
-                    end
-                end
-            end)
-        end
-    end
-end)
-
-
-task.spawn(function()
-    while task.wait(0.01) do
-        if _G.godmode then
-            pcall(function()
-                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
-                    if modelInWorkspace:IsA("Model") then
-                        -- เน€เธเธฒเธฐเธเธเน€เธเธเธฒเธฐ 6 เธเธดเนเธเธชเนเธงเธเธ—เธตเนเธฃเธฐเธเธธเน€เธ—เนเธฒเธเธฑเนเธ
-                        local demonPartsToCheck = {
-                            "DemonHead",
-                            "DemonTorso",
-                            "DemonRightArm",
-                            "DemonLeftArm",
-                            "DemonRightWing",
-                            "DemonLeftWing"
-                        }
-
-                        for _, partName in ipairs(demonPartsToCheck) do
-                            local part = modelInWorkspace:FindFirstChild(partName)
-                            if part then
-                                for _, child in pairs(part:GetChildren()) do
-                                    if child.Name == "TouchInterest" then
-                                        child:Destroy()
-                                    end
-                                end
-                            end
-                        end
                     end
                 end
             end)
@@ -3132,15 +3066,13 @@ spawn(function()
 
 				for i = 1, #players do
 					local player = players[i]
-
-					-- เน€เธเนเธเนเธ Backpack
 					if player:FindFirstChild("Backpack") then
 						local backpackItems = player.Backpack:GetChildren()
 						for j = 1, #backpackItems do
 							local item = backpackItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									local msg = "เธเธ " .. item.Name .. " เนเธ Backpack เธเธญเธ " .. player.Name
+									local msg = " มีคนได้ :" .. item.Name .. " ในกระเป๋าของ " .. player.Name
 									print(msg)
 									create:Notifile("", msg, 3)
 								end
@@ -3156,7 +3088,7 @@ spawn(function()
 							local item = characterItems[j]
 							for k = 1, #rareFruits do
 								if item.Name == rareFruits[k] then
-									local msg = "เธเธ " .. item.Name .. " เนเธ Character เธเธญเธ " .. player.Name
+									local msg = " มีคนได้ : " .. item.Name .. " อยู่ที่ผู้เล่น :" .. player.Name
 									print(msg)
 									create:Notifile("", msg, 3)
 								end
@@ -3184,15 +3116,13 @@ spawn(function()
 
 				for i = 1, #players do
 					local player = players[i]
-
-					-- เน€เธเนเธเนเธ Backpack
 					if player:FindFirstChild("Backpack") then
 						local backpackItems = player.Backpack:GetChildren()
 						for j = 1, #backpackItems do
 							local item = backpackItems[j]
 							for k = 1, #targetBoxes do
 								if item.Name == targetBoxes[k] then
-									local msb = "เธเธ " .. item.Name .. " เนเธ Backpack เธเธญเธ " .. player.Name
+									local msb = " มีคนได้ : " .. item.Name .. " อยู่ที่ผู้เล่น : " .. player.Name
 									print(msb)
 									create:Notifile("", msb, 3)
 								end
@@ -3200,7 +3130,6 @@ spawn(function()
 						end
 					end
 
-					-- เน€เธเนเธเนเธ Character
 					local character = workspace:FindFirstChild(player.Name)
 					if character then
 						local characterItems = character:GetChildren()
@@ -3208,7 +3137,7 @@ spawn(function()
 							local item = characterItems[j]
 							for k = 1, #targetBoxes do
 								if item.Name == targetBoxes[k] then
-									local msb = "เธเธ " .. item.Name .. " เนเธ Character เธเธญเธ " .. player.Name
+									local msb = " มีคนได้ :" .. item.Name .. " อยู่ที่ผู้เล่น : " .. player.Name
 									print(msg)
 									create:Notifile("", msb, 3)
 								end
@@ -3972,6 +3901,70 @@ task.spawn(function()
                     hum.PlatformStand = false
                 end
             end)
+        end
+    end
+end)
+
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            pcall(function()
+                for _, modelInWorkspace in pairs(workspace:GetChildren()) do
+                    if modelInWorkspace:IsA("Model") then
+                        local demonPartsToCheck = {
+                            "DemonHead",
+                            "DemonTorso",
+                            "DemonRightArm",
+                            "DemonLeftArm",
+                            "DemonRightWing",
+                            "DemonLeftWing"
+                        }
+
+                        for _, partName in ipairs(demonPartsToCheck) do
+                            local part = modelInWorkspace:FindFirstChild(partName)
+                            if part then
+                                for _, child in pairs(part:GetChildren()) do
+                                    if child.Name == "TouchInterest" then
+                                        child:Destroy()
+                                    end
+                                end
+                            end
+                        end
+                    end
+                end
+            end)
+        end
+    end
+end)
+		
+task.spawn(function()
+    while task.wait(0.01) do
+        if _G.anti then
+            local resourceHolder = workspace:FindFirstChild("UserData")
+            if resourceHolder then
+                for _, player in ipairs(game.Players:GetPlayers()) do
+                    local folderName = "User_" .. tostring(player.UserId)
+                    local userFolder = resourceHolder:FindFirstChild(folderName)
+
+                    if userFolder then
+                        local success, err = pcall(function()
+                            local specials = userFolder:FindFirstChild("Specials")
+                            if specials then
+                                local venom = specials:FindFirstChild("Venom")
+                                if venom then
+                                    local venomPool = venom:FindFirstChild("VenomPool")
+                                    if venomPool then
+                                        local touchInterest = venomPool:FindFirstChild("TouchInterest")
+                                        if touchInterest then
+                                            touchInterest:Destroy()
+                                        end
+                                    end
+                                end
+                            end
+                        end)
+                    end
+		end
+            end
         end
     end
 end)
