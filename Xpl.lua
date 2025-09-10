@@ -1119,28 +1119,37 @@ spawn(function()
         local character = player.Character
         if not character or not backpack then continue end
 
+        -- คำที่ใช้ตรวจชื่อ (ใส่เฉพาะ keyword)
+        local drinkKeywords = {
+            "juice", "cider", "smoothie", 
+            "milk", "lemonade", "golden"
+        }
+
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
-                if string.find(item.Name, "Juice") 
-                or string.find(item.Name, "Cider") 
-                or string.find(item.Name, "Smoothie") 
-                or string.find(item.Name, "Milk") 
-                or string.find(item.Name, "Apple") 
-                or string.find(item.Name, "Golden")
-				or string.find(item.Name, "Lemonade") then
-                    
-                    -- ย้าย Tool จาก Backpack ไป Character (ถือทันที)
+                local itemName = item.Name:lower()
+
+                -- เช็คว่าชื่อมี keyword ไหนบ้าง
+                local isDrink = false
+                for _, keyword in ipairs(drinkKeywords) do
+                    if string.find(itemName, keyword) then
+                        isDrink = true
+                        break
+                    end
+                end
+
+                if isDrink then
+                    -- ถือ
                     item.Parent = character
                     task.wait(0.2)
 
-                    -- ถ้าอยู่ใน Character แล้วกดใช้
+                    -- กิน
                     if item.Parent == character then
                         pcall(function()
                             item:Activate()
                         end)
-                        task.wait(1) -- หน่วงให้เวลากินเสร็จ
-                        
-                        -- เอากลับเข้า Backpack เผื่อ loop รอบต่อไป
+                        task.wait(1) -- เผื่อเวลา animation
+                        -- ย้ายกลับ backpack
                         item.Parent = backpack
                     end
                 end
