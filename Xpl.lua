@@ -1129,14 +1129,25 @@ spawn(function()
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if not humanoid then continue end
 
-        -- น้ำปั่นเท่านั้น
-        local drinkSuffixes = {"juice", "milk", "smoothie", "cider", "lemonade"}
+        -- รายชื่อเครื่องดื่มที่กินได้
+        local drinkNames = {
+            "Fruit Juice",
+            "Apple Juice",
+            "Pear Juice",
+            "Banana Juice",
+            "Coconut Milk",
+            "Golden Apple",
+            "Pumpkin Juice",
+			"Cider",
+			"Smoothie",
+			"Lemonade",
+			"Juice"
+        }
 
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
-                local nameLower = item.Name:lower()
-                for _, suffix in ipairs(drinkSuffixes) do
-                    if string.sub(nameLower, -#suffix) == suffix then
+                for _, drinkName in ipairs(drinkNames) do
+                    if item.Name == drinkName then
                         -- กินทุกครั้งที่เจอ
                         humanoid:EquipTool(item)
                         task.wait(0.15) -- เวลาถือ Tool
@@ -1146,7 +1157,7 @@ spawn(function()
                             end)
                             task.wait(0.8) -- รอกิน animation
                         end
-                        break
+                        -- ไม่มี break ให้กินทุกชิ้นและทุกชื่อ
                     end
                 end
             end
