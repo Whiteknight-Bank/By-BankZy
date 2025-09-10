@@ -1098,7 +1098,7 @@ end)
 spawn(function() -- auto drink mixer
 while wait() do
 pcall(function()
-if G.automixer then
+if _G.automixer then
 local args = {
 [1] = "Claim",
 [2] = "Challenge13"
@@ -1111,26 +1111,37 @@ end
 end)
 
 spawn(function()
-    while wait(0.5) do
+    while task.wait(0.5) do
         if not _G.automixer then continue end
+        
         local player = game.Players.LocalPlayer
-        local backpack = player:WaitForChild("Backpack")
+        local backpack = player:FindFirstChild("Backpack")
         local character = player.Character
-        if not character then continue end
+        if not character or not backpack then continue end
+        
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if not humanoid then continue end
 
-        for _, item in pairs(backpack:GetChildren()) do
+        for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
-                -- ตรวจชื่อไอเทมว่าเป็นน้ำ (ถ้ามีคำว่า "Juice", "Cider", "Smoothie" ฯลฯ)
-                if string.find(item.Name, "Juice") or string.find(item.Name, "Cider") or 
-                   string.find(item.Name, "Smoothie") or string.find(item.Name, "Milk") or 
-                   string.find(item.Name, "Apple") or string.find(item.Name, "Golden") then
-                    -- Equip และ Activate
+                if string.find(item.Name, "Juice") 
+                or string.find(item.Name, "Cider") 
+                or string.find(item.Name, "Smoothie") 
+                or string.find(item.Name, "Milk") 
+                or string.find(item.Name, "Apple") 
+                or string.find(item.Name, "Golden") then
+                    
+                    -- Equip ก่อน
                     humanoid:EquipTool(item)
-                    wait(0.1)
-                    pcall(function() item:Activate() end)
-                    wait(0.2)  -- รอให้กินน้ำเสร็จ
+                    task.wait(0.2)
+
+                    -- ต้องตรวจว่า Tool ถูกย้ายมา Character แล้ว
+                    if item.Parent == character then
+                        pcall(function()
+                            item:Activate()
+                        end)
+                        task.wait(1) -- เวลาหน่วงเผื่อ animation การกิน
+                    end
                 end
             end
         end
