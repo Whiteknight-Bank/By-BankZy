@@ -1095,74 +1095,29 @@ end)
 end
 end)
 
-spawn(function()
-    while task.wait(1) do
+spawn(function() -- auto drink mixer
+    while wait() do
         pcall(function()
             if _G.automixer then
-                local player = game.Players.LocalPlayer
-                local userId = player.UserId
-                local userFolder = workspace:FindFirstChild("UserData")
-                if userFolder then
-                    local thisUser = userFolder:FindFirstChild("User_" .. userId)
-                    if thisUser and thisUser:FindFirstChild("ChallengesRemote") then
-                        local args = {
-                            [1] = "Claim",
-                            [2] = "Challenge13"
-                        }
-                        thisUser.ChallengesRemote:FireServer(table.unpack(args))
+                wait(1)
+                local args = {
+                    [1] = "Claim",
+                    [2] = "Challenge13"
+                }
+                game.workspace.UserData["User_" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
+
+                wait(1)
+                for a, h in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                    if h:IsA("Tool") and string.find(h.Name, "Juice") or string.find(h.Name, "Milk") or
+                    string.find(h.Name, "Cider") or string.find(h.Name, "Lemonade") or
+                    string.find(h.Name, "Smoothie") or string.find(h.Name, "Golden") then
+                        game.Players.LocalPlayer.Character.Humanoid:EquipTool(h)
+                        game:GetService 'VirtualUser':CaptureController()
+                        game:GetService 'VirtualUser':Button1Down(Vector2.new(1280, 672))
                     end
                 end
             end
         end)
-    end
-end)
-
-spawn(function()
-    local player = game.Players.LocalPlayer
-
-    while task.wait(0.1) do
-        if not _G.automixer then continue end
-
-        local backpack = player:FindFirstChild("Backpack")
-        local character = player.Character
-        if not character or not backpack then continue end
-
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if not humanoid then continue end
-
-        local drinkNames = {
-            "Fruit Juice",
-            "Apple Juice",
-            "Pear Juice",
-            "Banana Juice",
-            "Coconut Milk",
-            "Golden Apple",
-            "Pumpkin Juice",
-			"Cider",
-			"Smoothie",
-			"Lemonade",
-			"Juice"
-					}
-
-        for _, item in ipairs(backpack:GetChildren()) do
-            if item:IsA("Tool") then
-                for _, drinkName in ipairs(drinkNames) do
-                    if item.Name == drinkName then
-                        -- กินทุกครั้งที่เจอ
-                        repeat
-                            humanoid:EquipTool(item)
-                            -- รอจน Tool อยู่ในมือจริง ๆ
-                            repeat task.wait(0.05) until item.Parent == character
-                            pcall(function()
-                                item:Activate()
-                            end)
-                            -- รอกิน animation
-                            task.wait(0.8)
-                        until not item or not item.Parent or item.Parent ~= backpack
-                    end
-                end
-            end
-        end
     end
 end)
 		
