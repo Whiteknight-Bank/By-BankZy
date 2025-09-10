@@ -1096,19 +1096,25 @@ end
 end)
 
 spawn(function()
-while wait() do
-pcall(function()
-if _G.automixer then
-local args = {
-    [1] = "Claim",
-    [2] = "Challenge13"
-}
-
-game.workspace.UserData["User" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
-
-        end  
-    end)  
-end
+    while task.wait(1) do
+        pcall(function()
+            if _G.automixer then
+                local player = game.Players.LocalPlayer
+                local userId = player.UserId
+                local userFolder = workspace:FindFirstChild("UserData")
+                if userFolder then
+                    local thisUser = userFolder:FindFirstChild("User_" .. userId)
+                    if thisUser and thisUser:FindFirstChild("ChallengesRemote") then
+                        local args = {
+                            [1] = "Claim",
+                            [2] = "Challenge13"
+                        }
+                        thisUser.ChallengesRemote:FireServer(table.unpack(args))
+                    end
+                end
+            end
+        end)
+    end
 end)
 
 spawn(function()
@@ -1123,7 +1129,7 @@ spawn(function()
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if not humanoid then continue end
 
-        -- keyword เฉพาะน้ำดื่มที่ปั่นแล้ว
+        -- น้ำดื่มเท่านั้น
         local drinkSuffixes = {
             "juice", "milk", "smoothie", "cider", "lemonade"
         }
@@ -1133,7 +1139,6 @@ spawn(function()
                 local nameLower = item.Name:lower()
                 local isDrink = false
 
-                -- เช็คว่าชื่อลงท้ายด้วยคำไหนใน drinkSuffixes
                 for _, suffix in ipairs(drinkSuffixes) do
                     if string.sub(nameLower, -#suffix) == suffix then
                         isDrink = true
@@ -1142,6 +1147,7 @@ spawn(function()
                 end
 
                 if isDrink then
+                    -- ถือแล้วกดกิน
                     humanoid:EquipTool(item)
                     task.wait(0.2)
 
@@ -1149,7 +1155,7 @@ spawn(function()
                         pcall(function()
                             item:Activate()
                         end)
-                        task.wait(1) -- เวลากิน animation
+                        task.wait(1) -- รอกินเสร็จ
                     end
                 end
             end
