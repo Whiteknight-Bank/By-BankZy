@@ -1113,44 +1113,42 @@ end)
 spawn(function()
     while task.wait(0.5) do
         if not _G.automixer then continue end
-        
+
         local player = game.Players.LocalPlayer
         local backpack = player:FindFirstChild("Backpack")
         local character = player.Character
         if not character or not backpack then continue end
 
-        -- คำที่ใช้ตรวจชื่อ (ใส่เฉพาะ keyword)
-        local drinkKeywords = {
-            "juice", "cider", "smoothie", 
-            "milk", "lemonade", "golden"
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if not humanoid then continue end
+
+        -- keyword เฉพาะน้ำดื่มที่ปั่นแล้ว
+        local drinkSuffixes = {
+            "juice", "milk", "smoothie", "cider", "lemonade"
         }
 
         for _, item in ipairs(backpack:GetChildren()) do
             if item:IsA("Tool") then
-                local itemName = item.Name:lower()
-
-                -- เช็คว่าชื่อมี keyword ไหนบ้าง
+                local nameLower = item.Name:lower()
                 local isDrink = false
-                for _, keyword in ipairs(drinkKeywords) do
-                    if string.find(itemName, keyword) then
+
+                -- เช็คว่าชื่อลงท้ายด้วยคำไหนใน drinkSuffixes
+                for _, suffix in ipairs(drinkSuffixes) do
+                    if string.sub(nameLower, -#suffix) == suffix then
                         isDrink = true
                         break
                     end
                 end
 
                 if isDrink then
-                    -- ถือ
-                    item.Parent = character
+                    humanoid:EquipTool(item)
                     task.wait(0.2)
 
-                    -- กิน
                     if item.Parent == character then
                         pcall(function()
                             item:Activate()
                         end)
-                        task.wait(1) -- เผื่อเวลา animation
-                        -- ย้ายกลับ backpack
-                        item.Parent = backpack
+                        task.wait(1) -- เวลากิน animation
                     end
                 end
             end
