@@ -1095,14 +1095,15 @@ end)
 end
 end)
 
-spawn(function() -- auto drink mixer
+spawn(function()
 while wait() do
 pcall(function()
 if _G.automixer then
 local args = {
-[1] = "Claim",
-[2] = "Challenge13"
+    [1] = "Claim",
+    [2] = "Challenge13"
 }
+
 game.workspace.UserData["User" .. game.Players.LocalPlayer.UserId].ChallengesRemote:FireServer(unpack(args))
 
         end  
