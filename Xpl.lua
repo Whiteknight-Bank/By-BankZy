@@ -3297,7 +3297,7 @@ wait(3)
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page8:Button("ย้ายเซฟ", function()
+Tab8:Button("ย้ายเซฟ", function()
 create:Notifile("", "รอ 3 วิ เพื่อย้ายเซิฟ " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
