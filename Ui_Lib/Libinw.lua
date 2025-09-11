@@ -77,7 +77,7 @@ function library:Win(title)
     closeBtn.Position = UDim2.new(1, -35, 0.5, -14)
     closeBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
     closeBtn.BackgroundTransparency = 0.2
-    closeBtn.Text = "X"
+    closeBtn.Text = "-"
     closeBtn.TextColor3 = Color3.fromRGB(255,255,255)
     closeBtn.Font = Enum.Font.GothamBold
     closeBtn.TextSize = 16
@@ -145,16 +145,45 @@ function library:Win(title)
     hubToggle.Parent = gui
     createUICorner(hubToggle, UDim.new(1,0))
 
-    -- closeBtn behavior: hide main show hub toggle
     closeBtn.MouseButton1Click:Connect(function()
+    -- Animate เมนูเลื่อนขึ้นไปหายด้านบน
+    TweenService:Create(
+        main,
+        TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+        {Position = UDim2.new(0.5, 0, -0.5, 0)} -- เลื่อนขึ้นไปบน
+    ):Play()
+
+    task.delay(0.45, function()
         main.Visible = false
         hubToggle.Visible = true
+        hubToggle.Position = UDim2.new(0.5, 0, -0.2, 0) -- เริ่มนอกจอด้านบน
+        TweenService:Create(
+            hubToggle,
+            TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {Position = UDim2.new(0.5, 0, 0, 10)} -- เลื่อนลงมาบนสุดพอดี
+        ):Play()
     end)
-    -- hub toggle behavior
-    hubToggle.MouseButton1Click:Connect(function()
-        main.Visible = true
+end)
+
+hubToggle.MouseButton1Click:Connect(function()
+    -- Animate ปุ่มวงรีหายขึ้นไป
+    TweenService:Create(
+        hubToggle,
+        TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+        {Position = UDim2.new(0.5, 0, -0.2, 0)}
+    ):Play()
+
+    task.delay(0.35, function()
         hubToggle.Visible = false
+        main.Visible = true
+        main.Position = UDim2.new(0.5, 0, -0.5, 0) -- เริ่มนอกจอด้านบน
+        TweenService:Create(
+            main,
+            TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {Position = UDim2.new(0.5, 0, 0.5, 0)} -- กลางจอ
+        ):Play()
     end)
+end)
 
     -- Expose for tabs creation
     self.tabButtons = tabButtons
