@@ -392,7 +392,7 @@ function tabs:Taps(name)
         return container
     end
 
-    function newPage:Dropdown(title, items, callback, multi)
+     function newPage:Dropdown(title, items, callback, multi)
     multi = multi or false
     items = items or {}
 
@@ -418,14 +418,14 @@ function tabs:Taps(name)
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSans
     btn.TextSize = 14
-    uicorner(btn, UDim.new(0, 6))
+    createUICorner(btn, UDim.new(0, 6))
 
     local listFrame = Instance.new("Frame", container)
     listFrame.Size = UDim2.new(1, 0, 0, 0)
     listFrame.Position = UDim2.new(0, 0, 1, 2)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
-    uicorner(listFrame, UDim.new(0, 6))
+    createUICorner(listFrame, UDim.new(0, 6))
 
     local listLayout = Instance.new("UIListLayout", listFrame)
     listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -438,7 +438,7 @@ function tabs:Taps(name)
     searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     searchBox.Text = ""
-    uicorner(searchBox, UDim.new(0, 6))
+    createUICorner(searchBox, UDim.new(0, 6))
 
     local selected = {}
     local singleSelected = nil
@@ -459,7 +459,7 @@ function tabs:Taps(name)
                 opt.TextColor3 = Color3.fromRGB(255, 255, 255)
                 opt.Text = textV
                 opt.AutoButtonColor = false
-                uicorner(opt, UDim.new(0, 6))
+                createUICorner(opt, UDim.new(0, 6))
 
                 if multi then
                     if selected[textV] then
