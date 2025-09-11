@@ -37,8 +37,8 @@ function library:Win(title)
     local main = Instance.new("Frame")
     main.Name = "MainFrame"
     main.Size = UDim2.new(0, 500, 0, 350)
-    main.Position = UDim2.new(0.5, -250, 0.5, -175)
     main.AnchorPoint = Vector2.new(0.5, 0.5)
+    main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(0,0,0)
     main.BackgroundTransparency = 0.3
     main.BorderSizePixel = 0
