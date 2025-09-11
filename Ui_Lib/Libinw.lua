@@ -557,4 +557,5 @@ function library:Notifile(title, msg, duration)
     end)
 end
 
+library.tabs = tabs
 return library
