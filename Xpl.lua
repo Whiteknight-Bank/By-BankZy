@@ -290,10 +290,9 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
-local Tab1 = Window:Taps("ออโต้")
-local page1 = Tab1:newpage()
+local Tab1 = create.tabs:Taps("ออโต้")
 		
-page1:Label(" ฝั่งชั่น การเกิด ")
+Tab1:Label(" ฝั่งชั่น การเกิด ")
 
 _G.savedCFrame = nil
 
@@ -304,7 +303,7 @@ function SaveCFrame()
     end
 end
 
-page1:Button("เซฟจุดเกิด", function()
+Tab1:Button("เซฟจุดเกิด", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
@@ -312,7 +311,7 @@ page1:Button("เซฟจุดเกิด", function()
     end
 end)
 		
-page1:Toggle("ออโต้ เกิดและกดตาย", false, function(aspw)
+Tab1:Toggle("ออโต้ เกิดและกดตาย", false, function(aspw)
         _G.respawndie = aspw
 end)
 
@@ -330,7 +329,7 @@ end
 end
 end)
 
-page1:Toggle("ออโต้ เกิด & เกิดแบบเซฟจุด", false, function(rspw)
+Tab1:Toggle("ออโต้ เกิด & เกิดแบบเซฟจุด", false, function(rspw)
         _G.autorespawn = rspw
 end)
 
@@ -389,8 +388,8 @@ spawn(function()
     end
 end)
 
-page1:Label(" ฝั่งชั่น ออโต้ต่างๆ ")
-page1:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
+Tab1:Label(" ฝั่งชั่น ออโต้ต่างๆ ")
+Tab1:Toggle("ออโต้ รับภารกิจ", false, function(dmmsv)
         AutoMission = dmmsv
 end)
 
@@ -404,7 +403,7 @@ spawn(function()
     end 
 end)
 
-page1:Toggle("ออโต้ ทำภารกิจ [ ไม่พร้อมใช้งาน ]", false, function(miss)
+Tab1:Toggle("ออโต้ ทำภารกิจ [ ไม่พร้อมใช้งาน ]", false, function(miss)
         _G.automission = miss
 end)
 
@@ -595,7 +594,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ดึงผลไม้ปีศาจ", false, function(bdf)
+Tab1:Toggle("ดึงผลไม้ปีศาจ", false, function(bdf)
 BringDF = bdf
 end)
 
@@ -705,7 +704,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ออโต้ ตกปลาและเผาปลา", false, function(fsh)
+Tab1:Toggle("ออโต้ ตกปลาและเผาปลา", false, function(fsh)
     AutoFish = fsh
 end)
 
@@ -768,7 +767,7 @@ spawn(function()
     end
 end)
 
-page1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
+Tab1:Toggle("ออโต้ กดรับรางวัล (รายวัน/รายสัปดาห์/รายเดือน/ชาเลนเจอร์)", false, function(chllge)
 _G.autoclaim = chllge
 end)
 
@@ -923,7 +922,7 @@ wait(.8)
     end
 end)
 
-page1:Toggle("ออโต้ กดรับของขวัญ  [ เบรี ]", false, function(bri)
+Tab1:Toggle("ออโต้ กดรับของขวัญ  [ เบรี ]", false, function(bri)
 _G.berigift = bri
 end)
 
@@ -939,7 +938,7 @@ local A_1 = "RewardMark"
     end
 end)
 
-page1:Toggle("ออโต้ กดรับของขวัญ  [ เพชร ]", false, function(gxm)
+Tab1:Toggle("ออโต้ กดรับของขวัญ  [ เพชร ]", false, function(gxm)
 _G.gemsgift = gxm
 end)
 
@@ -1003,12 +1002,12 @@ end)
     return tmp
 end
 
-page1:Label("แสปมโยรุ")
-page1:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
+Tab1:Label("แสปมโยรุ")
+Tab1:Textbox("การตี โยรุ:", "ใส่เลข", function(hty)
     _G.yoruhit = hty
 end)
 
-page1:Toggle("ใช้งาน", false, function(yru)
+Tab1:Toggle("ใช้งาน", false, function(yru)
 _G.yorufast = yru
 end)
 
@@ -1032,11 +1031,10 @@ end)
 end 
 end)
 		
-local Tab2 = Window:Taps("ฟาร์ม")
-local page2 = Tab2:newpage()
+local Tab2 = create.tabs:Taps("ฟาร์ม")
 		
-page2:Label("ฝั่งชั่น มอนตาย")
-page2:Toggle("ออโต้ มอนตายทุกตัว [ 100% ]", false, function(dthh)
+Tab2:Label("ฝั่งชั่น มอนตาย")
+Tab2:Toggle("ออโต้ มอนตายทุกตัว [ 100% ]", false, function(dthh)
     _G.autodie = dthh
 end)
 
@@ -1055,7 +1053,7 @@ spawn(function()
     end
 end)
 
-page2:Toggle("ออโต้ บอสหมัดตาย [ 100% ]", false, function(zki)
+Tab2:Toggle("ออโต้ บอสหมัดตาย [ 100% ]", false, function(zki)
     _G.autokaizu = zki
 end)
 
@@ -1074,8 +1072,8 @@ spawn(function()
     end
 end)
 
-page2:Label("ฝั่งชั่น ฟาร์มผลไม้")
-page2:Toggle("ออโต้ ฟาร์มและปั่นผลไม้", false, function(stts)
+Tab2:Label("ฝั่งชั่น ฟาร์มผลไม้")
+Tab2:Toggle("ออโต้ ฟาร์มและปั่นผลไม้", false, function(stts)
     _G.automixer = stts
 end)
 
@@ -1208,12 +1206,12 @@ local barrelsContainer = workspace:FindFirstChild("Barrels")
 end)
 end)
 
-page2:Label("ฝั่งชั่น ฟาร์มอื่นๆ")
-page2:Dropdown("เลือกอาวุธ :", Wapon, function(wapn)
+Tab2:Label("ฝั่งชั่น ฟาร์มอื่นๆ")
+Tab2:Dropdown("เลือกอาวุธ :", Wapon, function(wapn)
     selectedWapon = wapn
 end)
 
-page2:Button("รีเฟรช ชื่ออาวุธ", function()
+Tab2:Button("รีเฟรช ชื่ออาวุธ", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -1222,7 +1220,7 @@ page2:Button("รีเฟรช ชื่ออาวุธ", function()
 				end
 			end)
 		
-page2:Toggle("ออโต้ วาปฟาร์ม", false, function(befrm)
+Tab2:Toggle("ออโต้ วาปฟาร์ม", false, function(befrm)
     _G.behindFarm = befrm
 end)
 
@@ -1270,7 +1268,7 @@ spawn(function()
     end
 end)
 		
-page2:Toggle("ออโต้คลิก", false, function(state)
+Tab2:Toggle("ออโต้คลิก", false, function(state)
     _G.autoclick = state
 end)
 
@@ -1285,7 +1283,7 @@ end)
 end) 
 end)
 
-page2:Toggle("ออโต้ถือ", false, function(state)
+Tab2:Toggle("ออโต้ถือ", false, function(state)
     _G.autoequip = state
 end)
 
@@ -1305,8 +1303,8 @@ spawn(function() -- auto equip
     end
 end)
 
-page2:Label(" ฝั่งชั่น ฟาร์มด้วยลูกปืน ")
-page2:Toggle("ออโต้ ฟาร์มด้วยลูกปืน", false, function(bll)
+Tab2:Label(" ฝั่งชั่น ฟาร์มด้วยลูกปืน ")
+Tab2:Toggle("ออโต้ ฟาร์มด้วยลูกปืน", false, function(bll)
     _G.autocannonslow = bll
 end)
 
@@ -1547,8 +1545,8 @@ spawn(function() -- autofarm cannon
     end
 end)
 
-page2:Label("ฝั่งชั่น ฟาร์มด้วยผลปีศาจ")
-page2:Toggle("ออโต้ฟาร์ม กุระ [ แลคมาก ]", false, function(qke)
+Tab2:Label("ฝั่งชั่น ฟาร์มด้วยผลปีศาจ")
+Tab2:Toggle("ออโต้ฟาร์ม กุระ [ แลคมาก ]", false, function(qke)
     _G.quakefarm = qke
 end)
 
@@ -1596,7 +1594,7 @@ spawn(function() -- Quake farm npcs
     end
 end)
 
-page2:Toggle("ออโต้หาร์ม แสง", false, function(lth)
+Tab2:Toggle("ออโต้หาร์ม แสง", false, function(lth)
     _G.lightfarm = lth
 end)
 
@@ -1643,8 +1641,8 @@ spawn(function() -- Light farm npcs
     end
 end)
 
-page2:Label("ฝั่งชั่น ฮาคิ")
-page2:Toggle("ออโต้ฟาร์ม ฮาคิแบบเร็ว [ ปิงมาก ]", false, function(hki)
+Tab2:Label("ฝั่งชั่น ฮาคิ")
+Tab2:Toggle("ออโต้ฟาร์ม ฮาคิแบบเร็ว [ ปิงมาก ]", false, function(hki)
     AutoHaki = hki
 end)
 
@@ -1758,7 +1756,7 @@ game:GetService('RunService').RenderStepped:connect(function()
     end
 end)
 
-page2:Toggle("ออโต้ กดรับท่าพนมมือ [ ต้องเลเวล 1,000 ]", false, function(gthi)
+Tab2:Toggle("ออโต้ กดรับท่าพนมมือ [ ต้องเลเวล 1,000 ]", false, function(gthi)
     getgenv().haki = gthi
 while getgenv().haki do
             wait()
@@ -1773,12 +1771,11 @@ while getgenv().haki do
 	end
 end)
 
-page2:Label("คำเตือน: ใช้นานอาจเด้งหรือโดนเตะ เพราะ ปิงมาก")
+Tab2:Label("คำเตือน: ใช้นานอาจเด้งหรือโดนเตะ เพราะ ปิงมาก")
 		
-local Tab3 = Window:Taps("สกิล")
-local page3 = Tab3:newpage()
-
-page3:Label("แสปมสกิล")
+local Tab3 = create.tabs:Taps("สกิล")
+		
+Tab3:Label("แสปมสกิล")
 
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
