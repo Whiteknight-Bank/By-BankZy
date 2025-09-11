@@ -1780,22 +1780,22 @@ Tab3:Label("แสปมสกิล")
 local selectedSpamFruit = ""
 local selectedSpamSkill = ""
 
-page3:Dropdown("เลือกผล :", Cache.DevConfig["ListOfSDf"], function(spdf)
+Tab3:Dropdown("เลือกผล :", Cache.DevConfig["ListOfSDf"], function(spdf)
     selectedSpamFruit = spdf
 end)
 
 local spamtimeSet = false
 		
-page3:Textbox("วินาที ต่อ:", "Enter Number", function(xtx)
+Tab3:Textbox("วินาที ต่อ:", "Enter Number", function(xtx)
     getgenv().spamtime = tonumber(xtx)
     spamtimeSet = true
 end)
 
-page3:Dropdown("เลือกปุ่มสกิล :", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
+Tab3:Dropdown("เลือกปุ่มสกิล :", {"Skill Z", "Skill X", "Skill C", "Skill V", "Skill B", "Skill N"}, function(sps)
     selectedSpamSkill = sps
 end)
 
-page3:Toggle("ใช้งาน แสปม [ 100% ]", false, function(spam)
+Tab3:Toggle("ใช้งาน แสปม [ 100% ]", false, function(spam)
     _G.skillspam = spam
 end)
 
@@ -2069,16 +2069,15 @@ game:GetService("Players").LocalPlayer.Character.Powers.Magma.RemoteEvent:FireSe
     end
 end)
 
-page3:Label("ฝั่งชั่น สกิลชาร์จเต็ม")
-page3:Toggle("สกิลชาร์จเต็ม [ 100% ]", false, function(smx)
+Tab3:Label("ฝั่งชั่น สกิลชาร์จเต็ม")
+Tab3:Toggle("สกิลชาร์จเต็ม [ 100% ]", false, function(smx)
 	_G.skillmax = smx
 end)
 
-local Tab4 = Window:Taps("ผู้เล่น")
-local page4 = Tab4:newpage()
+local Tab4 = create.tabs:Taps("ผู้เล่น")
 
-page4:Label("ตัวผู้เล่น")
-page4:Toggle("อมตะ [ 36% ]", false, function(gxd)
+Tab4:Label("ตัวผู้เล่น")
+Tab4:Toggle("อมตะ [ 36% ]", false, function(gxd)
 	_G.godmode = gxd
 end)
 
@@ -2361,29 +2360,29 @@ task.spawn(function()
     end
 end)
 		
-page4:Label("ผู้เล่น")
+Tab4:Label("ผู้เล่น")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-page4:Dropdown("เลือกผู้เล่น :", playerNames, function(name)
+Tab4:Dropdown("เลือกผู้เล่น :", playerNames, function(name)
     selectedPlayer = name
 end)
 
-page4:Button("รีเฟรช ชื่อผู้เล่น", function()
+Tab4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
 				end
 			end)
 		
-page4:Button("วาปไปที่", function()
+Tab4:Button("วาปไปที่", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page4:Button("เช็คดาต้าข้อมูลผู้เล่น & เช็คที่เก็บผล 1-12", function()
+Tab4:Button("เช็คดาต้าข้อมูลผู้เล่น & เช็คที่เก็บผล 1-12", function()
 local selectedName = selectedPlayer
 local player = game.Players:FindFirstChild(selectedName)
 if not player then return end
@@ -2463,7 +2462,7 @@ print("-- =================================== --")
 end)
 
 
-page4:Toggle("View", false, function(state)
+Tab4:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -2476,7 +2475,7 @@ page4:Toggle("View", false, function(state)
 	end
 end)
 
-page4:Toggle("ดึงผู้เล่นทั้งหมด", false, function(plal)
+Tab4:Toggle("ดึงผู้เล่นทั้งหมด", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -2497,7 +2496,7 @@ spawn(function() -- bring Plr
     end
 end)
 		
-page4:Toggle("ล็อคเป้า [ เลือกผู้เล่นก่อน ]", false, function(value)
+Tab4:Toggle("ล็อคเป้า [ เลือกผู้เล่นก่อน ]", false, function(value)
     aimsilent = value
 end)
 
@@ -2526,16 +2525,16 @@ return index(a, b, c)
 end)
 
 
-page4:Label("ฝั่งชั่น ฆ่าผู้เล่น")
-page4:Toggle("ออโต้ฆ่า ฆ่าผู้เล่นด้วยลูกปืน", false, function(bplr)
+Tab4:Label("ฝั่งชั่น ฆ่าผู้เล่น")
+Tab4:Toggle("ออโต้ฆ่า ฆ่าผู้เล่นด้วยลูกปืน", false, function(bplr)
     _G.autocannonplr = bplr
 end)
 
-page4:Toggle("ออโต้ฆ่า ผู้เล่นด้วยกุระ", false, function(qkkl)
+Tab4:Toggle("ออโต้ฆ่า ผู้เล่นด้วยกุระ", false, function(qkkl)
 	_G.Quakekill = qkkl
 end)
 
-page4:Toggle("ออโต้ฆ่า ผู้เล่นด้วยระเบิด", false, function(kbmb)
+Tab4:Toggle("ออโต้ฆ่า ผู้เล่นด้วยระเบิด", false, function(kbmb)
     _G.killbomb = kbmb
 end)
 
@@ -2586,15 +2585,14 @@ end)
 		
 plr = game.Players.LocalPlayer
 
-local Tab5 = Window:Taps("เกาะ")
-local page5 = Tab5:newpage()
+local Tab5 = create.tabs:Taps("เกาะ")
 
-page5:Label("เกาะทั้งหมด")
-page5:Dropdown("เลือกเกาะ :", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
+Tab5:Label("เกาะทั้งหมด")
+Tab5:Dropdown("เลือกเกาะ :", {"Grassy", "Kaizu Island", "Snowy Mountains", "Pursuer Island", "Bar", "Cliffs", "Windmill", "Cave", "Krizma", "Pirate", "Green", "Trees", "Pyramid", "Package", "Snowy", "Mountain", "Marine Ford", "Sand Castle", "Forest", "Evil", "Crescent", "Islands", "Town", "Rocky", "Plam", "Sand", "Sand 2", "Small", "Tiny", "Super Tiny", "Grass", "Atlar"}, function(t)
     getgenv().tpisland = t
 end)
 
-page5:Button("วาปไปที่" , function()
+Tab5:Button("วาปไปที่" , function()
     if getgenv().tpisland == "Grassy" then
        plr.Character.HumanoidRootPart.CFrame = CFrame.new(737, 241, 1209)
       elseif getgenv().tpisland == "Kaizu Island" then
@@ -2662,12 +2660,12 @@ page5:Button("วาปไปที่" , function()
                 end
 end)
 
-page5:Label("เซฟโซน")
-page5:Dropdown("เลือกเซฟโซน", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
+Tab5:Label("เซฟโซน")
+Tab5:Dropdown("เลือกเซฟโซน", {"Safe Zone (Sky)", "Safe Zone (UnderSea)", "Safe Zone Light Affinities 1.0", "Safe Zone Light Affinities 2.0"}, function(s)
     getgenv().tpsafezone = s
 end)
 
-page5:Button("วาปไปที่" , function()
+Tab5:Button("วาปไปที่" , function()
         if getgenv().tpsafezone == "Safe Zone (UnderSea)" then
         game.Players.LocalPlayer.Character.Humanoid.Sit = true
         wait(0.15)
@@ -2681,12 +2679,12 @@ page5:Button("วาปไปที่" , function()
         end
     end)
 
-page5:Label("เอ็นพีซี")
-page5:Dropdown("เลือก เอ็นพีซี :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
+Tab5:Label("เอ็นพีซี")
+Tab5:Dropdown("เลือก เอ็นพีซี :", {"Rayleigh", "Better Drink", "Drink", "Flail", "QuestFish", "Krizma", "Heavy Weapon", "Sword", "Sniper", "Emote", "Affinity","Fish", "Expertise", "Friend"}, function(n)
     getgenv().tpmerchant = n
 end)
 
-page5:Button("วาปไปที่" , function()
+Tab5:Button("วาปไปที่" , function()
         if getgenv().tpmerchant == "Rayleigh" then
             local emoi = game:GetService("Workspace").Merchants.QuestHakiMerchant.Clickable.Available.Value
             if emoi == true then
@@ -2723,15 +2721,14 @@ page5:Button("วาปไปที่" , function()
         end
     end)
 
-local Tab6 = Window:Taps("เอ็นพีซี")
-local page6 = Tab6:newpage()
+local Tab6 = create.tabs:Taps("เอ็นพีซี")
 
-page6:Label("ฝั่งชั่น น้ำ-ดื่ม")
-page6:Dropdown("เลือกน้ำ :", Cache.DevConfig["ListOfDrink"], function(knrd)
+Tab6:Label("ฝั่งชั่น น้ำ-ดื่ม")
+Tab6:Dropdown("เลือกน้ำ :", Cache.DevConfig["ListOfDrink"], function(knrd)
     selectedDrinks = knrd
 end)
 
-page6:Toggle("ออโต้ซื้อน้ำ", false, function(bdy)
+Tab6:Toggle("ออโต้ซื้อน้ำ", false, function(bdy)
 	_G.buydrink = bdy
 end)
 
@@ -2765,7 +2762,7 @@ wait(.8)
 end)
 
 
-page6:Toggle("ออโต้ดื่มน้ำทั้งหมด", false, function(drks)
+Tab6:Toggle("ออโต้ดื่มน้ำทั้งหมด", false, function(drks)
 	AutoDrinks = drks
 end)
 
@@ -2798,7 +2795,7 @@ wait(.8)
     end
 end)
 
-page6:Label("ฝั่งชั่น ออโต้ ค่าพีรามิด [ 2.0 หรือ 10 ขีด ]")
+Tab6:Label("ฝั่งชั่น ออโต้ ค่าพีรามิด [ 2.0 หรือ 10 ขีด ]")
 
 -- Prepare dropdownDF
 local player = game.Players.LocalPlayer
@@ -2825,22 +2822,22 @@ end
 local selectedDF = nil
 local lockvalue = nil
 
-page6:Dropdown("เลือกผลที่จะสุ่ม :", dropdownDF, function(dfs)
+Tab6:Dropdown("เลือกผลที่จะสุ่ม :", dropdownDF, function(dfs)
     selectedDF = dfs
 end)
 
-page6:Dropdown("เลือกล็อคค่า :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
+Tab6:Dropdown("เลือกล็อคค่า :", {"1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2"}, function(lkvs)
     lockvalue = tonumber(lkvs)
 end)
 
-page6:Dropdown("เลือกแบบสุ่ม :", {"Beri", "Gems"}, function(srll)
+Tab6:Dropdown("เลือกแบบสุ่ม :", {"Beri", "Gems"}, function(srll)
     selectedrol = srll
 end)
 
 local isRunning1 = false
 local task1Thread
 
-page6:Toggle("ออโต้สุ่ม", false, function(rol)
+Tab6:Toggle("ออโต้สุ่ม", false, function(rol)
     isRunning1 = rol
 
     if isRunning1 then
@@ -2913,10 +2910,9 @@ page6:Toggle("ออโต้สุ่ม", false, function(rol)
     end
 end)
   
-local Tab7 = Window:Taps("เควสแซม")
-local page7 = Tab7:newpage()
+local Tab7 = create.tabs:Taps("เควสแซม")
 
-page7:Label("ฝั่งชั่น ที่เก็บผล")
+Tab7:Label("ฝั่งชั่น ที่เก็บผล")
 local Cache = {
     Player = { Inputfruitlist = {}, Inputfruitname = "" },
     Boolean = { StorageUsingGroup = {}, StorageKeepShiny = false }
@@ -2934,11 +2930,11 @@ local function StoreFruit(Index, Fruit)
     storagePath:FireServer("StoredDF" .. Index)
 end
 
-page7:Toggle("ออโต้เก็บผล", false, function(value)
+Tab7:Toggle("ออโต้เก็บผล", false, function(value)
     Cache.Boolean.StorageAll = value
 end)
 
-page7:Toggle("ออโต้เก็บผลออร่า [ ไม่พร้อมใช้งาน ]", false, function(shy)
+Tab7:Toggle("ออโต้เก็บผลออร่า [ ไม่พร้อมใช้งาน ]", false, function(shy)
     Cache.Boolean.StorageKeepShiny = shy
 end)
 
@@ -2978,8 +2974,8 @@ spawn(function()
     end
 end)
 
-page7:Label("ฝั่งชั่น เควสแซม")
-page7:Toggle("ออโต้หาเข็ม", false, function(comp)
+Tab7:Label("ฝั่งชั่น เควสแซม")
+Tab7:Toggle("ออโต้หาเข็ม", false, function(comp)
     AutoComp = comp
 end)
 
@@ -3003,7 +2999,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("ออโต้กดรับ 1 เข็ม", false, function(clmp)
+Tab7:Toggle("ออโต้กดรับ 1 เข็ม", false, function(clmp)
     AutoClaimComp1 = clmp
 end)
 
@@ -3017,7 +3013,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("ออโต้กดรับ 10 เข็ม", false, function(clmpp)
+Tab7:Toggle("ออโต้กดรับ 10 เข็ม", false, function(clmpp)
     AutoClaimComp2 = clmpp
 end)
 
@@ -3031,8 +3027,8 @@ spawn(function()
     end
 end)
 
-page7:Label("ฝั่งชั่น เช็คผลแรร์/กล่องแรร์/กล่องอัลตร้า")
-page7:Toggle("เช็คผลแรร์", false, function(chre)
+Tab7:Label("ฝั่งชั่น เช็คผลแรร์/กล่องแรร์/กล่องอัลตร้า")
+Tab7:Toggle("เช็คผลแรร์", false, function(chre)
     _G.checkrare = chre
 end)
 
@@ -3130,8 +3126,8 @@ spawn(function()
 	end
 end)
 
-page7:Label("ฝั่งชั่น โขมยผลแรร์")
-page7:Toggle("ออโต้กุระ โขมยผล", false, function(qkst)
+Tab7:Label("ฝั่งชั่น โขมยผลแรร์")
+Tab7:Toggle("ออโต้กุระ โขมยผล", false, function(qkst)
     _G.quakesteal = qkst
 end)
 
@@ -3205,7 +3201,7 @@ spawn(function()
     end
 end)
 
-page7:Toggle("ออโต้ ระเบิดโขมยผล", false, function(qkst)
+Tab7:Toggle("ออโต้ ระเบิดโขมยผล", false, function(qkst)
     _G.bombsteal = qkst
 end)
 
@@ -3291,11 +3287,10 @@ spawn(function()
     end
 end)
 
-local Tab8 = Window:Taps("อื่นๆ")
-local page8 = Tab8:newpage()
+local Tab8 = create.tabs:Taps("อื่นๆ")
 
-page8:Label("ฝั่งชั่น เซิฟเวอร์")
-page8:Button("รีจอยเซิฟ", function()
+Tab8:Label("ฝั่งชั่น เซิฟเวอร์")
+Tab8:Button("รีจอยเซิฟ", function()
 create:Notifile("", "รอ 3 วิ เพื่อรีจอย " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
@@ -3381,8 +3376,8 @@ local PlaceID = game.PlaceId
 
 end)
 
-page8:Label("ฝั่งชั่น คุ้มกัน")
-page8:Button("กันแลค", function()
+Tab8:Label("ฝั่งชั่น คุ้มกัน")
+Tab8:Button("กันแลค", function()
 create:Notifile("", "โปรดรอ 2 วิ เพื่อเปิดใช้งานกันแลค & โชว์ FPS", 3)
 wait(2)
 
@@ -3500,7 +3495,7 @@ end)
 
 local afkConnection
 
-page8:Toggle("คุัมกัน AFK", false, function(state)
+Tab8:Toggle("คุัมกัน AFK", false, function(state)
 
     if state then
 	create:Notifile("", "ปกป้อง โดนเตะ " .. game.Players.LocalPlayer.Name .. " Can AFK Now :)", 3)
@@ -3518,7 +3513,7 @@ page8:Toggle("คุัมกัน AFK", false, function(state)
     end
 end)
 
-page8:Toggle("คุ้มกัน การโดนสตั้น", false, function(pol)
+Tab8:Toggle("คุ้มกัน การโดนสตั้น", false, function(pol)
     _G.anti = pol
 end)
 
@@ -3953,7 +3948,7 @@ local RunService = game:GetService("RunService")
 local followConnection
 local seaPart
 
-page8:Toggle("เดินบนน้ำ", false, function(walk)
+Tab8:Toggle("เดินบนน้ำ", false, function(walk)
     if walk then
         create:Notifile("", "เดินบนน้ำได้แล้ว! :)", 3)
 
@@ -4059,13 +4054,13 @@ for name, transform in pairs(npcMapping) do
     end
 end
 
-page8:Label("เช็คความคืบหน้าดาบลับได้ที่นี้")
-page8:Dropdown("เช็คความคืบหน้า:", displayOptions, function(select)
+Tab8:Label("เช็คความคืบหน้าดาบลับได้ที่นี้")
+Tab8:Dropdown("เช็คความคืบหน้า:", displayOptions, function(select)
     local originalName = reverseLookup[select]
 end)
 
-page8:Label("อาวุธปลอม")
-page8:Button("Aqua Staff [ ต้องการเมรี เลเวล 500 ]" , function()
+Tab8:Label("อาวุธปลอม")
+Tab8:Button("Aqua Staff [ ต้องการเมรี เลเวล 500 ]" , function()
 local A_1 = "Aqua Staff"
     local Event = game:GetService("Workspace").UserData["User_"..game.Players.LocalPlayer.UserId].UpdateMelee
     Event:FireServer(A_1)
@@ -4077,10 +4072,9 @@ local A_1 = "Seastone Cestus"
     Event:FireServer(A_1)
 end)
 
-local Tab9 = Window:Taps("ดูปเพชร")
-local page9 = Tab9:newpage()
+local Tab9 = create.tabs:Taps("ดูปเพชร")
 
-page9:Button("ดูปเพชร [ คำเตือน: รีแสตททั้งหมดทิ้งเพื่อใช้งานดูป ]" , function()
+Tab9:Button("ดูปเพชร [ คำเตือน: รีแสตททั้งหมดทิ้งเพื่อใช้งานดูป ]" , function()
 create:Notifile("", "เริ่มการดูปเพชร : " .. game.Players.LocalPlayer.Name .. " โปรดรอ", 3) -- เนเธเนเธเน€เธ•เธทเธญเธเน€เธฃเธดเนเธกเธฃเธตเธเธญเธข
 wait(4)
 workspace.UserData["User_"..game.Players.LocalPlayer.UserId].Stats:FireServer()
@@ -4089,7 +4083,7 @@ game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId) -- เธฃเธตเธเธญเธขเธเธฅเธฑเธเน€เธเธดเธฃเนเธเน€เธงเธญเธฃเนเน€เธ”เธดเธก
 end)
 
-page9:Button("เปลี่ยนเพชรเป็นเบรี", function()
+Tab9:Button("เปลี่ยนเพชรเป็นเบรี", function()
     local player = game.Players.LocalPlayer
     local playerId = player.UserId
     local userDataName = game.Workspace.UserData:FindFirstChild("User_" .. playerId)
