@@ -392,7 +392,7 @@ function tabs:Taps(name)
         return container
     end
 
-    function pageAPI:Dropdown(title, items, callback, multi)
+    function newPage:Dropdown(title, items, callback, multi)
     multi = multi or false
     items = items or {}
 
