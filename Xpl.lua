@@ -2369,7 +2369,7 @@ end
 
 Tab4:Dropdown("เลือกผู้เล่น :", playerNames, function(name)
     selectedPlayer = name
-end)
+end, true)
 
 Tab4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
@@ -2462,7 +2462,7 @@ print("-- =================================== --")
 end)
 
 
-Tab4:Toggle("View", false, function(state)
+Tab4:Toggle("ส่องผู้เล่น", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -2473,6 +2473,36 @@ Tab4:Toggle("View", false, function(state)
 			end
 		end
 	end
+end)
+
+Tab4:Toggle("ดึงผู้เล่น [ เลือกผู้เล่นก่อน & กดได้หลายคน ]", false, function(plyer)
+	_G.BringPlayer = plyer
+end)
+
+spawn(function()
+    while task.wait() do
+        if _G.BringPlayer then
+            pcall(function()
+                local localPlr = game.Players.LocalPlayer
+                local targetPlayer = game.Players:FindFirstChild(selectedPlayer)
+
+                if targetPlayer 
+                    and targetPlayer.Character 
+                    and targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    and localPlr.Character
+                    and localPlr.Character:FindFirstChild("HumanoidRootPart") then
+                    
+                    targetPlayer.Character.HumanoidRootPart.CFrame =
+                        localPlr.Character.HumanoidRootPart.CFrame * CFrame.new(0, 0, -14))
+
+                    if targetPlayer.Character:FindFirstChild("Humanoid") 
+                        and targetPlayer.Character.Humanoid.Health <= 0 then
+                        targetPlayer.Character.HumanoidRootPart.Size = Vector3.new(0, 0, 0)
+                    end
+                end
+            end)
+        end
+    end
 end)
 
 Tab4:Toggle("ดึงผู้เล่นทั้งหมด", false, function(plal)
