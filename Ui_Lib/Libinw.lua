@@ -392,122 +392,131 @@ function tabs:Taps(name)
         return container
     end
 
-    function newPage:Dropdown(title, items, callback, multi, subtext)
-                multi = multi or false
-                items = items or {}
+    function pageAPI:Dropdown(title, items, callback, multi)
+    multi = multi or false
+    items = items or {}
 
-                local container = Instance.new("Frame", page)
-                container.Size = UDim2.new(1,-12,0,(subtext and 56 or 40))
-                container.BackgroundTransparency = 1
+    local container = Instance.new("Frame", page)
+    container.Size = UDim2.new(1, -12, 0, (subtext and 56 or 40))
+    container.BackgroundTransparency = 1
 
-                local lbl = Instance.new("TextLabel", container)
-                lbl.Size = UDim2.new(0.4,0,0,20)
-                lbl.Position = UDim2.new(0,6,0,6)
-                lbl.BackgroundTransparency = 1
-                lbl.Text = title or ""
-                lbl.TextColor3 = Color3.fromRGB(255,255,255)
-                lbl.Font = Enum.Font.SourceSans
-                lbl.TextSize = 16
-                lbl.TextXAlignment = Enum.TextXAlignment.Left
+    local lbl = Instance.new("TextLabel", container)
+    lbl.Size = UDim2.new(0.4, 0, 0, 20)
+    lbl.Position = UDim2.new(0, 6, 0, 6)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = title or ""
+    lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+    lbl.Font = Enum.Font.SourceSans
+    lbl.TextSize = 16
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-                local btn = Instance.new("TextButton", container)
-                btn.Size = UDim2.new(0.56,-12,0,28)
-                btn.Position = UDim2.new(0.44,0,0.5,-14)
-                btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
-                btn.Text = "Select..."
-                btn.TextColor3 = Color3.fromRGB(255,255,255)
-                btn.Font = Enum.Font.SourceSans
-                btn.TextSize = 14
-                uicorner(btn, UDim.new(0,6))
+    local btn = Instance.new("TextButton", container)
+    btn.Size = UDim2.new(0.56, -12, 0, 28)
+    btn.Position = UDim2.new(0.44, 0, 0.5, -14)
+    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    btn.Text = "Select..."
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSans
+    btn.TextSize = 14
+    uicorner(btn, UDim.new(0, 6))
 
-                local listFrame = Instance.new("ScrollingFrame", page)
-                listFrame.Size = UDim2.new(1,-12,0,0)
-                listFrame.BackgroundColor3 = Color3.fromRGB(32,32,32)
-                listFrame.Position = UDim2.new(0,6,0,0)
-                listFrame.Visible = false
-                listFrame.ScrollBarThickness = 6
-                listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-                uicorner(listFrame, UDim.new(0,6))
+    local listFrame = Instance.new("Frame", container)
+    listFrame.Size = UDim2.new(1, 0, 0, 0)
+    listFrame.Position = UDim2.new(0, 0, 1, 2)
+    listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    listFrame.Visible = false
+    uicorner(listFrame, UDim.new(0, 6))
 
-                local listLayout = Instance.new("UIListLayout", listFrame)
-                listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-                listLayout.Padding = UDim.new(0,4)
+    local listLayout = Instance.new("UIListLayout", listFrame)
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Padding = UDim.new(0, 4)
 
-                local searchBox = Instance.new("TextBox", listFrame)
-                searchBox.Size = UDim2.new(1,-12,0,28)
-                searchBox.Position = UDim2.new(0,6,0,0)
-                searchBox.PlaceholderText = "Search..."
-                searchBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
-                searchBox.TextColor3 = Color3.fromRGB(255,255,255)
-                searchBox.Text = ""
-                uicorner(searchBox, UDim.new(0,6))
+    local searchBox = Instance.new("TextBox", listFrame)
+    searchBox.Size = UDim2.new(1, -12, 0, 28)
+    searchBox.Position = UDim2.new(0, 6, 0, 0)
+    searchBox.PlaceholderText = "Search..."
+    searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.Text = ""
+    uicorner(searchBox, UDim.new(0, 6))
 
-                local selected = {}
-                local singleSelected = nil
+    local selected = {}
+    local singleSelected = nil
 
-                local function buildOptions(filter)
-                    for _,child in ipairs(listFrame:GetChildren()) do
-                        if child:IsA("TextButton") then child:Destroy() end
+    local function buildOptions(filter)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") and child ~= searchBox then
+                child:Destroy()
+            end
+        end
+
+        for _, v in ipairs(items) do
+            local textV = tostring(v)
+            if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
+                local opt = Instance.new("TextButton", listFrame)
+                opt.Size = UDim2.new(1, -12, 0, 28)
+                opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.Text = textV
+                opt.AutoButtonColor = false
+                uicorner(opt, UDim.new(0, 6))
+
+                if multi then
+                    if selected[textV] then
+                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
                     end
-
-                    for _,v in ipairs(items) do
-                        local textV = tostring(v)
-                        if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
-                            local opt = Instance.new("TextButton", listFrame)
-                            opt.Size = UDim2.new(1,-12,0,28)
-                            opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
-                            opt.TextColor3 = Color3.fromRGB(255,255,255)
-                            opt.Text = textV
-                            opt.AutoButtonColor = false
-                            uicorner(opt, UDim.new(0,6))
-
-                            if multi then
-                                if selected[textV] then
-                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
-                                end
-                            else
-                                if singleSelected == textV then
-                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
-                                end
-                            end
-
-                            opt.MouseButton1Click:Connect(function()
-                                if multi then
-                                    if selected[textV] then
-                                        selected[textV] = nil
-                                        opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
-                                    else
-                                        selected[textV] = true
-                                        opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
-                                    end
-                                    local result = {}
-                                    for k,_ in pairs(selected) do table.insert(result, k) end
-                                    btn.Text = (#result>0) and table.concat(result, ", ") or "Select..."
-                                    if callback then pcall(callback, result) end
-                                else
-                                    singleSelected = textV
-                                    btn.Text = textV
-                                    if callback then pcall(callback, textV) end
-                                    buildOptions(searchBox.Text)
-                                    listFrame.Visible = false
-                                    listFrame.Size = UDim2.new(1,-12,0,0)
-                                end
-                            end)
-                        end
+                else
+                    if singleSelected == textV then
+                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
                     end
                 end
 
-                searchBox:GetPropertyChangedSignal("Text"):Connect(function()
-                    buildOptions(searchBox.Text)
-                    task.wait(0.03)
-                    local contentY = listLayout.AbsoluteContentSize.Y
-                    local target = math.min(220, contentY + 8)
-                    listFrame.Size = UDim2.new(1,-12,0,target)
+                opt.MouseButton1Click:Connect(function()
+                    if multi then
+                        if selected[textV] then
+                            selected[textV] = nil
+                            opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                        else
+                            selected[textV] = true
+                            opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                        end
+                        local result = {}
+                        for k, _ in pairs(selected) do table.insert(result, k) end
+                        btn.Text = (#result > 0) and table.concat(result, ", ") or "Select..."
+                        if callback then pcall(callback, result) end
+                    else
+                        singleSelected = textV
+                        btn.Text = textV
+                        if callback then pcall(callback, textV) end
+                        listFrame.Visible = false
+                        listFrame.Size = UDim2.new(1, 0, 0, 0)
+                    end
                 end)
-
-                return container
             end
+        end
 
+        task.wait(0.03)
+        local contentY = listLayout.AbsoluteContentSize.Y
+        local target = math.min(220, contentY + 8)
+        listFrame.Size = UDim2.new(1, 0, 0, target)
+    end
+
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        buildOptions(searchBox.Text)
+    end)
+
+    btn.MouseButton1Click:Connect(function()
+        listFrame.Visible = not listFrame.Visible
+        if listFrame.Visible then
+            buildOptions("")
+        else
+            listFrame.Size = UDim2.new(1, 0, 0, 0)
+        end
+    end)
+
+    return container
+end
+    
     if #library.pages:GetChildren() == 1 then
         for _, v in pairs(library.pages:GetChildren()) do
             if v:IsA("ScrollingFrame") then v.Visible = true end
