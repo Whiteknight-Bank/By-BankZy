@@ -132,7 +132,7 @@ function library:Win(title)
     -- Hub Toggle (small rounded horizontal button to reopen)
     local hubToggle = Instance.new("TextButton")
     hubToggle.Name = "HubToggle"
-    hubToggle.Size = UDim2.new(0,180,0,36)
+    hubToggle.Size = UDim2.new(0, 120, 0, 50)
     hubToggle.Position = UDim2.new(0.5, -90, 0, 10)
     hubToggle.AnchorPoint = Vector2.new(0.5,0)
     hubToggle.BackgroundColor3 = Color3.fromRGB(25,25,25)
@@ -161,10 +161,10 @@ closeBtn.MouseButton1Click:Connect(function()
         hubToggle.Position = UDim2.new(0.5, 0, -0.2, 0) -- เริ่มนอกจอด้านบน
         -- ขยายปุ่มวงรีเล็กน้อย
         TweenService:Create(
-            hubToggle,
-            TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Size = UDim2.new(0, 60, 0, 60), Position = UDim2.new(0.5, 0, 0, 10)}
-        ):Play()
+    hubToggle,
+    TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    {Size = UDim2.new(0, 120, 0, 50), Position = UDim2.new(0.5, 0, 0, 10)}
+):Play()
     end)
 end)
 
