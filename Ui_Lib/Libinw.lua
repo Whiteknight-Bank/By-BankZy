@@ -397,7 +397,7 @@ function tabs:Taps(name)
     items = items or {}
 
     local container = Instance.new("Frame", page)
-    container.Size = UDim2.new(1, -12, 0, (subtext and 56 or 40))
+    container.Size = UDim2.new(1, -12, 0, 40)
     container.BackgroundTransparency = 1
 
     local lbl = Instance.new("TextLabel", container)
@@ -409,22 +409,29 @@ function tabs:Taps(name)
     lbl.Font = Enum.Font.SourceSans
     lbl.TextSize = 16
     lbl.TextXAlignment = Enum.TextXAlignment.Left
+    lbl.ZIndex = 5
 
     local btn = Instance.new("TextButton", container)
     btn.Size = UDim2.new(0.56, -12, 0, 28)
     btn.Position = UDim2.new(0.44, 0, 0.5, -14)
     btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    btn.Text = "Select..."
+    btn.Text = "🔍Select..."
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSans
     btn.TextSize = 14
+    btn.ZIndex = 5
     createUICorner(btn, UDim.new(0, 6))
 
-    local listFrame = Instance.new("Frame", container)
+    -- 🔹 ใช้ ScrollingFrame แทน Frame
+    local listFrame = Instance.new("ScrollingFrame", container)
     listFrame.Size = UDim2.new(1, 0, 0, 0)
     listFrame.Position = UDim2.new(0, 0, 1, 2)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
+    listFrame.ScrollBarThickness = 6
+    listFrame.ZIndex = 10
+    listFrame.ClipsDescendants = true
+    listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
     createUICorner(listFrame, UDim.new(0, 6))
 
     local listLayout = Instance.new("UIListLayout", listFrame)
@@ -434,10 +441,11 @@ function tabs:Taps(name)
     local searchBox = Instance.new("TextBox", listFrame)
     searchBox.Size = UDim2.new(1, -12, 0, 28)
     searchBox.Position = UDim2.new(0, 6, 0, 0)
-    searchBox.PlaceholderText = "Search..."
+    searchBox.PlaceholderText = "🔍Search..."
     searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     searchBox.Text = ""
+    searchBox.ZIndex = 11
     createUICorner(searchBox, UDim.new(0, 6))
 
     local selected = {}
@@ -459,6 +467,7 @@ function tabs:Taps(name)
                 opt.TextColor3 = Color3.fromRGB(255, 255, 255)
                 opt.Text = textV
                 opt.AutoButtonColor = false
+                opt.ZIndex = 11
                 createUICorner(opt, UDim.new(0, 6))
 
                 if multi then
