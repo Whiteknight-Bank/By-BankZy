@@ -145,42 +145,48 @@ function library:Win(title)
     hubToggle.Parent = gui
     createUICorner(hubToggle, UDim.new(1,0))
 
-    closeBtn.MouseButton1Click:Connect(function()
-    -- Animate เมนูเลื่อนขึ้นไปหายด้านบน
+    -- ปิดเมนูหลัก
+closeBtn.MouseButton1Click:Connect(function()
+    -- ย่อเมนูหลัก
     TweenService:Create(
         main,
         TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-        {Position = UDim2.new(0.5, 0, -0.5, 0)} -- เลื่อนขึ้นไปบน
+        {Size = UDim2.new(0.5, 0, 0, 0), Position = UDim2.new(0.5, 0, -0.2, 0)}
     ):Play()
 
     task.delay(0.45, function()
         main.Visible = false
         hubToggle.Visible = true
+        hubToggle.Size = UDim2.new(0, 50, 0, 50) -- เริ่มขนาดเล็ก
         hubToggle.Position = UDim2.new(0.5, 0, -0.2, 0) -- เริ่มนอกจอด้านบน
+        -- ขยายปุ่มวงรีเล็กน้อย
         TweenService:Create(
             hubToggle,
-            TweenInfo.new(0.4, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Position = UDim2.new(0.5, 0, 0, 10)} -- เลื่อนลงมาบนสุดพอดี
+            TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {Size = UDim2.new(0, 60, 0, 60), Position = UDim2.new(0.5, 0, 0, 10)}
         ):Play()
     end)
 end)
 
+-- กดปุ่มวงรี
 hubToggle.MouseButton1Click:Connect(function()
-    -- Animate ปุ่มวงรีหายขึ้นไป
+    -- ย่อปุ่มวงรี
     TweenService:Create(
         hubToggle,
         TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-        {Position = UDim2.new(0.5, 0, -0.2, 0)}
+        {Size = UDim2.new(0, 0, 0, 0), Position = UDim2.new(0.5, 0, -0.2, 0)}
     ):Play()
 
     task.delay(0.35, function()
         hubToggle.Visible = false
         main.Visible = true
-        main.Position = UDim2.new(0.5, 0, -0.5, 0) -- เริ่มนอกจอด้านบน
+        main.Size = UDim2.new(0.5, 0, 0, 0) -- เริ่มหด
+        main.Position = UDim2.new(0.5, 0, -0.2, 0)
+        -- ขยายเมนูหลักลงมา
         TweenService:Create(
             main,
             TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-            {Position = UDim2.new(0.5, 0, 0.5, 0)} -- กลางจอ
+            {Size = UDim2.new(0.5, 0, 0.7, 0), Position = UDim2.new(0.5, 0, 0.5, 0)}
         ):Play()
     end)
 end)
