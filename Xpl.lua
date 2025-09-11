@@ -290,10 +290,8 @@ for i,v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) 
     end
 end
 
-local Tab1 = Window:Taps("ออโต้")
-local page1 = Tab1:newpage()
-
-page1:Label(" ฝั่งชั่น การเกิด ")
+local Tab1 = create.tabs:Taps("ออโต้")
+Tab1:Label(" ฝั่งชั่น การเกิด ")
 
 _G.savedCFrame = nil
 
@@ -304,7 +302,7 @@ function SaveCFrame()
     end
 end
 
-page1:Button("เซฟจุดเกิด", function()
+Tab1:Button("เซฟจุดเกิด", function()
     local hrp = game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
     if hrp then
         _G.savedCFrame = hrp.CFrame
