@@ -2369,7 +2369,7 @@ end
 
 Tab4:Dropdown("เลือกผู้เล่น :", playerNames, function(name)
     selectedPlayer = name
-end, true)
+end)
 
 Tab4:Button("รีเฟรช ชื่อผู้เล่น", function()
     table.clear(playerNames)
