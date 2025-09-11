@@ -22,122 +22,124 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
 
-    -- เน€เธกเธเธนเธซเธฅเธฑเธ
+    -- Main menu
     local main = Instance.new("Frame")
     main.Size = UDim2.new(0, 500, 0, 350)
     main.Position = UDim2.new(0.5, -250, 0.5, -175)
     main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)BackgroundTransparency = 0.4
     main.BackgroundTransparency = 0.3
     main.BorderSizePixel = 0
     main.Parent = gui
     main.ClipsDescendants = true
 
-    -- เน€เธชเนเธเธเธญเธเธเธฒเธงเธฃเธญเธเธเธฅเนเธญเธ
     local border = Instance.new("UIStroke", main)
     border.Thickness = 2
     border.Color = Color3.fromRGB(255, 255, 255)
 
--- toggle close
-local toggleButton = Instance.new("TextButton")
-toggleButton.Name = "BankHubToggle"
-toggleButton.AnchorPoint = Vector2.new(0, 0)
-toggleButton.Size = UDim2.new(0, 28, 0, 28)
-toggleButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-toggleButton.BackgroundTransparency = 0.2
-toggleButton.Text = " X "
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 16
-toggleButton.TextXAlignment = Enum.TextXAlignment.Center
-toggleButton.TextYAlignment = Enum.TextYAlignment.Center
-toggleButton.ZIndex = 10
-toggleButton.Parent = gui
+    -- X button
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Name = "CloseButton"
+    closeBtn.Size = UDim2.new(0, 28, 0, 28)
+    closeBtn.Position = UDim2.new(1, -35, 0, 5)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    closeBtn.BackgroundTransparency = 0.2
+    closeBtn.Text = "X"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.TextSize = 16
+    closeBtn.Parent = main
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 6)
-corner.Parent = toggleButton
+    local cornerX = Instance.new("UICorner")
+    cornerX.CornerRadius = UDim.new(0, 6)
+    cornerX.Parent = closeBtn
 
-local titleBar = Instance.new("TextLabel")
-titleBar.Size = UDim2.new(1, 0, 0, 35)
-titleBar.Position = UDim2.new(0, 0, 0, 0)
-titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-titleBar.BackgroundTransparency = 0.2
-titleBar.Text = title
-titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleBar.Font = Enum.Font.GothamBold
-titleBar.TextSize = 20
-titleBar.Parent = main
-titleBar.Active = true
+    -- Title bar
+    local titleBar = Instance.new("TextLabel")
+    titleBar.Size = UDim2.new(1, 0, 0, 35)
+    titleBar.Position = UDim2.new(0, 0, 0, 0)
+    titleBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    titleBar.BackgroundTransparency = 0.2
+    titleBar.Text = title
+    titleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleBar.Font = Enum.Font.GothamBold
+    titleBar.TextSize = 20
+    titleBar.Parent = main
+    titleBar.Active = true
 
-local tabButtons = Instance.new("Frame", main)
-tabButtons.Size = UDim2.new(0, 120, 1, -35)
-tabButtons.Position = UDim2.new(0, 0, 0, 35)
-tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-tabButtons.BackgroundTransparency = 0.3
+    -- Tab buttons frame
+    local tabButtons = Instance.new("Frame", main)
+    tabButtons.Size = UDim2.new(0, 120, 1, -35)
+    tabButtons.Position = UDim2.new(0, 0, 0, 35)
+    tabButtons.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    tabButtons.BackgroundTransparency = 0.3
 
-local tabLayout = Instance.new("UIListLayout", tabButtons)
-tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-tabLayout.Padding = UDim.new(0, 5)
+    local tabLayout = Instance.new("UIListLayout", tabButtons)
+    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    tabLayout.Padding = UDim.new(0, 5)
 
-local pages = Instance.new("Frame", main)
-pages.Size = UDim2.new(1, -130, 1, -45)
-pages.Position = UDim2.new(0, 130, 0, 40)
-pages.BackgroundTransparency = 1
+    local pages = Instance.new("Frame", main)
+    pages.Size = UDim2.new(1, -130, 1, -45)
+    pages.Position = UDim2.new(0, 130, 0, 40)
+    pages.BackgroundTransparency = 1
 
--- Dragging system
-local dragging, dragStart, startPos
-titleBar.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = main.Position
-	end
-end)
+    -- Dragging system
+    local dragging, dragStart, startPos
+    titleBar.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = main.Position
+        end
+    end)
 
-titleBar.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
-end)
+    titleBar.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = false
+        end
+    end)
 
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
-		main.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+            local delta = input.Position - dragStart
+            main.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+    end)
 
--- โ… Fix: เธ•เธณเนเธซเธเนเธเธเธธเนเธก X เนเธซเนเธ•เธดเธ”เธกเธธเธกเธเนเธฒเธขเธเธเธเธญเธ main
-RunService.RenderStepped:Connect(function()
-	toggleButton.Position = UDim2.new(0, main.AbsolutePosition.X + 10, 0, main.AbsolutePosition.Y + 5)
-end)
+    -- ReaperX Hub toggle button (วงรียาวด้านบน)
+    local hubToggle = Instance.new("TextButton")
+    hubToggle.Size = UDim2.new(0, 150, 0, 40)
+    hubToggle.Position = UDim2.new(0.5, -75, 0, 10)
+    hubToggle.AnchorPoint = Vector2.new(0.5, 0)
+    hubToggle.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    hubToggle.BackgroundTransparency = 0.1
+    hubToggle.Text = "ReaperX Hub"
+    hubToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    hubToggle.Font = Enum.Font.GothamBold
+    hubToggle.TextSize = 18
+    hubToggle.Visible = false
+    hubToggle.Parent = gui
 
--- Toggle hide/show with animation
-local isOpen = true
-local fullSize = main.Size
-local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+    local hubCorner = Instance.new("UICorner")
+    hubCorner.CornerRadius = UDim.new(1, 0) -- วงรี
+    hubCorner.Parent = hubToggle
 
-toggleButton.MouseButton1Click:Connect(function()
-	if isOpen then
-		local shrink = TweenService:Create(main, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
-		shrink:Play()
-		shrink.Completed:Once(function()
-			main.Visible = false
-			main.Size = fullSize
-		end)
-	else
-		main.Visible = true
-		main.Size = UDim2.new(0, 0, 0, 0)
-		TweenService:Create(main, tweenInfo, {Size = fullSize}):Play()
-	end
-	isOpen = not isOpen
-end)
+    -- กด X → ซ่อน main แล้วโชว์ Hub Toggle
+    closeBtn.MouseButton1Click:Connect(function()
+        main.Visible = false
+        hubToggle.Visible = true
+    end)
+
+    -- กด ReaperX Hub → โชว์ main แล้วซ่อน Hub Toggle
+    hubToggle.MouseButton1Click:Connect(function()
+        main.Visible = true
+        hubToggle.Visible = false
+    end)
+end
     
 local tabs = {}
 
