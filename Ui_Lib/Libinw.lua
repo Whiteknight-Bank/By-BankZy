@@ -392,101 +392,122 @@ function tabs:Taps(name)
         return container
     end
 
-    function newPage:Dropdown(title, items, callback)
-        items = items or {}
-        local container = Instance.new("Frame")
-        container.Size = UDim2.new(1, -10, 0, 30)
-        container.BackgroundTransparency = 1
-        container.Parent = page
+    function newPage:Dropdown(title, items, callback, multi, subtext)
+                multi = multi or false
+                items = items or {}
 
-        local titleLabel = Instance.new("TextLabel")
-        titleLabel.Size = UDim2.new(0.45, 0, 1, 0)
-        titleLabel.Position = UDim2.new(0,10,0,0)
-        titleLabel.BackgroundTransparency = 1
-        titleLabel.Text = title or ""
-        titleLabel.TextColor3 = Color3.fromRGB(255,255,255)
-        titleLabel.Font = Enum.Font.SourceSans
-        titleLabel.TextSize = 16
-        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-        titleLabel.Parent = container
+                local container = Instance.new("Frame", page)
+                container.Size = UDim2.new(1,-12,0,(subtext and 56 or 40))
+                container.BackgroundTransparency = 1
 
-        local dropdownBtn = Instance.new("TextButton")
-        dropdownBtn.Size = UDim2.new(0.5, -20, 1, 0)
-        dropdownBtn.Position = UDim2.new(0.5, 0, 0, 0)
-        dropdownBtn.BackgroundColor3 = Color3.fromRGB(55,55,55)
-        dropdownBtn.BackgroundTransparency = 0.4
-        dropdownBtn.TextColor3 = Color3.fromRGB(255,255,255)
-        dropdownBtn.Font = Enum.Font.SourceSans
-        dropdownBtn.TextSize = 16
-        dropdownBtn.Text = "Select..."
-        dropdownBtn.Parent = container
-        createUICorner(dropdownBtn, UDim.new(0,6))
+                local lbl = Instance.new("TextLabel", container)
+                lbl.Size = UDim2.new(0.4,0,0,20)
+                lbl.Position = UDim2.new(0,6,0,6)
+                lbl.BackgroundTransparency = 1
+                lbl.Text = title or ""
+                lbl.TextColor3 = Color3.fromRGB(255,255,255)
+                lbl.Font = Enum.Font.SourceSans
+                lbl.TextSize = 16
+                lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-        local arrow = Instance.new("TextLabel")
-        arrow.Size = UDim2.new(0,18,1,0)
-        arrow.Position = UDim2.new(1, -26, 0, 0)
-        arrow.BackgroundTransparency = 1
-        arrow.Text = "›"
-        arrow.TextColor3 = Color3.fromRGB(255,255,255)
-        arrow.Font = Enum.Font.SourceSans
-        arrow.TextSize = 18
-        arrow.Parent = container
+                local btn = Instance.new("TextButton", container)
+                btn.Size = UDim2.new(0.56,-12,0,28)
+                btn.Position = UDim2.new(0.44,0,0.5,-14)
+                btn.BackgroundColor3 = Color3.fromRGB(45,45,45)
+                btn.Text = "Select..."
+                btn.TextColor3 = Color3.fromRGB(255,255,255)
+                btn.Font = Enum.Font.SourceSans
+                btn.TextSize = 14
+                uicorner(btn, UDim.new(0,6))
 
-        local opened = false
-        local optionContainer = Instance.new("Frame")
-        optionContainer.Size = UDim2.new(1, -10, 0, 0)
-        optionContainer.Position = UDim2.new(0,5,0,34)
-        optionContainer.BackgroundTransparency = 0.95
-        optionContainer.ClipsDescendants = true
-        optionContainer.Parent = page
+                local listFrame = Instance.new("ScrollingFrame", page)
+                listFrame.Size = UDim2.new(1,-12,0,0)
+                listFrame.BackgroundColor3 = Color3.fromRGB(32,32,32)
+                listFrame.Position = UDim2.new(0,6,0,0)
+                listFrame.Visible = false
+                listFrame.ScrollBarThickness = 6
+                listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+                uicorner(listFrame, UDim.new(0,6))
 
-        local optionLayout = Instance.new("UIListLayout")
-        optionLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        optionLayout.Padding = UDim.new(0,4)
-        optionLayout.Parent = optionContainer
+                local listLayout = Instance.new("UIListLayout", listFrame)
+                listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+                listLayout.Padding = UDim.new(0,4)
 
-        dropdownBtn.MouseButton1Click:Connect(function()
-            opened = not opened
-            arrow.Text = opened and "‹" or "›"
-            optionContainer:TweenSize(UDim2.new(1, -10, 0, opened and (#items * 28) or 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.18, true)
-            if opened then
-                -- clear previous options
-                for _, c in ipairs(optionContainer:GetChildren()) do
-                    if c:IsA("TextButton") then c:Destroy() end
-                end
-                for _, item in ipairs(items) do
-                    local opt = Instance.new("TextButton")
-                    opt.Size = UDim2.new(1, 0, 0, 24)
-                    opt.BackgroundColor3 = Color3.fromRGB(45,45,45)
-                    opt.BackgroundTransparency = 0.4
-                    opt.TextColor3 = Color3.fromRGB(255,255,255)
-                    opt.Font = Enum.Font.SourceSans
-                    opt.TextSize = 16
-                    opt.Text = tostring(item)
-                    opt.Parent = optionContainer
-                    createUICorner(opt, UDim.new(0,6))
-                    opt.MouseButton1Click:Connect(function()
-                        dropdownBtn.Text = tostring(item)
-                        opened = false
-                        optionContainer:TweenSize(UDim2.new(1, -10, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.18, true)
-                        if callback then
-                            pcall(callback, item)
+                local searchBox = Instance.new("TextBox", listFrame)
+                searchBox.Size = UDim2.new(1,-12,0,28)
+                searchBox.Position = UDim2.new(0,6,0,0)
+                searchBox.PlaceholderText = "Search..."
+                searchBox.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                searchBox.TextColor3 = Color3.fromRGB(255,255,255)
+                searchBox.Text = ""
+                uicorner(searchBox, UDim.new(0,6))
+
+                local selected = {}
+                local singleSelected = nil
+
+                local function buildOptions(filter)
+                    for _,child in ipairs(listFrame:GetChildren()) do
+                        if child:IsA("TextButton") then child:Destroy() end
+                    end
+
+                    for _,v in ipairs(items) do
+                        local textV = tostring(v)
+                        if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
+                            local opt = Instance.new("TextButton", listFrame)
+                            opt.Size = UDim2.new(1,-12,0,28)
+                            opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                            opt.TextColor3 = Color3.fromRGB(255,255,255)
+                            opt.Text = textV
+                            opt.AutoButtonColor = false
+                            uicorner(opt, UDim.new(0,6))
+
+                            if multi then
+                                if selected[textV] then
+                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                end
+                            else
+                                if singleSelected == textV then
+                                    opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                end
+                            end
+
+                            opt.MouseButton1Click:Connect(function()
+                                if multi then
+                                    if selected[textV] then
+                                        selected[textV] = nil
+                                        opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                                    else
+                                        selected[textV] = true
+                                        opt.BackgroundColor3 = Color3.fromRGB(50,200,50)
+                                    end
+                                    local result = {}
+                                    for k,_ in pairs(selected) do table.insert(result, k) end
+                                    btn.Text = (#result>0) and table.concat(result, ", ") or "Select..."
+                                    if callback then pcall(callback, result) end
+                                else
+                                    singleSelected = textV
+                                    btn.Text = textV
+                                    if callback then pcall(callback, textV) end
+                                    buildOptions(searchBox.Text)
+                                    listFrame.Visible = false
+                                    listFrame.Size = UDim2.new(1,-12,0,0)
+                                end
+                            end)
                         end
-                    end)
+                    end
                 end
-            else
-                for _, c in ipairs(optionContainer:GetChildren()) do
-                    if c:IsA("TextButton") then c:Destroy() end
-                end
+
+                searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+                    buildOptions(searchBox.Text)
+                    task.wait(0.03)
+                    local contentY = listLayout.AbsoluteContentSize.Y
+                    local target = math.min(220, contentY + 8)
+                    listFrame.Size = UDim2.new(1,-12,0,target)
+                end)
+
+                return container
             end
-        end)
 
-        return container
-    end
-
-    -- show first created page by default
-    -- hide others
-    -- If this is the first tab created, auto-show it
     if #library.pages:GetChildren() == 1 then
         for _, v in pairs(library.pages:GetChildren()) do
             if v:IsA("ScrollingFrame") then v.Visible = true end
