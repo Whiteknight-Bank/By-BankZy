@@ -415,14 +415,14 @@ function tabs:Taps(name)
     btn.Size = UDim2.new(0.56, -12, 0, 28)
     btn.Position = UDim2.new(0.44, 0, 0.5, -14)
     btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    btn.Text = "🔍Select..."
+    btn.Text = "Select..."
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Font = Enum.Font.SourceSans
     btn.TextSize = 14
     btn.ZIndex = 5
     createUICorner(btn, UDim.new(0, 6))
 
-    -- 🔹 ใช้ ScrollingFrame แทน Frame
+    -- 🔹 ใช้ ScrollingFrame
     local listFrame = Instance.new("ScrollingFrame", container)
     listFrame.Size = UDim2.new(1, 0, 0, 0)
     listFrame.Position = UDim2.new(0, 0, 1, 2)
@@ -441,7 +441,7 @@ function tabs:Taps(name)
     local searchBox = Instance.new("TextBox", listFrame)
     searchBox.Size = UDim2.new(1, -12, 0, 28)
     searchBox.Position = UDim2.new(0, 6, 0, 0)
-    searchBox.PlaceholderText = "🔍Search..."
+    searchBox.PlaceholderText = "Search..."
     searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     searchBox.Text = ""
@@ -472,11 +472,11 @@ function tabs:Taps(name)
 
                 if multi then
                     if selected[textV] then
-                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- 🔹 เทาออน
                     end
                 else
                     if singleSelected == textV then
-                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- 🔹 เทาออน
                     end
                 end
 
@@ -487,7 +487,7 @@ function tabs:Taps(name)
                             opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                         else
                             selected[textV] = true
-                            opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                            opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- เทาออน
                         end
                         local result = {}
                         for k, _ in pairs(selected) do table.insert(result, k) end
@@ -497,17 +497,17 @@ function tabs:Taps(name)
                         singleSelected = textV
                         btn.Text = textV
                         if callback then pcall(callback, textV) end
-                        listFrame.Visible = false
-                        listFrame.Size = UDim2.new(1, 0, 0, 0)
+                        -- ปิดพร้อมอนิเมชั่นหุบขึ้น
+                        TweenService:Create(
+                            listFrame,
+                            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                            {Size = UDim2.new(1, 0, 0, 0)}
+                        ):Play()
+                        task.delay(0.25, function() listFrame.Visible = false end)
                     end
                 end)
             end
         end
-
-        task.wait(0.03)
-        local contentY = listLayout.AbsoluteContentSize.Y
-        local target = math.min(220, contentY + 8)
-        listFrame.Size = UDim2.new(1, 0, 0, target)
     end
 
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -515,11 +515,25 @@ function tabs:Taps(name)
     end)
 
     btn.MouseButton1Click:Connect(function()
-        listFrame.Visible = not listFrame.Visible
-        if listFrame.Visible then
+        if not listFrame.Visible then
+            listFrame.Visible = true
             buildOptions("")
+            local contentY = listLayout.AbsoluteContentSize.Y
+            local target = math.min(220, contentY + 8)
+            -- 🔹 อนิเมชั่นเลื่อนลง
+            TweenService:Create(
+                listFrame,
+                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                {Size = UDim2.new(1, 0, 0, target)}
+            ):Play()
         else
-            listFrame.Size = UDim2.new(1, 0, 0, 0)
+            -- 🔹 อนิเมชั่นหุบขึ้น
+            TweenService:Create(
+                listFrame,
+                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                {Size = UDim2.new(1, 0, 0, 0)}
+            ):Play()
+            task.delay(0.25, function() listFrame.Visible = false end)
         end
     end)
 
