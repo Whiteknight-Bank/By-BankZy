@@ -1,5 +1,3 @@
--- Libinw_Fixed_Full.lua
--- Full fixed UI library with Tabs, Dropdown, Textbox, Section, Toggle, Button, Label, Notifications
 local library = {}
 local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
@@ -559,5 +557,4 @@ function library:Notifile(title, msg, duration)
     end)
 end
 
-library.tabs = tabs
 return library
