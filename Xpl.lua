@@ -612,7 +612,7 @@ spawn(function()
     end
  end)
 
-page1:Toggle("ออโต้ แพ็คเกจ", false, function(apke)
+Tab1:Toggle("ออโต้ แพ็คเกจ", false, function(apke)
     AutoPack = apke
 end)
 spawn(function()
