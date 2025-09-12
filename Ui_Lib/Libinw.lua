@@ -393,10 +393,16 @@ function tabs:Taps(name)
     end
 
    function newPage:Dropdown(title, items, callback)
+    -- ถ้า page มี ZIndexBehavior อยู่แล้วให้ใช้ ถ้าไม่มีก็ตั้ง
+    if page:IsA("Frame") or page:IsA("ScrollingFrame") then
+        page.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    end
+
     local container = Instance.new("Frame")
     container.Size = UDim2.new(1, -10, 0, 30)
     container.BackgroundTransparency = 1
     container.LayoutOrder = 0
+    container.ZIndex = 1  -- ✅ ตั้งให้ container อยู่ข้างบน
     container.Parent = page
 
     local titleLabel = Instance.new("TextLabel")
@@ -407,6 +413,7 @@ function tabs:Taps(name)
     titleLabel.Font = Enum.Font.SourceSans
     titleLabel.TextSize = 16
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.ZIndex = 2
     titleLabel.Parent = container
 
     local arrow = Instance.new("TextLabel")
@@ -417,6 +424,7 @@ function tabs:Taps(name)
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
+    arrow.ZIndex = 2
     arrow.Parent = container
 
     local dropdownButton = Instance.new("TextButton")
@@ -428,6 +436,7 @@ function tabs:Taps(name)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
     dropdownButton.Text = " . . . "
+    dropdownButton.ZIndex = 2
     dropdownButton.Parent = container
 
     local opened = false
@@ -436,13 +445,14 @@ function tabs:Taps(name)
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
     optionContainer.BackgroundTransparency = 0.4
     optionContainer.ClipsDescendants = true
+    optionContainer.ZIndex = 50 -- ✅ สูงพอให้โผล่มาด้านบน
     optionContainer.Parent = container
 
     local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Parent = optionContainer
 
-    -- สร้างช่องค้นหา
+    -- ช่องค้นหา
     local searchBox = Instance.new("TextBox")
     searchBox.Size = UDim2.new(1, 0, 0, 25)
     searchBox.PlaceholderText = "🔍 Search..."
@@ -452,11 +462,11 @@ function tabs:Taps(name)
     searchBox.ClearTextOnFocus = false
     searchBox.Font = Enum.Font.SourceSans
     searchBox.TextSize = 16
+    searchBox.ZIndex = 51
     searchBox.Parent = optionContainer
 
-    -- ฟังก์ชันสร้างปุ่มตัวเลือก
+    -- ฟังก์ชันสร้างปุ่ม
     local function createOptions(filter)
-        -- ลบปุ่มเก่า
         for _, child in ipairs(optionContainer:GetChildren()) do
             if child:IsA("TextButton") then child:Destroy() end
         end
@@ -471,9 +481,9 @@ function tabs:Taps(name)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
                 option.TextSize = 16
+                option.ZIndex = 51
                 option.Parent = optionContainer
 
-                -- Hover effect
                 option.MouseEnter:Connect(function()
                     if item ~= selectedOption then
                         option.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -511,15 +521,14 @@ function tabs:Taps(name)
         opened = not opened
         arrow.Text = opened and "»" or "«"
         optionContainer:TweenSize(
-            UDim2.new(1, -10, 0, opened and (#items * 25 + 25) or 0), -- +25 สำหรับช่องค้นหา
+            UDim2.new(1, -10, 0, opened and (#items * 25 + 25) or 0),
             Enum.EasingDirection.Out,
             Enum.EasingStyle.Quad,
             0.2,
             true
         )
-
         if opened then
-            searchBox.Text = "" -- reset search
+            searchBox.Text = ""
             createOptions("")
         end
     end)
