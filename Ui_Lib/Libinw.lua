@@ -445,15 +445,16 @@ function tabs:Taps(name)
     searchBox.ZIndex = 11
     createUICorner(searchBox, UDim.new(0, 6))
 
-    -- 🔹 ScrollingFrame สำหรับ Options
-    local optionsScroll = Instance.new("ScrollingFrame", listFrame)
-    optionsScroll.Size = UDim2.new(1, -12, 1, -40) -- -40 เผื่อช่อง searchBox
-    optionsScroll.Position = UDim2.new(0, 6, 0, 40)
-    optionsScroll.BackgroundTransparency = 1
-    optionsScroll.ScrollBarThickness = 6
-    optionsScroll.ZIndex = 11
-    optionsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-    optionsScroll.ClipsDescendants = true
+local optionsScroll = Instance.new("ScrollingFrame", listFrame)
+optionsScroll.Size = UDim2.new(1, -12, 0, 180)
+optionsScroll.Position = UDim2.new(0, 6, 0, 40)
+optionsScroll.BackgroundTransparency = 1
+optionsScroll.ScrollBarThickness = 6
+optionsScroll.ZIndex = 11
+optionsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+optionsScroll.ClipsDescendants = true
+optionsScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+optionsScroll.ScrollingDirection = Enum.ScrollingDirection.Y
 
     local listLayout = Instance.new("UIListLayout", optionsScroll)
     listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -533,25 +534,26 @@ function tabs:Taps(name)
     end)
 
     btn.MouseButton1Click:Connect(function()
-        if not listFrame.Visible then
-            listFrame.Visible = true
-            buildOptions("")
-            local contentY = listLayout.AbsoluteContentSize.Y
-            local target = math.min(220, contentY + 50) -- 50 เผื่อ searchBox
-            TweenService:Create(
-                listFrame,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                {Size = UDim2.new(1, 0, 0, target)}
-            ):Play()
-        else
-            TweenService:Create(
-                listFrame,
-                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-                {Size = UDim2.new(1, 0, 0, 0)}
-            ):Play()
-            task.delay(0.25, function() listFrame.Visible = false end)
-        end
-    end)
+    if not listFrame.Visible then
+        listFrame.Visible = true
+        buildOptions("")
+        local contentY = listLayout.AbsoluteContentSize.Y
+        local target = math.min(220, contentY + 50) -- 50 เผื่อ searchBox
+        -- 🔹 ไม่ต้องเปลี่ยนสูงสุด Scroll จะจัดการเอง
+        TweenService:Create(
+            listFrame,
+            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+            {Size = UDim2.new(1, 0, 0, target)}
+        ):Play()
+    else
+        TweenService:Create(
+            listFrame,
+            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+            {Size = UDim2.new(1, 0, 0, 0)}
+        ):Play()
+        task.delay(0.25, function() listFrame.Visible = false end)
+    end
+end)
 
     return container
 end
