@@ -433,16 +433,24 @@ function tabs:Taps(name)
     local opened = false
     local selectedOption = nil
 
-    local optionContainer = Instance.new("Frame")
+    -- ✅ เปลี่ยนเป็น ScrollingFrame
+    local optionContainer = Instance.new("ScrollingFrame")
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
     optionContainer.BackgroundTransparency = 0.4
     optionContainer.ClipsDescendants = true
-    optionContainer.ZIndex = 5 -- ✅ ทำให้ขึ้นมาด้านหน้า
+    optionContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+    optionContainer.ScrollBarThickness = 4
+    optionContainer.ZIndex = 5
     optionContainer.Parent = container
 
     local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Parent = optionContainer
+
+    -- อัพเดตขนาด Canvas ทุกครั้งที่มีการเปลี่ยน Layout
+    UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        optionContainer.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
+    end)
 
     local searchBox = Instance.new("TextBox")
     searchBox.Size = UDim2.new(1, 0, 0, 25)
@@ -453,7 +461,7 @@ function tabs:Taps(name)
     searchBox.ClearTextOnFocus = false
     searchBox.Font = Enum.Font.SourceSans
     searchBox.TextSize = 16
-    searchBox.ZIndex = 6 -- ✅ ช่องค้นหาให้อยู่บนสุดด้วย
+    searchBox.ZIndex = 6
     searchBox.Parent = optionContainer
 
     local function createOptions(filter)
@@ -471,7 +479,7 @@ function tabs:Taps(name)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
                 option.TextSize = 16
-                option.ZIndex = 6 -- ✅ ปุ่ม option ให้อยู่ด้านหน้า
+                option.ZIndex = 6
                 option.Parent = optionContainer
 
                 option.MouseEnter:Connect(function()
@@ -511,7 +519,7 @@ function tabs:Taps(name)
         opened = not opened
         arrow.Text = opened and "»" or "«"
         optionContainer:TweenSize(
-            UDim2.new(1, -10, 0, opened and (#items * 25 + 25) or 0),
+            UDim2.new(1, -10, 0, opened and math.min(#items * 25 + 25, 150) or 0), -- จำกัดความสูงสูงสุด 150px
             Enum.EasingDirection.Out,
             Enum.EasingStyle.Quad,
             0.2,
