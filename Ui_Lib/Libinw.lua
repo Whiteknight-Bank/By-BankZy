@@ -30,12 +30,11 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
     gui.Parent = CoreGui
-    print("[Lib] GUI Created and Parent set to CoreGui")
 
     -- Main menu
     local main = Instance.new("Frame")
     main.Name = "MainFrame"
-    main.Size = UDim2.new(0.5, 0, 0.7, 0) -- แก้ให้ใช้ scale เพื่อให้แสดงบนทุกจอ
+    main.Size = UDim2.new(0, 500, 0, 350)
     main.AnchorPoint = Vector2.new(0.5, 0.5)
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(0,0,0)
@@ -393,170 +392,130 @@ function tabs:Taps(name)
         return container
     end
 
-   function newPage:Dropdown(title, items, callback, multi)
-local TweenService = game:GetService("TweenService")
+    function newPage:Dropdown(title, items, callback, multi)
+    multi = multi or false
+    items = items or {}
 
-multi = multi or false  
-items = items or {}  
+    local container = Instance.new("Frame", page)
+    container.Size = UDim2.new(1, -12, 0, (subtext and 56 or 40))
+    container.BackgroundTransparency = 1
 
--- 🔹 Container หลัก  
-local container = Instance.new("Frame", page)  
-container.Size = UDim2.new(1, -12, 0, 40)  
-container.BackgroundTransparency = 1  
+    local lbl = Instance.new("TextLabel", container)
+    lbl.Size = UDim2.new(0.4, 0, 0, 20)
+    lbl.Position = UDim2.new(0, 6, 0, 6)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = title or ""
+    lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+    lbl.Font = Enum.Font.SourceSans
+    lbl.TextSize = 16
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
 
-local lbl = Instance.new("TextLabel", container)  
-lbl.Size = UDim2.new(0.4, 0, 0, 20)  
-lbl.Position = UDim2.new(0, 6, 0, 6)  
-lbl.BackgroundTransparency = 1  
-lbl.Text = title or ""  
-lbl.TextColor3 = Color3.fromRGB(255, 255, 255)  
-lbl.Font = Enum.Font.SourceSans  
-lbl.TextSize = 16  
-lbl.TextXAlignment = Enum.TextXAlignment.Left  
-lbl.ZIndex = 5  
+    local btn = Instance.new("TextButton", container)
+    btn.Size = UDim2.new(0.56, -12, 0, 28)
+    btn.Position = UDim2.new(0.44, 0, 0.5, -14)
+    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    btn.Text = "Select..."
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSans
+    btn.TextSize = 14
+    createUICorner(btn, UDim.new(0, 6))
 
-local btn = Instance.new("TextButton", container)  
-btn.Size = UDim2.new(0.56, -12, 0, 28)  
-btn.Position = UDim2.new(0.44, 0, 0.5, -14)  
-btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)  
-btn.Text = "Select..."  
-btn.TextColor3 = Color3.fromRGB(255, 255, 255)  
-btn.Font = Enum.Font.SourceSans  
-btn.TextSize = 14  
-btn.ZIndex = 5  
-createUICorner(btn, UDim.new(0, 6))  
+    local listFrame = Instance.new("Frame", container)
+    listFrame.Size = UDim2.new(1, 0, 0, 0)
+    listFrame.Position = UDim2.new(0, 0, 1, 2)
+    listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    listFrame.Visible = false
+    createUICorner(listFrame, UDim.new(0, 6))
 
--- 🔹 Frame Dropdown  
-local listFrame = Instance.new("Frame", container)  
-listFrame.Size = UDim2.new(1, 0, 0, 0)  
-listFrame.Position = UDim2.new(0, 0, 1, 2)  
-listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)  
-listFrame.Visible = false  
-listFrame.ZIndex = 10  
-createUICorner(listFrame, UDim.new(0, 6))  
+    local listLayout = Instance.new("UIListLayout", listFrame)
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Padding = UDim.new(0, 4)
 
--- 🔹 Search Box (อยู่นิ่งด้านบน)  
-local searchBox = Instance.new("TextBox", listFrame)  
-searchBox.Size = UDim2.new(1, -12, 0, 28)  
-searchBox.Position = UDim2.new(0, 6, 0, 6)  
-searchBox.PlaceholderText = "Search..."  
-searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
-searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)  
-searchBox.Text = ""  
-searchBox.ZIndex = 11  
-createUICorner(searchBox, UDim.new(0, 6))  
+    local searchBox = Instance.new("TextBox", listFrame)
+    searchBox.Size = UDim2.new(1, -12, 0, 28)
+    searchBox.Position = UDim2.new(0, 6, 0, 0)
+    searchBox.PlaceholderText = "Search..."
+    searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.Text = ""
+    createUICorner(searchBox, UDim.new(0, 6))
 
--- 🔹 ScrollingFrame สำหรับ Options  
-local optionsScroll = Instance.new("ScrollingFrame", listFrame)  
-optionsScroll.Size = UDim2.new(1, -12, 1, -40) -- -40 เผื่อช่อง searchBox  
-optionsScroll.Position = UDim2.new(0, 6, 0, 40)  
-optionsScroll.BackgroundTransparency = 1  
-optionsScroll.ScrollBarThickness = 6  
-optionsScroll.ZIndex = 11  
-optionsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)  
-optionsScroll.ClipsDescendants = true  
+    local selected = {}
+    local singleSelected = nil
 
-local listLayout = Instance.new("UIListLayout", optionsScroll)  
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder  
-listLayout.Padding = UDim.new(0, 4)  
+    local function buildOptions(filter)
+        for _, child in ipairs(listFrame:GetChildren()) do
+            if child:IsA("TextButton") and child ~= searchBox then
+                child:Destroy()
+            end
+        end
 
--- ✅ อัปเดต CanvasSize ให้เลื่อน  
-listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()  
-    optionsScroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)  
-end)  
+        for _, v in ipairs(items) do
+            local textV = tostring(v)
+            if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
+                local opt = Instance.new("TextButton", listFrame)
+                opt.Size = UDim2.new(1, -12, 0, 28)
+                opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.Text = textV
+                opt.AutoButtonColor = false
+                createUICorner(opt, UDim.new(0, 6))
 
--- ตัวแปรเลือก  
-local selected = {}  
-local singleSelected = nil  
+                if multi then
+                    if selected[textV] then
+                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                    end
+                else
+                    if singleSelected == textV then
+                        opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                    end
+                end
 
--- 🔹 สร้าง Options  
-local function buildOptions(filter)  
-    for _, child in ipairs(optionsScroll:GetChildren()) do  
-        if child:IsA("TextButton") then  
-            child:Destroy()  
-        end  
-    end  
+                opt.MouseButton1Click:Connect(function()
+                    if multi then
+                        if selected[textV] then
+                            selected[textV] = nil
+                            opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                        else
+                            selected[textV] = true
+                            opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
+                        end
+                        local result = {}
+                        for k, _ in pairs(selected) do table.insert(result, k) end
+                        btn.Text = (#result > 0) and table.concat(result, ", ") or "Select..."
+                        if callback then pcall(callback, result) end
+                    else
+                        singleSelected = textV
+                        btn.Text = textV
+                        if callback then pcall(callback, textV) end
+                        listFrame.Visible = false
+                        listFrame.Size = UDim2.new(1, 0, 0, 0)
+                    end
+                end)
+            end
+        end
 
-    for _, v in ipairs(items) do  
-        local textV = tostring(v)  
-        if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then  
-            local opt = Instance.new("TextButton", optionsScroll)  
-            opt.Size = UDim2.new(1, -4, 0, 28)  
-            opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
-            opt.TextColor3 = Color3.fromRGB(255, 255, 255)  
-            opt.Text = textV  
-            opt.AutoButtonColor = false  
-            opt.ZIndex = 12  
-            createUICorner(opt, UDim.new(0, 6))  
+        task.wait(0.03)
+        local contentY = listLayout.AbsoluteContentSize.Y
+        local target = math.min(220, contentY + 8)
+        listFrame.Size = UDim2.new(1, 0, 0, target)
+    end
 
-            -- ไฮไลท์ตัวเลือก  
-            if multi then  
-                if selected[textV] then  
-                    opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)  
-                end  
-            else  
-                if singleSelected == textV then  
-                    opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)  
-                end  
-            end  
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        buildOptions(searchBox.Text)
+    end)
 
-            opt.MouseButton1Click:Connect(function()  
-                if multi then  
-                    if selected[textV] then  
-                        selected[textV] = nil  
-                        opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)  
-                    else  
-                        selected[textV] = true  
-                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)  
-                    end  
-                    local result = {}  
-                    for k, _ in pairs(selected) do table.insert(result, k) end  
-                    btn.Text = (#result > 0) and table.concat(result, ", ") or "Select..."  
-                    if callback then pcall(callback, result) end  
-                else  
-                    singleSelected = textV  
-                    btn.Text = textV  
-                    if callback then pcall(callback, textV) end  
-                    TweenService:Create(  
-                        listFrame,  
-                        TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),  
-                        {Size = UDim2.new(1, 0, 0, 0)}  
-                    ):Play()  
-                    task.delay(0.25, function() listFrame.Visible = false end)  
-                end  
-            end)  
-        end  
-    end  
-end  
+    btn.MouseButton1Click:Connect(function()
+        listFrame.Visible = not listFrame.Visible
+        if listFrame.Visible then
+            buildOptions("")
+        else
+            listFrame.Size = UDim2.new(1, 0, 0, 0)
+        end
+    end)
 
-searchBox:GetPropertyChangedSignal("Text"):Connect(function()  
-    buildOptions(searchBox.Text)  
-end)  
-
-btn.MouseButton1Click:Connect(function()  
-    if not listFrame.Visible then  
-        listFrame.Visible = true  
-        buildOptions("")  
-        local contentY = listLayout.AbsoluteContentSize.Y  
-        local target = math.min(220, contentY + 50) -- 50 เผื่อ searchBox  
-        TweenService:Create(  
-            listFrame,  
-            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),  
-            {Size = UDim2.new(1, 0, 0, target)}  
-        ):Play()  
-    else  
-        TweenService:Create(  
-            listFrame,  
-            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),  
-            {Size = UDim2.new(1, 0, 0, 0)}  
-        ):Play()  
-        task.delay(0.25, function() listFrame.Visible = false end)  
-    end  
-end)  
-
-return container
-
-
+    return container
+end
     
     if #library.pages:GetChildren() == 1 then
         for _, v in pairs(library.pages:GetChildren()) do
