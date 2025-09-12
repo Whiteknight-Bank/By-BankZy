@@ -30,11 +30,12 @@ function library:Win(title)
     gui.Name = "redui"
     gui.ResetOnSpawn = false
     gui.Parent = CoreGui
+    print("[Lib] GUI Created and Parent set to CoreGui")
 
     -- Main menu
     local main = Instance.new("Frame")
     main.Name = "MainFrame"
-    main.Size = UDim2.new(0, 500, 0, 350)
+    main.Size = UDim2.new(0.5, 0, 0.7, 0) -- แก้ให้ใช้ scale เพื่อให้แสดงบนทุกจอ
     main.AnchorPoint = Vector2.new(0.5, 0.5)
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(0,0,0)
