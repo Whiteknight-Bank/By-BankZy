@@ -393,30 +393,22 @@ function tabs:Taps(name)
     end
 
    function newPage:Dropdown(title, items, callback)
-    -- ถ้า page มี ZIndexBehavior อยู่แล้วให้ใช้ ถ้าไม่มีก็ตั้ง
-    if page:IsA("Frame") or page:IsA("ScrollingFrame") then
-        page.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-    end
-
-    local container = Instance.new("Frame")
+    -- container (parent = page เพื่อให้เรียกใช้งานแบบ Tab1:Dropdown เหมือนเดิม)
+    local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -10, 0, 30)
     container.BackgroundTransparency = 1
     container.LayoutOrder = 0
-    container.ZIndex = 1  -- ✅ ตั้งให้ container อยู่ข้างบน
-    container.Parent = page
 
-    local titleLabel = Instance.new("TextLabel")
+    local titleLabel = Instance.new("TextLabel", container)
     titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Text = title
-    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- แก้ค่าผิด
     titleLabel.Font = Enum.Font.SourceSans
     titleLabel.TextSize = 16
     titleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    titleLabel.ZIndex = 2
-    titleLabel.Parent = container
 
-    local arrow = Instance.new("TextLabel")
+    local arrow = Instance.new("TextLabel", container)
     arrow.Size = UDim2.new(0, 20, 1, 0)
     arrow.Position = UDim2.new(1, -20, 0, 0)
     arrow.BackgroundTransparency = 1
@@ -424,10 +416,8 @@ function tabs:Taps(name)
     arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
     arrow.Font = Enum.Font.SourceSans
     arrow.TextSize = 16
-    arrow.ZIndex = 2
-    arrow.Parent = container
 
-    local dropdownButton = Instance.new("TextButton")
+    local dropdownButton = Instance.new("TextButton", container)
     dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
     dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
     dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
@@ -436,24 +426,24 @@ function tabs:Taps(name)
     dropdownButton.Font = Enum.Font.SourceSans
     dropdownButton.TextSize = 16
     dropdownButton.Text = " . . . "
-    dropdownButton.ZIndex = 2
-    dropdownButton.Parent = container
 
     local opened = false
     local selectedOption = nil
-    local optionContainer = Instance.new("Frame")
-    optionContainer.Size = UDim2.new(1, -10, 0, 0)
+
+    -- optionContainer เป็นลูกของ 'page' เหมือนโค้ดต้นฉบับ (เพื่อให้โผล่เหนือ UI ที่อาจอยู่ใน container เดียวกัน)
+    local optionContainer = Instance.new("Frame", page)
+    optionContainer.Size = UDim2.new(container.Size.X.Scale, container.Size.X.Offset, 0, 0)
     optionContainer.BackgroundTransparency = 0.4
     optionContainer.ClipsDescendants = true
-    optionContainer.ZIndex = 50 -- ✅ สูงพอให้โผล่มาด้านบน
-    optionContainer.Parent = container
+    optionContainer.ZIndex = 60 -- ให้สูงเพื่อไม่ถูกบัง
+    optionContainer.BorderSizePixel = 0
 
-    local UIListLayout = Instance.new("UIListLayout")
+    local UIListLayout = Instance.new("UIListLayout", optionContainer)
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Parent = optionContainer
+    UIListLayout.Padding = UDim.new(0, 0)
 
-    -- ช่องค้นหา
-    local searchBox = Instance.new("TextBox")
+    -- search box (อยู่ใน optionContainer)
+    local searchBox = Instance.new("TextBox", optionContainer)
     searchBox.Size = UDim2.new(1, 0, 0, 25)
     searchBox.PlaceholderText = "🔍 Search..."
     searchBox.Text = ""
@@ -462,18 +452,36 @@ function tabs:Taps(name)
     searchBox.ClearTextOnFocus = false
     searchBox.Font = Enum.Font.SourceSans
     searchBox.TextSize = 16
-    searchBox.ZIndex = 51
-    searchBox.Parent = optionContainer
+    searchBox.ZIndex = 61
+    searchBox.LayoutOrder = 1
 
-    -- ฟังก์ชันสร้างปุ่ม
+    -- ฟังก์ชันวาง optionContainer ให้อยู่ใต้ container เสมอ
+    local function updateOptionPosition()
+        -- ใช้ AbsoluteSize เพื่อวางให้ตรงขนาดจริงของ container
+        local absY = container.AbsoluteSize.Y
+        optionContainer.Position = UDim2.new(
+            container.Position.X.Scale, container.Position.X.Offset,
+            container.Position.Y.Scale, container.Position.Y.Offset + absY
+        )
+        optionContainer.Size = UDim2.new(container.Size.X.Scale, container.Size.X.Offset, 0, optionContainer.Size.Y.Offset)
+    end
+    -- เรียกครั้งแรก (บางครั้ง AbsoluteSize ยังไม่พร้อมทันที — เชื่อมสัญญาณไว้ด้วย)
+    updateOptionPosition()
+    container:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateOptionPosition)
+    container:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateOptionPosition)
+
+    -- สร้างรายการตัวเลือก (และคืนจำนวนตัวเลือกที่แสดงได้)
     local function createOptions(filter)
+        -- ลบเฉพาะ TextButton เก่า (ไม่ลบ searchBox)
         for _, child in ipairs(optionContainer:GetChildren()) do
             if child:IsA("TextButton") then child:Destroy() end
         end
 
+        local shown = 0
         for _, item in ipairs(items) do
             if filter == "" or string.find(string.lower(item), string.lower(filter)) then
-                local option = Instance.new("TextButton")
+                shown = shown + 1
+                local option = Instance.new("TextButton", optionContainer)
                 option.Size = UDim2.new(1, 0, 0, 25)
                 option.BackgroundColor3 = (item == selectedOption) and Color3.fromRGB(90, 90, 90) or Color3.fromRGB(40, 40, 40)
                 option.BackgroundTransparency = 0.4
@@ -481,8 +489,8 @@ function tabs:Taps(name)
                 option.Text = item
                 option.Font = Enum.Font.SourceSans
                 option.TextSize = 16
-                option.ZIndex = 51
-                option.Parent = optionContainer
+                option.ZIndex = 61
+                option.LayoutOrder = shown + 1 -- searchBox = 1
 
                 option.MouseEnter:Connect(function()
                     if item ~= selectedOption then
@@ -498,40 +506,47 @@ function tabs:Taps(name)
                 option.MouseButton1Click:Connect(function()
                     selectedOption = item
                     dropdownButton.Text = item
-                    if callback then callback(item) end
+                    if callback then pcall(callback, item) end
+                    -- ปิด dropdown
                     opened = false
                     arrow.Text = "«"
-                    optionContainer:TweenSize(
-                        UDim2.new(1, -10, 0, 0),
-                        Enum.EasingDirection.Out,
-                        Enum.EasingStyle.Quad,
-                        0.2,
-                        true
-                    )
+                    optionContainer:TweenSize(UDim2.new(optionContainer.Size.X.Scale, optionContainer.Size.X.Offset, 0, 0),
+                        Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
                 end)
             end
         end
+
+        return shown
     end
 
+    -- เมื่อพิมพ์ค้นหาให้สร้างตัวเลือกใหม่
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
-        createOptions(searchBox.Text)
+        local count = createOptions(searchBox.Text)
+        local totalHeight = (count * 25) + 25 -- options + searchBox
+        optionContainer:TweenSize(UDim2.new(container.Size.X.Scale, container.Size.X.Offset, 0, totalHeight),
+            Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.12, true)
     end)
 
+    -- เปิด/ปิด dropdown
     dropdownButton.MouseButton1Click:Connect(function()
         opened = not opened
         arrow.Text = opened and "»" or "«"
-        optionContainer:TweenSize(
-            UDim2.new(1, -10, 0, opened and (#items * 25 + 25) or 0),
-            Enum.EasingDirection.Out,
-            Enum.EasingStyle.Quad,
-            0.2,
-            true
-        )
+
         if opened then
             searchBox.Text = ""
-            createOptions("")
+            local count = createOptions("") -- คืนจำนวนที่แสดง
+            local totalHeight = (count * 25) + 25
+            updateOptionPosition()
+            optionContainer:TweenSize(UDim2.new(container.Size.X.Scale, container.Size.X.Offset, 0, totalHeight),
+                Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.15, true)
+        else
+            optionContainer:TweenSize(UDim2.new(optionContainer.Size.X.Scale, optionContainer.Size.X.Offset, 0, 0),
+                Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.12, true)
         end
     end)
+
+    return container
+end
 
     return container
 end
