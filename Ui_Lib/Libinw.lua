@@ -393,94 +393,136 @@ function tabs:Taps(name)
     end
 
    function newPage:Dropdown(title, items, callback)
-local container = Instance.new("Frame", page)
-container.Size = UDim2.new(1, -10, 0, 30)
-container.BackgroundTransparency = 1
-container.LayoutOrder = 0
+    local container = Instance.new("Frame")
+    container.Size = UDim2.new(1, -10, 0, 30)
+    container.BackgroundTransparency = 1
+    container.LayoutOrder = 0
+    container.Parent = page
 
-local titleLabel = Instance.new("TextLabel", container)  
-titleLabel.Size = UDim2.new(0.5, 0, 1, 0)  
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = title  
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 355)  
-titleLabel.Font = Enum.Font.SourceSans  
-titleLabel.TextSize = 16  
-titleLabel.TextXAlignment = Enum.TextXAlignment.Left  
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(0.5, 0, 1, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = title
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.Font = Enum.Font.SourceSans
+    titleLabel.TextSize = 16
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = container
 
-local arrow = Instance.new("TextLabel", container)  
-arrow.Size = UDim2.new(0, 20, 1, 0)  
-arrow.Position = UDim2.new(1, -20, 0, 0)  
-arrow.BackgroundTransparency = 1
-arrow.Text = "«"  
-arrow.TextColor3 = Color3.fromRGB(255, 255, 255)  
-arrow.Font = Enum.Font.SourceSans  
-arrow.TextSize = 16  
+    local arrow = Instance.new("TextLabel")
+    arrow.Size = UDim2.new(0, 20, 1, 0)
+    arrow.Position = UDim2.new(1, -20, 0, 0)
+    arrow.BackgroundTransparency = 1
+    arrow.Text = "«"
+    arrow.TextColor3 = Color3.fromRGB(255, 255, 255)
+    arrow.Font = Enum.Font.SourceSans
+    arrow.TextSize = 16
+    arrow.Parent = container
 
-local dropdownButton = Instance.new("TextButton", container)  
-dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)  
-dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)  
-dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)  
-dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
-dropdownButton.BackgroundTransparency = 0.4
-dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)  
-dropdownButton.Font = Enum.Font.SourceSans  
-dropdownButton.TextSize = 16  
-dropdownButton.Text = " . . . "  
+    local dropdownButton = Instance.new("TextButton")
+    dropdownButton.Size = UDim2.new(0.5, -20, 1, 0)
+    dropdownButton.Position = UDim2.new(0.5, 0, 0, 0)
+    dropdownButton.BackgroundColor3 = Color3.fromRGB(55, 55, 55)
+    dropdownButton.BackgroundTransparency = 0.4
+    dropdownButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    dropdownButton.Font = Enum.Font.SourceSans
+    dropdownButton.TextSize = 16
+    dropdownButton.Text = " . . . "
+    dropdownButton.Parent = container
 
-local opened = false  
-local optionContainer = Instance.new("Frame", page)  
-optionContainer.Size = UDim2.new(1, -10, 0, 0)  
-optionContainer.BackgroundTransparency = 0.4  
-optionContainer.ClipsDescendants = true  
+    local opened = false
+    local selectedOption = nil
+    local optionContainer = Instance.new("Frame")
+    optionContainer.Size = UDim2.new(1, -10, 0, 0)
+    optionContainer.BackgroundTransparency = 0.4
+    optionContainer.ClipsDescendants = true
+    optionContainer.Parent = container
 
-local UIListLayout = Instance.new("UIListLayout", optionContainer)  
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder  
+    local UIListLayout = Instance.new("UIListLayout")
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Parent = optionContainer
 
-dropdownButton.MouseButton1Click:Connect(function()  
-    opened = not opened  
-    arrow.Text = opened and "»" or "«"  
-    optionContainer:TweenSize(  
-        UDim2.new(1, -10, 0, opened and (#items * 25) or 0),  
-        Enum.EasingDirection.Out,  
-        Enum.EasingStyle.Quad,  
-        0.2,  
-        true  
-    )  
-    if opened then  
-        for _, child in ipairs(optionContainer:GetChildren()) do  
-            if child:IsA("TextButton") then child:Destroy() end  
-        end  
-        for _, item in ipairs(items) do  
-            local option = Instance.new("TextButton", optionContainer)  
-            option.Size = UDim2.new(1, 0, 0, 25)  
-            option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)  
-            option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            option.BackgroundTransparency = 0.4  
-            option.TextColor3 = Color3.fromRGB(255, 255, 255)  
-            option.Text = item  
-            option.Font = Enum.Font.SourceSans  
-            option.TextSize = 16  
-            option.MouseButton1Click:Connect(function()  
-                dropdownButton.Text = item  
-                if callback then callback(item) end  
-                opened = false  
-                arrow.Text = "«"  
-                optionContainer:TweenSize(  
-                    UDim2.new(1, -10, 0, 0),  
-                    Enum.EasingDirection.Out,  
-                    Enum.EasingStyle.Quad,  
-                    0.2,  
-                    true  
-                )  
-            end)  
-        end  
-    else  
-        for _, child in ipairs(optionContainer:GetChildren()) do  
-            if child:IsA("TextButton") then child:Destroy() end  
-        end  
-    end  
-end)
-end
+    -- สร้างช่องค้นหา
+    local searchBox = Instance.new("TextBox")
+    searchBox.Size = UDim2.new(1, 0, 0, 25)
+    searchBox.PlaceholderText = "🔍 Search..."
+    searchBox.Text = ""
+    searchBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.ClearTextOnFocus = false
+    searchBox.Font = Enum.Font.SourceSans
+    searchBox.TextSize = 16
+    searchBox.Parent = optionContainer
+
+    -- ฟังก์ชันสร้างปุ่มตัวเลือก
+    local function createOptions(filter)
+        -- ลบปุ่มเก่า
+        for _, child in ipairs(optionContainer:GetChildren()) do
+            if child:IsA("TextButton") then child:Destroy() end
+        end
+
+        for _, item in ipairs(items) do
+            if filter == "" or string.find(string.lower(item), string.lower(filter)) then
+                local option = Instance.new("TextButton")
+                option.Size = UDim2.new(1, 0, 0, 25)
+                option.BackgroundColor3 = (item == selectedOption) and Color3.fromRGB(90, 90, 90) or Color3.fromRGB(40, 40, 40)
+                option.BackgroundTransparency = 0.4
+                option.TextColor3 = Color3.fromRGB(255, 255, 255)
+                option.Text = item
+                option.Font = Enum.Font.SourceSans
+                option.TextSize = 16
+                option.Parent = optionContainer
+
+                -- Hover effect
+                option.MouseEnter:Connect(function()
+                    if item ~= selectedOption then
+                        option.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+                    end
+                end)
+                option.MouseLeave:Connect(function()
+                    if item ~= selectedOption then
+                        option.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+                    end
+                end)
+
+                option.MouseButton1Click:Connect(function()
+                    selectedOption = item
+                    dropdownButton.Text = item
+                    if callback then callback(item) end
+                    opened = false
+                    arrow.Text = "«"
+                    optionContainer:TweenSize(
+                        UDim2.new(1, -10, 0, 0),
+                        Enum.EasingDirection.Out,
+                        Enum.EasingStyle.Quad,
+                        0.2,
+                        true
+                    )
+                end)
+            end
+        end
+    end
+
+    searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+        createOptions(searchBox.Text)
+    end)
+
+    dropdownButton.MouseButton1Click:Connect(function()
+        opened = not opened
+        arrow.Text = opened and "»" or "«"
+        optionContainer:TweenSize(
+            UDim2.new(1, -10, 0, opened and (#items * 25 + 25) or 0), -- +25 สำหรับช่องค้นหา
+            Enum.EasingDirection.Out,
+            Enum.EasingStyle.Quad,
+            0.2,
+            true
+        )
+
+        if opened then
+            searchBox.Text = "" -- reset search
+            createOptions("")
+        end
+    end)
 
     return container
 end
