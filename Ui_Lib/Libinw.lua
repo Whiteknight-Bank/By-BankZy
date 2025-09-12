@@ -438,6 +438,10 @@ function tabs:Taps(name)
     listLayout.SortOrder = Enum.SortOrder.LayoutOrder
     listLayout.Padding = UDim.new(0, 4)
 
+    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        listFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
+    end)
+        
     local searchBox = Instance.new("TextBox", listFrame)
     searchBox.Size = UDim2.new(1, -12, 0, 28)
     searchBox.Position = UDim2.new(0, 6, 0, 0)
