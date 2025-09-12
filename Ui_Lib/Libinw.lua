@@ -420,11 +420,17 @@ function tabs:Taps(name)
     btn.TextSize = 14
     createUICorner(btn, UDim.new(0, 6))
 
-    local listFrame = Instance.new("Frame", container)
+    -- เปลี่ยนเป็น ScrollingFrame + parent ไป main container (ไม่ดันปุ่มอื่น)
+    local listFrame = Instance.new("ScrollingFrame")
     listFrame.Size = UDim2.new(1, 0, 0, 0)
-    listFrame.Position = UDim2.new(0, 0, 1, 2)
+    listFrame.Position = UDim2.new(0, container.AbsolutePosition.X, 0, container.AbsolutePosition.Y + container.AbsoluteSize.Y)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
+    listFrame.ClipsDescendants = true
+    listFrame.ScrollBarThickness = 6
+    listFrame.ScrollingDirection = Enum.ScrollingDirection.Y
+    listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    listFrame.Parent = page.Parent -- ใส่ parent ใหญ่แทน container
     createUICorner(listFrame, UDim.new(0, 6))
 
     local listLayout = Instance.new("UIListLayout", listFrame)
@@ -489,7 +495,6 @@ function tabs:Taps(name)
                         btn.Text = textV
                         if callback then pcall(callback, textV) end
                         listFrame.Visible = false
-                        listFrame.Size = UDim2.new(1, 0, 0, 0)
                     end
                 end)
             end
@@ -498,7 +503,7 @@ function tabs:Taps(name)
         task.wait(0.03)
         local contentY = listLayout.AbsoluteContentSize.Y
         local target = math.min(220, contentY + 8)
-        listFrame.Size = UDim2.new(1, 0, 0, target)
+        listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, 0, target)
     end
 
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -509,6 +514,7 @@ function tabs:Taps(name)
         listFrame.Visible = not listFrame.Visible
         if listFrame.Visible then
             buildOptions("")
+            listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
         else
             listFrame.Size = UDim2.new(1, 0, 0, 0)
         end
