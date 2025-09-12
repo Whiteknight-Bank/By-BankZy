@@ -423,6 +423,7 @@ function tabs:Taps(name)
     createUICorner(btn, UDim.new(0, 6))
 
     -- 🔹 ใช้ ScrollingFrame
+    -- 🔹 ScrollingFrame
     local listFrame = Instance.new("ScrollingFrame", container)
     listFrame.Size = UDim2.new(1, 0, 0, 0)
     listFrame.Position = UDim2.new(0, 0, 1, 2)
@@ -431,17 +432,9 @@ function tabs:Taps(name)
     listFrame.ScrollBarThickness = 6
     listFrame.ZIndex = 10
     listFrame.ClipsDescendants = true
-    listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
     createUICorner(listFrame, UDim.new(0, 6))
 
-    local listLayout = Instance.new("UIListLayout", listFrame)
-    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    listLayout.Padding = UDim.new(0, 4)
-
-    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        listFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
-    end)
-        
+    -- 🔹 ช่องค้นหา (อยู่นิ่งด้านบน ไม่โดนเลื่อน)
     local searchBox = Instance.new("TextBox", listFrame)
     searchBox.Size = UDim2.new(1, -12, 0, 28)
     searchBox.Position = UDim2.new(0, 6, 0, 0)
@@ -452,14 +445,38 @@ function tabs:Taps(name)
     searchBox.ZIndex = 11
     createUICorner(searchBox, UDim.new(0, 6))
 
+    -- 🔹 Holder สำหรับ options (เลื่อนแยก)
+    local optionsHolder = Instance.new("Frame", listFrame)
+    optionsHolder.Size = UDim2.new(1, -12, 0, 0)
+    optionsHolder.Position = UDim2.new(0, 6, 0, 34) -- ใต้ searchBox
+    optionsHolder.BackgroundTransparency = 1
+    optionsHolder.ZIndex = 11
+
+    local listLayout = Instance.new("UIListLayout", listFrame)
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Padding = UDim.new(0, 4)
+
+    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        listFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
+    end)
+
+    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        optionsHolder.Size = UDim2.new(1, -12, 0, listLayout.AbsoluteContentSize.Y)
+        listFrame.CanvasSize = UDim2.new(0, 0, 0, optionsHolder.AbsoluteSize.Y + 40)
+    end)
+
     local selected = {}
     local singleSelected = nil
 
     local function buildOptions(filter)
-        for _, child in ipairs(listFrame:GetChildren()) do
-            if child:IsA("TextButton") and child ~= searchBox then
-                child:Destroy()
-            end
+    for _, child in ipairs(optionsHolder:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+    ...
+    local opt = Instance.new("TextButton", optionsHolder)
+    ...
         end
 
         for _, v in ipairs(items) do
