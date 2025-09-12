@@ -392,133 +392,166 @@ function tabs:Taps(name)
         return container
     end
 
-     function newPage:Dropdown(text, option, callback)
-    option = option or {}
+     function newPage:Dropdown(title, items, callback, multi)
+    local TweenService = game:GetService("TweenService")
+    multi = multi or false
+    items = items or {}
     callback = callback or function() end
-    library.Flags[text] = option[1]
 
-    local isOpen = false
-    local searchText = ""
+    -- 🔹 Container หลัก
+    local container = Instance.new("Frame", page)
+    container.Size = UDim2.new(1, -12, 0, 40)
+    container.BackgroundTransparency = 1
 
-    local container = library.container
+    local lbl = Instance.new("TextLabel", container)
+    lbl.Size = UDim2.new(0.4, 0, 0, 20)
+    lbl.Position = UDim2.new(0, 6, 0, 6)
+    lbl.BackgroundTransparency = 1
+    lbl.Text = title or ""
+    lbl.TextColor3 = Color3.fromRGB(255, 255, 255)
+    lbl.Font = Enum.Font.SourceSans
+    lbl.TextSize = 16
+    lbl.TextXAlignment = Enum.TextXAlignment.Left
+    lbl.ZIndex = 5
 
-    -- ปุ่มหลัก
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(1, -10, 0, 40)
-    btn.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-    btn.Text = text .. " - " .. tostring(option[1] or "")
-    btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    btn.Font = Enum.Font.Gotham
+    local btn = Instance.new("TextButton", container)
+    btn.Size = UDim2.new(0.56, -12, 0, 28)
+    btn.Position = UDim2.new(0.44, 0, 0.5, -14)
+    btn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    btn.Text = "Select..."
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.SourceSans
     btn.TextSize = 14
-    btn.Parent = container
+    btn.ZIndex = 5
     createUICorner(btn, UDim.new(0, 6))
 
-    -- dropdown หลัก (อยู่นอก main ป้องกันโดนตัด)
-    local listFrame = Instance.new("Frame")
+    -- 🔹 Frame Dropdown
+    local listFrame = Instance.new("Frame", page) -- อยู่ใน page โดยตรง
     listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, 0, 0)
-    listFrame.Position = UDim2.fromOffset(0,0)
+    listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
+    listFrame.ClipsDescendants = false
     listFrame.ZIndex = 10
     createUICorner(listFrame, UDim.new(0, 6))
-    listFrame.Parent = library.gui
 
-    local searchBox = Instance.new("TextBox")
-    searchBox.Size = UDim2.new(1, -10, 0, 30)
-    searchBox.Position = UDim2.new(0, 5, 0, 5)
+    local searchBox = Instance.new("TextBox", listFrame)
+    searchBox.Size = UDim2.new(1, -12, 0, 28)
+    searchBox.Position = UDim2.new(0, 6, 0, 6)
     searchBox.PlaceholderText = "Search..."
-    searchBox.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
-    searchBox.TextColor3 = Color3.fromRGB(200, 200, 200)
-    searchBox.Font = Enum.Font.Gotham
-    searchBox.TextSize = 14
-    searchBox.ClearTextOnFocus = false
+    searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    searchBox.Text = ""
     searchBox.ZIndex = 11
-    createUICorner(searchBox, UDim.new(0, 4))
-    searchBox.Parent = listFrame
+    createUICorner(searchBox, UDim.new(0, 6))
 
-    local scroll = Instance.new("ScrollingFrame")
-    scroll.Size = UDim2.new(1, 0, 1, -40)
-    scroll.Position = UDim2.new(0, 0, 0, 40)
-    scroll.BackgroundTransparency = 1
-    scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
-    scroll.ScrollBarThickness = 6
-    scroll.ZIndex = 11
-    scroll.Parent = listFrame
+    local optionsScroll = Instance.new("ScrollingFrame", listFrame)
+    optionsScroll.Size = UDim2.new(1, -12, 1, -40)
+    optionsScroll.Position = UDim2.new(0, 6, 0, 40)
+    optionsScroll.BackgroundTransparency = 1
+    optionsScroll.ScrollBarThickness = 6
+    optionsScroll.ZIndex = 11
+    optionsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    optionsScroll.ClipsDescendants = true
 
-    local listLayout = Instance.new("UIListLayout")
-    listLayout.Parent = scroll
+    local listLayout = Instance.new("UIListLayout", optionsScroll)
     listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    listLayout.Padding = UDim.new(0, 2)
+    listLayout.Padding = UDim.new(0, 4)
+
+    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        optionsScroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
+    end)
+
+    -- ตัวแปรเลือก
+    local selected = {}
+    local singleSelected = nil
+    local isOpen = false
 
     local function buildOptions(filter)
-        scroll:ClearAllChildren()
-        listLayout.Parent = scroll
-        for _, v in ipairs(option) do
-            if filter == "" or string.find(string.lower(v), string.lower(filter), 1, true) then
-                local optBtn = Instance.new("TextButton")
-                optBtn.Size = UDim2.new(1, -10, 0, 30)
-                optBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-                optBtn.Text = v
-                optBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-                optBtn.Font = Enum.Font.Gotham
-                optBtn.TextSize = 14
-                optBtn.ZIndex = 12
-                createUICorner(optBtn, UDim.new(0, 4))
-                optBtn.Parent = scroll
+        for _, child in ipairs(optionsScroll:GetChildren()) do
+            if child:IsA("TextButton") then
+                child:Destroy()
+            end
+        end
 
-                optBtn.MouseButton1Click:Connect(function()
-                    -- อัปเดตค่าที่เลือก
-                    btn.Text = text .. " - " .. v
-                    library.Flags[text] = v
-                    callback(v)
+        for _, v in ipairs(items) do
+            local textV = tostring(v)
+            if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
+                local opt = Instance.new("TextButton", optionsScroll)
+                opt.Size = UDim2.new(1, -4, 0, 28)
+                opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+                opt.TextColor3 = Color3.fromRGB(255, 255, 255)
+                opt.Text = textV
+                opt.AutoButtonColor = false
+                opt.ZIndex = 12
+                createUICorner(opt, UDim.new(0, 6))
 
-                    -- ปิด dropdown
-                    isOpen = false
-                    tweenService:Create(listFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Size = UDim2.new(0, btn.AbsoluteSize.X, 0, 0)
-                    }):Play()
-                    task.wait(0.25)
-                    listFrame.Visible = false
+                if multi then
+                    if selected[textV] then opt.BackgroundColor3 = Color3.fromRGB(100,100,100) end
+                else
+                    if singleSelected == textV then opt.BackgroundColor3 = Color3.fromRGB(100,100,100) end
+                end
+
+                opt.MouseButton1Click:Connect(function()
+                    if multi then
+                        if selected[textV] then
+                            selected[textV] = nil
+                            opt.BackgroundColor3 = Color3.fromRGB(50,50,50)
+                        else
+                            selected[textV] = true
+                            opt.BackgroundColor3 = Color3.fromRGB(100,100,100)
+                        end
+                        local result = {}
+                        for k,_ in pairs(selected) do table.insert(result,k) end
+                        btn.Text = (#result>0) and table.concat(result,", ") or "Select..."
+                        if callback then pcall(callback, result) end
+                    else
+                        singleSelected = textV
+                        btn.Text = textV
+                        if callback then pcall(callback, textV) end
+                        -- ปิด dropdown
+                        TweenService:Create(
+                            listFrame,
+                            TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                            {Size = UDim2.new(listFrame.Size.X.Scale, listFrame.Size.X.Offset,0,0)}
+                        ):Play()
+                        task.delay(0.25, function() listFrame.Visible = false end)
+                        isOpen = false
+                    end
                 end)
             end
         end
-        scroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y)
     end
 
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
-        searchText = searchBox.Text
-        buildOptions(searchText)
+        buildOptions(searchBox.Text)
     end)
 
     btn.MouseButton1Click:Connect(function()
         if not isOpen then
-            -- เปิด
-            local absPos = btn.AbsolutePosition
-            local absSize = btn.AbsoluteSize
-            listFrame.Position = UDim2.fromOffset(absPos.X, absPos.Y + absSize.Y)
-
-            buildOptions(searchText)
-
+            -- เปิด dropdown
+            listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
+            listFrame.Visible = true
+            buildOptions("")
             local contentY = listLayout.AbsoluteContentSize.Y
             local target = math.min(220, contentY + 50)
-
-            listFrame.Size = UDim2.new(0, absSize.X, 0, 0)
-            listFrame.Visible = true
-            tweenService:Create(listFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                Size = UDim2.new(0, absSize.X, 0, target)
-            }):Play()
+            TweenService:Create(
+                listFrame,
+                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+                {Size = UDim2.new(listFrame.Size.X.Scale, listFrame.Size.X.Offset, 0, target)}
+            ):Play()
             isOpen = true
         else
-            -- ปิด
+            -- ปิด dropdown
             isOpen = false
-            tweenService:Create(listFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                Size = UDim2.new(0, btn.AbsoluteSize.X, 0, 0)
-            }):Play()
-            task.wait(0.25)
-            listFrame.Visible = false
+            TweenService:Create(
+                listFrame,
+                TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+                {Size = UDim2.new(listFrame.Size.X.Scale, listFrame.Size.X.Offset, 0, 0)}
+            ):Play()
+            task.delay(0.25, function() listFrame.Visible = false end)
         end
     end)
-end
 
     return container
 end
