@@ -420,7 +420,6 @@ function tabs:Taps(name)
     btn.TextSize = 14
     createUICorner(btn, UDim.new(0, 6))
 
-    -- หา ScreenGui ที่ใหญ่สุด
     local rootGui = page:FindFirstAncestorOfClass("ScreenGui") or page.Parent
 
     local listFrame = Instance.new("ScrollingFrame")
@@ -450,8 +449,15 @@ function tabs:Taps(name)
     local selected = {}
     local singleSelected = nil
 
+    local function updateDropdownPosition()
+        listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
+        listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, listFrame.Size.Y.Scale, listFrame.Size.Y.Offset)
+    end
+
+    btn:GetPropertyChangedSignal("AbsolutePosition"):Connect(updateDropdownPosition)
+    btn:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateDropdownPosition)
+
     local function buildOptions(filter)
-        -- ล้างปุ่มเก่าออก
         for _, child in ipairs(listFrame:GetChildren()) do
             if child:IsA("TextButton") and child ~= searchBox then
                 child:Destroy()
@@ -469,7 +475,6 @@ function tabs:Taps(name)
                 opt.AutoButtonColor = false
                 createUICorner(opt, UDim.new(0, 6))
 
-                -- เช็ค highlight ที่เลือกอยู่
                 if multi then
                     if selected[textV] then
                         opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
@@ -507,6 +512,7 @@ function tabs:Taps(name)
         local contentY = listLayout.AbsoluteContentSize.Y
         local target = math.min(220, contentY + 8)
         listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, 0, target)
+        updateDropdownPosition()
     end
 
     searchBox:GetPropertyChangedSignal("Text"):Connect(function()
@@ -517,8 +523,8 @@ function tabs:Taps(name)
         listFrame.Visible = not listFrame.Visible
         if listFrame.Visible then
             buildOptions("")
-            listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
         end
+        updateDropdownPosition()
     end)
 
     return container
