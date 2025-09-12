@@ -393,9 +393,12 @@ function tabs:Taps(name)
     end
 
      function newPage:Dropdown(title, items, callback, multi)
+    local TweenService = game:GetService("TweenService")
+
     multi = multi or false
     items = items or {}
 
+    -- 🔹 Container หลัก
     local container = Instance.new("Frame", page)
     container.Size = UDim2.new(1, -12, 0, 40)
     container.BackgroundTransparency = 1
@@ -422,22 +425,19 @@ function tabs:Taps(name)
     btn.ZIndex = 5
     createUICorner(btn, UDim.new(0, 6))
 
-    -- 🔹 ใช้ ScrollingFrame
-    -- 🔹 ScrollingFrame
-    local listFrame = Instance.new("ScrollingFrame", container)
+    -- 🔹 Frame Dropdown
+    local listFrame = Instance.new("Frame", container)
     listFrame.Size = UDim2.new(1, 0, 0, 0)
     listFrame.Position = UDim2.new(0, 0, 1, 2)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
-    listFrame.ScrollBarThickness = 6
     listFrame.ZIndex = 10
-    listFrame.ClipsDescendants = true
     createUICorner(listFrame, UDim.new(0, 6))
 
-    -- 🔹 ช่องค้นหา (อยู่นิ่งด้านบน ไม่โดนเลื่อน)
+    -- 🔹 Search Box (อยู่นิ่งด้านบน)
     local searchBox = Instance.new("TextBox", listFrame)
     searchBox.Size = UDim2.new(1, -12, 0, 28)
-    searchBox.Position = UDim2.new(0, 6, 0, 0)
+    searchBox.Position = UDim2.new(0, 6, 0, 6)
     searchBox.PlaceholderText = "Search..."
     searchBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -445,59 +445,57 @@ function tabs:Taps(name)
     searchBox.ZIndex = 11
     createUICorner(searchBox, UDim.new(0, 6))
 
-    -- 🔹 Holder สำหรับ options (เลื่อนแยก)
-    local optionsHolder = Instance.new("Frame", listFrame)
-    optionsHolder.Size = UDim2.new(1, -12, 0, 0)
-    optionsHolder.Position = UDim2.new(0, 6, 0, 34) -- ใต้ searchBox
-    optionsHolder.BackgroundTransparency = 1
-    optionsHolder.ZIndex = 11
+    -- 🔹 ScrollingFrame สำหรับ Options
+    local optionsScroll = Instance.new("ScrollingFrame", listFrame)
+    optionsScroll.Size = UDim2.new(1, -12, 1, -40) -- -40 เผื่อช่อง searchBox
+    optionsScroll.Position = UDim2.new(0, 6, 0, 40)
+    optionsScroll.BackgroundTransparency = 1
+    optionsScroll.ScrollBarThickness = 6
+    optionsScroll.ZIndex = 11
+    optionsScroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+    optionsScroll.ClipsDescendants = true
 
-    local listLayout = Instance.new("UIListLayout", listFrame)
+    local listLayout = Instance.new("UIListLayout", optionsScroll)
     listLayout.SortOrder = Enum.SortOrder.LayoutOrder
     listLayout.Padding = UDim.new(0, 4)
 
+    -- ✅ อัปเดต CanvasSize ให้เลื่อน
     listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        listFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
+        optionsScroll.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 8)
     end)
 
-    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-        optionsHolder.Size = UDim2.new(1, -12, 0, listLayout.AbsoluteContentSize.Y)
-        listFrame.CanvasSize = UDim2.new(0, 0, 0, optionsHolder.AbsoluteSize.Y + 40)
-    end)
-
+    -- ตัวแปรเลือก
     local selected = {}
     local singleSelected = nil
 
+    -- 🔹 สร้าง Options
     local function buildOptions(filter)
-    for _, child in ipairs(optionsHolder:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-    ...
-    local opt = Instance.new("TextButton", optionsHolder)
-    ...
+        for _, child in ipairs(optionsScroll:GetChildren()) do
+            if child:IsA("TextButton") then
+                child:Destroy()
+            end
         end
 
         for _, v in ipairs(items) do
             local textV = tostring(v)
             if not filter or filter == "" or string.find(string.lower(textV), string.lower(filter)) then
-                local opt = Instance.new("TextButton", listFrame)
-                opt.Size = UDim2.new(1, -12, 0, 28)
+                local opt = Instance.new("TextButton", optionsScroll)
+                opt.Size = UDim2.new(1, -4, 0, 28)
                 opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                 opt.TextColor3 = Color3.fromRGB(255, 255, 255)
                 opt.Text = textV
                 opt.AutoButtonColor = false
-                opt.ZIndex = 11
+                opt.ZIndex = 12
                 createUICorner(opt, UDim.new(0, 6))
 
+                -- ไฮไลท์ตัวเลือก
                 if multi then
                     if selected[textV] then
-                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- 🔹 เทาออน
+                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
                     end
                 else
                     if singleSelected == textV then
-                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- 🔹 เทาออน
+                        opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
                     end
                 end
 
@@ -508,7 +506,7 @@ function tabs:Taps(name)
                             opt.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
                         else
                             selected[textV] = true
-                            opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100) -- เทาออน
+                            opt.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
                         end
                         local result = {}
                         for k, _ in pairs(selected) do table.insert(result, k) end
@@ -518,7 +516,6 @@ function tabs:Taps(name)
                         singleSelected = textV
                         btn.Text = textV
                         if callback then pcall(callback, textV) end
-                        -- ปิดพร้อมอนิเมชั่นหุบขึ้น
                         TweenService:Create(
                             listFrame,
                             TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
@@ -540,15 +537,13 @@ function tabs:Taps(name)
             listFrame.Visible = true
             buildOptions("")
             local contentY = listLayout.AbsoluteContentSize.Y
-            local target = math.min(220, contentY + 8)
-            -- 🔹 อนิเมชั่นเลื่อนลง
+            local target = math.min(220, contentY + 50) -- 50 เผื่อ searchBox
             TweenService:Create(
                 listFrame,
                 TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
                 {Size = UDim2.new(1, 0, 0, target)}
             ):Play()
         else
-            -- 🔹 อนิเมชั่นหุบขึ้น
             TweenService:Create(
                 listFrame,
                 TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
