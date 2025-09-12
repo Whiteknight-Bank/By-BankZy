@@ -420,17 +420,18 @@ function tabs:Taps(name)
     btn.TextSize = 14
     createUICorner(btn, UDim.new(0, 6))
 
-    -- เปลี่ยนเป็น ScrollingFrame + parent ไป main container (ไม่ดันปุ่มอื่น)
+    -- หา ScreenGui ที่ใหญ่สุด
+    local rootGui = page:FindFirstAncestorOfClass("ScreenGui") or page.Parent
+
     local listFrame = Instance.new("ScrollingFrame")
-    listFrame.Size = UDim2.new(1, 0, 0, 0)
-    listFrame.Position = UDim2.new(0, container.AbsolutePosition.X, 0, container.AbsolutePosition.Y + container.AbsoluteSize.Y)
+    listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, 0, 0)
     listFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
     listFrame.Visible = false
-    listFrame.ClipsDescendants = true
     listFrame.ScrollBarThickness = 6
     listFrame.ScrollingDirection = Enum.ScrollingDirection.Y
     listFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-    listFrame.Parent = page.Parent -- ใส่ parent ใหญ่แทน container
+    listFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+    listFrame.Parent = rootGui
     createUICorner(listFrame, UDim.new(0, 6))
 
     local listLayout = Instance.new("UIListLayout", listFrame)
@@ -450,6 +451,7 @@ function tabs:Taps(name)
     local singleSelected = nil
 
     local function buildOptions(filter)
+        -- ล้างปุ่มเก่าออก
         for _, child in ipairs(listFrame:GetChildren()) do
             if child:IsA("TextButton") and child ~= searchBox then
                 child:Destroy()
@@ -467,6 +469,7 @@ function tabs:Taps(name)
                 opt.AutoButtonColor = false
                 createUICorner(opt, UDim.new(0, 6))
 
+                -- เช็ค highlight ที่เลือกอยู่
                 if multi then
                     if selected[textV] then
                         opt.BackgroundColor3 = Color3.fromRGB(50, 200, 50)
@@ -500,7 +503,7 @@ function tabs:Taps(name)
             end
         end
 
-        task.wait(0.03)
+        task.wait()
         local contentY = listLayout.AbsoluteContentSize.Y
         local target = math.min(220, contentY + 8)
         listFrame.Size = UDim2.new(0, btn.AbsoluteSize.X, 0, target)
@@ -515,8 +518,6 @@ function tabs:Taps(name)
         if listFrame.Visible then
             buildOptions("")
             listFrame.Position = UDim2.new(0, btn.AbsolutePosition.X, 0, btn.AbsolutePosition.Y + btn.AbsoluteSize.Y)
-        else
-            listFrame.Size = UDim2.new(1, 0, 0, 0)
         end
     end)
 
