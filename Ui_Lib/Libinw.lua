@@ -34,7 +34,7 @@ function library:Win(title)
     -- Main menu
     local main = Instance.new("Frame")
     main.Name = "MainFrame"
-    main.Size = UDim2.new(0, 500, 0, 350)
+    main.Size = UDim2.new(0.5, 0, 0.7, 0)
     main.AnchorPoint = Vector2.new(0.5, 0.5)
     main.Position = UDim2.new(0.5, 0, 0.5, 0)
     main.BackgroundColor3 = Color3.fromRGB(0,0,0)
@@ -168,7 +168,6 @@ end)
 
 -- กดปุ่มวงรี
 hubToggle.MouseButton1Click:Connect(function()
-    -- ย่อปุ่มวงรี
     TweenService:Create(
         hubToggle,
         TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
@@ -178,9 +177,11 @@ hubToggle.MouseButton1Click:Connect(function()
     task.delay(0.35, function()
         hubToggle.Visible = false
         main.Visible = true
-        main.Size = UDim2.new(0.5, 0, 0, 0) -- เริ่มหด
+        
+        -- ✅ รีเซ็ตขนาด/ตำแหน่งก่อน Tween
+        main.Size = UDim2.new(0.5, 0, 0, 0)
         main.Position = UDim2.new(0.5, 0, -0.2, 0)
-        -- ขยายเมนูหลักลงมา
+
         TweenService:Create(
             main,
             TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
