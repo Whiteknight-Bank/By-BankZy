@@ -495,19 +495,23 @@ function tabs:Taps(name)
                 end)
 
                 option.MouseButton1Click:Connect(function()
-                    selectedOption = item
-                    dropdownButton.Text = item
-                    if callback then callback(item) end
-                    opened = false
-                    arrow.Text = "«"
-                    optionContainer:TweenSize(
-                        UDim2.new(1, -10, 0, 0),
-                        Enum.EasingDirection.Out,
-                        Enum.EasingStyle.Quad,
-                        0.2,
-                        true
-                    )
-                end)
+                selectedOption = item
+                dropdownButton.Text = item
+                if callback then callback(item) end
+                opened = false
+                arrow.Text = "«"
+
+                optionContainer:TweenSize(
+                UDim2.new(1, -10, 0, 0),
+                Enum.EasingDirection.Out,
+                Enum.EasingStyle.Quad,
+                0.2,
+                true,
+            function()
+            optionContainer.Visible = false -- ✅ ปิดการมองเห็นและรับ input
+        end
+    )
+            end)
             end
         end
     end
@@ -517,21 +521,23 @@ function tabs:Taps(name)
     end)
 
     dropdownButton.MouseButton1Click:Connect(function()
-        opened = not opened
-        arrow.Text = opened and "»" or "«"
-        optionContainer:TweenSize(
-            UDim2.new(1, -10, 0, opened and math.min(#items * 25 + 25, 150) or 0), -- จำกัดความสูงสูงสุด 150px
-            Enum.EasingDirection.Out,
-            Enum.EasingStyle.Quad,
-            0.2,
-            true
-        )
+    opened = not opened
+    arrow.Text = opened and "»" or "«"
 
-        if opened then
-            searchBox.Text = ""
-            createOptions("")
-        end
-    end)
+    if opened then
+        optionContainer.Visible = true -- ✅ เปิดใหม่ก่อน Tween
+        searchBox.Text = ""
+        createOptions("")
+    end
+
+    optionContainer:TweenSize(
+        UDim2.new(1, -10, 0, opened and math.min(#items * 25 + 25, 150) or 0),
+        Enum.EasingDirection.Out,
+        Enum.EasingStyle.Quad,
+        0.2,
+        true
+    )
+end)
 
     return container
 end
