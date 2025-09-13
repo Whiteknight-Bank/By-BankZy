@@ -83,16 +83,24 @@ function library:Win(title)
     createUICorner(closeBtn, UDim.new(0,6))
 
     -- Left tabs area
-    local tabButtons = Instance.new("Frame")
-    tabButtons.Size = UDim2.new(0,120,1,-35)
-    tabButtons.Position = UDim2.new(0,0,0,35)
-    tabButtons.BackgroundTransparency = 0.9
-    tabButtons.Parent = main
+    -- Left tabs area (เปลี่ยนจาก Frame เป็น ScrollingFrame)
+local tabButtons = Instance.new("ScrollingFrame")
+tabButtons.Size = UDim2.new(0,120,1,-35)
+tabButtons.Position = UDim2.new(0,0,0,35)
+tabButtons.BackgroundTransparency = 0.9
+tabButtons.ScrollBarThickness = 4
+tabButtons.CanvasSize = UDim2.new(0,0,0,0) -- จะอัปเดตอัตโนมัติ
+tabButtons.Parent = main
 
-    local tabLayout = Instance.new("UIListLayout")
-    tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    tabLayout.Padding = UDim.new(0,6)
-    tabLayout.Parent = tabButtons
+local tabLayout = Instance.new("UIListLayout")
+tabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+tabLayout.Padding = UDim.new(0,6)
+tabLayout.Parent = tabButtons
+
+-- อัปเดต CanvasSize ให้เท่ากับขนาดเนื้อหา
+tabLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    tabButtons.CanvasSize = UDim2.new(0, 0, 0, tabLayout.AbsoluteContentSize.Y)
+end)
 
     -- Pages container
     local pages = Instance.new("Frame")
@@ -434,7 +442,7 @@ function tabs:Taps(name)
     local opened = false
     local selectedOption = nil
 
-    -- ✅ เปลี่ยนเป็น ScrollingFrame
+    -- ✅ ใช้ ScrollingFrame + ปิด/เปิด Visible
     local optionContainer = Instance.new("ScrollingFrame")
     optionContainer.Size = UDim2.new(1, -10, 0, 0)
     optionContainer.BackgroundTransparency = 0.4
@@ -442,13 +450,13 @@ function tabs:Taps(name)
     optionContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
     optionContainer.ScrollBarThickness = 4
     optionContainer.ZIndex = 5
+    optionContainer.Visible = false -- ❗ เริ่มต้นปิดไว้
     optionContainer.Parent = container
 
     local UIListLayout = Instance.new("UIListLayout")
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     UIListLayout.Parent = optionContainer
 
-    -- อัพเดตขนาด Canvas ทุกครั้งที่มีการเปลี่ยน Layout
     UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         optionContainer.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y)
     end)
@@ -495,23 +503,24 @@ function tabs:Taps(name)
                 end)
 
                 option.MouseButton1Click:Connect(function()
-                selectedOption = item
-                dropdownButton.Text = item
-                if callback then callback(item) end
-                opened = false
-                arrow.Text = "«"
+                    selectedOption = item
+                    dropdownButton.Text = item
+                    if callback then callback(item) end
+                    opened = false
+                    arrow.Text = "«"
 
-                optionContainer:TweenSize(
-                UDim2.new(1, -10, 0, 0),
-                Enum.EasingDirection.Out,
-                Enum.EasingStyle.Quad,
-                0.2,
-                true,
-            function()
-            optionContainer.Visible = false -- ✅ ปิดการมองเห็นและรับ input
-        end
-    )
-            end)
+                    -- ❗ ปิด dropdown อย่างสมบูรณ์
+                    optionContainer:TweenSize(
+                        UDim2.new(1, -10, 0, 0),
+                        Enum.EasingDirection.Out,
+                        Enum.EasingStyle.Quad,
+                        0.2,
+                        true,
+                        function()
+                            optionContainer.Visible = false
+                        end
+                    )
+                end)
             end
         end
     end
@@ -521,23 +530,28 @@ function tabs:Taps(name)
     end)
 
     dropdownButton.MouseButton1Click:Connect(function()
-    opened = not opened
-    arrow.Text = opened and "»" or "«"
+        opened = not opened
+        arrow.Text = opened and "»" or "«"
 
-    if opened then
-        optionContainer.Visible = true -- ✅ เปิดใหม่ก่อน Tween
-        searchBox.Text = ""
-        createOptions("")
-    end
+        if opened then
+            optionContainer.Visible = true -- ✅ เปิดใหม่ก่อน Tween
+            searchBox.Text = ""
+            createOptions("")
+        end
 
-    optionContainer:TweenSize(
-        UDim2.new(1, -10, 0, opened and math.min(#items * 25 + 25, 150) or 0),
-        Enum.EasingDirection.Out,
-        Enum.EasingStyle.Quad,
-        0.2,
-        true
-    )
-end)
+        optionContainer:TweenSize(
+            UDim2.new(1, -10, 0, opened and math.min(#items * 25 + 25, 150) or 0),
+            Enum.EasingDirection.Out,
+            Enum.EasingStyle.Quad,
+            0.2,
+            true,
+            function()
+                if not opened then
+                    optionContainer.Visible = false
+                end
+            end
+        )
+    end)
 
     return container
 end
