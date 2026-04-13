@@ -72,7 +72,7 @@ spawn(function()
     end
 end)
 
-local Tab1 = create.tabs("Farm")
+local Tab1 = create.tabs:Taps("Farm")
 
 Tab1:Label("┇ Safe Zone ┇")
 Tab1:Button("Safe Zone Part", function()
