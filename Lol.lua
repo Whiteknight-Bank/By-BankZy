@@ -1,7 +1,7 @@
-local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/keseerattanakorn/Bankzahh/refs/heads/main/libold.lua"))()
-local Window = create:Win("ReaperX Hub | Steve's One Piece ")
+local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/keseerattanakorn/Bankzahh/refs/heads/main/libold.lua"))()
+local Window = lib:Win("ReaperX Hub | Steve's One Piece ")
 
-create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
+lib:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
 
 local Wapon = {}
 
@@ -72,10 +72,10 @@ spawn(function()
     end
 end)
 
-local Tab1 = create.tabs:Taps("Farm")
+local tab1 = lib.tabs:Taps("Farm")
 
-Tab1:Label("┇ Safe Zone ┇")
-Tab1:Button("Safe Zone Part", function()
+tab1:Label("┇ Safe Zone ┇")
+tab1:Button("Safe Zone Part", function()
     local char = lp.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
