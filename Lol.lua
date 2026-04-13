@@ -86,7 +86,7 @@ task.spawn(function()
 	wait(0.5)
 	ScreenGui:Destroy()
 	
-local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/Whiteknight-Bank/By-BankZy/refs/heads/main/Ui_Lib/RxeperLib.lua"))()
+local create = loadstring(game:HttpGet("https://raw.githubusercontent.com/keseerattanakorn/Bankzahh/refs/heads/main/libold.lua"))()
 local Window = create:Win("ReaperX Hub | Steve's One Piece ")
 
 create:Notifile("", "Welcome " .. game.Players.LocalPlayer.Name .. " to ReaperX Hub", 5)
@@ -160,18 +160,17 @@ spawn(function()
     end
 end)
 
-local Tab1 = Window:Taps("Farm")
-local page1 = Tab1:newpage()
+local Tab1 = create.tabs("Farm")
 
-page1:Label("┇ Safe Zone ┇")
-page1:Button("Safe Zone Part", function()
+Tab1:Label("┇ Safe Zone ┇")
+Tab1:Button("Safe Zone Part", function()
     local char = lp.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
     end
 end)
 		
-page1:Toggle("Safe Zone Warp", false, function(val)
+Tab1:Toggle("Safe Zone Warp", false, function(val)
     _G.safezonewarp = val
 end)
 
@@ -188,7 +187,7 @@ spawn(function()
     end
 end)
 
-page1:Label("┇ Function Item ┇")
+Tab1:Label("┇ Function Item ┇")
 local Wapon = {}
 local selectedWeapon = nil
 
@@ -200,12 +199,12 @@ for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
 end
 
 -- สร้าง Dropdown แค่ครั้งเดียว
-page1:Dropdown("Select Weapon:", Wapon, function(wapn)
+Tab1:Dropdown("Select Weapon:", Wapon, function(wapn)
     selectedWeapon = wapn
 end)
 
 -- ปุ่มรีเฟรช ล้างตาราง Wapon แล้วใส่ค่าใหม่
-page1:Button("Refresh Weapon", function()
+Tab1:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -217,7 +216,7 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
-page1:Toggle("Auto Click", false, function(lcik)
+Tab1:Toggle("Auto Click", false, function(lcik)
     _G.autoclick = lcik
 end)
 
@@ -232,7 +231,7 @@ end)
 end) 
 end)
 
-page1:Toggle("Auto Equip", false, function(aeq)
+Tab1:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
 
@@ -265,11 +264,11 @@ spawn(function()
     end
 end)
 
-page1:Label("┇ Function Farm ┇")
+Tab1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-page1:Dropdown("Select Mobs:", {
+Tab1:Dropdown("Select Mobs:", {
     "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)",
     "Attacking Noob(Lvl:100)", "Marine(Lvl:200)",
     "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun"
@@ -279,7 +278,7 @@ end)
 
 local canPullMob = true
 		
-page1:Toggle("Auto Farm", false, function(state)
+Tab1:Toggle("Auto Farm", false, function(state)
     _G.farmNpc = state
 
     if state then
@@ -412,7 +411,7 @@ page1:Toggle("Auto Farm", false, function(state)
     end
 end)
 
-page1:Toggle("Auto Quest", false, function(qust)
+Tab1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
 		
@@ -461,7 +460,7 @@ spawn(function()
     end
 end)
 		
-page1:Toggle("Auto Haki Buso", false, function(hki)
+Tab1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
     if hki then
@@ -495,7 +494,7 @@ page1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
-page1:Toggle("Auto Haki Ken", false, function(hkxn)
+Tab1:Toggle("Auto Haki Ken", false, function(hkxn)
     _G.autoKen = hkxn
 
     if hkxn then
