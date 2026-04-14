@@ -590,7 +590,7 @@ spawn(function()
     end
 end)
 
-local Tab3 = Window:Taps("Island")
+local Tab3 = lib.tabs:Taps("Island")
 
 Tab3:Label("┇ Island Teleport ┇")
 Tab3:Button("Thief Island" , function()
