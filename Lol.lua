@@ -99,7 +99,7 @@ spawn(function()
     end
 end)
 
-Tab1:Label("┇ Function Item ┇")
+tab1:Label("┇ Function Item ┇")
 local Wapon = {}
 local selectedWeapon = nil
 
@@ -111,12 +111,12 @@ for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
 end
 
 -- สร้าง Dropdown แค่ครั้งเดียว
-Tab1:Dropdown("Select Weapon:", Wapon, function(wapn)
+tab1:Dropdown("Select Weapon:", Wapon, function(wapn)
     selectedWeapon = wapn
 end)
 
 -- ปุ่มรีเฟรช ล้างตาราง Wapon แล้วใส่ค่าใหม่
-Tab1:Button("Refresh Weapon", function()
+tab1:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -128,7 +128,7 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
-Tab1:Toggle("Auto Click", false, function(lcik)
+tab1:Toggle("Auto Click", false, function(lcik)
     _G.autoclick = lcik
 end)
 
@@ -143,7 +143,7 @@ end)
 end) 
 end)
 
-Tab1:Toggle("Auto Equip", false, function(aeq)
+tab1:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
 
@@ -176,11 +176,11 @@ spawn(function()
     end
 end)
 
-Tab1:Label("┇ Function Farm ┇")
+tab1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-Tab1:Dropdown("Select Mobs:", {
+tab1:Dropdown("Select Mobs:", {
     "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)",
     "Attacking Noob(Lvl:100)", "Marine(Lvl:200)",
     "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun"
@@ -190,7 +190,7 @@ end)
 
 local canPullMob = true
 		
-Tab1:Toggle("Auto Farm", false, function(state)
+tab1:Toggle("Auto Farm", false, function(state)
     _G.farmNpc = state
 
     if state then
@@ -323,7 +323,7 @@ Tab1:Toggle("Auto Farm", false, function(state)
     end
 end)
 
-Tab1:Toggle("Auto Quest", false, function(qust)
+tab1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
 		
@@ -372,7 +372,7 @@ spawn(function()
     end
 end)
 		
-Tab1:Toggle("Auto Haki Buso", false, function(hki)
+tab1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
     if hki then
@@ -406,7 +406,7 @@ Tab1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
-Tab1:Toggle("Auto Haki Ken", false, function(hkxn)
+tab1:Toggle("Auto Haki Ken", false, function(hkxn)
     _G.autoKen = hkxn
 
     if hkxn then
@@ -447,21 +447,20 @@ Tab1:Toggle("Auto Haki Ken", false, function(hkxn)
     end
 end)
 		
-local Tab2 = Window:Taps("Players")
-local page2 = Tab2:newpage()
+local tab2 = lib.tabs:Taps("Players")
 
-page2:Label("┇ Player ┇")
+tab2:Label("┇ Player ┇")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-page2:Dropdown("Select Player:", playerNames, function(name)
+tab2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-page2:Button("Refresh Player", function()
+tab2:Button("Refresh Player", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
@@ -471,11 +470,11 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 
-page2:Button("Click to Tp", function()
+tab2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-page2:Toggle("View", false, function(state)
+tab2:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -488,7 +487,7 @@ page2:Toggle("View", false, function(state)
 	end
 end)
 
-page2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
+tab2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
 	_G.bringPlayer = pla
 end)
 
@@ -542,7 +541,7 @@ spawn(function()
     end
 end)
 		
-page2:Toggle("Auto Bring Player [ All ]", false, function(plal)
+tab2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
@@ -592,54 +591,52 @@ spawn(function()
 end)
 
 local Tab3 = Window:Taps("Island")
-local page3 = Tab3:newpage()
 
-page3:Label("┇ Island Teleport ┇")
-page3:Button("Thief Island" , function()
+Tab3:Label("┇ Island Teleport ┇")
+Tab3:Button("Thief Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5, 2, 620)
 end)
 
-page3:Button("Buggy Island" , function()
+Tab3:Button("Buggy Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4242, 3, 1329)
 end)
 
-page3:Button("Noob Island" , function()
+Tab3:Button("Noob Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3006, 2, 1610)
 end)
 
-page3:Button("Marine Island" , function()
+Tab3:Button("Marine Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(3329, 31, 6152)
 end)
 
-page3:Button("Fishmen Island" , function()
+Tab3:Button("Fishmen Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-5226, 2, -4555)
 end)
 
-page3:Button("Luffy Island" , function()
+Tab3:Button("Luffy Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-2368, 18, -3923)
 end)
 
-page3:Button("Coconut Island" , function()
+Tab3:Button("Coconut Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4791, -1, -2159)
 end)
 
-page3:Button("BlackLeg Island" , function()
+Tab3:Button("BlackLeg Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-1324, 37, 5079)
 end)
 
-page3:Button("Ussop Island" , function()
+Tab3:Button("Ussop Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(-4609, 58, 4049)
 end)
 
-page3:Button("Fruit Seller Island" , function()
+Tab3:Button("Fruit Seller Island" , function()
         plr.Character.HumanoidRootPart.CFrame = CFrame.new(2205, 32, -3351)
 end)
 
-local Tab4 = Window:Taps("Shop")
-local page4 = Tab4:newpage()
+local Tab4 = lib.tabs:Taps("Shop")
 
-page4:Label("┇ Shop [ Weapon ] ┇")
-page4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
+Tab4:Label("┇ Shop [ Weapon ] ┇")
+Tab4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
 end)
 
@@ -671,11 +668,11 @@ page4:Button("Buy Sword", function()
     end
 end)
 
-page4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
+Tab4:Dropdown("Select Melee:", Cache.DevConfig["ListOfMelee"], function(knrd)
     selectedMelee = knrd
 end)
 
-page4:Button("Buy Melee", function()
+Tab4:Button("Buy Melee", function()
     if selectedMelee then  
         for i = 1, 2 do 
             local foundNPC = nil  
@@ -703,11 +700,11 @@ page4:Button("Buy Melee", function()
     end
 end)
 
-page4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
+Tab4:Dropdown("Select Gun:", Cache.DevConfig["ListOfGun"], function(knrd)
     selectedGun = knrd
 end)
 
-page4:Button("Buy Gun", function()
+Tab4:Button("Buy Gun", function()
     if selectedGun then  
         for i = 1, 2 do  -- ซื้อ 2 ครั้ง
             local foundNPC = nil  
@@ -735,11 +732,10 @@ page4:Button("Buy Gun", function()
     end
 end)
 
-local Tab0 = Window:Taps("Fruit")
-local page0 = Tab0:newpage()
+local Tab0 = lib.tabs:Taps("Fruit")
 
-page0:Label("┇ Fruit ┇")
-page0:Button("Reset Devil Fruit", function()
+Tab0:Label("┇ Fruit ┇")
+Tab0:Button("Reset Devil Fruit", function()
 local removerClick = nil  
 local beliClick = nil  
 
@@ -769,7 +765,7 @@ end
 create:Notifile("", "Your Devil Fruit is Reset Now", 3)
 end)
 
-page0:Button("Random Fruit", function()
+Tab0:Button("Random Fruit", function()
 local randomClick = nil  
 local beli1Click = nil  
 
@@ -797,7 +793,7 @@ if beli1Click then
 end
 end)
 
-page0:Toggle("Auto Bring Fruit", false, function(brdf)
+Tab0:Toggle("Auto Bring Fruit", false, function(brdf)
 _G.bring = brdf
 end)
 
@@ -821,18 +817,17 @@ spawn(function()
     end
 end)
 		
-local Tab5 = Window:Taps("Misc")
-local page5 = Tab5:newpage()
+local Tab5 = lib.tabs:Taps("Misc")
 
-page5:Label("┇ Function Sever ┇")
-page5:Button("Rejoin Server", function()
+Tab5:Label("┇ Function Sever ┇")
+Tab5:Button("Rejoin Server", function()
 create:Notifile("", "Start Rejoin " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 		   game.Players.LocalPlayer:Kick()
 game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId)
 end)
 
-page5:Button("Hop Server", function()
+Tab5:Button("Hop Server", function()
 create:Notifile("", "Start Hop Sever " .. game.Players.LocalPlayer.Name .. " Pls Wait", 3)
 wait(3)
 
@@ -911,8 +906,8 @@ local PlaceID = game.PlaceId
 
 end)
 		
-page5:Label("┇ Another Functions ┇")
-page5:Button("Boost FPS", function()
+Tab5:Label("┇ Another Functions ┇")
+Tab5:Button("Boost FPS", function()
 create:Notifile("", "Pls wait start boost fps & show fps", 3)
 wait(2)
 
@@ -1052,7 +1047,7 @@ local RunService = game:GetService("RunService")
 local followConnection
 local seaPart
 
-page5:Toggle("Walk On Sea", false, function(walk)
+Tab5:Toggle("Walk On Sea", false, function(walk)
     if walk then
         create:Notifile("", "You can walk on sea now! :)", 3)
 
@@ -1087,7 +1082,7 @@ page5:Toggle("Walk On Sea", false, function(walk)
     end
 end)
 
-page5:Toggle("Teleport Chest", false, function(cpst)
+Tab5:Toggle("Teleport Chest", false, function(cpst)
     _G.tpchest = cpst
 end)
 
@@ -1160,8 +1155,7 @@ spawn(function()
     end
 end)
 
-local Tab6 = Window:Taps("Credit")
-local page6 = Tab6:newpage()
+local Tab6 = lib.tabs:Taps("Credit")
 
 page6:Label("| Made by ReaperX from Thai prople | ทำโดย ReaperX จากคนไทย อิอิ|")
 
