@@ -640,7 +640,7 @@ Tab4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
 end)
 
-page4:Button("Buy Sword", function()
+Tab4:Button("Buy Sword", function()
     if selectedSword then  
         for i = 1, 2 do
             local foundNPC = nil  
