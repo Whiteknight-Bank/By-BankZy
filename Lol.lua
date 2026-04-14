@@ -634,7 +634,7 @@ Tab3:Button("Fruit Seller Island" , function()
 end)
 
 local Tab4 = lib.tabs:Taps("Shop")
-
+--[[
 Tab4:Label("┇ Shop [ Weapon ] ┇")
 Tab4:Dropdown("Select Sword:", Cache.DevConfig["ListOfSword"], function(sword)
     selectedSword = sword
@@ -731,7 +731,7 @@ Tab4:Button("Buy Gun", function()
         create:Notifile("", "Please select a gun before buying.", 3)
     end
 end)
-
+]]--
 local Tab0 = lib.tabs:Taps("Fruit")
 
 Tab0:Label("┇ Fruit ┇")
