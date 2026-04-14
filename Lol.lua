@@ -72,10 +72,10 @@ spawn(function()
     end
 end)
 
-local tab1 = lib.tabs:Taps("Farm")
+local Tab1 = lib.tabs:Taps("Farm")
 
-tab1:Label("┇ Safe Zone ┇")
-tab1:Button("Safe Zone Part", function()
+Tab1:Label("┇ Safe Zone ┇")
+Tab1:Button("Safe Zone Part", function()
     local char = lp.Character
     if char and char:FindFirstChild("HumanoidRootPart") then
         char.HumanoidRootPart.CFrame = workspace["SafeZoneOuterSpacePart"].CFrame * CFrame.new(0, 5, 0)
@@ -99,7 +99,7 @@ spawn(function()
     end
 end)
 
-tab1:Label("┇ Function Item ┇")
+Tab1:Label("┇ Function Item ┇")
 local Wapon = {}
 local selectedWeapon = nil
 
@@ -111,12 +111,12 @@ for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
 end
 
 -- สร้าง Dropdown แค่ครั้งเดียว
-tab1:Dropdown("Select Weapon:", Wapon, function(wapn)
+Tab1:Dropdown("Select Weapon:", Wapon, function(wapn)
     selectedWeapon = wapn
 end)
 
 -- ปุ่มรีเฟรช ล้างตาราง Wapon แล้วใส่ค่าใหม่
-tab1:Button("Refresh Weapon", function()
+Tab1:Button("Refresh Weapon", function()
     table.clear(Wapon)
     for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
         if v:IsA("Tool") then
@@ -128,7 +128,7 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 		
-tab1:Toggle("Auto Click", false, function(lcik)
+Tab1:Toggle("Auto Click", false, function(lcik)
     _G.autoclick = lcik
 end)
 
@@ -143,7 +143,7 @@ end)
 end) 
 end)
 
-tab1:Toggle("Auto Equip", false, function(aeq)
+Tab1:Toggle("Auto Equip", false, function(aeq)
     _G.autoequip = aeq
 end)
 
@@ -176,11 +176,11 @@ spawn(function()
     end
 end)
 
-tab1:Label("┇ Function Farm ┇")
+Tab1:Label("┇ Function Farm ┇")
 
 local SelectedMob = ""
 
-tab1:Dropdown("Select Mobs:", {
+Tab1:Dropdown("Select Mobs:", {
     "All", "Thief(Lvl:5)", "Buggy pirate(Lvl:30)",
     "Attacking Noob(Lvl:100)", "Marine(Lvl:200)",
     "Luffy(Lvl:1000)", "Farm Sword", "Farm Gun"
@@ -190,7 +190,7 @@ end)
 
 local canPullMob = true
 		
-tab1:Toggle("Auto Farm", false, function(state)
+Tab1:Toggle("Auto Farm", false, function(state)
     _G.farmNpc = state
 
     if state then
@@ -323,7 +323,7 @@ tab1:Toggle("Auto Farm", false, function(state)
     end
 end)
 
-tab1:Toggle("Auto Quest", false, function(qust)
+Tab1:Toggle("Auto Quest", false, function(qust)
 	_G.autoquest = qust
 end)
 		
@@ -372,7 +372,7 @@ spawn(function()
     end
 end)
 		
-tab1:Toggle("Auto Haki Buso", false, function(hki)
+Tab1:Toggle("Auto Haki Buso", false, function(hki)
     _G.autobuso = hki
 
     if hki then
@@ -406,7 +406,7 @@ tab1:Toggle("Auto Haki Buso", false, function(hki)
     end
 end)
 
-tab1:Toggle("Auto Haki Ken", false, function(hkxn)
+Tab1:Toggle("Auto Haki Ken", false, function(hkxn)
     _G.autoKen = hkxn
 
     if hkxn then
@@ -447,20 +447,20 @@ tab1:Toggle("Auto Haki Ken", false, function(hkxn)
     end
 end)
 		
-local tab2 = lib.tabs:Taps("Players")
+local Tab2 = lib.tabs:Taps("Players")
 
-tab2:Label("┇ Player ┇")
+Tab2:Label("┇ Player ┇")
 local playerNames = {}
 
 for _, player in ipairs(game.Players:GetPlayers()) do
     table.insert(playerNames, player.Name)
 end
 
-tab2:Dropdown("Select Player:", playerNames, function(name)
+Tab2:Dropdown("Select Player:", playerNames, function(name)
     selectedPlayer = name
 end)
 
-tab2:Button("Refresh Player", function()
+Tab2:Button("Refresh Player", function()
     table.clear(playerNames)
     for _, player in ipairs(game.Players:GetPlayers()) do
         table.insert(playerNames, player.Name)
@@ -470,11 +470,11 @@ wait(0.3)
 create:Notifile("", "Dropdown Refresh!", 2)
 end)
 
-tab2:Button("Click to Tp", function()
+Tab2:Button("Click to Tp", function()
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(selectedPlayer).Character.HumanoidRootPart.CFrame
 end)
 
-tab2:Toggle("View", false, function(state)
+Tab2:Toggle("View", false, function(state)
 	if selectedPlayer then
 		local target = Players:FindFirstChild(selectedPlayer)
 		if target and target.Character and target.Character:FindFirstChild("Humanoid") then
@@ -487,7 +487,7 @@ tab2:Toggle("View", false, function(state)
 	end
 end)
 
-tab2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
+Tab2:Toggle("Auto Bring Player [ Select Player ]", false, function(pla)
 	_G.bringPlayer = pla
 end)
 
@@ -541,7 +541,7 @@ spawn(function()
     end
 end)
 		
-tab2:Toggle("Auto Bring Player [ All ]", false, function(plal)
+Tab2:Toggle("Auto Bring Player [ All ]", false, function(plal)
 	_G.BringAllPlayer = plal
 end)
 
