@@ -1025,7 +1025,7 @@ end)
 
 local afkConnection
 
-page5:Toggle("Anti AFK", false, function(state)
+Tab5:Toggle("Anti AFK", false, function(state)
 
     if state then
 	create:Notifile("", "Protect kick from the server when you afk :)", 3)
