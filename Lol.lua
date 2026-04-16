@@ -340,12 +340,13 @@ local requiredKills = {
 local lastEquipKills = {}
 
 spawn(function()
-    while wait(0.03) do
+    while wait(0.1) do -- เพิ่ม delay นิดนึงกันบัค
         pcall(function()
             if not _G.autoquest then return end
 
-            local character = game:GetService("Players").LocalPlayer.Character
-            local backpack = game:GetService("Players").LocalPlayer:FindFirstChild("Backpack")
+            local player = game:GetService("Players").LocalPlayer
+            local character = player.Character
+            local backpack = player:FindFirstChild("Backpack")
             local humanoid = character and character:FindFirstChildOfClass("Humanoid")
             if not character or not backpack or not humanoid then return end
 
@@ -355,15 +356,21 @@ spawn(function()
                     local kills = tool:FindFirstChild("Kills")
                     if kills and kills:IsA("IntValue") then
                         local currentKills = kills.Value
-                        local lastKills = lastEquipKills[toolName] or -1
+                        local lastKills = lastEquipKills[toolName]
 
-                        if (currentKills == required and lastKills ~= currentKills)
-                        or (currentKills > required and currentKills > lastKills) then
-                            _G.forceHold = true
-                            humanoid:EquipTool(tool)
-                            wait(1)
-                            _G.forceHold = false
-                            lastEquipKills[toolName] = currentKills
+                        -- ✅ เงื่อนไขใหม่
+                        if currentKills >= required then
+                            if lastKills ~= currentKills then
+                                _G.forceHold = true
+                                humanoid:EquipTool(tool)
+                                task.wait(0.8)
+                                _G.forceHold = false
+
+                                lastEquipKills[toolName] = currentKills
+                            end
+                        else
+                            -- 🔄 รีเซ็ตเมื่อเควสใหม่ (ค่าโดนรีเซ็ตต่ำลง)
+                            lastEquipKills[toolName] = nil
                         end
                     end
                 end
